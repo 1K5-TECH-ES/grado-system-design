@@ -4,7 +4,6 @@
 import { createElement as h, useEffect, useId, useMemo, useRef, useState } from 'react'
 import * as G from '@1k5-tech-es/grado-react'
 import { themes } from '@1k5-tech-es/grado/tokens'
-import gradoPackage from '@1k5-tech-es/grado/package.json' with { type: 'json' }
 import { GradoLogo } from './brand.mjs'
 import { CodeBlock, TextLink } from './site/ui.mjs'
 import {
@@ -25,8 +24,6 @@ import {
 } from './palette.mjs'
 
 export const STORAGE_KEY = 'grado-docs-custom-theme'
-// La versión de los paquetes descargables: la misma que la del paquete base.
-const VERSION = gradoPackage.version
 const icon =
   (paths, strokeWidth = 2) =>
   (props) =>
@@ -574,7 +571,7 @@ export function Configurator() {
   const modes = mode === 'both' ? ['light', 'dark'] : [mode]
   const css = themeCss(theme, { styles: framework === 'html' ? 'css' : styles })
   const lines = css.trimEnd().split('\n').length
-  const steps = installSteps(theme, { framework, styles, version: VERSION })
+  const steps = installSteps(theme, { framework, styles })
   const [install, file, ...imports] = steps
   const baseName = config.base === 'marca' ? 'Marca' : 'Consola'
 

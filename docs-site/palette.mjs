@@ -519,13 +519,10 @@ export function themeCss({ config, palette, variant, font, tokens, code }, { sty
  * Pasos de instalación con el tema, según framework y estilos. Con bundler, Barlow sale de
  * @1k5-tech-es/grado/fonts.css y las demás fuentes de Fontsource; en HTML, se enlazan a Google Fonts.
  */
-export function installSteps({ config, font }, { framework = 'react', styles = 'tailwind4', version = '0.1.0' } = {}) {
-  const base = `./vendor/1k5-tech-es-grado-${version}.tgz`
+export function installSteps({ config, font }, { framework = 'react', styles = 'tailwind4' } = {}) {
   const fontPackage = font.package ? ` \\\n  ${font.package}` : ''
   const install =
-    framework === 'html'
-      ? `npm install ${base}`
-      : `npm install ${base} \\\n  ./vendor/1k5-tech-es-grado-${framework}-${version}.tgz${fontPackage}`
+    framework === 'html' ? 'npm install @1k5-tech-es/grado' : `npm install @1k5-tech-es/grado @1k5-tech-es/grado-${framework}${fontPackage}`
   const htmlTag = `<html lang="es"${config.base === 'marca' ? ' data-k5-theme="marca"' : ''}>`
   const main = framework === 'vue' ? 'main.ts' : 'main.tsx'
   const fontImports = font.bundled
@@ -563,7 +560,7 @@ export function installSteps({ config, font }, { framework = 'react', styles = '
   }
   // El paso del archivo no lleva código: la web pone ahí el CSS del tema (themeCss).
   const steps = [
-    { label: 'Terminal · en tu aplicación', code: install },
+    { label: 'Terminal · en tu aplicación, con el .npmrc de Instalación', code: install },
     { label: framework === 'html' ? 'grado/grado-tema.css · guarda aquí tu tema' : 'src/grado-tema.css · guarda aquí tu tema', file: true },
     entry,
   ]

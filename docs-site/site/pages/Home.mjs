@@ -30,8 +30,8 @@ const paths = (total) => [
     to: '/instalacion',
     icon: icons.installation,
     title: 'Instala',
-    text: 'Paquetes descargables, estilos para Tailwind 3, Tailwind 4 o CSS y ejemplos en React y Vue.',
-    sample: h('code', { className: 'docs-command' }, `npm install ./vendor/1k5-tech-es-grado-${version}.tgz`),
+    text: 'Paquetes privados en GitHub Packages, estilos para Tailwind 3, Tailwind 4 o CSS y ejemplos en React y Vue.',
+    sample: h('code', { className: 'docs-command' }, 'npm install @1k5-tech-es/grado'),
     cta: 'Ver la guía',
   },
   {
@@ -117,7 +117,7 @@ export default function Home() {
       h(G.Kpi, { label: 'Componentes', value: String(total), hint: `En ${families.length} familias` }),
       h(G.Kpi, { label: 'Frameworks', value: '3', hint: 'React · Vue · HTML' }),
       h(G.Kpi, { label: 'Temas', value: '2', hint: 'Consola y Marca' }),
-      h(G.Kpi, { label: 'Versión', value: version, hint: 'Paquetes descargables' }),
+      h(G.Kpi, { label: 'Versión', value: version, hint: 'En GitHub Packages' }),
     ),
     h(
       Section,

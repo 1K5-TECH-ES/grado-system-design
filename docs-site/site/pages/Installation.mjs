@@ -75,6 +75,28 @@ const downloads = h(
   ),
 )
 
+const npmrc = `@1k5-tech-es:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}`
+const tokenShell = 'export GITHUB_TOKEN=ghp_tu_token'
+const actionsWorkflow = [
+  'permissions:',
+  '  contents: read',
+  '  packages: read',
+  '',
+  'steps:',
+  '  - uses: actions/checkout@v4',
+  '  - uses: actions/setup-node@v4',
+  '    with:',
+  '      node-version: 22',
+  '  - run: npm ci',
+  '    env:',
+  '      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}',
+].join('\n')
+const install = (framework) => `npm install @1k5-tech-es/grado @1k5-tech-es/grado-${framework}`
+const update = (framework) => `npm install @1k5-tech-es/grado@latest @1k5-tech-es/grado-${framework}@latest`
+const fromVendor = (framework) => `npm uninstall @1k5/grado @1k5/grado-${framework}
+${install(framework)}`
+
 const tailwind4 = `@import 'tailwindcss';
 @import '@1k5-tech-es/grado/fonts.css';
 @import '@1k5-tech-es/grado/tailwind.css';
@@ -185,6 +207,7 @@ export default function Installation() {
         P(
           'Utiliza React 18 o superior, o Vue 3.5 o superior. Para compilar el repositorio de Grado necesitas Node.js 20 o superior. Tailwind es opcional.',
         ),
+        P('Para instalar los paquetes necesitas una cuenta de GitHub con acceso a la organización `1K5-TECH-ES`.'),
         P(
           "Con el App Router de Next.js puedes importar los componentes desde un Server Component: los que tienen estado llevan `'use client'`.",
         ),
@@ -192,18 +215,106 @@ export default function Installation() {
       h(
         Step,
         { id: 'paquetes', number: 2, title: 'Instala los paquetes' },
-        P(
-          `La versión ${version} aún no está en npm. Descarga el paquete base y el de tu framework, guárdalos en \`vendor/\` dentro de tu aplicación y añádelos al repositorio para que el despliegue también los tenga.`,
+        h(
+          G.Alert,
+          { tone: 'info', title: 'Desde la 0.3.0, Grado se instala con npm' },
+          rich(
+            'Los paquetes están en GitHub Packages, privados para la organización `1K5-TECH-ES`, y se llaman `@1k5-tech-es/…`. Ya no hace falta guardar archivos `.tgz` en tu repositorio.',
+          ),
         ),
-        downloads,
+        P(
+          '**Dile a npm dónde está Grado.** Crea este `.npmrc` en la raíz de tu aplicación y súbelo al repositorio. No contiene ningún secreto: solo el nombre de la variable que guarda el token.',
+        ),
+        h(CodeBlock, { code: npmrc, label: '.npmrc · raíz de tu aplicación' }),
+        P(
+          '**Crea tu token, una sola vez.** En GitHub, ve a Settings → Developer settings → Personal access tokens → Tokens (classic) y crea uno con el permiso `read:packages`. Tiene que ser «classic»: GitHub Packages no acepta tokens granulares para npm. Si la organización usa SSO, autoriza el token para `1K5-TECH-ES`. Después, guárdalo en tu shell:',
+        ),
+        h(CodeBlock, { code: tokenShell, label: '~/.bashrc o ~/.zshrc · no lo subas a ningún repositorio' }),
+        P('**Instala el paquete base y el de tu framework.**'),
         h(FrameworkCode, {
-          react: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-react-${version}.tgz`,
-          vue: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-vue-${version}.tgz`,
+          react: install('react'),
+          vue: install('vue'),
           reactLabel: 'Terminal · en tu aplicación',
           vueLabel: 'Terminal · en tu aplicación',
         }),
         h(G.Accordion, {
           items: [
+            {
+              value: 'ci',
+              title: 'En el CI y en los despliegues',
+              content: h(
+                'div',
+                null,
+                P(
+                  '**GitHub Actions.** En GitHub, abre cada paquete de Grado (pestaña Packages de la organización), entra en Package settings → Manage Actions access y añade el repositorio de tu aplicación. Después, en su workflow:',
+                ),
+                h(CodeBlock, { code: actionsWorkflow, label: '.github/workflows/ci.yml · solo lo que cambia' }),
+                P(
+                  '**Vercel, Netlify, Docker y otros.** Define la variable de entorno `GITHUB_TOKEN` con un token «classic» con `read:packages`, mejor de una cuenta de servicio que de una persona. En Docker, pásalo como secreto de build, no como `ARG`, para que no quede en la imagen.',
+                ),
+              ),
+            },
+            {
+              value: 'actualizar',
+              title: 'Actualizar a una versión nueva',
+              content: h(
+                'div',
+                null,
+                P(
+                  'Hasta la 1.0, una versión menor (0.3 → 0.4) puede cambiar el aspecto o una API. Antes de actualizar, lee «Al actualizar» de esa versión en Cambios. Luego:',
+                ),
+                h(FrameworkCode, {
+                  react: update('react'),
+                  vue: update('vue'),
+                  reactLabel: 'Terminal · en tu aplicación',
+                  vueLabel: 'Terminal · en tu aplicación',
+                }),
+                P('Instala siempre el paquete base y el del framework en la misma versión.'),
+              ),
+            },
+            {
+              value: 'desde-vendor',
+              title: 'Si ya usabas los .tgz de vendor/',
+              content: h(
+                'div',
+                null,
+                P('Añade el `.npmrc` y el token de arriba y cambia los paquetes:'),
+                h(FrameworkCode, {
+                  react: fromVendor('react'),
+                  vue: fromVendor('vue'),
+                  reactLabel: 'Terminal · en tu aplicación',
+                  vueLabel: 'Terminal · en tu aplicación',
+                }),
+                P(
+                  'Después, sustituye `@1k5/` por `@1k5-tech-es/` en los imports de JavaScript y de CSS, y borra los `.tgz` de `vendor/`. Los componentes, las clases y los tokens no cambian de nombre.',
+                ),
+              ),
+            },
+            {
+              value: 'publicacion',
+              title: 'Cómo se publica una versión',
+              content: P(
+                'Nadie publica a mano. Quien mantiene Grado sube la versión de los tres paquetes, escribe sus cambios y crea la etiqueta `vX.Y.Z` en el repositorio. GitHub Actions pasa los tests, publica los tres paquetes en GitHub Packages y crea la release con las notas. La versión nueva aparece en Cambios.',
+              ),
+            },
+            {
+              value: 'descargas',
+              title: 'Sin acceso a la organización: paquetes descargables',
+              content: h(
+                'div',
+                null,
+                P(
+                  'Para probar Grado sin cuenta en `1K5-TECH-ES`, descarga el paquete base y el de tu framework, guárdalos en `vendor/` dentro de tu aplicación y añádelos al repositorio para que el despliegue también los tenga.',
+                ),
+                downloads,
+                h(FrameworkCode, {
+                  react: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-react-${version}.tgz`,
+                  vue: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-vue-${version}.tgz`,
+                  reactLabel: 'Terminal · en tu aplicación',
+                  vueLabel: 'Terminal · en tu aplicación',
+                }),
+              ),
+            },
             {
               value: 'repositorio',
               title: 'Trabajar directamente desde el repositorio',

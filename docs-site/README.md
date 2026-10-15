@@ -69,7 +69,7 @@ Abre `http://localhost:4173`. Regenera con `npm run docs:build` después de camb
 
 ## Distribución de la librería
 
-La web ofrece archivos `.tgz` instalables, generados con `npm pack --workspaces`. El paquete base y el del framework se instalan juntos. Los consumidores deben guardar los archivos en su repositorio para que sus compilaciones sean reproducibles.
+Las aplicaciones instalan Grado con npm desde GitHub Packages (`@1k5-tech-es/…`), como explica la página Instalación. La web ofrece además archivos `.tgz`, generados con `npm pack --workspaces`, para quien no tenga acceso a la organización de GitHub; quien los use debe guardarlos en su repositorio para que sus compilaciones sean reproducibles.
 
 Publicar esta web **no publica los paquetes en npm**: los publica el workflow `Release` al subir una etiqueta `vX.Y.Z`, en GitHub Packages, privados como el repositorio. Los `.tgz` siguen sirviendo a quien no tenga acceso a la organización de GitHub. Al cambiar de versión, mantén alineadas las versiones y dependencias de los tres paquetes.
 
