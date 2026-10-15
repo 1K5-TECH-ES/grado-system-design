@@ -11,7 +11,7 @@ import {
   type StackAlign,
   type StackDirection,
   type StackJustify,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 
 export interface StackProps extends HTMLAttributes<HTMLElement> {
   /** Etiqueta o componente que se pinta. Por defecto div; ul, ol, section, form… cuando el contenido lo pide. */

@@ -1,4 +1,4 @@
-/** Icono interno hecho con trazos de Lucide (ver ICON_PATHS en @1k5/grado/classes). */
+/** Icono interno hecho con trazos de Lucide (ver ICON_PATHS en @1k5-tech-es/grado/classes). */
 export function PathIcon({ paths, className }: { paths: string[]; className?: string }) {
   return (
     <svg

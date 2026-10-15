@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue'
-import { tableClass, tableWrapClass } from '@1k5/grado/classes'
+import { tableClass, tableWrapClass } from '@1k5-tech-es/grado/classes'
 
 /** Envuelve una <table> normal. Para columnas numéricas usa class="k5-num" en th y td. */
 export const Table = defineComponent({

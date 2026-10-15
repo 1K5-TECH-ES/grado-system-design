@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue'
-import { cx } from '@1k5/grado/classes'
+import { cx } from '@1k5-tech-es/grado/classes'
 
 export const Skeleton = defineComponent({
   name: 'K5Skeleton',

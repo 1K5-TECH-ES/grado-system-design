@@ -1,7 +1,7 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { descriptionListClass, type DescriptionLayout } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import type { DescriptionItem } from '@1k5/grado/patterns'
+import { descriptionListClass, type DescriptionLayout } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import type { DescriptionItem } from '@1k5-tech-es/grado/patterns'
 import { CopyButton } from './CopyButton.js'
 import { useGrado } from './Locale.js'
 

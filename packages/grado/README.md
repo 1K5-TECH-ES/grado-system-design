@@ -1,8 +1,8 @@
-# @1k5/grado
+# @1k5-tech-es/grado
 
 Tokens de diseño de 1KOMMA5° España: colores de marca, tipografía, radios, sombras y alturas de control. Funcionan con React, Vue, Tailwind 3, Tailwind 4 o CSS sin framework.
 
-> Versión 0.2.0. Todavía no está publicado en ningún registro. Mientras tanto se instala desde la carpeta o con los `.tgz` de la web. Cambios: [CHANGELOG.md](../../CHANGELOG.md).
+> Paquete privado en GitHub Packages: configura el `.npmrc` del [README principal](../../README.md#instalar-en-un-proyecto-interno) y luego `npm i @1k5-tech-es/grado`. Cambios: [CHANGELOG.md](../../CHANGELOG.md).
 
 ## Qué archivo usar
 
@@ -11,10 +11,10 @@ Tokens de diseño de 1KOMMA5° España: colores de marca, tipografía, radios, s
 | Tailwind 3 + shadcn-vue (1komma5es_help, Sales Coach) | `tokens-hsl.css` y `tailwind-preset` | `hsl(var(--primary))`, `bg-primary/10` |
 | Tailwind 4 + shadcn (Kompilot, IRVE, Memorias) | `tailwind.css` | `var(--primary)`, `bg-primary/10` |
 | CSS sin Tailwind (OfferTool, páginas sueltas) | `tokens.css` | `var(--k5-primary)` |
-| JavaScript: gráficos, React Native, correos | `@1k5/grado/tokens` | `themes.consola.light.color.primary` |
-| Figma con Tokens Studio | `@1k5/grado/tokens.dtcg.json` | Formato W3C: un conjunto global y uno por tema y modo |
+| JavaScript: gráficos, React Native, correos | `@1k5-tech-es/grado/tokens` | `themes.consola.light.color.primary` |
+| Figma con Tokens Studio | `@1k5-tech-es/grado/tokens.dtcg.json` | Formato W3C: un conjunto global y uno por tema y modo |
 
-Y, en cualquier caso, `@1k5/grado/fonts.css` para la fuente Barlow (ver [Fuente](#fuente)).
+Y, en cualquier caso, `@1k5-tech-es/grado/fonts.css` para la fuente Barlow (ver [Fuente](#fuente)).
 
 Los dos CSS declaran las mismas variables. La única diferencia está en los nombres de shadcn (`--primary`, `--background`…): en `tokens-hsl.css` son tripletes HSL (`278.5 91.8% 28.6%`), como espera Tailwind 3, y en `tokens.css` son colores completos (`#5C068C`). Las variables `--k5-*` son siempre colores completos en los dos archivos.
 
@@ -31,7 +31,7 @@ npm i "/ruta/a/1KOMMA5 System Design/packages/grado"
 `src/assets/index.css`: el import sustituye a los bloques `:root` y `.dark` que tenía la app.
 
 ```css
-@import '@1k5/grado/tokens-hsl.css';
+@import '@1k5-tech-es/grado/tokens-hsl.css';
 
 @tailwind base;
 @tailwind components;
@@ -42,7 +42,7 @@ npm i "/ruta/a/1KOMMA5 System Design/packages/grado"
 
 ```js
 import animate from 'tailwindcss-animate'
-import grado from '@1k5/grado/tailwind-preset'
+import grado from '@1k5-tech-es/grado/tailwind-preset'
 
 export default {
   presets: [grado],
@@ -59,7 +59,7 @@ El preset trae los colores, `darkMode: ['class']`, los radios (`rounded-sm/md/lg
 
 ```css
 @import 'tailwindcss';
-@import '@1k5/grado/tailwind.css';
+@import '@1k5-tech-es/grado/tailwind.css';
 ```
 
 Los componentes de shadcn siguen funcionando sin cambios, porque leen las mismas variables.
@@ -76,7 +76,7 @@ Los componentes de shadcn siguen funcionando sin cambios, porque leen las mismas
 
 ## Componentes en CSS (`grado.css`)
 
-Botón, badge, campo, interruptor, tarjeta, tabla, indicadores, cabecera de página, estado vacío y spinner, en CSS normal con clases `k5-*`. Lo usan `@1k5/grado-react` y `@1k5/grado-vue`, y sirve igual en una página hecha a mano:
+Botón, badge, campo, interruptor, tarjeta, tabla, indicadores, cabecera de página, estado vacío y spinner, en CSS normal con clases `k5-*`. Lo usan `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`, y sirve igual en una página hecha a mano:
 
 ```html
 <button class="k5-btn k5-btn--primary">Generar oferta</button>
@@ -90,11 +90,11 @@ Botón, badge, campo, interruptor, tarjeta, tabla, indicadores, cabecera de pág
 
 Dónde importarlo:
 
-- **Tailwind 3:** `@import '@1k5/grado/grado.css';` antes de `@tailwind base`. Las utilidades quedan después y pueden sobrescribir a los componentes.
-- **Tailwind 4:** `@import '@1k5/grado/grado.css' layer(components);` después de `tailwind.css`.
+- **Tailwind 3:** `@import '@1k5-tech-es/grado/grado.css';` antes de `@tailwind base`. Las utilidades quedan después y pueden sobrescribir a los componentes.
+- **Tailwind 4:** `@import '@1k5-tech-es/grado/grado.css' layer(components);` después de `tailwind.css`.
 - **Sin Tailwind:** `<link rel="stylesheet">` después de `tokens.css`.
 
-Las clases para cada combinación de props salen de `@1k5/grado/classes` (`buttonClass({ variant: 'secondary' })`, `badgeClass({ tone: 'success' })`…). Úsalo para dar aspecto de botón a un enlace o para otro framework.
+Las clases para cada combinación de props salen de `@1k5-tech-es/grado/classes` (`buttonClass({ variant: 'secondary' })`, `badgeClass({ tone: 'success' })`…). Úsalo para dar aspecto de botón a un enlace o para otro framework.
 
 ### Texto sobre fondos tintados
 
@@ -113,14 +113,14 @@ Los badges, el botón de borrar y las variaciones de KPI ponen texto de color so
 Barlow es la fuente de marca y la primera de `--k5-font-sans`. Viene en el paquete (400, 500, 600 y 700; latín y latín extendido) con licencia SIL Open Font License 1.1 (`assets/fonts/OFL.txt`):
 
 ```css
-@import '@1k5/grado/fonts.css';
+@import '@1k5-tech-es/grado/fonts.css';
 ```
 
 Con bundler, impórtalo una vez junto a los tokens. Sin bundler, copia `dist/` y `assets/fonts/` manteniendo la estructura. Si tu app ya carga Barlow por su cuenta, no hace falta.
 
 ## Idiomas
 
-`@1k5/grado/messages` tiene los textos de los componentes en `es-ES` (por defecto), `de-DE` y `en-GB`, más `messagesFor(locale, overrides)` y `formatMessage()`. Los componentes los leen de `GradoProvider` (React) o del plugin `Grado` (Vue).
+`@1k5-tech-es/grado/messages` tiene los textos de los componentes en `es-ES` (por defecto), `de-DE` y `en-GB`, más `messagesFor(locale, overrides)` y `formatMessage()`. Los componentes los leen de `GradoProvider` (React) o del plugin `Grado` (Vue).
 
 ## Modo oscuro
 
@@ -156,6 +156,6 @@ Uso de los colores de marca en pantalla:
 
 ## Logos
 
-- `@1k5/grado/assets/logo-1k5.svg`: berenjena con el anillo menta, para fondos claros.
-- `@1k5/grado/assets/logo-1k5-white.svg`: blanco con el anillo menta, para la cabecera.
-- `@1k5/grado/assets/signet-1k5.svg`: el signet cuadrado, para favicon y avatares.
+- `@1k5-tech-es/grado/assets/logo-1k5.svg`: berenjena con el anillo menta, para fondos claros.
+- `@1k5-tech-es/grado/assets/logo-1k5-white.svg`: blanco con el anillo menta, para la cabecera.
+- `@1k5-tech-es/grado/assets/signet-1k5.svg`: el signet cuadrado, para favicon y avatares.

@@ -1,8 +1,8 @@
 'use client'
 import type { HTMLAttributes } from 'react'
-import { avatarClass, avatarGroupClass, cx, type Size } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import { splitAvatars, type AvatarItem } from '@1k5/grado/patterns'
+import { avatarClass, avatarGroupClass, cx, type Size } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import { splitAvatars, type AvatarItem } from '@1k5-tech-es/grado/patterns'
 import { Avatar } from './Avatar.js'
 import { useGrado } from './Locale.js'
 

@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, provide, type App, type ComputedRef, type InjectionKey, type PropType } from 'vue'
-import { DEFAULT_LOCALE, messagesFor, type Messages } from '@1k5/grado/messages'
+import { DEFAULT_LOCALE, messagesFor, type Messages } from '@1k5-tech-es/grado/messages'
 
 export interface GradoContext {
   locale: string

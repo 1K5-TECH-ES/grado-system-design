@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
-import { menuPosition, moveFocus, type MenuItem } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 import { useAutoId } from './hooks.js'
 

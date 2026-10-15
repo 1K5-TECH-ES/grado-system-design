@@ -1,6 +1,6 @@
 'use client'
-import { cx, ICON_PATHS } from '@1k5/grado/classes'
-import { type StepItem } from '@1k5/grado/patterns'
+import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { type StepItem } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

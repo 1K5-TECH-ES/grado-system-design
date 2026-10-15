@@ -47,7 +47,7 @@ export const entries = [
       ['justify', 'start · center · end · between', 'start'],
       ['wrap', 'Pasa a la línea siguiente lo que no cabe', 'false'],
     ],
-    'Solo pone clases (k5-stack, k5-gap-*, k5-align-*, k5-justify-*): sin estilos en línea, compatible con una CSP estricta. En HTML puedes usar stackClass() de @1k5/grado/classes. Las clases k5-gap-* sirven también en cualquier flex o grid propio.',
+    'Solo pone clases (k5-stack, k5-gap-*, k5-align-*, k5-justify-*): sin estilos en línea, compatible con una CSP estricta. En HTML puedes usar stackClass() de @1k5-tech-es/grado/classes. Las clases k5-gap-* sirven también en cualquier flex o grid propio.',
   ),
   entry(
     'grid',

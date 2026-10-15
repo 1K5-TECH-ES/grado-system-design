@@ -1,6 +1,6 @@
 'use client'
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
-import { cx, DATA_ICON_PATHS, linkClass, type LinkTone, type LinkUnderline } from '@1k5/grado/classes'
+import { cx, DATA_ICON_PATHS, linkClass, type LinkTone, type LinkUnderline } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

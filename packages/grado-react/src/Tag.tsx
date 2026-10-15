@@ -1,8 +1,8 @@
 'use client'
 import type { HTMLAttributes, MouseEvent, ReactNode } from 'react'
-import { cx, ICON_PATHS, tagClass, type SmallSize } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import { tagFocusTarget } from '@1k5/grado/patterns'
+import { cx, ICON_PATHS, tagClass, type SmallSize } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import { tagFocusTarget } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

@@ -1,10 +1,10 @@
 // Configurador de temas de la web («Personalizar»).
-// Controles y vista previa con los componentes de @1k5/grado-react; solo el marco
+// Controles y vista previa con los componentes de @1k5-tech-es/grado-react; solo el marco
 // de la vista previa, las muestras de color y las miniaturas de estilo son de la web.
 import { createElement as h, useEffect, useId, useMemo, useRef, useState } from 'react'
-import * as G from '@1k5/grado-react'
-import { themes } from '@1k5/grado/tokens'
-import gradoPackage from '@1k5/grado/package.json' with { type: 'json' }
+import * as G from '@1k5-tech-es/grado-react'
+import { themes } from '@1k5-tech-es/grado/tokens'
+import gradoPackage from '@1k5-tech-es/grado/package.json' with { type: 'json' }
 import { GradoLogo } from './brand.mjs'
 import { CodeBlock, TextLink } from './site/ui.mjs'
 import {

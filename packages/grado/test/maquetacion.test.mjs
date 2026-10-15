@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { loadTokens } from '../scripts/lib/tokens.mjs'
-import * as k5 from '@1k5/grado/classes'
+import * as k5 from '@1k5-tech-es/grado/classes'
 
 const tokens = loadTokens()
 const css = readFileSync(new URL('../dist/grado.css', import.meta.url), 'utf8')

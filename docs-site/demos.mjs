@@ -1,5 +1,5 @@
 import { createElement as h, useEffect, useRef, useState } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { demos as maquetacionDemos } from './groups/maquetacion.demos.mjs'
 import { demos as datosDemos } from './groups/datos.demos.mjs'
 import { demos as graficosDemos } from './groups/graficos.demos.mjs'

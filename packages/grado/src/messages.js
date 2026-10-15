@@ -1,4 +1,4 @@
-// Textos de los componentes. Los usan @1k5/grado-react y @1k5/grado-vue a través de
+// Textos de los componentes. Los usan @1k5-tech-es/grado-react y @1k5-tech-es/grado-vue a través de
 // GradoProvider (React) o del plugin Grado (Vue). Las props de cada componente
 // (closeLabel, emptyLabel…) tienen prioridad sobre estos textos.
 // {nombre} se sustituye con formatMessage().

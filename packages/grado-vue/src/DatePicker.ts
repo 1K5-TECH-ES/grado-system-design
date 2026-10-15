@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { rangeError, type DateRangeValue } from '@1k5/grado/patterns'
+import { rangeError, type DateRangeValue } from '@1k5-tech-es/grado/patterns'
 import { Input } from './Field.js'
 import { useGrado } from './Locale.js'
 import { autoId, model } from './helpers.js'

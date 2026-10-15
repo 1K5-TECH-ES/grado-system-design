@@ -9,7 +9,7 @@ import {
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react'
-import { controlClass, cx, inputWrapClass, type Size } from '@1k5/grado/classes'
+import { controlClass, cx, inputWrapClass, type Size } from '@1k5-tech-es/grado/classes'
 
 interface FieldContextValue {
   id: string

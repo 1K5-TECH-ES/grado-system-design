@@ -1,6 +1,6 @@
 import { defineComponent, h } from 'vue'
-import { actionBarClass, ICON_PATHS } from '@1k5/grado/classes'
-import { moveFocus, selectedCount } from '@1k5/grado/patterns'
+import { actionBarClass, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { moveFocus, selectedCount } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

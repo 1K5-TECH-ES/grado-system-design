@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import * as G from '@1k5/grado-vue'
+import * as G from '@1k5-tech-es/grado-vue'
 
 const render = (template, data = {}) => renderToString(createSSRApp({ template, components: G, data: () => data }))
 

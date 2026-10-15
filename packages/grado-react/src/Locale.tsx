@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
-import { DEFAULT_LOCALE, messagesFor, type Messages } from '@1k5/grado/messages'
+import { DEFAULT_LOCALE, messagesFor, type Messages } from '@1k5-tech-es/grado/messages'
 
 interface GradoContextValue {
   locale: string

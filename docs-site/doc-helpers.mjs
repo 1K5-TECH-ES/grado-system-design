@@ -11,11 +11,11 @@ export const react = (names, markup, setup = '') => {
   const hooks = setup.includes('useState') ? "import { useState } from 'react';\n" : ''
   const state = setup ? `${indent(setup, 2)}\n` : ''
   const jsx = markup.includes('\n') ? `(\n${indent(markup, 4)}\n  )` : markup
-  return `${hooks}import { ${names} } from '@1k5/grado-react';\n\nexport default function Ejemplo() {\n${state}  return ${jsx};\n}`
+  return `${hooks}import { ${names} } from '@1k5-tech-es/grado-react';\n\nexport default function Ejemplo() {\n${state}  return ${jsx};\n}`
 }
 export const vue = (names, markup, setup = '') => {
   const refs = setup.includes('ref(') ? "import { ref } from 'vue';\n" : ''
-  return `<script setup>\n${refs}import { ${names} } from '@1k5/grado-vue';\n${setup ? `\n${setup}\n` : ''}</script>\n\n<template>\n${indent(markup, 2)}\n</template>`
+  return `<script setup>\n${refs}import { ${names} } from '@1k5-tech-es/grado-vue';\n${setup ? `\n${setup}\n` : ''}</script>\n\n<template>\n${indent(markup, 2)}\n</template>`
 }
 export const entry = (id, name, category, description, reactCode, vueCode, props, note) => ({
   id,

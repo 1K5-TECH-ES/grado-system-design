@@ -1,8 +1,8 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { buttonClass, type ButtonVariant, type Size } from '@1k5/grado/classes'
+import { buttonClass, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { Spinner } from './Spinner.js'
 
-/** Para enlaces o RouterLink, usa buttonClass() de @1k5/grado/classes. */
+/** Para enlaces o RouterLink, usa buttonClass() de @1k5-tech-es/grado/classes. */
 export const Button = defineComponent({
   name: 'K5Button',
   props: {

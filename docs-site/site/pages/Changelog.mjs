@@ -1,5 +1,5 @@
 import { createElement as h } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { rich } from '../text.mjs'
 import { Page, useSite } from '../ui.mjs'
 

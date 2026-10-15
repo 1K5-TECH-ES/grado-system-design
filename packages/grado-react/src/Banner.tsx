@@ -1,6 +1,6 @@
 'use client'
 import { type ReactNode } from 'react'
-import { bannerClass, cx, ICON_PATHS, STATUS_ICONS, type BannerTone } from '@1k5/grado/classes'
+import { bannerClass, cx, ICON_PATHS, STATUS_ICONS, type BannerTone } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { present } from './hooks.js'

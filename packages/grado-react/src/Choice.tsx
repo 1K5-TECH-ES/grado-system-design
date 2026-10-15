@@ -1,7 +1,7 @@
 'use client'
 import { forwardRef, useEffect, useRef, type InputHTMLAttributes, type ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
-import { type ChoiceOption } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { type ChoiceOption } from '@1k5-tech-es/grado/patterns'
 import { useField } from './Field.js'
 import { useAutoId, useValue } from './hooks.js'
 

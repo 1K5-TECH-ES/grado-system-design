@@ -11,7 +11,7 @@ import {
   meterRatio,
   meterSegments,
   sparklinePoints,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 
 test('sparklinePoints escala del mínimo al máximo y deja plana una serie constante', () => {
   assert.deepEqual(sparklinePoints([2, 6, 4]), [

@@ -1,6 +1,6 @@
 import { defineComponent, h, onBeforeUnmount, ref, type PropType } from 'vue'
-import { copyButtonClass, DATA_ICON_PATHS, ICON_PATHS, type Size } from '@1k5/grado/classes'
-import { copyText } from '@1k5/grado/patterns'
+import { copyButtonClass, DATA_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
+import { copyText } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

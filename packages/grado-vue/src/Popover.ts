@@ -1,6 +1,6 @@
 import { cloneVNode, defineComponent, h, isVNode, onBeforeUnmount, onMounted, ref, watch, type PropType, type VNode } from 'vue'
-import { popoverClass, type PopoverAlign, type PopoverSide } from '@1k5/grado/classes'
-import { overflowsSide } from '@1k5/grado/patterns'
+import { popoverClass, type PopoverAlign, type PopoverSide } from '@1k5-tech-es/grado/classes'
+import { overflowsSide } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
 import { autoId, booleanOptional, model } from './helpers.js'
 

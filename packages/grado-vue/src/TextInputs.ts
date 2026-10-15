@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, mergeProps, ref, type PropType } from 'vue'
-import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5/grado/classes'
+import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { Input, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { Spinner } from './Spinner.js'

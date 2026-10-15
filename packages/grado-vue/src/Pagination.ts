@@ -1,8 +1,8 @@
 import { defineComponent, h } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
-import { pageCount, pageItems } from '@1k5/grado/patterns'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { pageCount, pageItems } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
-import { formatMessage } from '@1k5/grado/messages'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { useGrado } from './Locale.js'
 import { model } from './helpers.js'
 

@@ -1,7 +1,7 @@
 import { defineComponent, h, type PropType, type VNode } from 'vue'
-import { ICON_PATHS, tagClass, type SmallSize } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import { tagFocusTarget } from '@1k5/grado/patterns'
+import { ICON_PATHS, tagClass, type SmallSize } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import { tagFocusTarget } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

@@ -9,7 +9,7 @@ import {
   type TextSize,
   type TextTone,
   type TextWeight,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
   /** Etiqueta que se pinta: p por defecto; span, strong, small, label… para texto en línea. */

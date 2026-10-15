@@ -10,7 +10,7 @@ import {
   type StackAlign,
   type StackDirection,
   type StackJustify,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 
 const asProp = (tag: string) => ({ type: [String, Object, Function] as PropType<string | Component>, default: tag })
 // En plantilla, gap="4" llega como texto y :gap="4" como número: valen los dos.

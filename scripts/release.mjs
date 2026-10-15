@@ -31,8 +31,8 @@ if (command === 'check') {
   for (const name of PACKAGES) {
     const pkg = JSON.parse(read(`packages/${name}/package.json`))
     if (pkg.version !== version) problems.push(`${pkg.name} está en ${pkg.version}`)
-    const internal = pkg.dependencies?.['@1k5/grado']
-    if (internal && internal !== `^${version}`) problems.push(`${pkg.name} depende de @1k5/grado ${internal}`)
+    const internal = pkg.dependencies?.['@1k5-tech-es/grado']
+    if (internal && internal !== `^${version}`) problems.push(`${pkg.name} depende de @1k5-tech-es/grado ${internal}`)
   }
   if (!changelogSection(read('CHANGELOG.md'), version)) problems.push(`CHANGELOG.md no tiene la sección ${version}`)
   if (problems.length) {

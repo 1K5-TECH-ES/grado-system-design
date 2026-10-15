@@ -8,7 +8,7 @@ export { Kpi, KpiGroup } from './Kpi.js'
 export { PageHeader } from './PageHeader.js'
 export { EmptyState } from './EmptyState.js'
 export { Spinner } from './Spinner.js'
-export { buttonClass, badgeClass, cx } from '@1k5/grado/classes'
+export { buttonClass, badgeClass, cx } from '@1k5-tech-es/grado/classes'
 export { AppShell, AppLogo, AppSearch, Nav, NavSection, NavItem, NavGroup } from './Shell.js'
 export { Avatar } from './Avatar.js'
 export * from './Patterns.js'
@@ -24,14 +24,14 @@ export type {
   TimelineItem,
   FilterItem,
   SortState,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 export { Grado, GradoProvider, useGrado, GRADO_KEY, type GradoContext, type GradoOptions } from './Locale.js'
-export { DEFAULT_LOCALE, MESSAGES, messagesFor, formatMessage, type Messages, type MessageKey } from '@1k5/grado/messages'
+export { DEFAULT_LOCALE, MESSAGES, messagesFor, formatMessage, type Messages, type MessageKey } from '@1k5-tech-es/grado/messages'
 export { NumberInput, SegmentedControl, MultiSelect } from './Inputs.js'
 export { Calendar } from './Calendar.js'
 export { CommandPalette } from './CommandPalette.js'
 export { BarChart } from './BarChart.js'
-export type { CommandItem, CommandGroup, ChartSeries } from '@1k5/grado/patterns'
+export type { CommandItem, CommandGroup, ChartSeries } from '@1k5-tech-es/grado/patterns'
 // Componentes de 0.3, por grupo.
 export * from './group-datos.js'
 export * from './group-graficos.js'

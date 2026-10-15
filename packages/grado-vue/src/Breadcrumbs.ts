@@ -1,6 +1,6 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
-import { type BreadcrumbItem } from '@1k5/grado/patterns'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { type BreadcrumbItem } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { pathIcon } from './PathIcon.js'
 import { autoId, model } from './helpers.js'
 

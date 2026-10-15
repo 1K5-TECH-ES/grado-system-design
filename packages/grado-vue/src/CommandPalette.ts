@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, mergeProps, onBeforeUnmount, onMounted, ref, watch, type PropType } from 'vue'
-import { cx, ICON_PATHS } from '@1k5/grado/classes'
-import { filterGroups, isShortcut, lockScroll, nextIndex, type CommandGroup, type CommandItem } from '@1k5/grado/patterns'
+import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { filterGroups, isShortcut, lockScroll, nextIndex, type CommandGroup, type CommandItem } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { autoId, booleanOptional, model } from './helpers.js'

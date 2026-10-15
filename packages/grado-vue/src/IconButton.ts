@@ -1,5 +1,5 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { iconButtonClass, type IconButtonVariant, type Size } from '@1k5/grado/classes'
+import { iconButtonClass, type IconButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { booleanOptional, model } from './helpers.js'
 
 /** Botón de solo icono con nombre obligatorio. Con pressed (v-model:pressed), botón conmutador. */

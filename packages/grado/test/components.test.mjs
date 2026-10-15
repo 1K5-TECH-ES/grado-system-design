@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { contrast, mix } from '../scripts/lib/color.mjs'
 import { MODES, loadTokens } from '../scripts/lib/tokens.mjs'
-import * as k5 from '@1k5/grado/classes'
+import * as k5 from '@1k5-tech-es/grado/classes'
 
 const css = readFileSync(new URL('../dist/grado.css', import.meta.url), 'utf8')
 const tokensCss = readFileSync(new URL('../dist/tokens.css', import.meta.url), 'utf8')

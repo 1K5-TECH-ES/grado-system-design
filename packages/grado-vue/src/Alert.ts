@@ -1,6 +1,6 @@
 import { defineComponent, h, mergeProps, onBeforeUnmount, onMounted, ref, watch, type PropType } from 'vue'
-import { cx, ICON_PATHS, STATUS_ICONS } from '@1k5/grado/classes'
-import { type StatusTone } from '@1k5/grado/patterns'
+import { cx, ICON_PATHS, STATUS_ICONS } from '@1k5-tech-es/grado/classes'
+import { type StatusTone } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

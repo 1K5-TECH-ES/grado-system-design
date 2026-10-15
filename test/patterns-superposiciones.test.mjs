@@ -1,8 +1,8 @@
 // Grupo «superposiciones y acciones»: lógica compartida de ActionBar, ContextMenu y ToggleGroup.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { menuPosition, selectedCount, toggleValues } from '@1k5/grado/patterns'
-import { MESSAGES } from '@1k5/grado/messages'
+import { menuPosition, selectedCount, toggleValues } from '@1k5-tech-es/grado/patterns'
+import { MESSAGES } from '@1k5-tech-es/grado/messages'
 
 test('selección de ActionBar con plural en los tres idiomas', () => {
   assert.equal(selectedCount(1), '1 seleccionada')

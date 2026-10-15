@@ -1,5 +1,5 @@
 import { createElement as h } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { icons } from '../icons.mjs'
 import { installToc } from '../routes.mjs'
 import { rich } from '../text.mjs'
@@ -52,7 +52,7 @@ const downloads = h(
       h(
         'tr',
         { key: name },
-        h('th', { scope: 'row' }, h('code', null, `@1k5/${name}`)),
+        h('th', { scope: 'row' }, h('code', null, `@1k5-tech-es/${name}`)),
         h('td', null, text),
         h('td', null, h(G.Badge, null, version)),
         h(
@@ -62,12 +62,12 @@ const downloads = h(
             'a',
             {
               className: G.buttonClass({ variant: 'secondary', size: 'sm' }),
-              href: `downloads/1k5-${name}-${version}.tgz`,
+              href: `downloads/1k5-tech-es-${name}-${version}.tgz`,
               download: true,
             },
             h(icons.installation, { 'aria-hidden': 'true' }),
             'Descargar',
-            h('span', { className: 'k5-sr-only' }, ` @1k5/${name}`),
+            h('span', { className: 'k5-sr-only' }, ` @1k5-tech-es/${name}`),
           ),
         ),
       ),
@@ -76,26 +76,26 @@ const downloads = h(
 )
 
 const tailwind4 = `@import 'tailwindcss';
-@import '@1k5/grado/fonts.css';
-@import '@1k5/grado/tailwind.css';
-@import '@1k5/grado/grado.css' layer(components);`
-const tailwind3 = `@import '@1k5/grado/fonts.css';
-@import '@1k5/grado/tokens-hsl.css';
-@import '@1k5/grado/grado.css';
+@import '@1k5-tech-es/grado/fonts.css';
+@import '@1k5-tech-es/grado/tailwind.css';
+@import '@1k5-tech-es/grado/grado.css' layer(components);`
+const tailwind3 = `@import '@1k5-tech-es/grado/fonts.css';
+@import '@1k5-tech-es/grado/tokens-hsl.css';
+@import '@1k5-tech-es/grado/grado.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;`
-const tailwind3Config = `import grado from '@1k5/grado/tailwind-preset';
+const tailwind3Config = `import grado from '@1k5-tech-es/grado/tailwind-preset';
 
 export default {
   presets: [grado],
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
   // Conserva los plugins que utilice tu aplicación.
 };`
-const cssImports = `import '@1k5/grado/fonts.css';
-import '@1k5/grado/tokens.css';
-import '@1k5/grado/grado.css';`
+const cssImports = `import '@1k5-tech-es/grado/fonts.css';
+import '@1k5-tech-es/grado/tokens.css';
+import '@1k5-tech-es/grado/grado.css';`
 const cssBase = `*, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
@@ -104,7 +104,7 @@ body {
   background: var(--k5-background);
   color: var(--k5-foreground);
 }`
-const firstReact = `import { Button, Field, Input } from '@1k5/grado-react';
+const firstReact = `import { Button, Field, Input } from '@1k5-tech-es/grado-react';
 
 export default function Instalacion() {
   return (
@@ -118,7 +118,7 @@ export default function Instalacion() {
 }`
 const firstVue = `<script setup>
 import { ref } from 'vue';
-import { Button, Field, Input } from '@1k5/grado-vue';
+import { Button, Field, Input } from '@1k5-tech-es/grado-vue';
 const potencia = ref('8,4');
 </script>
 
@@ -130,7 +130,7 @@ const potencia = ref('8,4');
     <Button type="submit">Guardar instalación</Button>
   </form>
 </template>`
-const localeReact = `import { GradoProvider } from '@1k5/grado-react';
+const localeReact = `import { GradoProvider } from '@1k5-tech-es/grado-react';
 
 export default function Raiz() {
   return (
@@ -140,7 +140,7 @@ export default function Raiz() {
   );
 }`
 const localeVue = `import { createApp } from 'vue';
-import { Grado } from '@1k5/grado-vue';
+import { Grado } from '@1k5-tech-es/grado-vue';
 import App from './App.vue';
 
 createApp(App).use(Grado, { locale: 'de-DE' }).mount('#app');`
@@ -197,8 +197,8 @@ export default function Installation() {
         ),
         downloads,
         h(FrameworkCode, {
-          react: `npm install ./vendor/1k5-grado-${version}.tgz ./vendor/1k5-grado-react-${version}.tgz`,
-          vue: `npm install ./vendor/1k5-grado-${version}.tgz ./vendor/1k5-grado-vue-${version}.tgz`,
+          react: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-react-${version}.tgz`,
+          vue: `npm install ./vendor/1k5-tech-es-grado-${version}.tgz ./vendor/1k5-tech-es-grado-vue-${version}.tgz`,
           reactLabel: 'Terminal · en tu aplicación',
           vueLabel: 'Terminal · en tu aplicación',
         }),
@@ -343,7 +343,7 @@ export default function Installation() {
           label: 'CSS',
         }),
         P(
-          'Los tokens de marca como `--k5-mint` son constantes. Los semánticos como `--k5-primary` cambian con el tema. Para gráficos también puedes importar `themes` desde `@1k5/grado/tokens`.',
+          'Los tokens de marca como `--k5-mint` son constantes. Los semánticos como `--k5-primary` cambian con el tema. Para gráficos también puedes importar `themes` desde `@1k5-tech-es/grado/tokens`.',
         ),
       ),
       h(

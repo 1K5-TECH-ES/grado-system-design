@@ -1,5 +1,5 @@
 // Genera la web de documentación en docs-site/dist/: una aplicación React con el AppShell y
-// los componentes de @1k5/grado-react (docs-site/site/), los recursos de Grado y los datos
+// los componentes de @1k5-tech-es/grado-react (docs-site/site/), los recursos de Grado y los datos
 // que se calculan al generar (cobertura, adopción y cambios).
 import { mkdirSync, readFileSync, writeFileSync, copyFileSync, cpSync, rmSync } from 'node:fs'
 import { createElement as h } from 'react'

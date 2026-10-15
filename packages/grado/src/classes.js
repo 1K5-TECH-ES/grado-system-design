@@ -1,4 +1,4 @@
-// Traduce props a clases de grado.css. Lo usan @1k5/grado-react y @1k5/grado-vue,
+// Traduce props a clases de grado.css. Lo usan @1k5-tech-es/grado-react y @1k5-tech-es/grado-vue,
 // y cualquier otra tecnología puede usarlo igual. Cambiar aquí cambia las dos.
 
 export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'destructive', 'link']

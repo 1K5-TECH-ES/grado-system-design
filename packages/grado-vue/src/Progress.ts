@@ -1,6 +1,6 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { cx, progressClass, type ProgressTone, type SmallSize } from '@1k5/grado/classes'
-import { progressState } from '@1k5/grado/patterns'
+import { cx, progressClass, type ProgressTone, type SmallSize } from '@1k5-tech-es/grado/classes'
+import { progressState } from '@1k5-tech-es/grado/patterns'
 import { autoId } from './helpers.js'
 import { useGrado } from './Locale.js'
 

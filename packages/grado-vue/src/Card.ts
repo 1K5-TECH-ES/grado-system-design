@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { cardClass, type CardVariant } from '@1k5/grado/classes'
+import { cardClass, type CardVariant } from '@1k5-tech-es/grado/classes'
 
 export const Card = defineComponent({
   name: 'K5Card',

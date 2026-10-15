@@ -9,7 +9,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | Fase | Qué incluye | Estado |
 |---|---|---|
 | 1. Tokens | `tokens.json` como fuente única; CSS en dos formatos; presets de Tailwind 3 y 4; tokens para JS; logos; vista previa | Hecha |
-| 2. Componentes base | `grado.css` (botón, badge, campo, interruptor, tarjeta, tabla, KPI, cabecera, estado vacío, spinner) y paquetes `@1k5/grado-react` y `@1k5/grado-vue` con la misma API | Hecha |
+| 2. Componentes base | `grado.css` (botón, badge, campo, interruptor, tarjeta, tabla, KPI, cabecera, estado vacío, spinner) y paquetes `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue` con la misma API | Hecha |
 | 2b. Armazón | `AppShell`, `Nav`, `NavItem`, `NavGroup`, `AppSearch`, `AppLogo` y `Avatar`. Consola y Marca, barra lateral plegable y cajón en móvil | Hecha |
 | 2c. Componentes interactivos | Diálogos, panel lateral, menú, tooltip, casillas, combobox, avisos, pestañas, paginación, fechas, subida de archivos, pasos, historial, filtros, acordeón, migas y `DataTable`. Misma línea visual que 1komma5es_help: iconos de Lucide, menús con resaltado menta, diálogos con cabecera y pie | Hecha |
 | 3. Migración | Sales Coach, Memorias, Kompilot, Radar-Link y OfferTool, en ese orden | Sales Coach en la rama `feat/grado` |
@@ -24,7 +24,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 - **Colores:** los de la guía de marca (Aubergine `#5C068C`, Mint `#2ED8C3`, Fuchsia `#FA65EC`, Graphite `#222222`). Para Graphite 75 y 25 se usa el HEX del PDF, que es el que cuadra con su CMYK; el RGB que aparece en la guía no coincide.
 - **Grises de interfaz:** con un ligero tinte berenjena, como 1komma5es_help.
 - **Tonos al 10, 25, 50 y 75 %:** calculados como mezcla con blanco. Se sustituyen si marca facilita los valores oficiales.
-- **Tipografía:** Barlow, la de marca, incluida en el paquete (`@1k5/grado/fonts.css`, licencia OFL). La fuente del sistema queda de respaldo.
+- **Tipografía:** Barlow, la de marca, incluida en el paquete (`@1k5-tech-es/grado/fonts.css`, licencia OFL). La fuente del sistema queda de respaldo.
 - **Contraste:** todas las combinaciones de color llegan a 4,5 : 1 en los dos temas y los dos modos (desde 0.2.0).
 - **Minimalismo (desde 0.3.0):** un solo acento por vista; borde o fondo, nunca los dos; jerarquía por tamaño y peso; estado con punto y texto. Consola se separa así del aspecto de 1komma5es_help en badges, tablas, tarjetas y KPI; los colores siguen siendo los mismos.
 
@@ -48,11 +48,26 @@ npm run release:check -- 0.3.0  # versiones de los tres paquetes y sección del 
 
 ## Publicar una versión
 
-1. Sube la versión en los tres `package.json` (y la dependencia `@1k5/grado` de React y Vue) y escribe su sección en `CHANGELOG.md`.
+1. Sube la versión en los tres `package.json` (y la dependencia `@1k5-tech-es/grado` de React y Vue) y escribe su sección en `CHANGELOG.md`.
 2. `npm run release:check -- X.Y.Z`.
 3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
 
-Antes de la primera publicación hay que decidir el registro: configura la variable `NPM_REGISTRY_URL` y el secreto `NPM_TOKEN` en GitHub. GitHub Packages solo admite paquetes cuyo ámbito sea el nombre de la organización (`@1k5-tech-es/…`); para mantener `@1k5/…` hace falta otro registro privado (Artifactory, Verdaccio, npm de pago).
+Los paquetes se publican en **GitHub Packages** con el ámbito `@1k5-tech-es`, el de la organización de GitHub. Son privados como este repositorio y gratis dentro de la cuota de la organización. El workflow publica con su propio `GITHUB_TOKEN`; no hace falta configurar secretos.
+
+### Instalar en un proyecto interno
+
+Añade este `.npmrc` en la raíz del proyecto, para que npm busque `@1k5-tech-es/…` en GitHub:
+
+```ini
+@1k5-tech-es:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+- **En tu máquina:** crea un token *classic* de GitHub con el permiso `read:packages` (GitHub Packages no admite todavía los tokens granulares para npm) y expórtalo como `GITHUB_TOKEN` en tu shell. Después, `npm i @1k5-tech-es/grado @1k5-tech-es/grado-react` (o `@1k5-tech-es/grado-vue`).
+- **En GitHub Actions del proyecto:** da acceso al repositorio en los ajustes de cada paquete (*Manage Actions access*), añade `packages: read` a los `permissions` del workflow y pasa `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}` en el paso de `npm ci`.
+- **En otros despliegues (Docker, Vercel, Netlify…):** guarda como variable de entorno `GITHUB_TOKEN` un token *classic* con `read:packages`, mejor de una cuenta de servicio que de una persona.
+
+No subas nunca el token en sí al repositorio: el `.npmrc` solo lo referencia.
 
 Los cambios de cada versión están en [CHANGELOG.md](CHANGELOG.md).
 

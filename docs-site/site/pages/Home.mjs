@@ -1,6 +1,6 @@
 import { createElement as h } from 'react'
-import * as G from '@1k5/grado-react'
-import tokens from '@1k5/grado/tokens.json' with { type: 'json' }
+import * as G from '@1k5-tech-es/grado-react'
+import tokens from '@1k5-tech-es/grado/tokens.json' with { type: 'json' }
 import { icons } from '../icons.mjs'
 import { useAppearance } from '../Layout.mjs'
 import { LinkButton, Page, Section, TextLink, useSite, version } from '../ui.mjs'
@@ -31,7 +31,7 @@ const paths = (total) => [
     icon: icons.installation,
     title: 'Instala',
     text: 'Paquetes descargables, estilos para Tailwind 3, Tailwind 4 o CSS y ejemplos en React y Vue.',
-    sample: h('code', { className: 'docs-command' }, `npm install ./vendor/1k5-grado-${version}.tgz`),
+    sample: h('code', { className: 'docs-command' }, `npm install ./vendor/1k5-tech-es-grado-${version}.tgz`),
     cta: 'Ver la guía',
   },
   {

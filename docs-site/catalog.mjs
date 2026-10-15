@@ -1,7 +1,7 @@
 // Catálogo de componentes de la web: datos, vista previa, código y propiedades de cada uno.
 // Lo usan la aplicación de la web (en el navegador) y el build (búsqueda, Estado).
 import { createElement as h, Fragment } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { newComponents } from './components.mjs'
 import { GradoLogo } from './brand.mjs'
 
@@ -31,14 +31,14 @@ export const components = [
       h(G.Button, { loading: true }, 'Guardando'),
       h(G.Button, { disabled: true }, 'Desactivado'),
     ),
-    react: `import { Button } from '@1k5/grado-react';
+    react: `import { Button } from '@1k5-tech-es/grado-react';
 
 <Button onClick={guardar}>Guardar cambios</Button>
 <Button variant="secondary">Cancelar</Button>
 <Button variant="danger">Eliminar</Button>
 <Button loading>Guardando</Button>`,
     vue: `<script setup>
-import { Button } from '@1k5/grado-vue';
+import { Button } from '@1k5-tech-es/grado-vue';
 const emit = defineEmits(['guardar']);
 </script>
 
@@ -66,12 +66,12 @@ const emit = defineEmits(['guardar']);
         h(G.Badge, { tone, key: tone }, ['Archivado', 'Grado', 'En curso', 'Firmada', 'Pendiente', 'Vencida', 'Nuevo'][i]),
       ),
     ),
-    react: `import { Badge } from '@1k5/grado-react';
+    react: `import { Badge } from '@1k5-tech-es/grado-react';
 
 <Badge tone="success">Firmada</Badge>
 <Badge tone="warning">Pendiente</Badge>`,
     vue: `<script setup>
-import { Badge } from '@1k5/grado-vue';
+import { Badge } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -96,14 +96,14 @@ import { Badge } from '@1k5/grado-vue';
       ),
       h(G.Field, { label: 'Presupuesto', error: 'Introduce un importe mayor que 0.' }, h(G.Input, { prefix: '€', defaultValue: '0' })),
     ),
-    react: `import { Field, Input } from '@1k5/grado-react';
+    react: `import { Field, Input } from '@1k5-tech-es/grado-react';
 
 <Field label="Potencia instalada" hint="Suma de los módulos" required>
   <Input suffix="kWp" inputMode="decimal" defaultValue="8,4" />
 </Field>`,
     vue: `<script setup>
 import { ref } from 'vue';
-import { Field, Input } from '@1k5/grado-vue';
+import { Field, Input } from '@1k5-tech-es/grado-vue';
 const potencia = ref('8,4');
 </script>
 
@@ -138,7 +138,7 @@ const potencia = ref('8,4');
       ),
       h(G.Field, { label: 'Notas' }, h(G.Textarea, { rows: 3, placeholder: 'Añade indicaciones para el instalador…' })),
     ),
-    react: `import { Field, Select, Textarea } from '@1k5/grado-react';
+    react: `import { Field, Select, Textarea } from '@1k5-tech-es/grado-react';
 
 <Field label="Tipo de instalación">
   <Select defaultValue="solar">
@@ -149,7 +149,7 @@ const potencia = ref('8,4');
 <Field label="Notas"><Textarea rows={3} /></Field>`,
     vue: `<script setup>
 import { ref } from 'vue';
-import { Field, Select, Textarea } from '@1k5/grado-vue';
+import { Field, Select, Textarea } from '@1k5-tech-es/grado-vue';
 const tipo = ref('solar');
 const notas = ref('');
 </script>
@@ -181,7 +181,7 @@ const notas = ref('');
       h(G.Switch, { disabled: true, label: 'Sincronización' }),
     ),
     react: `import { useState } from 'react';
-import { Switch } from '@1k5/grado-react';
+import { Switch } from '@1k5-tech-es/grado-react';
 
 function Preferencias() {
   const [activo, setActivo] = useState(true);
@@ -190,7 +190,7 @@ function Preferencias() {
 }`,
     vue: `<script setup>
 import { ref } from 'vue';
-import { Switch } from '@1k5/grado-vue';
+import { Switch } from '@1k5-tech-es/grado-vue';
 const activo = ref(true);
 </script>
 
@@ -227,7 +227,7 @@ const activo = ref(true);
       h(G.CardFooter, null, h(G.Button, { variant: 'secondary' }, 'Ver proyecto')),
     ),
     react: `import { Card, CardHeader, CardTitle, CardDescription,
-  CardContent, CardFooter, Button } from '@1k5/grado-react';
+  CardContent, CardFooter, Button } from '@1k5-tech-es/grado-react';
 
 <Card>
   <CardHeader>
@@ -239,7 +239,7 @@ const activo = ref(true);
 </Card>`,
     vue: `<script setup>
 import { Card, CardHeader, CardTitle, CardDescription,
-  CardContent, CardFooter, Button } from '@1k5/grado-vue';
+  CardContent, CardFooter, Button } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -284,7 +284,7 @@ import { Card, CardHeader, CardTitle, CardDescription,
         ),
       ),
     ),
-    react: `import { Table, Badge } from '@1k5/grado-react';
+    react: `import { Table, Badge } from '@1k5-tech-es/grado-react';
 
 <Table caption="Instalaciones">
   <thead><tr><th>Cliente</th><th>Estado</th></tr></thead>
@@ -294,7 +294,7 @@ import { Card, CardHeader, CardTitle, CardDescription,
   </tr></tbody>
 </Table>`,
     vue: `<script setup>
-import { Table, Badge } from '@1k5/grado-vue';
+import { Table, Badge } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -326,7 +326,7 @@ import { Table, Badge } from '@1k5/grado-vue';
       h(G.Kpi, { label: 'Días hasta legalizar', value: '23', change: -14.3, better: 'lower', previous: '27' }),
       h(G.Kpi, { label: 'Incidencias', value: '7', tone: 'danger', hint: 'Fuera de plazo' }),
     ),
-    react: `import { KpiGroup, Kpi } from '@1k5/grado-react';
+    react: `import { KpiGroup, Kpi } from '@1k5-tech-es/grado-react';
 
 <KpiGroup>
   <Kpi label="Instalaciones activas" value="128" change={10} previous="116"
@@ -335,7 +335,7 @@ import { Table, Badge } from '@1k5/grado-vue';
     change={-14.3} better="lower" previous="27" />
 </KpiGroup>`,
     vue: `<script setup>
-import { KpiGroup, Kpi } from '@1k5/grado-vue';
+import { KpiGroup, Kpi } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -365,12 +365,12 @@ import { KpiGroup, Kpi } from '@1k5/grado-vue';
       as: 'h2',
       actions: h(G.Button, { icon: plus }, 'Nueva instalación'),
     }),
-    react: `import { PageHeader, Button } from '@1k5/grado-react';
+    react: `import { PageHeader, Button } from '@1k5-tech-es/grado-react';
 
 <PageHeader title="Instalaciones" subtitle="Seguimiento de obras"
   actions={<Button>Nueva instalación</Button>} />`,
     vue: `<script setup>
-import { PageHeader, Button } from '@1k5/grado-vue';
+import { PageHeader, Button } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -395,13 +395,13 @@ import { PageHeader, Button } from '@1k5/grado-vue';
       description: 'No hay documentos pendientes de revisión.',
       action: h(G.Button, { variant: 'secondary' }, 'Añadir documento'),
     }),
-    react: `import { EmptyState, Button } from '@1k5/grado-react';
+    react: `import { EmptyState, Button } from '@1k5-tech-es/grado-react';
 
 <EmptyState title="Todo al día"
   description="No hay documentos pendientes de revisión."
   action={<Button variant="secondary">Añadir documento</Button>} />`,
     vue: `<script setup>
-import { EmptyState, Button } from '@1k5/grado-vue';
+import { EmptyState, Button } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -427,12 +427,12 @@ import { EmptyState, Button } from '@1k5/grado-vue';
       h(G.Spinner, { size: 'lg' }),
       h('span', { className: 'muted' }, 'Cargando instalaciones…'),
     ),
-    react: `import { Spinner } from '@1k5/grado-react';
+    react: `import { Spinner } from '@1k5-tech-es/grado-react';
 
 <Spinner label="Cargando instalaciones" />
 <Spinner size="sm" decorative />`,
     vue: `<script setup>
-import { Spinner } from '@1k5/grado-vue';
+import { Spinner } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -456,12 +456,12 @@ import { Spinner } from '@1k5/grado-vue';
       h(G.Avatar, { name: 'Ana Pérez', size: 'lg', status: 'away' }),
       h(G.Avatar, { name: 'Carlos Gil', status: 'busy' }),
     ),
-    react: `import { Avatar } from '@1k5/grado-react';
+    react: `import { Avatar } from '@1k5-tech-es/grado-react';
 
 <Avatar name="Marta Ruiz" status="online" />
 <Avatar name="Ana Pérez" size="lg" status="away" />`,
     vue: `<script setup>
-import { Avatar } from '@1k5/grado-vue';
+import { Avatar } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>
@@ -504,7 +504,7 @@ import { Avatar } from '@1k5/grado-vue';
         ),
       ),
     ),
-    react: `import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5/grado-react';
+    react: `import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5-tech-es/grado-react';
 
 <AppShell product="Mi aplicación"
   actions={<Avatar name="Lucía Fernández" />}
@@ -512,7 +512,7 @@ import { Avatar } from '@1k5/grado-vue';
   <PageHeader title="Instalaciones" />
 </AppShell>`,
     vue: `<script setup>
-import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5/grado-vue';
+import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5-tech-es/grado-vue';
 </script>
 
 <template>

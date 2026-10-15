@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, watch, type PropType } from 'vue'
-import { FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5/grado/classes'
-import { nearestTime, normalizeTime, timeError, timeSlots } from '@1k5/grado/patterns'
+import { FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
+import { nearestTime, normalizeTime, timeError, timeSlots } from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'

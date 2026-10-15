@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject, mergeProps, provide, useId, type ComputedRef, type InjectionKey, type PropType } from 'vue'
-import { controlClass, cx, inputWrapClass, type Size } from '@1k5/grado/classes'
+import { controlClass, cx, inputWrapClass, type Size } from '@1k5-tech-es/grado/classes'
 
 export interface FieldContext {
   id: string

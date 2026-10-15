@@ -1,9 +1,9 @@
-// Piezas compartidas de las páginas. Todo se compone con @1k5/grado-react; aquí solo hay
+// Piezas compartidas de las páginas. Todo se compone con @1k5-tech-es/grado-react; aquí solo hay
 // lo que Grado no trae como componente (bloque de código, índice de página).
 import { createContext, createElement as h, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import * as G from '@1k5/grado-react'
-import gradoPackage from '@1k5/grado/package.json' with { type: 'json' }
+import * as G from '@1k5-tech-es/grado-react'
+import gradoPackage from '@1k5-tech-es/grado/package.json' with { type: 'json' }
 import { rich } from './text.mjs'
 
 export const version = gradoPackage.version

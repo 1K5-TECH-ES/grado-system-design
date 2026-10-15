@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { cardClass, cx, type CardVariant } from '@1k5/grado/classes'
+import { cardClass, cx, type CardVariant } from '@1k5-tech-es/grado/classes'
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   /** panel (por defecto), alert (borde rojo) o plain (sin superficie). */

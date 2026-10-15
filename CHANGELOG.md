@@ -1,6 +1,6 @@
 # Cambios
 
-Todas las versiones de `@1k5/grado`, `@1k5/grado-react` y `@1k5/grado-vue`. Los tres paquetes comparten número de versión.
+Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
 ## 0.3.0 · sin publicar
 
@@ -25,7 +25,7 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 - Maquetación y tipografía: `Stack`, `Grid`, `Container`, `Text` y `Heading`. Las clases `k5-gap-*`, `k5-align-*` y `k5-justify-*` sirven también en cualquier flex o grid propio.
 - Datos y piezas: `Status` (punto y texto, la alternativa discreta a Badge en tablas), `Progress` (con variante por pasos), `DescriptionList`, `CopyButton`, `Tag`, `AvatarGroup`, `Kbd`, `Separator` y `Link`.
 - Gráficos: `Sparkline`, `LineChart`, `AreaChart`, `Donut`, `Meter` y `EnergyFlow` (flujo en vivo entre placas, casa, batería y red).
-- Campos especiales: `SearchInput`, `PasswordInput`, `Slider`, `TimePicker`, `PhoneInput`, `NifInput`, `IbanInput` y `AddressInput`. Validación española de teléfonos, DNI, NIE, CIF e IBAN en `@1k5/grado/patterns`.
+- Campos especiales: `SearchInput`, `PasswordInput`, `Slider`, `TimePicker`, `PhoneInput`, `NifInput`, `IbanInput` y `AddressInput`. Validación española de teléfonos, DNI, NIE, CIF e IBAN en `@1k5-tech-es/grado/patterns`.
 - Superposiciones y acciones: `Popover`, `Banner`, `ActionBar`, `ContextMenu`, `IconButton` y `ToggleGroup`.
 
 ### Componentes que cambian
@@ -40,13 +40,14 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 ### Calidad y distribución
 
 - CI en GitHub Actions: lint, tests, navegador, web y capturas en cada pull request. Las capturas se hacen dentro de la imagen de Playwright y se pueden regenerar lanzando el workflow a mano.
-- Publicación con la etiqueta `vX.Y.Z`: publica los tres paquetes en el registro privado y crea la release con estas notas. `npm run release:check <versión>` comprueba versiones y CHANGELOG antes.
+- Publicación con la etiqueta `vX.Y.Z`: publica los tres paquetes en GitHub Packages y crea la release con estas notas. `npm run release:check <versión>` comprueba versiones y CHANGELOG antes.
 - Los componentes de `Patterns` viven ahora cada uno en su archivo. Los imports desde el paquete no cambian.
 - La web tiene una página nueva, Fundamentos, con todas las escalas, los principios y la política de versiones. La página Estado cuenta también los tests de los componentes nuevos.
-- La web es ahora una aplicación hecha con `@1k5/grado-react`: `AppShell`, `CommandPalette` para buscar, `SegmentedControl`, `Tabs`, `Accordion`, `Table`, `CopyButton`… en todas las páginas. Cada página se descarga al visitarla.
+- La web es ahora una aplicación hecha con `@1k5-tech-es/grado-react`: `AppShell`, `CommandPalette` para buscar, `SegmentedControl`, `Tabs`, `Accordion`, `Table`, `CopyButton`… en todas las páginas. Cada página se descarga al visitarla.
 
 ### Al actualizar desde 0.2.0
 
+- Los paquetes se llaman ahora `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`, el ámbito que exige GitHub Packages. Cambia los imports de `@1k5/…` a `@1k5-tech-es/…` y añade el `.npmrc` del README.
 - `Badge`: sin borde. `highlight` deja de ser un bloque fucsia: ahora es un punto fucsia con texto normal sobre un tinte suave.
 - `Button` `danger`: pasa a texto rojo sin fondo ni borde (el fondo aparece al pasar el ratón). Para el botón que confirma un borrado usa `destructive`.
 - `KpiGroup` en Consola: sin caja ni fondo de selección. Cada indicador lleva una línea fina arriba y el elegido la lleva en berenjena. La variación es texto de color, sin pastilla. En Marca no cambia.
@@ -77,7 +78,7 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 
 ### Fuente
 
-- Barlow (400, 500, 600 y 700; latín y latín extendido) viene en el paquete: `@1k5/grado/fonts.css`. Licencia SIL OFL 1.1 en `assets/fonts/OFL.txt`.
+- Barlow (400, 500, 600 y 700; latín y latín extendido) viene en el paquete: `@1k5-tech-es/grado/fonts.css`. Licencia SIL OFL 1.1 en `assets/fonts/OFL.txt`.
 
 ### Componentes nuevos
 
@@ -91,12 +92,12 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 ### Idiomas
 
 - `GradoProvider` en React; plugin `Grado` y `GradoProvider` en Vue. Textos en español (por defecto), alemán e inglés.
-- `@1k5/grado/messages`: los textos, `messagesFor()` y `formatMessage()`.
+- `@1k5-tech-es/grado/messages`: los textos, `messagesFor()` y `formatMessage()`.
 
 ### Distribución
 
 - `grado.min.css` (minificado), `grado.layer.css` (dentro de `@layer components`) y un archivo por componente en `css/`.
-- Los módulos interactivos de `@1k5/grado-react` llevan `'use client'`: se pueden importar desde el App Router de Next.js.
+- Los módulos interactivos de `@1k5-tech-es/grado-react` llevan `'use client'`: se pueden importar desde el App Router de Next.js.
 
 ### Calidad
 

@@ -1,5 +1,5 @@
 {
-  "name": "@1k5/grado-react",
+  "name": "@1k5-tech-es/grado-react",
   "version": "0.3.0",
   "description": "Componentes React del sistema de diseño Grado de 1KOMMA5° España.",
   "license": "UNLICENSED",
@@ -9,7 +9,7 @@
     "directory": "packages/grado-react"
   },
   "publishConfig": {
-    "access": "restricted"
+    "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
   "sideEffects": false,
@@ -29,7 +29,7 @@
     "prepack": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@1k5/grado": "^0.3.0"
+    "@1k5-tech-es/grado": "^0.3.0"
   },
   "peerDependencies": {
     "react": ">=18"

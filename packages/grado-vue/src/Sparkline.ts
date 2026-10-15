@@ -1,6 +1,6 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { sparklineClass, type SparklineTone } from '@1k5/grado/classes'
-import { areaPath, linePath, sparklinePoints } from '@1k5/grado/patterns'
+import { sparklineClass, type SparklineTone } from '@1k5-tech-es/grado/classes'
+import { areaPath, linePath, sparklinePoints } from '@1k5-tech-es/grado/patterns'
 
 /** Línea de tendencia mínima, sin ejes. El último punto va marcado. */
 export const Sparkline = defineComponent({

@@ -1,6 +1,6 @@
 'use client'
 import type { HTMLAttributes } from 'react'
-import { avatarClass, cx, initials, type AvatarStatus, type Size } from '@1k5/grado/classes'
+import { avatarClass, cx, initials, type AvatarStatus, type Size } from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 
 const STATUS_KEYS = { online: 'statusOnline', away: 'statusAway', busy: 'statusBusy' } as const

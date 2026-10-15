@@ -1,9 +1,9 @@
 import { defineComponent, h, ref, type PropType } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
-import { fileError, type UploadItem } from '@1k5/grado/patterns'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { fileError, type UploadItem } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
 import { pathIcon } from './PathIcon.js'
-import { formatMessage } from '@1k5/grado/messages'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { useGrado } from './Locale.js'
 import { autoId } from './helpers.js'
 

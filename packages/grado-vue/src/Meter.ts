@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, type PropType } from 'vue'
-import { cx, meterClass, type MeterVariant } from '@1k5/grado/classes'
-import { formatNumber, meterLevel, meterRatio, meterSegments } from '@1k5/grado/patterns'
+import { cx, meterClass, type MeterVariant } from '@1k5-tech-es/grado/classes'
+import { formatNumber, meterLevel, meterRatio, meterSegments } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 
 /**

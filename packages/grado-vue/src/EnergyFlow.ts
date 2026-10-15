@@ -1,7 +1,7 @@
 import { computed, defineComponent, h } from 'vue'
-import { ENERGY_ICONS, cx, energyLineClass, energyNodeClass } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import { energyFlow, formatNumber, formatPercent, type EnergyNode } from '@1k5/grado/patterns'
+import { ENERGY_ICONS, cx, energyLineClass, energyNodeClass } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import { energyFlow, formatNumber, formatPercent, type EnergyNode } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 
 const NAMES = { solar: 'energySolar', home: 'energyHome', battery: 'energyBattery', grid: 'energyGrid' } as const

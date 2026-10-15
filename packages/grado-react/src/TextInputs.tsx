@@ -1,6 +1,6 @@
 'use client'
 import { forwardRef, useImperativeHandle, useRef, useState, type InputHTMLAttributes } from 'react'
-import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5/grado/classes'
+import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { Input, useField } from './Field.js'
 import { PathIcon } from './PathIcon.js'
 import { Spinner } from './Spinner.js'

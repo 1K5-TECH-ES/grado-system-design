@@ -1,7 +1,7 @@
 // Logo de Grado: una «G» con el anillo del grado (°) sobre menta, el color de producto de la marca.
 // Lo usan el build de la web (marco, favicon y vista previa de AppShell) y el configurador.
 import { createElement as h } from 'react'
-import { palette } from '@1k5/grado/tokens'
+import { palette } from '@1k5-tech-es/grado/tokens'
 
 export const GradoMark = (props) =>
   h(

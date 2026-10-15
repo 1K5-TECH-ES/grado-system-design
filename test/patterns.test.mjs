@@ -5,9 +5,18 @@ import { createElement as r } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import * as R from '@1k5/grado-react'
-import * as V from '@1k5/grado-vue'
-import { compareValues, fileError, filterOptions, pageCount, pageItems, rangeError, lockScroll, selectionLabel } from '@1k5/grado/patterns'
+import * as R from '@1k5-tech-es/grado-react'
+import * as V from '@1k5-tech-es/grado-vue'
+import {
+  compareValues,
+  fileError,
+  filterOptions,
+  pageCount,
+  pageItems,
+  rangeError,
+  lockScroll,
+  selectionLabel,
+} from '@1k5-tech-es/grado/patterns'
 import { normalize } from './normalize.mjs'
 
 test('búsqueda sin tildes, paginación acotada y orden numérico', () => {

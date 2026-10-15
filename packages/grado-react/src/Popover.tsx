@@ -10,8 +10,8 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react'
-import { cx, popoverClass, type PopoverAlign, type PopoverSide } from '@1k5/grado/classes'
-import { overflowsSide } from '@1k5/grado/patterns'
+import { cx, popoverClass, type PopoverAlign, type PopoverSide } from '@1k5-tech-es/grado/classes'
+import { overflowsSide } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
 import { useAutoId, useValue } from './hooks.js'
 

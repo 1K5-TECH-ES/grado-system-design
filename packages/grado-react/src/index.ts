@@ -19,7 +19,7 @@ export { PageHeader, type PageHeaderProps } from './PageHeader.js'
 export { EmptyState, type EmptyStateProps } from './EmptyState.js'
 export { Spinner, type SpinnerProps } from './Spinner.js'
 export type { IconComponent } from './types.js'
-export { buttonClass, badgeClass, cx } from '@1k5/grado/classes'
+export { buttonClass, badgeClass, cx } from '@1k5-tech-es/grado/classes'
 export {
   AppShell,
   AppLogo,
@@ -49,9 +49,9 @@ export type {
   TimelineItem,
   FilterItem,
   SortState,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 export { GradoProvider, useGrado, type GradoProviderProps } from './Locale.js'
-export { DEFAULT_LOCALE, MESSAGES, messagesFor, formatMessage, type Messages, type MessageKey } from '@1k5/grado/messages'
+export { DEFAULT_LOCALE, MESSAGES, messagesFor, formatMessage, type Messages, type MessageKey } from '@1k5-tech-es/grado/messages'
 export {
   NumberInput,
   SegmentedControl,
@@ -63,7 +63,7 @@ export {
 export { Calendar, type CalendarProps } from './Calendar.js'
 export { CommandPalette, type CommandPaletteProps } from './CommandPalette.js'
 export { BarChart, type BarChartProps } from './BarChart.js'
-export type { CommandItem, CommandGroup, ChartSeries } from '@1k5/grado/patterns'
+export type { CommandItem, CommandGroup, ChartSeries } from '@1k5-tech-es/grado/patterns'
 // Componentes de 0.3, por grupo.
 export * from './group-datos.js'
 export * from './group-graficos.js'

@@ -202,7 +202,7 @@ test('las fuentes tienen nombre, pila, paquete y hoja de Google Fonts; Barlow co
       assert.equal(font.href, undefined)
       continue
     }
-    if (font.bundled) assert.equal(font.package, undefined, 'Barlow viene en @1k5/grado/fonts.css')
+    if (font.bundled) assert.equal(font.package, undefined, 'Barlow viene en @1k5-tech-es/grado/fonts.css')
     else assert.match(font.package, /^@fontsource\/[a-z0-9-]+$/, font.id)
     assert.match(font.href, /^https:\/\/fonts\.googleapis\.com\/css2\?family=[A-Za-z0-9+]+:wght@400;500;600;700&display=swap$/, font.id)
   }
@@ -234,24 +234,24 @@ test('el CSS del tema lleva la fuente y, con Tailwind 3, la aplica por encima de
 test('los pasos de instalación usan los paquetes y los imports reales', () => {
   const theme = resolveTheme({ base: 'marca' })
   const react = installSteps(theme, { framework: 'react', styles: 'tailwind4' })
-  assert.match(react[0].code, /1k5-grado-0\.1\.0\.tgz \\\n {2}\.\/vendor\/1k5-grado-react-0\.1\.0\.tgz/)
+  assert.match(react[0].code, /1k5-tech-es-grado-0\.1\.0\.tgz \\\n {2}\.\/vendor\/1k5-tech-es-grado-react-0\.1\.0\.tgz/)
   assert.ok(react[1].file)
   assert.match(react[2].code, /@import '\.\/grado-tema\.css';/)
   assert.match(react.at(-1).code, /data-k5-theme="marca"/)
   const html = installSteps(theme, { framework: 'html' })
-  assert.equal(html[0].code, 'npm install ./vendor/1k5-grado-0.1.0.tgz')
+  assert.equal(html[0].code, 'npm install ./vendor/1k5-tech-es-grado-0.1.0.tgz')
   assert.match(html[2].code, /grado-tema\.css/)
   assert.equal(installSteps(resolveTheme({ font: 'sistema' }), { framework: 'react' }).length, 4)
   assert.equal(
     cliCommand('GRADO-5C068C-2ED8C3-F-R8', { framework: 'vue', styles: 'css' }),
-    'npx @1k5/grado init --tema GRADO-5C068C-2ED8C3-F-R8 --framework vue --estilos css',
+    'npx @1k5-tech-es/grado init --tema GRADO-5C068C-2ED8C3-F-R8 --framework vue --estilos css',
   )
 })
 
 test('los pasos de instalación cargan la fuente elegida', () => {
   const inter = resolveTheme({ font: 'inter', dark: false })
   const tailwind = installSteps(inter, { framework: 'vue', styles: 'tailwind4' })
-  assert.match(tailwind[0].code, /1k5-grado-vue-0\.1\.0\.tgz \\\n {2}@fontsource\/inter$/)
+  assert.match(tailwind[0].code, /1k5-tech-es-grado-vue-0\.1\.0\.tgz \\\n {2}@fontsource\/inter$/)
   assert.equal(tailwind[3].label, 'Entrada de tu aplicación · main.ts · fuente Inter')
   assert.equal(
     tailwind[3].code,
@@ -261,14 +261,14 @@ test('los pasos de instalación cargan la fuente elegida', () => {
   assert.equal(css.length, 3)
   assert.match(css[2].code, /^import '@fontsource\/inter\/400\.css';[\s\S]*import '\.\/grado-tema\.css';$/)
   const html = installSteps(inter, { framework: 'html' })
-  assert.equal(html[0].code, 'npm install ./vendor/1k5-grado-0.1.0.tgz')
+  assert.equal(html[0].code, 'npm install ./vendor/1k5-tech-es-grado-0.1.0.tgz')
   assert.match(
     html[2].code,
     /<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Inter:wght@400;500;600;700&display=swap">\n {2}<link rel="stylesheet" href="\/grado\/tokens\.css">/,
   )
   const barlow = installSteps(resolveTheme({ font: 'barlow', dark: false }), { framework: 'react', styles: 'tailwind4' })
   assert.doesNotMatch(barlow[0].code, /fontsource/)
-  assert.equal(barlow.at(-1).code, "import '@1k5/grado/fonts.css';")
+  assert.equal(barlow.at(-1).code, "import '@1k5-tech-es/grado/fonts.css';")
   const system = resolveTheme({ font: 'sistema' })
   for (const framework of ['react', 'html'])
     for (const step of installSteps(system, { framework })) assert.doesNotMatch(step.code ?? '', /fontsource|fonts\.googleapis/)

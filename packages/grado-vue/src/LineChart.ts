@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, type PropType } from 'vue'
-import { areaPath, chartPoints, formatNumber, linePath, niceScale, type ChartSeries } from '@1k5/grado/patterns'
+import { areaPath, chartPoints, formatNumber, linePath, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 
 const percent = (value: number, max: number) => `${Math.round((Math.max(0, value) / max) * 10000) / 100}%`

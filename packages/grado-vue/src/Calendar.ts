@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, nextTick, ref, type PropType } from 'vue'
-import { cx, ICON_PATHS } from '@1k5/grado/classes'
+import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import {
   addDays,
   addMonths,
@@ -12,7 +12,7 @@ import {
   todayIso,
   weekdayNames,
   type DateRangeValue,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { autoId, model } from './helpers.js'

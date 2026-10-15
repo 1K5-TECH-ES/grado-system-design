@@ -6,8 +6,8 @@ import { createElement as r } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import * as R from '@1k5/grado-react'
-import * as V from '@1k5/grado-vue'
+import * as R from '@1k5-tech-es/grado-react'
+import * as V from '@1k5-tech-es/grado-vue'
 import { normalize } from './normalize.mjs'
 
 const css = readFileSync(new URL('../packages/grado/dist/grado.css', import.meta.url), 'utf8')

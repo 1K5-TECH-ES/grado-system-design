@@ -1,18 +1,18 @@
-# @1k5/grado-vue
+# @1k5-tech-es/grado-vue
 
-Componentes Vue 3 de Grado, el sistema de diseño de 1KOMMA5° España. Son una capa fina sobre `grado.css`: generan exactamente el mismo HTML que `@1k5/grado-react`. No necesitan compilar `.vue`: están hechos con `defineComponent`.
+Componentes Vue 3 de Grado, el sistema de diseño de 1KOMMA5° España. Son una capa fina sobre `grado.css`: generan exactamente el mismo HTML que `@1k5-tech-es/grado-react`. No necesitan compilar `.vue`: están hechos con `defineComponent`.
 
 ## Instalación
 
 ```bash
-npm i @1k5/grado @1k5/grado-vue
+npm i @1k5-tech-es/grado @1k5-tech-es/grado-vue
 ```
 
 Importa el CSS una vez en toda la app. Con Tailwind 3 (1komma5es_help, Sales Coach), en `src/assets/index.css`:
 
 ```css
-@import '@1k5/grado/tokens-hsl.css';
-@import '@1k5/grado/grado.css';
+@import '@1k5-tech-es/grado/tokens-hsl.css';
+@import '@1k5-tech-es/grado/grado.css';
 
 @tailwind base;
 @tailwind components;
@@ -25,7 +25,7 @@ Así las utilidades de Tailwind quedan después y pueden sobrescribir a los comp
 
 ```vue
 <script setup lang="ts">
-import { Button, Field, Input, Switch, PageHeader } from '@1k5/grado-vue'
+import { Button, Field, Input, Switch, PageHeader } from '@1k5-tech-es/grado-vue'
 import { Plus } from 'lucide-vue-next'
 const kwp = ref('8,4')
 const auto = ref(true)
@@ -86,7 +86,7 @@ En `Input`, `v-model` devuelve siempre texto. Para cifras usa `NumberInput`, que
 Sin configurar nada, los textos están en español. Para toda la app:
 
 ```ts
-import { Grado } from '@1k5/grado-vue'
+import { Grado } from '@1k5-tech-es/grado-vue'
 
 createApp(App).use(Grado, { locale: 'de-DE' }).mount('#app')
 ```

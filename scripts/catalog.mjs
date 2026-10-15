@@ -1,11 +1,11 @@
-// Genera el catálogo con @1k5/grado-react sobre tokens.css + grado.css:
+// Genera el catálogo con @1k5-tech-es/grado-react sobre tokens.css + grado.css:
 //   catalog/index.html  todos los componentes
 //   catalog/app.html    el armazón de aplicación con una página de ejemplo
 // Parámetros de la URL: ?tema=marca&modo=dark&menu=abierto&plegado=si
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createElement as r, Fragment } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import maquetacionSections from './catalog/maquetacion.mjs'
 import datosSections from './catalog/datos.mjs'
 import graficosSections from './catalog/graficos.mjs'

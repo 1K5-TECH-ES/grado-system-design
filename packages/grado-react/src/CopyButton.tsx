@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState, type ButtonHTMLAttributes, type MouseEvent } from 'react'
-import { copyButtonClass, cx, DATA_ICON_PATHS, ICON_PATHS, type Size } from '@1k5/grado/classes'
-import { copyText } from '@1k5/grado/patterns'
+import { copyButtonClass, cx, DATA_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
+import { copyText } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

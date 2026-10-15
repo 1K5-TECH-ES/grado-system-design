@@ -1,5 +1,5 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { badgeClass, type BadgeTone } from '@1k5/grado/classes'
+import { badgeClass, type BadgeTone } from '@1k5-tech-es/grado/classes'
 
 export const Badge = defineComponent({
   name: 'K5Badge',

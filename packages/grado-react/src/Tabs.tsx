@@ -1,7 +1,7 @@
 'use client'
 import { type ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
-import { moveFocus } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { moveFocus } from '@1k5-tech-es/grado/patterns'
 import { useAutoId, useValue } from './hooks.js'
 
 export interface TabItem {

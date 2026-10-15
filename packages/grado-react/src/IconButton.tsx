@@ -1,6 +1,6 @@
 'use client'
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
-import { cx, iconButtonClass, type IconButtonVariant, type Size } from '@1k5/grado/classes'
+import { cx, iconButtonClass, type IconButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { useValue } from './hooks.js'
 import type { IconComponent } from './types.js'
 

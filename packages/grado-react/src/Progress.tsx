@@ -1,7 +1,7 @@
 'use client'
 import type { HTMLAttributes } from 'react'
-import { cx, progressClass, type ProgressTone, type SmallSize } from '@1k5/grado/classes'
-import { progressState } from '@1k5/grado/patterns'
+import { cx, progressClass, type ProgressTone, type SmallSize } from '@1k5-tech-es/grado/classes'
+import { progressState } from '@1k5-tech-es/grado/patterns'
 import { useAutoId } from './hooks.js'
 import { useGrado } from './Locale.js'
 

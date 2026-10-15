@@ -13,7 +13,7 @@ import {
   type MouseEvent,
   type ReactNode,
 } from 'react'
-import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass, cx } from '@1k5/grado/classes'
+import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass, cx } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import type { IconComponent } from './types.js'

@@ -1,8 +1,8 @@
 // Grupo «datos y piezas»: lógica compartida de Progress, AvatarGroup, Tag y CopyButton.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { copyText, formatPercent, progressState, splitAvatars, tagFocusTarget } from '@1k5/grado/patterns'
-import { messagesFor } from '@1k5/grado/messages'
+import { copyText, formatPercent, progressState, splitAvatars, tagFocusTarget } from '@1k5-tech-es/grado/patterns'
+import { messagesFor } from '@1k5-tech-es/grado/messages'
 
 test('formatPercent: formato de cada idioma', () => {
   assert.equal(formatPercent(0.64), '64\u00a0%')

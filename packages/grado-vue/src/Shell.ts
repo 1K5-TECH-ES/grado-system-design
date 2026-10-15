@@ -15,7 +15,7 @@ import {
   type PropType,
   type VNodeArrayChildren,
 } from 'vue'
-import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass } from '@1k5/grado/classes'
+import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass } from '@1k5-tech-es/grado/classes'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

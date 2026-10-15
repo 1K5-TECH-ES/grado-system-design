@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
-import { cx, sparklineClass, type SparklineTone } from '@1k5/grado/classes'
-import { areaPath, linePath, sparklinePoints } from '@1k5/grado/patterns'
+import { cx, sparklineClass, type SparklineTone } from '@1k5-tech-es/grado/classes'
+import { areaPath, linePath, sparklinePoints } from '@1k5-tech-es/grado/patterns'
 
 export interface SparklineProps {
   /** Valores en orden. La escala va del mínimo al máximo; si son iguales, la línea queda plana. */

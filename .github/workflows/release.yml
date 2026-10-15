@@ -1,8 +1,6 @@
-# Publicación: al subir una etiqueta vX.Y.Z publica los tres paquetes con esa versión.
-# Configura en el repositorio (Settings → Secrets and variables → Actions):
-#   - variable NPM_REGISTRY_URL: el registro privado (p. ej. https://npm.pkg.github.com
-#     si el ámbito de los paquetes coincide con la organización, o el de vuestro Artifactory/Verdaccio).
-#   - secreto NPM_TOKEN: un token con permiso de publicación en ese registro.
+# Publicación: al subir una etiqueta vX.Y.Z publica los tres paquetes en GitHub Packages
+# (ámbito @1k5-tech-es, privados como el repositorio) y crea la release de GitHub.
+# No necesita secretos: publica con el GITHUB_TOKEN del propio workflow.
 # La versión de los package.json tiene que coincidir con la etiqueta: `npm run release:check` lo comprueba.
 name: Release
 
@@ -24,7 +22,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          registry-url: ${{ vars.NPM_REGISTRY_URL }}
+          registry-url: https://npm.pkg.github.com
+          scope: '@1k5-tech-es'
       - run: npm ci
       - run: npm run release:check -- "${GITHUB_REF_NAME#v}"
       - run: npm test
@@ -32,7 +31,7 @@ jobs:
       - run: npm run test:browser
       - run: npm publish --workspaces
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm run docs:build
       - name: Release en GitHub con los paquetes y las notas del CHANGELOG
         run: |

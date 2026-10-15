@@ -1,6 +1,6 @@
 'use client'
 import { type ReactNode } from 'react'
-import { cx, ICON_PATHS } from '@1k5/grado/classes'
+import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId, useValue } from './hooks.js'
 

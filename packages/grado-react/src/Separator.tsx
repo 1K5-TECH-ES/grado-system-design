@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { cx, separatorClass, type SeparatorOrientation } from '@1k5/grado/classes'
+import { cx, separatorClass, type SeparatorOrientation } from '@1k5-tech-es/grado/classes'
 
 export interface SeparatorProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   orientation?: SeparatorOrientation

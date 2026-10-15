@@ -1,5 +1,5 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { emptyClass } from '@1k5/grado/classes'
+import { emptyClass } from '@1k5-tech-es/grado/classes'
 
 export const EmptyState = defineComponent({
   name: 'K5EmptyState',

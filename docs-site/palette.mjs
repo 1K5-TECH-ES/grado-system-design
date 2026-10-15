@@ -54,7 +54,7 @@ export const RADII = { r4: '0.25rem', r8: '0.5rem', r12: '0.75rem' }
 
 /**
  * Fuentes del configurador, todas en Google Fonts y en Fontsource con los pesos 400 a 700.
- * Barlow es la de marca y la de tokens.json, y viene en el propio paquete (@1k5/grado/fonts.css).
+ * Barlow es la de marca y la de tokens.json, y viene en el propio paquete (@1k5-tech-es/grado/fonts.css).
  * «Sistema» no descarga nada.
  */
 const FALLBACK = 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
@@ -79,7 +79,7 @@ export const FONTS = [
   return {
     ...font,
     stack: `${family}, ${FALLBACK}`,
-    // Barlow no necesita paquete aparte: la trae @1k5/grado.
+    // Barlow no necesita paquete aparte: la trae @1k5-tech-es/grado.
     ...(bundled ? { bundled: true } : { package: `@fontsource/${font.name.toLowerCase().replaceAll(' ', '-')}` }),
     // Hoja de estilos de Google Fonts: la web la usa para las muestras y las páginas HTML sin bundler.
     href: `https://fonts.googleapis.com/css2?family=${font.name.replaceAll(' ', '+')}:wght@${FONT_WEIGHTS.join(';')}&display=swap`,
@@ -517,17 +517,19 @@ export function themeCss({ config, palette, variant, font, tokens, code }, { sty
 
 /**
  * Pasos de instalación con el tema, según framework y estilos. Con bundler, Barlow sale de
- * @1k5/grado/fonts.css y las demás fuentes de Fontsource; en HTML, se enlazan a Google Fonts.
+ * @1k5-tech-es/grado/fonts.css y las demás fuentes de Fontsource; en HTML, se enlazan a Google Fonts.
  */
 export function installSteps({ config, font }, { framework = 'react', styles = 'tailwind4', version = '0.1.0' } = {}) {
-  const base = `./vendor/1k5-grado-${version}.tgz`
+  const base = `./vendor/1k5-tech-es-grado-${version}.tgz`
   const fontPackage = font.package ? ` \\\n  ${font.package}` : ''
   const install =
-    framework === 'html' ? `npm install ${base}` : `npm install ${base} \\\n  ./vendor/1k5-grado-${framework}-${version}.tgz${fontPackage}`
+    framework === 'html'
+      ? `npm install ${base}`
+      : `npm install ${base} \\\n  ./vendor/1k5-tech-es-grado-${framework}-${version}.tgz${fontPackage}`
   const htmlTag = `<html lang="es"${config.base === 'marca' ? ' data-k5-theme="marca"' : ''}>`
   const main = framework === 'vue' ? 'main.ts' : 'main.tsx'
   const fontImports = font.bundled
-    ? "import '@1k5/grado/fonts.css';\n"
+    ? "import '@1k5-tech-es/grado/fonts.css';\n"
     : font.package
       ? `${FONT_WEIGHTS.map((weight) => `import '${font.package}/${weight}.css';`).join('\n')}\n`
       : ''
@@ -543,18 +545,18 @@ export function installSteps({ config, font }, { framework = 'react', styles = '
   } else if (styles === 'css') {
     entry = {
       label: `Entrada de tu aplicación · ${main}`,
-      code: `${fontImports}import '@1k5/grado/tokens.css';\nimport '@1k5/grado/grado.css';\nimport './grado-tema.css';`,
+      code: `${fontImports}import '@1k5-tech-es/grado/tokens.css';\nimport '@1k5-tech-es/grado/grado.css';\nimport './grado-tema.css';`,
     }
   } else {
     entry =
       styles === 'tailwind3'
         ? {
             label: 'CSS global · con el preset de Grado en tailwind.config.js',
-            code: "@import '@1k5/grado/tokens-hsl.css';\n@import '@1k5/grado/grado.css';\n@import './grado-tema.css';\n\n@tailwind base;\n@tailwind components;\n@tailwind utilities;",
+            code: "@import '@1k5-tech-es/grado/tokens-hsl.css';\n@import '@1k5-tech-es/grado/grado.css';\n@import './grado-tema.css';\n\n@tailwind base;\n@tailwind components;\n@tailwind utilities;",
           }
         : {
             label: 'CSS global',
-            code: "@import 'tailwindcss';\n@import '@1k5/grado/tailwind.css';\n@import '@1k5/grado/grado.css' layer(components);\n@import './grado-tema.css';",
+            code: "@import 'tailwindcss';\n@import '@1k5-tech-es/grado/tailwind.css';\n@import '@1k5-tech-es/grado/grado.css' layer(components);\n@import './grado-tema.css';",
           }
     // La fuente va en la entrada de JavaScript: así el bundler resuelve las rutas de sus archivos.
     if (fontImports) fontEntry = { label: `Entrada de tu aplicación · ${main} · fuente ${font.name}`, code: fontImports.trimEnd() }
@@ -573,4 +575,4 @@ export function installSteps({ config, font }, { framework = 'react', styles = '
 
 /** Comando de una línea para cuando exista el CLI de Grado. */
 export const cliCommand = (code, { framework = 'react', styles = 'tailwind4' } = {}) =>
-  `npx @1k5/grado init --tema ${code} --framework ${framework}${framework === 'html' ? '' : ` --estilos ${styles}`}`
+  `npx @1k5-tech-es/grado init --tema ${code} --framework ${framework}${framework === 'html' ? '' : ` --estilos ${styles}`}`

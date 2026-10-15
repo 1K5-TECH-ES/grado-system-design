@@ -1,6 +1,6 @@
 'use client'
 import { forwardRef, useImperativeHandle, useState, type InputHTMLAttributes } from 'react'
-import { cx, type Size } from '@1k5/grado/classes'
+import { cx, type Size } from '@1k5-tech-es/grado/classes'
 import {
   formatIban,
   formatPhone,
@@ -15,7 +15,7 @@ import {
   significantCount,
   toE164,
   type PhoneCountryCode,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
 import { useGrado } from './Locale.js'
 import { useAutoId, useValue } from './hooks.js'

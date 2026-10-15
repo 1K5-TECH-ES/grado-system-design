@@ -1,6 +1,6 @@
 import { defineComponent, h, mergeProps, onMounted, ref, watch, type PropType } from 'vue'
-import { cx } from '@1k5/grado/classes'
-import { type ChoiceOption } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { type ChoiceOption } from '@1k5-tech-es/grado/patterns'
 import { useField } from './Field.js'
 import { autoId, booleanOptional, model } from './helpers.js'
 

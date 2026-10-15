@@ -1,5 +1,5 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { DATA_ICON_PATHS, linkClass, type LinkTone, type LinkUnderline } from '@1k5/grado/classes'
+import { DATA_ICON_PATHS, linkClass, type LinkTone, type LinkUnderline } from '@1k5-tech-es/grado/classes'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

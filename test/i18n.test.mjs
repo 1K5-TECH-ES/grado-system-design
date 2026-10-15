@@ -1,4 +1,4 @@
-// Idiomas: los textos de los componentes salen de @1k5/grado/messages y se cambian con
+// Idiomas: los textos de los componentes salen de @1k5-tech-es/grado/messages y se cambian con
 // GradoProvider (React) o con el plugin y GradoProvider (Vue). Las props mandan.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
@@ -6,9 +6,9 @@ import { createElement as r } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import * as R from '@1k5/grado-react'
-import * as V from '@1k5/grado-vue'
-import { MESSAGES, formatMessage, messagesFor } from '@1k5/grado/messages'
+import * as R from '@1k5-tech-es/grado-react'
+import * as V from '@1k5-tech-es/grado-vue'
+import { MESSAGES, formatMessage, messagesFor } from '@1k5-tech-es/grado/messages'
 import { normalize } from './normalize.mjs'
 
 const sameIds = (html) => normalize(html).replace(/(k5-[a-z]+-)(?:_R_[A-Za-z0-9]*_|v-\d+(?:-\d+)*)/g, '$1AUTO')

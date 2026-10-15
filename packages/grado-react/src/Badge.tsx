@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { badgeClass, cx, type BadgeTone } from '@1k5/grado/classes'
+import { badgeClass, cx, type BadgeTone } from '@1k5-tech-es/grado/classes'
 import type { IconComponent } from './types.js'
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

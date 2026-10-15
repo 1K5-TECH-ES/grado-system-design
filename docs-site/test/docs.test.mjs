@@ -63,7 +63,7 @@ test('cada ejemplo React y Vue tiene sintaxis válida', () => {
         compileScript(descriptor, { id: filename })
         const template = compileTemplate({ source: descriptor.template.content, filename, id: filename })
         assert.deepEqual(template.errors, [], filename)
-      } else if (source.includes("from '@1k5/grado-react'")) {
+      } else if (source.includes("from '@1k5-tech-es/grado-react'")) {
         const filename = `Example${++reactCount}.tsx`
         // Wrap usage fragments in a component so adjacent JSX examples are valid.
         const imports = source.match(/^import[\s\S]*?from [^;]+;/gm) || []

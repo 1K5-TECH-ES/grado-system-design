@@ -1,5 +1,5 @@
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
-import { buttonClass, cx, type ButtonVariant, type Size } from '@1k5/grado/classes'
+import { buttonClass, cx, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { Spinner } from './Spinner.js'
 import type { IconComponent } from './types.js'
 
@@ -16,7 +16,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
 }
 
-/** Para enlaces o el Link del router, usa buttonClass() de @1k5/grado/classes. */
+/** Para enlaces o el Link del router, usa buttonClass() de @1k5-tech-es/grado/classes. */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant, size, icon: Icon, iconOnly, block, loading = false, disabled, type = 'button', className, children, ...rest },
   ref,

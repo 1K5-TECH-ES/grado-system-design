@@ -1,6 +1,6 @@
 # Web de documentación de Grado
 
-Aplicación React en español con introducción, configurador de temas, instalación y componentes. Está hecha con `@1k5/grado-react`, como cualquier aplicación de 1KOMMA5°: `AppShell` y `Nav` para el marco, `CommandPalette` para la búsqueda, `SegmentedControl` para el tema, el modo y el framework, y `PageHeader`, `Card`, `Tabs`, `Table`, `Accordion`, `Alert`, `CopyButton`… para el contenido. React Router gestiona la navegación y cada página se descarga solo cuando se visita. Las vistas previas son los componentes reales. Incluye código para React y Vue, propiedades, búsqueda, temas y modo oscuro.
+Aplicación React en español con introducción, configurador de temas, instalación y componentes. Está hecha con `@1k5-tech-es/grado-react`, como cualquier aplicación de 1KOMMA5°: `AppShell` y `Nav` para el marco, `CommandPalette` para la búsqueda, `SegmentedControl` para el tema, el modo y el framework, y `PageHeader`, `Card`, `Tabs`, `Table`, `Accordion`, `Alert`, `CopyButton`… para el contenido. React Router gestiona la navegación y cada página se descarga solo cuando se visita. Las vistas previas son los componentes reales. Incluye código para React y Vue, propiedades, búsqueda, temas y modo oscuro.
 
 ## Generar
 
@@ -59,7 +59,7 @@ Abre `http://localhost:4173`. Regenera con `npm run docs:build` después de camb
 - `scripts/docs.mjs`: el build: copia los recursos de Grado, escribe `index.html` y empaqueta la app con esbuild.
 - `docs-site/assets/app.mjs`: entrada del navegador; monta la app con React Router.
 - `docs-site/palette.mjs`: paletas que combinan con el principal (armonías en OKLCH), variantes, lista de fuentes, tokens del tema, CSS y código de tema. Usa la librería de color de Grado. Sus tests están en `docs-site/test/palette.test.mjs`.
-- `docs-site/configurator.mjs`: el configurador, con los componentes de `@1k5/grado-react`.
+- `docs-site/configurator.mjs`: el configurador, con los componentes de `@1k5-tech-es/grado-react`.
 - `docs-site/assets/docs.css`: solo lo que los componentes no traen: disposición de las páginas, bloques de código, muestras de tokens, marco de las vistas previas y configurador. Usa solo variables `--k5-*`: la web entera sigue el tema elegido en la cabecera, Marca por defecto. Antes de añadir estilos aquí, mira si un componente de Grado (o `Stack`, `Grid`, `Text`) ya lo resuelve.
 - `docs-site/assets/theme.js`: aplicación temprana del tema guardado. Admite `?tema=consola` y `?modo=dark`.
 - `docs-site/guidelines.mjs`: guía de uso de cada componente. Un test exige las tres partes en todos.
@@ -71,7 +71,7 @@ Abre `http://localhost:4173`. Regenera con `npm run docs:build` después de camb
 
 La web ofrece archivos `.tgz` instalables, generados con `npm pack --workspaces`. El paquete base y el del framework se instalan juntos. Los consumidores deben guardar los archivos en su repositorio para que sus compilaciones sean reproducibles.
 
-Publicar esta web **no publica los paquetes en npm**. Cuando se configure un registro, habrá que publicar los tres paquetes y actualizar la guía de instalación. Al cambiar de versión, mantén alineadas las versiones y dependencias de los tres paquetes.
+Publicar esta web **no publica los paquetes en npm**: los publica el workflow `Release` al subir una etiqueta `vX.Y.Z`, en GitHub Packages, privados como el repositorio. Los `.tgz` siguen sirviendo a quien no tenga acceso a la organización de GitHub. Al cambiar de versión, mantén alineadas las versiones y dependencias de los tres paquetes.
 
 ## Comprobaciones
 

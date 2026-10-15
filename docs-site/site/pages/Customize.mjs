@@ -1,5 +1,5 @@
 import { createElement as h } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { Configurator } from '../../configurator.mjs'
 import { footer, NoteCard, Section } from '../ui.mjs'
 

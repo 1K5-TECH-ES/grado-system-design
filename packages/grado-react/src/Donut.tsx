@@ -1,8 +1,8 @@
 'use client'
 import type { ReactNode } from 'react'
-import { cx, donutClass, type Size } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
-import { donutSlices, formatNumber, formatPercent, type DonutSegment } from '@1k5/grado/patterns'
+import { cx, donutClass, type Size } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
+import { donutSlices, formatNumber, formatPercent, type DonutSegment } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 
 export interface DonutProps {

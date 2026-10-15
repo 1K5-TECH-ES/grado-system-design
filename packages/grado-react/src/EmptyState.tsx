@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { cx, emptyClass } from '@1k5/grado/classes'
+import { cx, emptyClass } from '@1k5-tech-es/grado/classes'
 import type { IconComponent } from './types.js'
 
 export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {

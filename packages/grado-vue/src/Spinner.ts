@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { spinnerClass, type Size } from '@1k5/grado/classes'
+import { spinnerClass, type Size } from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 
 export const Spinner = defineComponent({

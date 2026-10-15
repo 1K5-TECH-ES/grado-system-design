@@ -1,7 +1,7 @@
 'use client'
 import { useState, type KeyboardEvent } from 'react'
-import { cx, toggleGroupClass, type Size } from '@1k5/grado/classes'
-import { nextIndex, toggleValues } from '@1k5/grado/patterns'
+import { cx, toggleGroupClass, type Size } from '@1k5-tech-es/grado/classes'
+import { nextIndex, toggleValues } from '@1k5-tech-es/grado/patterns'
 import { useValue } from './hooks.js'
 import type { IconComponent } from './types.js'
 

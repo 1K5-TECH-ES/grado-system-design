@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, mergeProps, type PropType } from 'vue'
-import { cx } from '@1k5/grado/classes'
-import { clampNumber, decimalsOf, formatNumber, type SliderMark } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { clampNumber, decimalsOf, formatNumber, type SliderMark } from '@1k5-tech-es/grado/patterns'
 import { useControl, useField } from './Field.js'
 import { useGrado } from './Locale.js'
 import { autoId, booleanOptional, model } from './helpers.js'

@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { cx, statusClass, type RowStatusTone } from '@1k5/grado/classes'
+import { cx, statusClass, type RowStatusTone } from '@1k5-tech-es/grado/classes'
 
 export interface StatusProps extends HTMLAttributes<HTMLSpanElement> {
   tone?: RowStatusTone

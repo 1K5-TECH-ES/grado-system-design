@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, type Component, type PropType } from 'vue'
-import { toggleGroupClass, type Size } from '@1k5/grado/classes'
-import { nextIndex, toggleValues } from '@1k5/grado/patterns'
+import { toggleGroupClass, type Size } from '@1k5-tech-es/grado/classes'
+import { nextIndex, toggleValues } from '@1k5-tech-es/grado/patterns'
 import { model } from './helpers.js'
 
 export interface ToggleOption {

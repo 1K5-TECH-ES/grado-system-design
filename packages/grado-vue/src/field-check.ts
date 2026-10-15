@@ -1,5 +1,5 @@
 import { ref, watch } from 'vue'
-import { caretAfter } from '@1k5/grado/patterns'
+import { caretAfter } from '@1k5-tech-es/grado/patterns'
 
 /**
  * Validación de los campos con formato (TimePicker, PhoneInput, NifInput, IbanInput). Uso interno.

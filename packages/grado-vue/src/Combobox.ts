@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, watch, type PropType } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
-import { filterOptions, type ChoiceOption } from '@1k5/grado/patterns'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'

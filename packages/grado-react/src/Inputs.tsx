@@ -1,7 +1,7 @@
 'use client'
 import { forwardRef, useEffect, useRef, useState, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react'
-import { cx, ICON_PATHS, type Size } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
+import { cx, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import {
   clampNumber,
   decimalsOf,
@@ -11,7 +11,7 @@ import {
   parseNumber,
   stepNumber,
   type ChoiceOption,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 import { useControl, useField } from './Field.js'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'

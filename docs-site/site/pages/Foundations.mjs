@@ -1,8 +1,8 @@
 // Las escalas de tokens.json, con los valores reales. Los colores y sombras se pintan con
 // variables: cambian con el tema y el modo de la cabecera.
 import { createElement as h } from 'react'
-import * as G from '@1k5/grado-react'
-import tokens from '@1k5/grado/tokens.json' with { type: 'json' }
+import * as G from '@1k5-tech-es/grado-react'
+import tokens from '@1k5-tech-es/grado/tokens.json' with { type: 'json' }
 import { foundationsToc } from '../routes.mjs'
 import { NoteCard, Page, Section } from '../ui.mjs'
 

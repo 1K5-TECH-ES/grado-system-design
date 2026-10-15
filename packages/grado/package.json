@@ -1,5 +1,5 @@
 {
-  "name": "@1k5/grado",
+  "name": "@1k5-tech-es/grado",
   "version": "0.3.0",
   "description": "Sistema de diseño de 1KOMMA5° España: tokens de color, tipografía y forma para React, Vue y cualquier web.",
   "license": "UNLICENSED",
@@ -9,7 +9,7 @@
     "directory": "packages/grado"
   },
   "publishConfig": {
-    "access": "restricted"
+    "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
   "sideEffects": [

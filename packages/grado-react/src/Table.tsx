@@ -1,5 +1,5 @@
 import type { ReactNode, TableHTMLAttributes } from 'react'
-import { cx, tableClass, tableWrapClass } from '@1k5/grado/classes'
+import { cx, tableClass, tableWrapClass } from '@1k5-tech-es/grado/classes'
 
 export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
   caption?: ReactNode

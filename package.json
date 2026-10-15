@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "test": "npm test --workspaces && node --test \"test/*.test.mjs\"",
-    "contrast": "npm run contrast -w @1k5/grado",
+    "contrast": "npm run contrast -w @1k5-tech-es/grado",
     "catalog": "npm run build && node scripts/catalog.mjs",
     "docs:build": "npm run build && node scripts/docs.mjs && npm pack --workspaces --pack-destination docs-site/dist/downloads",
     "docs:check": "node --test \"docs-site/test/*.test.mjs\"",

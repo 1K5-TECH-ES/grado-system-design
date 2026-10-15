@@ -1,6 +1,6 @@
 'use client'
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
+import { cx } from '@1k5-tech-es/grado/classes'
 
 export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'role'> {
   label?: ReactNode

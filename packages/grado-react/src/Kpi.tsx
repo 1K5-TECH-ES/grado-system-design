@@ -10,7 +10,7 @@ import {
   type KpiBetter,
   type KpiTone,
   type TrendDirection,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 import { Sparkline } from './Sparkline.js'
 

@@ -1,8 +1,8 @@
 // Web de documentación · grupo «entradas»: demo en vivo de cada ficha (id → componente React).
 // No importes doc-helpers.mjs aquí: demos.mjs carga este archivo y doc-helpers carga demos.mjs.
 import { createElement as h, useState } from 'react'
-import * as G from '@1k5/grado-react'
-import { formatNumber, normalizeSearch } from '@1k5/grado/patterns'
+import * as G from '@1k5-tech-es/grado-react'
+import { formatNumber, normalizeSearch } from '@1k5-tech-es/grado/patterns'
 
 // La vista previa es flex: live-stack hace que la demo ocupe todo el ancho.
 const frame = (...children) => h('div', { className: 'live-stack' }, ...children)

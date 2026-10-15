@@ -2,8 +2,8 @@
 // tests), adopción por aplicación y el registro de cambios. El build los pasa a la aplicación
 // como el módulo «virtual:site-data»; los tests los calculan igual.
 import { readFileSync, readdirSync } from 'node:fs'
-import * as G from '@1k5/grado-react'
-import * as V from '@1k5/grado-vue'
+import * as G from '@1k5-tech-es/grado-react'
+import * as V from '@1k5-tech-es/grado-vue'
 import { byCategory, components } from './catalog.mjs'
 import { guidelines } from './guidelines.mjs'
 import { slug } from './site/text.mjs'

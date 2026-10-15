@@ -182,7 +182,7 @@ export const entries = [
       "const nif = ref('');\nconst error = ref('');",
     ),
     [['value / modelValue', 'En mayúsculas, sin espacios ni guiones: «12345678Z»', "''"], ['size', 'sm · md · lg', 'md'], checked],
-    `DNI: letra de control con el módulo 23. NIE: X, Y o Z valen 0, 1 o 2 y se calcula igual. CIF: dígito o letra de control según el tipo de entidad. Los errores dicen qué falla: «La letra del DNI no coincide», «El CIF tiene una letra, 7 cifras y un carácter de control»… La lógica está en @1k5/grado/patterns (normalizeNif, nifError, isValidNif). ${checkedNote}`,
+    `DNI: letra de control con el módulo 23. NIE: X, Y o Z valen 0, 1 o 2 y se calcula igual. CIF: dígito o letra de control según el tipo de entidad. Los errores dicen qué falla: «La letra del DNI no coincide», «El CIF tiene una letra, 7 cifras y un carácter de control»… La lógica está en @1k5-tech-es/grado/patterns (normalizeNif, nifError, isValidNif). ${checkedNote}`,
   ),
   entry(
     'iban-input',
@@ -204,7 +204,7 @@ export const entries = [
       "const iban = ref('');",
     ),
     [['value / modelValue', 'Sin espacios: «ES9121000418450200051332»', "''"], ['size', 'sm · md · lg', 'md'], checked],
-    `Se ve como «ES91 2100 0418 4502 0005 1332» y el cursor se queda en su sitio al reformatear. Comprueba la longitud de cada país (24 en España) y los dígitos de control. La lógica está en @1k5/grado/patterns (formatIban, ibanError, isValidIban). ${checkedNote}`,
+    `Se ve como «ES91 2100 0418 4502 0005 1332» y el cursor se queda en su sitio al reformatear. Comprueba la longitud de cada país (24 en España) y los dígitos de control. La lógica está en @1k5-tech-es/grado/patterns (formatIban, ibanError, isValidIban). ${checkedNote}`,
   ),
   entry(
     'address-input',

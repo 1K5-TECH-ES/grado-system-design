@@ -1,7 +1,7 @@
 'use client'
 import type { CSSProperties, ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
-import { formatNumber, niceScale, type ChartSeries } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { formatNumber, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
 
 export interface BarChartProps<T extends object> {

@@ -8,7 +8,7 @@ import {
   type TextSize,
   type TextTone,
   type TextWeight,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 
 /** Párrafo o texto en línea con un paso de la escala tipográfica. */
 export const Text = defineComponent({

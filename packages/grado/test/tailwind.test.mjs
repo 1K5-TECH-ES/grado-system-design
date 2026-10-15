@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import postcss from 'postcss'
 import tailwind3 from 'tailwindcss3'
 import tailwind4 from '@tailwindcss/postcss'
-import preset from '@1k5/grado/tailwind-preset'
+import preset from '@1k5-tech-es/grado/tailwind-preset'
 
 const here = fileURLToPath(new URL('.', import.meta.url))
 
@@ -76,7 +76,7 @@ test('Tailwind 3 con el preset (1komma5es_help, Sales Coach)', async () => {
 test('Tailwind 4 con tailwind.css (Kompilot, Memorias)', async () => {
   const input = [
     '@import "tailwindcss" source(none);',
-    '@import "@1k5/grado/tailwind.css";',
+    '@import "@1k5-tech-es/grado/tailwind.css";',
     `@source inline("${CLASSES.join(' ')}");`,
   ].join('\n')
   const { css } = await postcss([tailwind4({ base: here, optimize: false })]).process(input, { from: `${here}input.css` })
@@ -101,8 +101,8 @@ test('Tailwind 4 con tailwind.css (Kompilot, Memorias)', async () => {
 test('Tailwind 4: grado.css entra en la capa components y las utilidades la pueden sobrescribir', async () => {
   const input = [
     '@import "tailwindcss" source(none);',
-    '@import "@1k5/grado/tailwind.css";',
-    '@import "@1k5/grado/grado.css" layer(components);',
+    '@import "@1k5-tech-es/grado/tailwind.css";',
+    '@import "@1k5-tech-es/grado/grado.css" layer(components);',
     '@source inline("rounded-full");',
   ].join('\n')
   const { css } = await postcss([tailwind4({ base: here, optimize: false })]).process(input, { from: `${here}input.css` })

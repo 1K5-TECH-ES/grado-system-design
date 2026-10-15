@@ -1,5 +1,5 @@
 import { defineComponent, h, ref } from 'vue'
-import { ICON_PATHS } from '@1k5/grado/classes'
+import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { Button } from './Button.js'
 import { pathIcon } from './PathIcon.js'
 import { autoId } from './helpers.js'

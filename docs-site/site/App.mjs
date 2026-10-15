@@ -1,7 +1,7 @@
 // La web como aplicación React: AppShell, React Router y una página por ruta.
 import { createElement as h, lazy, Suspense, useEffect, useLayoutEffect, useRef } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { Layout } from './Layout.mjs'
 import { routeByPath, routes } from './routes.mjs'
 import { SiteProvider } from './ui.mjs'

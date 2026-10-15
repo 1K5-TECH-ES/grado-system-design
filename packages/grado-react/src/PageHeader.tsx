@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { cx } from '@1k5/grado/classes'
+import { cx } from '@1k5-tech-es/grado/classes'
 
 export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   title: ReactNode

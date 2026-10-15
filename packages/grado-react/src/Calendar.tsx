@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { cx, ICON_PATHS } from '@1k5/grado/classes'
+import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import {
   addDays,
   addMonths,
@@ -13,7 +13,7 @@ import {
   todayIso,
   weekdayNames,
   type DateRangeValue,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { useAutoId, useValue } from './hooks.js'

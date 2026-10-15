@@ -1,6 +1,6 @@
 import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
-import { cx } from '@1k5/grado/classes'
-import { moveFocus } from '@1k5/grado/patterns'
+import { cx } from '@1k5-tech-es/grado/classes'
+import { moveFocus } from '@1k5-tech-es/grado/patterns'
 import { autoId, model } from './helpers.js'
 
 export interface TabItem {

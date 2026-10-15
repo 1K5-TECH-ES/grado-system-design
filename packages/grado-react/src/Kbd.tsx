@@ -1,5 +1,5 @@
 import { Fragment, type HTMLAttributes } from 'react'
-import { cx } from '@1k5/grado/classes'
+import { cx } from '@1k5-tech-es/grado/classes'
 
 export interface KbdProps extends HTMLAttributes<HTMLElement> {
   /** Teclas de un atajo: ['Ctrl', 'K'] → Ctrl + K. Sin keys, se usa el contenido. */

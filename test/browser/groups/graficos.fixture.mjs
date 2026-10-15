@@ -2,8 +2,8 @@
 // render recibe los ayudantes de fixture.mjs y devuelve una lista de section(id, ...hijos).
 // C(nombre, props, ...hijos) pinta el componente en React o en Vue con las mismas props;
 // en Vue, value → modelValue y onValueChange → onUpdate:modelValue. isVue para lo demás.
-import * as R from '@1k5/grado-react'
-import * as V from '@1k5/grado-vue'
+import * as R from '@1k5-tech-es/grado-react'
+import * as V from '@1k5-tech-es/grado-vue'
 
 export const initial = {}
 

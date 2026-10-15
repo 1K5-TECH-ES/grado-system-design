@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, mergeProps, ref, watch, type PropType } from 'vue'
-import { cx, ICON_PATHS, type Size } from '@1k5/grado/classes'
-import { formatMessage } from '@1k5/grado/messages'
+import { cx, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import {
   clampNumber,
   decimalsOf,
@@ -10,7 +10,7 @@ import {
   parseNumber,
   stepNumber,
   type ChoiceOption,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 import { useControl, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'

@@ -1,7 +1,7 @@
 // Campos especiales (grupo «entradas»): horas, teléfonos, NIF e IBAN con casos reales.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { MESSAGES } from '@1k5/grado/messages'
+import { MESSAGES } from '@1k5-tech-es/grado/messages'
 import {
   caretAfter,
   formatIban,
@@ -26,7 +26,7 @@ import {
   timeError,
   timeSlots,
   toE164,
-} from '@1k5/grado/patterns'
+} from '@1k5-tech-es/grado/patterns'
 
 test('parseTime entiende las formas habituales de escribir una hora', () => {
   for (const [text, time] of [

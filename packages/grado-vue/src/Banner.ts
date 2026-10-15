@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { bannerClass, ICON_PATHS, STATUS_ICONS, type BannerTone } from '@1k5/grado/classes'
+import { bannerClass, ICON_PATHS, STATUS_ICONS, type BannerTone } from '@1k5-tech-es/grado/classes'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 

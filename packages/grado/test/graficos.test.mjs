@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import * as k5 from '@1k5/grado/classes'
+import * as k5 from '@1k5-tech-es/grado/classes'
 
 const css = readFileSync(new URL('../dist/grado.css', import.meta.url), 'utf8')
 

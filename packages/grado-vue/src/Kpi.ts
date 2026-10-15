@@ -8,7 +8,7 @@ import {
   kpiTrend,
   type KpiBetter,
   type KpiTone,
-} from '@1k5/grado/classes'
+} from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 import { Sparkline } from './Sparkline.js'
 

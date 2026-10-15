@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { separatorClass, type SeparatorOrientation } from '@1k5/grado/classes'
+import { separatorClass, type SeparatorOrientation } from '@1k5-tech-es/grado/classes'
 
 /** Línea horizontal o vertical entre bloques. */
 export const Separator = defineComponent({

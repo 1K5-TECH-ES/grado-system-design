@@ -2,7 +2,7 @@
 // CommandPalette, el tema y el modo son SegmentedControl y la navegación usa NavLink.
 import { createElement as h, useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 import { GradoMark } from '../brand.mjs'
 import { icons } from './icons.mjs'
 import { routes, searchGroups } from './routes.mjs'

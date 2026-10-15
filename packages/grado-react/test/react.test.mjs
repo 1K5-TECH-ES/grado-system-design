@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createElement as r } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 
 test('los controles reenvían ref (react-hook-form los necesita)', () => {
   for (const name of ['Button', 'Input', 'Textarea', 'Select', 'Switch']) {

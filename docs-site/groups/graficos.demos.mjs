@@ -1,7 +1,7 @@
 // Web de documentación · grupo «gráficos»: demo en vivo de cada ficha (id → componente React).
 // No importes doc-helpers.mjs aquí: demos.mjs carga este archivo y doc-helpers carga demos.mjs.
 import { createElement as h, useState } from 'react'
-import * as G from '@1k5/grado-react'
+import * as G from '@1k5-tech-es/grado-react'
 
 // Últimos 7 días de una vivienda con 8,4 kWp en Valencia. Datos de ejemplo.
 const week = [
