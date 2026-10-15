@@ -119,3 +119,4 @@ packages/grado/
   dist/                  generado: tokens.css, tokens-hsl.css, tailwind.css, tailwind-preset, tokens.js,
                          tokens.dtcg.json, grado.css, grado.min.css, grado.layer.css, css/, fonts.css, preview.html
 ```
+# grado-system-design
