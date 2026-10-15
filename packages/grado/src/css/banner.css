@@ -1,0 +1,85 @@
+/* Aviso de toda la aplicación: de borde a borde, bajo la cabecera de AppShell.
+   Fondo tintado del tono, sin borde de color; icono y título en el texto del tono. */
+.k5-banner {
+  --_bg: var(--k5-info-subtle);
+  --_text: var(--k5-info-text);
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-2) var(--k5-space-3);
+  width: 100%;
+  min-height: var(--k5-control-h-lg);
+  padding: var(--k5-space-2) var(--k5-space-4);
+  background: var(--_bg);
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  line-height: var(--k5-leading-body);
+}
+.k5-banner--info {
+  --_bg: var(--k5-info-subtle);
+  --_text: var(--k5-info-text);
+}
+.k5-banner--success {
+  --_bg: var(--k5-success-subtle);
+  --_text: var(--k5-success-text);
+}
+.k5-banner--warning {
+  --_bg: var(--k5-warning-subtle);
+  --_text: var(--k5-warning-text);
+}
+.k5-banner--danger {
+  --_bg: var(--k5-destructive-subtle);
+  --_text: var(--k5-destructive-text);
+}
+.k5-banner--brand {
+  --_bg: var(--k5-primary-subtle);
+  --_text: var(--k5-primary-text);
+}
+.k5-banner__icon {
+  flex-shrink: 0;
+  width: var(--k5-icon-sm);
+  height: var(--k5-icon-sm);
+  color: var(--_text);
+}
+.k5-banner__content {
+  flex: 1;
+  min-width: 0;
+}
+.k5-banner__title {
+  margin-right: var(--k5-space-1-5);
+  color: var(--_text);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-banner__action {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--k5-space-2);
+}
+.k5-banner > .k5-close {
+  margin-right: calc(var(--k5-space-1-5) * -1);
+  color: var(--k5-foreground);
+}
+.k5-banner > .k5-close:hover {
+  background: color-mix(in srgb, var(--_text) 12%, transparent);
+}
+
+/* Enlaces en la acción: el color del texto, subrayados, para leerse sobre cualquier tinte. */
+.k5-banner__action .k5-btn--link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (max-width: 599px) {
+  .k5-banner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .k5-banner__icon {
+    margin-top: var(--k5-space-0-5);
+  }
+  .k5-banner__action {
+    order: 3;
+    width: 100%;
+    padding-left: calc(var(--k5-icon-sm) + var(--k5-space-3));
+  }
+}

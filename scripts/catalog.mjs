@@ -6,6 +6,11 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createElement as r, Fragment } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import * as G from '@1k5/grado-react'
+import maquetacionSections from './catalog/maquetacion.mjs'
+import datosSections from './catalog/datos.mjs'
+import graficosSections from './catalog/graficos.mjs'
+import entradasSections from './catalog/entradas.mjs'
+import superposicionesSections from './catalog/superposiciones.mjs'
 
 const pkg = (p) => new URL(`../packages/grado/${p}`, import.meta.url)
 const tokens = readFileSync(pkg('dist/tokens.css'), 'utf8')
@@ -72,6 +77,10 @@ const section = (title, note, ...children) =>
   )
 const row = (...children) => r('div', { className: 'cat-row' }, ...children)
 const label = (text) => r('span', { className: 'cat-label' }, text)
+const icons = { Plus, Download, Settings, Inbox, Sun, Chat, Ticket, Users, Book, Chart, Bell }
+const groupSections = [maquetacionSections, datosSections, graficosSections, entradasSections, superposicionesSections].flatMap((make) =>
+  make({ r, G, section, row, label, icons }),
+)
 
 const body = r(
   Fragment,
@@ -367,6 +376,7 @@ const body = r(
       ),
     ),
   ),
+  ...groupSections,
 )
 
 const toggles = `<div class="bar-controls">

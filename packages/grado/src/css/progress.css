@@ -1,0 +1,96 @@
+/* Progress: barra de progreso con valor, indeterminada o por pasos. */
+@keyframes k5-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+.k5-progress {
+  --_c: var(--k5-primary);
+  --_h: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-1-5);
+  width: 100%;
+  min-width: 0;
+}
+.k5-progress--brand {
+  --_c: var(--k5-primary);
+}
+.k5-progress--sm {
+  --_h: 0.25rem;
+}
+.k5-progress--success {
+  --_c: var(--k5-success);
+}
+.k5-progress--warning {
+  --_c: var(--k5-warning);
+}
+.k5-progress--danger {
+  --_c: var(--k5-destructive);
+}
+.k5-progress__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--k5-space-3);
+  font-size: var(--k5-text-small);
+  line-height: var(--k5-leading-small);
+}
+.k5-progress__label {
+  min-width: 0;
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-progress__value {
+  margin-left: auto;
+  color: var(--k5-muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.k5-progress__track {
+  position: relative;
+  display: flex;
+  height: var(--_h);
+  overflow: hidden;
+  border-radius: var(--k5-radius-full);
+  background: color-mix(in srgb, var(--k5-foreground) 10%, transparent);
+}
+.k5-progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--_c);
+  transition: width var(--k5-duration-slow) var(--k5-ease-standard);
+}
+.k5-progress--indeterminate .k5-progress__bar {
+  width: 40%;
+  animation: k5-progress-slide linear infinite;
+  animation-duration: 1.6s;
+}
+
+/* Por pasos: un segmento por paso, sin pista continua. */
+.k5-progress--steps .k5-progress__track {
+  gap: var(--k5-space-1);
+  overflow: visible;
+  background: none;
+}
+.k5-progress__step {
+  flex: 1;
+  border-radius: var(--k5-radius-full);
+  background: color-mix(in srgb, var(--k5-foreground) 10%, transparent);
+  transition: background-color var(--k5-duration-slow) var(--k5-ease-standard);
+}
+.k5-progress__step--done {
+  background: var(--_c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sin movimiento: una barra quieta y más tenue que indica actividad. */
+  .k5-progress--indeterminate .k5-progress__bar {
+    width: 100%;
+    animation: none;
+    opacity: 0.4;
+  }
+}

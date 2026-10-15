@@ -1,0 +1,42 @@
+/* Separator: línea horizontal o vertical, con un texto opcional en el centro («o»). */
+.k5-separator {
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--k5-border-width);
+  background: var(--k5-border);
+}
+.k5-separator--vertical {
+  align-self: stretch;
+  width: var(--k5-border-width);
+  height: auto;
+  min-height: 1rem;
+}
+.k5-separator--label {
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-3);
+  height: auto;
+  background: none;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-caption);
+}
+.k5-separator__label {
+  flex-shrink: 0;
+}
+.k5-separator--label::before,
+.k5-separator--label::after {
+  content: '';
+  flex: 1;
+  height: var(--k5-border-width);
+  background: var(--k5-border);
+}
+.k5-separator--vertical.k5-separator--label {
+  flex-direction: column;
+  width: auto;
+}
+.k5-separator--vertical.k5-separator--label::before,
+.k5-separator--vertical.k5-separator--label::after {
+  width: var(--k5-border-width);
+  height: auto;
+}

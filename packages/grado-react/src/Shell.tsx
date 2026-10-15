@@ -43,6 +43,8 @@ export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
   search?: ReactNode
   /** Derecha de la cabecera: avisos, menú de usuario… */
   actions?: ReactNode
+  /** Aviso de toda la aplicación bajo la cabecera, normalmente <Banner>. */
+  banner?: ReactNode
   /** Navegación lateral, normalmente <Nav>. Sin ella no hay barra lateral. */
   sidebar?: ReactNode
   /** Pie de la barra lateral: plegar, ajustes… */
@@ -60,6 +62,7 @@ export function AppShell({
   brand,
   search,
   actions,
+  banner,
   sidebar,
   sidebarFooter,
   collapsed = false,
@@ -124,6 +127,7 @@ export function AppShell({
           {present(search) ? <div className="k5-app__search">{search}</div> : null}
           {present(actions) ? <div className="k5-app__actions">{actions}</div> : null}
         </header>
+        {present(banner) ? <div className="k5-app__banner">{banner}</div> : null}
         {hasSidebar ? (
           <aside ref={sidebarRef} id={SIDEBAR_ID} className="k5-app__sidebar" onClick={closeOnLink}>
             <div className="k5-app__sidebar-brand">{brandContent}</div>

@@ -159,7 +159,7 @@ export function loadTokens(path = TOKENS_PATH) {
     palette,
     keys,
     themes,
-    typography: raw.typography,
+    typography: flattenTypography(raw.typography),
     brand: raw.brand,
     tintNote: raw.tints.note,
     derived: raw.derived,
@@ -168,18 +168,53 @@ export function loadTokens(path = TOKENS_PATH) {
 }
 
 /**
- * Escalas iguales en todos los temas: espaciado, movimiento, capas y puntos de corte.
+ * Tipografía plana, como la lee el resto del build: font-*, text-<paso>, leading-<paso>,
+ * los alias antiguos (text-badge…) con el valor de su paso, tracking-* y weight-*.
+ */
+export function flattenTypography(typography) {
+  const flat = {}
+  for (const [name, value] of Object.entries(typography)) {
+    if (name === 'note') continue
+    if (name === 'scale') {
+      for (const [step, { size, leading }] of Object.entries(value)) {
+        flat[`text-${step}`] = size
+        flat[`leading-${step}`] = leading
+      }
+    } else if (name === 'aliases') {
+      for (const [alias, step] of Object.entries(value)) {
+        if (!typography.scale[step]) throw new Error(`typography.aliases.${alias}: el paso "${step}" no existe`)
+        flat[alias] = typography.scale[step].size
+      }
+    } else flat[name] = value
+  }
+  return flat
+}
+
+/**
+ * Escalas iguales en todos los temas: espaciado, movimiento, capas, puntos de corte,
+ * iconos, contenedores, bordes, opacidad y densidad.
  * Devuelve nombre de token → valor CSS, en el orden del JSON.
  */
 function globalScales(raw) {
   const motion = {}
   for (const [name, value] of Object.entries(raw.motion.duration)) motion[`duration-${name}`] = value
   for (const [name, value] of Object.entries(raw.motion.ease)) motion[`ease-${name}`] = value
+  const density = raw.density.values
+  for (const [name, sizes] of Object.entries(density)) {
+    for (const key of Object.keys(sizes)) {
+      if (!raw.themes[BASE_THEME].light.size[key]) throw new Error(`density.${name}.${key}: no es un tamaño del tema base`)
+    }
+  }
   return {
     space: { ...raw.space.values },
     motion,
     z: Object.fromEntries(Object.entries(raw.z.values).map(([name, value]) => [name, String(value)])),
     breakpoint: { ...raw.breakpoint.values },
+    icon: { ...raw.icon.values },
+    container: { ...raw.container.values },
+    border: { ...raw.border.values },
+    opacity: { ...raw.opacity.values },
+    density: structuredClone(density),
   }
 }
 
@@ -198,23 +233,41 @@ export function deriveText(colors, source, { tint: amount, min }) {
   throw new Error(`No hay texto con contraste ${min} para "${source}"`)
 }
 
+/**
+ * Tokens calculados: el texto sobre tinte (derived.tokens) y la escala tonal de cada
+ * color de estado (derived.sources × derived.surfaces): <color>-subtle y <color>-border,
+ * mezcla del color con la tarjeta. El texto se calcula para llegar a `min` sobre el tinte
+ * al 10 %, que es el mismo valor que <color>-subtle.
+ */
+export function derivedNames(derived) {
+  const surfaces = []
+  for (const source of derived.sources ?? []) {
+    for (const suffix of Object.keys(derived.surfaces ?? {})) surfaces.push([`${source}-${suffix}`, source, derived.surfaces[suffix]])
+  }
+  return { text: Object.entries(derived.tokens), surfaces }
+}
+
 function addDerived(derived, themes, keys) {
-  for (const [name, source] of Object.entries(derived.tokens)) {
+  const { text, surfaces } = derivedNames(derived)
+  for (const [name, source] of [...text, ...surfaces]) {
     if (!keys.color.includes(source)) throw new Error(`derived.${name}: "${source}" no existe`)
     if (keys.color.includes(name)) throw new Error(`derived.${name}: ya existe un token con ese nombre`)
   }
   for (const modes of Object.values(themes)) {
     for (const mode of MODES) {
       const { block, full } = modes[mode]
-      const values = Object.entries(derived.tokens).map(([name, source]) => [
-        name,
-        { color: deriveText(full.color, source, derived), ref: null, derivedFrom: source },
-      ])
+      const values = [
+        ...text.map(([name, source]) => [name, { color: deriveText(full.color, source, derived), ref: null, derivedFrom: source }]),
+        ...surfaces.map(([name, source, amount]) => [
+          name,
+          { color: mix(full.color.card.color, full.color[source].color, amount), ref: null, derivedFrom: source },
+        ]),
+      ]
       for (const [name, value] of values) {
         block.color[name] = value
         full.color[name] = value
       }
     }
   }
-  keys.color.push(...Object.keys(derived.tokens))
+  keys.color.push(...text.map(([name]) => name), ...surfaces.map(([name]) => name))
 }

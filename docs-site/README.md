@@ -1,6 +1,6 @@
 # Web de documentación de Grado
 
-Aplicación React en español con introducción, configurador de temas, instalación y componentes. React Router gestiona la navegación, mientras el build genera una salida estática que usa los tokens y el CSS de Grado. Las vistas previas se crean a partir de los componentes React del repositorio. Incluye código para React y Vue, propiedades, búsqueda, temas y modo oscuro.
+Aplicación React en español con introducción, configurador de temas, instalación y componentes. Está hecha con `@1k5/grado-react`, como cualquier aplicación de 1KOMMA5°: `AppShell` y `Nav` para el marco, `CommandPalette` para la búsqueda, `SegmentedControl` para el tema, el modo y el framework, y `PageHeader`, `Card`, `Tabs`, `Table`, `Accordion`, `Alert`, `CopyButton`… para el contenido. React Router gestiona la navegación y cada página se descarga solo cuando se visita. Las vistas previas son los componentes reales. Incluye código para React y Vue, propiedades, búsqueda, temas y modo oscuro.
 
 ## Generar
 
@@ -16,12 +16,12 @@ El resultado completo queda en `docs-site/dist/`:
 
 - `index.html`: única entrada de la aplicación React.
 - `/personalizar`: configurador de temas. A partir del color principal propone paletas que combinan con él (complementaria, tríada, análoga…; con la berenjena, también la de marca), con tres variantes (Fiel, Suave y Alto contraste). Comprueba el contraste, deja elegir la fuente (Barlow, Inter y otras diez) y genera `grado-tema.css`, los pasos de instalación y un código de tema con el principal, el acento y la variante (`GRADO-5C068C-2ED8C3-F-R8`; con otra fuente, `GRADO-5C068C-2ED8C3-F-R8-INTER`). Las muestras de las fuentes se cargan desde Google Fonts, como Barlow en el resto de la web.
+- `/fundamentos`: principios y escalas de los tokens (tipografía, escala tonal, elevación, radios, espaciado, densidad) y política de versiones.
 - `/instalacion`: instalación y migración.
 - `/componentes`: ejemplos, propiedades y guía de uso (cuándo usarlo, qué evitar y accesibilidad); `?vista=mi-tema` aplica el tema guardado.
 - `/estado`: cobertura de cada componente (React, Vue, mismo HTML, navegador, captura, guía, Figma), calculada a partir de los tests al generar la web, y adopción por aplicación.
 - `/cambios`: el `CHANGELOG.md` del repositorio.
-- `assets/pages/`: contenido separado por ruta para cargar solo la página visitada.
-- `assets/`: CSS, JavaScript, logos y la fuente Barlow (copiada del paquete), sin servicios externos. Solo las muestras de otras fuentes del configurador se cargan desde Google Fonts.
+- `assets/`: CSS, JavaScript (`app.js` y un fragmento por página en `chunks/`), logos y la fuente Barlow (copiada del paquete), sin servicios externos. Solo las muestras de otras fuentes del configurador se cargan desde Google Fonts.
 - `downloads/`: paquetes npm `.tgz` de la versión compilada.
 
 ## Publicar en vuestro hosting
@@ -37,7 +37,7 @@ Comando de build: npm run docs:build
 Directorio de publicación: docs-site/dist
 ```
 
-La web no necesita servidor Node, base de datos ni variables de entorno. El hosting debe redirigir las rutas que no correspondan a un archivo hacia `index.html`, para que React Router resuelva `/personalizar`, `/instalacion`, `/componentes`, `/estado` y `/cambios`. También funciona bajo una subcarpeta. HTTPS habilita el portapapeles moderno; se incluye una alternativa para contextos locales.
+La web no necesita servidor Node, base de datos ni variables de entorno. El hosting debe redirigir las rutas que no correspondan a un archivo hacia `index.html`, para que React Router resuelva `/personalizar`, `/fundamentos`, `/instalacion`, `/componentes`, `/estado` y `/cambios`. También funciona bajo una subcarpeta. HTTPS habilita el portapapeles moderno; se incluye una alternativa para contextos locales.
 
 La configuración del dominio y su DNS pertenece al hosting. Esta tarea no registra ni configura `systemdesign.1komma5.com`.
 
@@ -53,13 +53,14 @@ Abre `http://localhost:4173`. Regenera con `npm run docs:build` después de camb
 
 ## Dónde editar
 
-- `scripts/docs.mjs`: contenido, ejemplos y datos de las rutas.
-- `docs-site/assets/app.mjs`: aplicación React, rutas y navegación cliente con React Router.
+- `docs-site/site/`: la aplicación. `App.mjs` (rutas, carga de cada página, scroll y anclas), `Layout.mjs` (AppShell, barra lateral, búsqueda, tema y modo), `routes.mjs` (rutas, índices de página y grupos del buscador), `ui.mjs` (piezas compartidas: sección, bloque de código, selector de framework, página con índice) y `pages/` (una por ruta).
+- `docs-site/catalog.mjs`: los componentes de la página Componentes: vista previa, código React y Vue y propiedades. Los de 0.3 vienen de `components.mjs` y `groups/`.
+- `docs-site/site-data.mjs`: lo que se calcula en Node al generar (cobertura leyendo los tests, adopción y `CHANGELOG.md`). La app lo recibe como el módulo `virtual:site-data`.
+- `scripts/docs.mjs`: el build: copia los recursos de Grado, escribe `index.html` y empaqueta la app con esbuild.
+- `docs-site/assets/app.mjs`: entrada del navegador; monta la app con React Router.
 - `docs-site/palette.mjs`: paletas que combinan con el principal (armonías en OKLCH), variantes, lista de fuentes, tokens del tema, CSS y código de tema. Usa la librería de color de Grado. Sus tests están en `docs-site/test/palette.test.mjs`.
 - `docs-site/configurator.mjs`: el configurador, con los componentes de `@1k5/grado-react`.
-- `docs-site/assets/docs.css`: disposición de las páginas, bloques de código y configurador. El marco de la web es el `AppShell` de Grado (barra lateral, buscador y cabecera), generado en `scripts/docs.mjs` con `@1k5/grado-react`, igual que una aplicación. Usa solo variables `--k5-*`: la web entera sigue el tema elegido en la cabecera, Marca por defecto.
-- `docs-site/assets/docs.js`: comportamiento del marco (cajón móvil, grupos de la barra lateral, buscador con `/` o Ctrl+K), portapapeles, temas y controles de cada ruta.
-- `docs-site/assets/live-demos.mjs`: monta y desmonta las demos interactivas, el configurador y el modo «Mi tema» de Componentes.
+- `docs-site/assets/docs.css`: solo lo que los componentes no traen: disposición de las páginas, bloques de código, muestras de tokens, marco de las vistas previas y configurador. Usa solo variables `--k5-*`: la web entera sigue el tema elegido en la cabecera, Marca por defecto. Antes de añadir estilos aquí, mira si un componente de Grado (o `Stack`, `Grid`, `Text`) ya lo resuelve.
 - `docs-site/assets/theme.js`: aplicación temprana del tema guardado. Admite `?tema=consola` y `?modo=dark`.
 - `docs-site/guidelines.mjs`: guía de uso de cada componente. Un test exige las tres partes en todos.
 - `docs-site/adoption.json`: qué versión usa cada aplicación y, cuando existan, los enlaces a Figma de cada componente. Se edita a mano.
@@ -74,4 +75,4 @@ Publicar esta web **no publica los paquetes en npm**. Cuando se configure un reg
 
 ## Comprobaciones
 
-`npm run docs:check` comprueba las rutas y anclas internas, recursos, archivos descargables, ejemplos de código, que cada componente tenga guía, que Estado y Cambios estén al día, que Barlow se sirva desde la propia web y el cálculo de paletas del configurador. `npm test` comprueba los paquetes del sistema de diseño. Las vistas previas usan los mismos componentes que pasan axe en `npm run test:browser`; eso no equivale a una certificación de accesibilidad.
+`npm run docs:check` pinta cada página en Node con el mismo armazón y comprueba las rutas y anclas internas, recursos, archivos descargables, ejemplos de código, que cada componente tenga guía, que Estado y Cambios estén al día, que Barlow se sirva desde la propia web y el cálculo de paletas del configurador. `npm test` comprueba los paquetes del sistema de diseño. Las vistas previas usan los mismos componentes que pasan axe en `npm run test:browser`; eso no equivale a una certificación de accesibilidad.

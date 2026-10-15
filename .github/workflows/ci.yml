@@ -1,0 +1,72 @@
+# Integración continua: lo mismo que `npm run test:all`, repartido en dos trabajos.
+# - checks: lint, tests unitarios y de paridad, navegador (teclado, foco y axe) y web.
+# - visual: capturas del catálogo dentro de la imagen oficial de Playwright, para que el
+#   renderizado sea siempre el mismo. Para regenerarlas, lanza el workflow a mano con
+#   «update-snapshots» y descarga el artefacto «capturas» en test/visual/__screenshots__/.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      update-snapshots:
+        description: Regenerar las capturas de regresión visual
+        type: boolean
+        default: false
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm run docs:build
+      - run: npm run docs:check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: docs-site/dist/
+          retention-days: 7
+
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container: mcr.microsoft.com/playwright:v1.64.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run catalog
+      - name: Capturas
+        run: npx playwright test ${{ inputs.update-snapshots && '--update-snapshots' || '' }}
+        env:
+          HOME: /root
+      - if: ${{ inputs.update-snapshots }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas
+          path: test/visual/__screenshots__/
+      - if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: diferencias
+          path: test-results/
+          retention-days: 7

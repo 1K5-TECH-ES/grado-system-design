@@ -1,4 +1,4 @@
-/* Aviso: tinte del tono al 10 %, borde al 25 %, icono y título en el color de texto del tono. */
+/* Aviso: tinte del tono al 8 %, sin borde de color; icono y título en el color de texto del tono. */
 .k5-alert {
   --_tone: var(--k5-info);
   --_text: var(--k5-info-text);
@@ -6,7 +6,7 @@
   align-items: flex-start;
   gap: var(--k5-space-3);
   padding: var(--k5-space-3-5) var(--k5-space-4);
-  border: 1px solid color-mix(in srgb, var(--_tone) 25%, var(--k5-border));
+  border: var(--k5-border-width) solid transparent;
   border-radius: var(--k5-radius);
   background: color-mix(in srgb, var(--_tone) 8%, var(--k5-card));
   color: var(--k5-foreground);
@@ -75,7 +75,6 @@
 }
 .k5-toast .k5-alert {
   border-color: var(--k5-border);
-  border-left: 3px solid var(--_tone);
   background: var(--k5-card);
 }
 

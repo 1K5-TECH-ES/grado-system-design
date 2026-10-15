@@ -26,6 +26,15 @@
   --_dot: 0.625rem;
   font-size: var(--k5-text-body);
 }
+/* Foto: tapa las iniciales, que quedan debajo por si la imagen no carga. */
+.k5-avatar__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 /* El punto, sobre el borde del círculo y proporcional al tamaño, para no tapar las iniciales. */
 .k5-avatar__status {
   position: absolute;

@@ -1,7 +1,18 @@
 'use client'
 import type { HTMLAttributes, ReactNode } from 'react'
-import { ARROW_PATHS, cx, formatChange, kpiClass, kpiTrend, type KpiBetter, type KpiTone, type TrendDirection } from '@1k5/grado/classes'
+import {
+  ARROW_PATHS,
+  cx,
+  formatChange,
+  kpiClass,
+  kpiSparklineTone,
+  kpiTrend,
+  type KpiBetter,
+  type KpiTone,
+  type TrendDirection,
+} from '@1k5/grado/classes'
 import { useGrado } from './Locale.js'
+import { Sparkline } from './Sparkline.js'
 
 const TREND_KEYS = { up: 'trendUp', down: 'trendDown', flat: 'trendFlat' } as const
 
@@ -50,7 +61,9 @@ export interface KpiProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> 
   selectable?: boolean
   selected?: boolean
   locale?: string
-  /** Se coloca junto al valor, por ejemplo una sparkline. */
+  /** Serie reciente (por ejemplo, los últimos 7 días): se dibuja como sparkline decorativa bajo la cifra. */
+  trend?: number[]
+  /** Se coloca junto al valor. */
   children?: ReactNode
 }
 
@@ -66,6 +79,7 @@ export function Kpi({
   selectable = false,
   selected = false,
   locale,
+  trend: series,
   className,
   children,
   ...rest
@@ -81,6 +95,7 @@ export function Kpi({
         <span className="k5-kpi__value">{value}</span>
         {children}
       </span>
+      {series?.length ? <Sparkline className="k5-kpi__trend" data={series} tone={kpiSparklineTone(trend)} height={28} /> : null}
       <span className="k5-kpi__foot">
         {trend && change != null ? (
           <span className={`k5-kpi__change k5-kpi__change--${trend.tone}`}>

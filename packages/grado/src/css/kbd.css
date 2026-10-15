@@ -1,0 +1,25 @@
+/* Kbd: una tecla o un atajo (Ctrl + K). Solo borde, con la base algo más gruesa. */
+.k5-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1);
+  color: var(--k5-muted-foreground);
+  font-family: var(--k5-font-sans);
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-caption);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.k5-kbd__key {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--k5-space-1);
+  border: var(--k5-border-width) solid var(--k5-border);
+  border-bottom-width: var(--k5-border-width-strong);
+  border-radius: var(--k5-radius-xs);
+  color: var(--k5-foreground);
+  font: inherit;
+  font-weight: var(--k5-weight-medium);
+}

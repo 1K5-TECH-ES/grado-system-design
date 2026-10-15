@@ -1,0 +1,66 @@
+/* Status: estado de una fila con punto de color y texto, sin fondo ni borde.
+   Es la alternativa discreta a Badge en tablas: el color va solo en el punto. */
+@keyframes k5-pulse-ring {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+.k5-status {
+  --_c: var(--k5-muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1-5);
+  color: var(--k5-foreground);
+  font-size: inherit;
+  line-height: inherit;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.k5-status__dot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+  border-radius: var(--k5-radius-full);
+  background: var(--_c);
+}
+.k5-status--neutral {
+  --_c: var(--k5-muted-foreground);
+}
+.k5-status--brand {
+  --_c: var(--k5-primary);
+}
+.k5-status--info {
+  --_c: var(--k5-info);
+}
+.k5-status--success {
+  --_c: var(--k5-success);
+}
+.k5-status--warning {
+  --_c: var(--k5-warning);
+}
+.k5-status--danger {
+  --_c: var(--k5-destructive);
+}
+/* En vivo: un anillo del mismo color se expande y se desvanece. */
+.k5-status--pulse .k5-status__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--_c);
+  animation: k5-pulse-ring 1.8s var(--k5-ease-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k5-status--pulse .k5-status__dot::after {
+    animation: none;
+    opacity: 0;
+  }
+}

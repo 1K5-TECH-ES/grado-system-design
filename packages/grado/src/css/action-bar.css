@@ -1,0 +1,104 @@
+/* Barra de acciones en lote: flota abajo y en el centro mientras hay filas elegidas.
+   Superficie invertida (oscura en tema claro, clara en oscuro) para separarse del contenido. */
+@keyframes k5-action-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+.k5-action-bar {
+  position: fixed;
+  z-index: var(--k5-z-toast);
+  bottom: var(--k5-space-6);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-2);
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  min-height: var(--k5-control-h-lg);
+  padding: var(--k5-space-1-5) var(--k5-space-1-5) var(--k5-space-1-5) var(--k5-space-4);
+  border-radius: var(--k5-radius-lg);
+  background: var(--k5-foreground);
+  color: var(--k5-background);
+  box-shadow: var(--k5-shadow-overlay);
+  font-size: var(--k5-text-body);
+  translate: -50% 0;
+  animation: k5-action-bar-in var(--k5-duration-slow) var(--k5-ease-out);
+}
+.k5-action-bar--inline {
+  position: static;
+  bottom: auto;
+  left: auto;
+  max-width: 100%;
+  box-shadow: none;
+  translate: none;
+  animation: none;
+}
+.k5-action-bar__count {
+  flex-shrink: 0;
+  margin-right: var(--k5-space-2);
+  font-weight: var(--k5-weight-semibold);
+  white-space: nowrap;
+}
+.k5-action-bar__actions {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-1);
+  min-width: 0;
+}
+.k5-action-bar__clear {
+  flex-shrink: 0;
+  margin-left: var(--k5-space-1);
+}
+
+/* Botones dentro de la barra: siguen su color, como en la cabecera de AppShell. */
+.k5-action-bar .k5-btn--ghost,
+.k5-action-bar .k5-btn--secondary,
+.k5-action-bar .k5-btn--danger {
+  color: inherit;
+}
+.k5-action-bar .k5-btn--secondary {
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+.k5-action-bar .k5-btn--ghost:hover,
+.k5-action-bar .k5-btn--secondary:hover,
+.k5-action-bar .k5-btn--danger:hover {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  color: inherit;
+}
+.k5-action-bar .k5-btn:focus-visible {
+  outline-color: currentColor;
+}
+
+@media (max-width: 599px) {
+  .k5-action-bar:not(.k5-action-bar--inline) {
+    right: var(--k5-space-4);
+    bottom: var(--k5-space-4);
+    left: var(--k5-space-4);
+    width: auto;
+    max-width: none;
+    translate: none;
+  }
+  /* Selección y «Quitar selección» arriba; las acciones debajo, a todo el ancho. */
+  .k5-action-bar {
+    flex-wrap: wrap;
+    padding-left: var(--k5-space-3);
+  }
+  .k5-action-bar__clear {
+    order: 1;
+    margin-left: auto;
+  }
+  .k5-action-bar__actions {
+    order: 2;
+    flex-basis: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k5-action-bar {
+    animation: none;
+  }
+}

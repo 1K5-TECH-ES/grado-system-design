@@ -1,0 +1,69 @@
+/* Grupo de botones conmutables: opciones que se combinan (negrita, cursiva) o filtros rápidos.
+   El grupo lleva borde; la opción activa, fondo y texto del tono primario. */
+.k5-toggle-group {
+  --_h: var(--k5-control-h);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-0-5);
+  max-width: 100%;
+  height: var(--_h);
+  padding: var(--k5-space-0-5);
+  border: var(--k5-border-width) solid var(--k5-border);
+  border-radius: var(--k5-radius-md);
+  overflow-x: auto;
+}
+.k5-toggle-group--sm {
+  --_h: var(--k5-control-h-sm);
+}
+.k5-toggle-group--lg {
+  --_h: var(--k5-control-h-lg);
+}
+.k5-toggle-group__item {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--k5-space-1-5);
+  height: 100%;
+  padding: 0 var(--k5-space-2-5);
+  border: 0;
+  border-radius: var(--k5-radius-sm);
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-caption);
+  font-weight: var(--k5-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base);
+}
+.k5-toggle-group--lg .k5-toggle-group__item {
+  font-size: var(--k5-text-body);
+}
+.k5-toggle-group--icon .k5-toggle-group__item {
+  aspect-ratio: 1;
+  padding: 0;
+}
+.k5-toggle-group__item svg {
+  width: var(--k5-icon-sm);
+  height: var(--k5-icon-sm);
+  flex-shrink: 0;
+}
+.k5-toggle-group__item:hover {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+.k5-toggle-group__item[aria-pressed='true'] {
+  background: var(--k5-primary-subtle);
+  color: var(--k5-primary-text);
+}
+.k5-toggle-group__item:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 1px;
+}
+.k5-toggle-group__item:disabled {
+  opacity: var(--k5-opacity-disabled);
+  cursor: not-allowed;
+}

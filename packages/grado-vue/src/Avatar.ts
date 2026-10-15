@@ -11,6 +11,8 @@ export const Avatar = defineComponent({
     name: String,
     /** Iniciales a mano, si no quieres que se calculen. */
     initials: String,
+    /** Foto. Si no carga, se ven las iniciales. */
+    src: String,
     size: String as PropType<Size>,
     status: String as PropType<AvatarStatus>,
   },
@@ -23,6 +25,16 @@ export const Avatar = defineComponent({
       const a11y = spoken ? { role: 'img', 'aria-label': spoken, title: props.name } : { 'aria-hidden': 'true' }
       return h('span', { ...a11y, class: avatarClass({ size: props.size }) }, [
         props.initials ?? initials(props.name),
+        props.src
+          ? h('img', {
+              class: 'k5-avatar__image',
+              src: props.src,
+              alt: '',
+              onError: (event: Event) => {
+                ;(event.target as HTMLImageElement).hidden = true
+              },
+            })
+          : null,
         props.status ? h('span', { class: `k5-avatar__status k5-avatar__status--${props.status}` }) : null,
       ])
     }

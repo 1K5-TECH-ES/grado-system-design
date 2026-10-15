@@ -156,3 +156,72 @@
   flex: none;
   border-radius: 2px;
 }
+
+/* LineChart y AreaChart: mismos ejes, rejilla, leyenda y tabla que las barras. Las líneas
+   van en un SVG estirado (el trazo mantiene su grosor) y el último punto de cada serie es
+   HTML, para que siga siendo redondo a cualquier ancho. */
+.k5-chart__columns {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.k5-chart__column {
+  flex: 1;
+  min-width: 0;
+  transition: background-color var(--k5-duration-base);
+}
+.k5-chart__column:hover {
+  background: color-mix(in srgb, var(--k5-muted) 70%, transparent);
+}
+.k5-chart__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.k5-chart__series--1 {
+  color: var(--k5-chart-1);
+}
+.k5-chart__series--2 {
+  color: var(--k5-chart-2);
+}
+.k5-chart__series--3 {
+  color: var(--k5-chart-3);
+}
+.k5-chart__series--4 {
+  color: var(--k5-chart-4);
+}
+.k5-chart__series--5 {
+  color: var(--k5-chart-5);
+}
+.k5-chart__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.k5-chart__area {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.12;
+}
+.k5-chart__point {
+  position: absolute;
+  width: var(--k5-space-2);
+  height: var(--k5-space-2);
+  border-radius: var(--k5-radius-full);
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.k5-chart__swatch.k5-chart__swatch--line {
+  flex: none;
+  width: var(--k5-space-3);
+  height: var(--k5-border-width-strong);
+  border-radius: var(--k5-radius-full);
+  background: currentColor;
+}

@@ -1,11 +1,17 @@
 // Guías de uso de cada componente: cuándo usarlo, qué evitar y accesibilidad.
 // La web de documentación las muestra debajo de cada ejemplo (scripts/docs.mjs).
+import { guidelines as maquetacionGuidelines } from './groups/maquetacion.docs.mjs'
+import { guidelines as datosGuidelines } from './groups/datos.docs.mjs'
+import { guidelines as graficosGuidelines } from './groups/graficos.docs.mjs'
+import { guidelines as entradasGuidelines } from './groups/entradas.docs.mjs'
+import { guidelines as superposicionesGuidelines } from './groups/superposiciones.docs.mjs'
 export const guidelines = {
   button: {
     use: [
       'Úsalo para acciones que cambian datos o abren algo, como guardar una oferta o crear una instalación.',
       'Pon un solo botón primary por zona. El resto, secondary o ghost.',
-      'Reserva danger para acciones destructivas, como eliminar un ticket.',
+      'Usa danger (texto rojo, sin fondo) para una acción destructiva junto a otras, como eliminar un ticket.',
+      'Usa destructive (rojo sólido) solo para confirmar el borrado dentro de AlertDialog.',
     ],
     avoid: [
       'Para ir a otra página usa un enlace con buttonClass() en lugar de Button.',
@@ -540,3 +546,6 @@ export const guidelines = {
     ],
   },
 }
+
+// Componentes de 0.3, por grupo.
+Object.assign(guidelines, maquetacionGuidelines, datosGuidelines, graficosGuidelines, entradasGuidelines, superposicionesGuidelines)

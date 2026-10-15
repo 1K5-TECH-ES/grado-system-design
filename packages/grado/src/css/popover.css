@@ -1,0 +1,77 @@
+/* Popover: contenido libre anclado a un control, sin bloquear la página.
+   Misma superficie que los menús: popover, borde fino y sombra de capa flotante. */
+@keyframes k5-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+@keyframes k5-popover-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
+.k5-popover {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+.k5-popover__content {
+  position: absolute;
+  z-index: var(--k5-z-dropdown);
+  top: 100%;
+  width: max-content;
+  min-width: 14rem;
+  max-width: min(22rem, calc(100vw - 2rem));
+  margin-top: var(--k5-space-1-5);
+  padding: var(--k5-space-3) var(--k5-space-4);
+  border: var(--k5-border-width) solid var(--k5-border);
+  border-radius: var(--k5-radius-md);
+  background: var(--k5-popover);
+  color: var(--k5-popover-foreground);
+  box-shadow: var(--k5-shadow-popover);
+  font-size: var(--k5-text-body);
+  line-height: var(--k5-leading-body);
+  text-align: left;
+  animation: k5-popover-in var(--k5-duration-fast) var(--k5-ease-out);
+}
+.k5-popover__content:focus {
+  outline: none;
+}
+.k5-popover__content:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-popover__content--start {
+  right: auto;
+  left: 0;
+}
+.k5-popover__content--center {
+  left: 50%;
+  translate: -50% 0;
+}
+.k5-popover__content--end {
+  right: 0;
+  left: auto;
+}
+.k5-popover__content--top {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: var(--k5-space-1-5);
+  animation-name: k5-popover-in-top;
+}
+.k5-popover__title {
+  margin: 0 0 var(--k5-space-2);
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+  line-height: var(--k5-leading-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k5-popover__content {
+    animation: none;
+  }
+}

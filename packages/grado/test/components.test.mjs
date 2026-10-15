@@ -22,6 +22,7 @@ test('cada clase que puede generar classes.js existe en grado.css', () => {
   for (const size of k5.SIZES) add(k5.spinnerClass({ size }))
   for (const variant of k5.CARD_VARIANTS) add(k5.cardClass({ variant }))
   add(k5.tableClass({ compact: true }))
+  add(k5.tableWrapClass({ plain: true }))
   add(k5.emptyClass({ compact: true }))
   add(k5.kpiClass({ tone: 'danger' }))
   for (const size of k5.SIZES) add(k5.avatarClass({ size }))

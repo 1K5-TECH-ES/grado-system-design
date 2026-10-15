@@ -1,0 +1,198 @@
+/* EnergyFlow: placas arriba, red a la izquierda, casa a la derecha y batería abajo, con el
+   inversor en el centro. Las líneas llevan una flecha con el sentido y, si se permite
+   movimiento, un trazo discontinuo que avanza. Sin flujo, la línea queda gris y sin flecha. */
+.k5-energy {
+  display: grid;
+  gap: var(--k5-space-4);
+  min-width: 0;
+  margin: 0;
+}
+.k5-energy__title {
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+  line-height: var(--k5-leading-body);
+}
+.k5-energy__diagram {
+  display: grid;
+  grid-template-areas:
+    '. . solar . .'
+    '. . lsolar . .'
+    'grid lgrid hub lhome home'
+    '. . lbattery . .'
+    '. . battery . .';
+  grid-template-columns:
+    minmax(min-content, 6.5rem) minmax(var(--k5-space-8), 1fr) minmax(min-content, 6.5rem) minmax(var(--k5-space-8), 1fr)
+    minmax(min-content, 6.5rem);
+  grid-template-rows: auto var(--k5-space-12) auto var(--k5-space-12) auto;
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+.k5-energy--no-battery .k5-energy__diagram {
+  grid-template-areas:
+    '. . solar . .'
+    '. . lsolar . .'
+    'grid lgrid hub lhome home';
+  grid-template-rows: auto var(--k5-space-12) auto;
+}
+.k5-energy__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k5-space-0-5);
+  min-width: 0;
+  text-align: center;
+}
+.k5-energy__node--solar {
+  grid-area: solar;
+}
+.k5-energy__node--grid {
+  grid-area: grid;
+}
+.k5-energy__node--home {
+  grid-area: home;
+}
+.k5-energy__node--battery {
+  grid-area: battery;
+}
+.k5-energy__icon,
+.k5-energy__hub {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--k5-space-10);
+  height: var(--k5-space-10);
+  border-radius: var(--k5-radius-full);
+}
+.k5-energy__icon {
+  margin-bottom: var(--k5-space-1);
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+.k5-energy__node--idle .k5-energy__icon {
+  color: var(--k5-muted-foreground);
+}
+.k5-energy__icon svg,
+.k5-energy__hub svg {
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+}
+.k5-energy__hub {
+  grid-area: hub;
+  align-self: start;
+  justify-self: center;
+  background: var(--k5-primary-subtle);
+  color: var(--k5-primary-text);
+}
+.k5-energy__name,
+.k5-energy__state,
+.k5-energy__level {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-caption);
+}
+.k5-energy__level {
+  font-variant-numeric: tabular-nums;
+}
+.k5-energy__value {
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-semibold);
+  line-height: var(--k5-leading-body);
+  white-space: nowrap;
+}
+
+/* Líneas: la del nodo dice la geometría; la del sentido, la flecha y la animación. */
+.k5-energy__line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--k5-primary);
+}
+.k5-energy__line::before {
+  content: '';
+  position: absolute;
+  background: var(--k5-border);
+}
+.k5-energy__line--solar {
+  grid-area: lsolar;
+}
+.k5-energy__line--battery {
+  grid-area: lbattery;
+}
+.k5-energy__line--grid {
+  grid-area: lgrid;
+}
+.k5-energy__line--home {
+  grid-area: lhome;
+}
+.k5-energy__line--grid,
+.k5-energy__line--home {
+  align-self: start;
+  height: var(--k5-space-10);
+  margin-inline: var(--k5-space-0-5);
+}
+.k5-energy__line--grid::before,
+.k5-energy__line--home::before {
+  inset: calc(50% - var(--k5-border-width-strong) / 2) 0 auto;
+  height: var(--k5-border-width-strong);
+}
+.k5-energy__line--solar,
+.k5-energy__line--battery {
+  margin-block: var(--k5-space-1-5);
+}
+.k5-energy__line--solar::before,
+.k5-energy__line--battery::before {
+  inset: 0 auto 0 calc(50% - var(--k5-border-width-strong) / 2);
+  width: var(--k5-border-width-strong);
+}
+.k5-energy__line--left::before,
+.k5-energy__line--right::before {
+  background: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 10px);
+  animation: k5-energy-x calc(var(--k5-duration-slower) * 2) linear infinite;
+}
+.k5-energy__line--up::before,
+.k5-energy__line--down::before {
+  background: repeating-linear-gradient(180deg, currentColor 0 6px, transparent 6px 10px);
+  animation: k5-energy-y calc(var(--k5-duration-slower) * 2) linear infinite;
+}
+.k5-energy__line--left::before,
+.k5-energy__line--up::before {
+  animation-direction: reverse;
+}
+.k5-energy__arrow {
+  position: relative;
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+  padding: var(--k5-space-0-5);
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-primary);
+  color: var(--k5-primary-foreground);
+}
+.k5-energy__line--down .k5-energy__arrow {
+  transform: rotate(90deg);
+}
+.k5-energy__line--left .k5-energy__arrow {
+  transform: rotate(180deg);
+}
+.k5-energy__line--up .k5-energy__arrow {
+  transform: rotate(-90deg);
+}
+@keyframes k5-energy-x {
+  to {
+    background-position: 10px 0;
+  }
+}
+@keyframes k5-energy-y {
+  to {
+    background-position: 0 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .k5-energy__line::before {
+    animation: none;
+  }
+}

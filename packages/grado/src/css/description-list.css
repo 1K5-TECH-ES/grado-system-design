@@ -1,0 +1,66 @@
+/* DescriptionList: pares dato–valor de una ficha de cliente o instalación. */
+.k5-dl {
+  display: grid;
+  margin: 0;
+  font-size: var(--k5-text-body);
+  line-height: var(--k5-leading-body);
+}
+.k5-dl__item {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 5fr);
+  gap: var(--k5-space-1) var(--k5-space-4);
+  align-items: baseline;
+  padding: var(--k5-space-2-5) 0;
+  border-top: var(--k5-border-width) solid var(--k5-border);
+}
+.k5-dl__item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.k5-dl__item:last-child {
+  padding-bottom: 0;
+}
+.k5-dl__term {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+  line-height: var(--k5-leading-small);
+}
+.k5-dl__description {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--k5-space-1);
+  margin: 0;
+  color: var(--k5-foreground);
+  overflow-wrap: anywhere;
+}
+.k5-dl__value {
+  min-width: 0;
+}
+.k5-dl__description--mono .k5-dl__value {
+  font-family: var(--k5-font-mono);
+  font-size: var(--k5-text-small);
+}
+/* El botón de copiar no debe estirar la fila. */
+.k5-dl__description .k5-copy {
+  flex-shrink: 0;
+  margin-block: calc(var(--k5-space-1) * -1);
+}
+
+@media (max-width: 599px) {
+  .k5-dl__item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Apilada: el dato encima del valor, en tantas columnas como quepan. */
+.k5-dl--stacked {
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--k5-space-4) var(--k5-space-6);
+}
+.k5-dl--stacked .k5-dl__item {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--k5-space-0-5);
+  padding: 0;
+  border-top: 0;
+}

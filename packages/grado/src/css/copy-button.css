@@ -1,0 +1,14 @@
+/* CopyButton: botón ghost que copia un texto y confirma con una marca durante 2 s. */
+.k5-copy {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.k5-copy__button svg {
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+  flex-shrink: 0;
+}
+.k5-copy__button--copied svg {
+  color: var(--k5-success-text);
+}

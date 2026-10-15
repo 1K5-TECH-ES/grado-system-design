@@ -327,3 +327,536 @@ export function filterGroups(groups, query) {
 export function isShortcut(event, key) {
   return Boolean(key) && (event.metaKey || event.ctrlKey) && !event.altKey && String(event.key).toLowerCase() === String(key).toLowerCase()
 }
+
+// ---------- Datos y piezas (0.3) ----------
+/** 0.64 → «64 %» (es-ES y de-DE con espacio fino, en-GB «64%»). */
+export function formatPercent(ratio, locale = DEFAULT_LOCALE, decimals = 0) {
+  if (ratio == null || Number.isNaN(ratio)) return ''
+  return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: decimals }).format(ratio)
+}
+
+/**
+ * Todo lo que necesita Progress para pintarse igual en React y Vue.
+ * value null o undefined: indeterminado. steps: variante por pasos (value = pasos completados).
+ */
+export function progressState({ value, max = 100, steps, locale = DEFAULT_LOCALE, messages } = {}) {
+  const texts = textsOr(messages)
+  const stepped = Number.isFinite(steps) && steps > 0
+  const top = stepped ? Math.round(steps) : max > 0 ? max : 100
+  if (value == null || Number.isNaN(value)) return { indeterminate: true, stepped, max: top, now: null, ratio: 0, text: '' }
+  const now = clampNumber(stepped ? Math.round(value) : value, 0, top)
+  const ratio = now / top
+  const text = stepped ? formatMessage(texts.progressStep, { value: now, max: top }) : formatPercent(ratio, locale)
+  return { indeterminate: false, stepped, max: top, now, ratio, text }
+}
+
+/** Avatares que se ven y los que van en el círculo «+N». */
+export function splitAvatars(items = [], max = 4) {
+  const limit = Math.max(1, Math.floor(max))
+  return items.length > limit ? { shown: items.slice(0, limit), rest: items.slice(limit) } : { shown: items, rest: [] }
+}
+
+/**
+ * Al quitar un Tag su botón desaparece. Devuelve el botón de quitar de la etiqueta siguiente
+ * (o, si es la última, de la anterior) del mismo contenedor, para no perder el foco.
+ */
+export function tagFocusTarget(button) {
+  const tag = button?.closest?.('.k5-tag')
+  if (!tag?.parentElement) return null
+  const buttons = [...tag.parentElement.children].map((el) => el.querySelector?.('.k5-tag__remove')).filter((el) => el && !el.disabled)
+  const index = buttons.indexOf(button)
+  return buttons[index + 1] ?? buttons[index - 1] ?? null
+}
+
+/**
+ * Copia un texto al portapapeles. Usa navigator.clipboard y, si no existe o falla (http,
+ * permisos), un textarea temporal con execCommand('copy'). Devuelve true si se ha copiado.
+ * env: el objeto global; se puede sustituir en pruebas.
+ */
+export async function copyText(text, env = globalThis) {
+  const value = String(text ?? '')
+  try {
+    if (env.navigator?.clipboard?.writeText) {
+      await env.navigator.clipboard.writeText(value)
+      return true
+    }
+  } catch {
+    // Sigue con el método antiguo.
+  }
+  const doc = env.document
+  if (!doc?.body) return false
+  const active = doc.activeElement
+  const area = doc.createElement('textarea')
+  area.value = value
+  area.setAttribute('readonly', '')
+  area.setAttribute('aria-hidden', 'true')
+  area.style.position = 'fixed'
+  area.style.top = '0'
+  area.style.left = '0'
+  area.style.opacity = '0'
+  doc.body.appendChild(area)
+  area.select()
+  let copied = false
+  try {
+    copied = Boolean(doc.execCommand?.('copy'))
+  } catch {
+    copied = false
+  }
+  area.remove()
+  // El foco vuelve al botón que pidió la copia.
+  active?.focus?.()
+  return copied
+}
+
+// ---------- Gráficos (0.3) ----------
+// Sparkline, LineChart, Donut, Meter y EnergyFlow. Las coordenadas van en un lienzo de
+// 100 × 100 (y = 0 arriba) que el SVG estira con preserveAspectRatio="none".
+
+const round2 = (n) => Math.round(n * 100) / 100
+const finite = (v) => typeof v === 'number' && Number.isFinite(v)
+
+/**
+ * Puntos de una sparkline. La escala va del mínimo al máximo de los datos; si todos son
+ * iguales (o solo hay uno), la línea queda plana en el centro.
+ */
+export function sparklinePoints(values) {
+  const data = (values ?? []).filter(finite)
+  if (!data.length) return []
+  const series = data.length === 1 ? [data[0], data[0]] : data
+  const min = Math.min(...series)
+  const max = Math.max(...series)
+  return series.map((v, i) => ({
+    x: round2((i / (series.length - 1)) * 100),
+    y: max === min ? 50 : round2(((max - v) / (max - min)) * 100),
+  }))
+}
+
+/** Puntos de una serie de LineChart: cada valor en el centro de su columna, en una escala de 0 a `max`. */
+export function chartPoints(values, max) {
+  const top = max > 0 ? max : 1
+  return values.map((v, i) => ({
+    x: round2(((i + 0.5) / values.length) * 100),
+    y: round2(100 - (Math.min(Math.max(0, finite(v) ? v : 0), top) / top) * 100),
+  }))
+}
+
+/** Trazo SVG que une los puntos: «M0 50 L50 20 L100 80». */
+export function linePath(points) {
+  return points.map((p, i) => `${i ? 'L' : 'M'}${p.x} ${p.y}`).join(' ')
+}
+
+/** Trazo SVG cerrado bajo la línea, hasta `base` (100 = abajo del todo). */
+export function areaPath(points, base = 100) {
+  if (!points.length) return ''
+  return `${linePath(points)} L${points[points.length - 1].x} ${base} L${points[0].x} ${base} Z`
+}
+
+/**
+ * Porciones de un donut: dónde empieza cada una y cuánto ocupa (de 0 a 100), y su
+ * porcentaje entero. Sin `total`, el total es la suma y los porcentajes suman 100.
+ */
+export function donutSlices(values, total) {
+  const clean = values.map((v) => (finite(v) && v > 0 ? v : 0))
+  const sum = total != null ? total : clean.reduce((a, b) => a + b, 0)
+  if (!(sum > 0)) return clean.map(() => ({ start: 0, length: 0, percent: 0 }))
+  const shares = clean.map((v) => (Math.min(v, sum) / sum) * 100)
+  const percents = shares.map(Math.floor)
+  if (total == null) {
+    // Reparto por el mayor resto: 33,3 + 33,3 + 33,3 → 34 + 33 + 33.
+    let missing = 100 - percents.reduce((a, b) => a + b, 0)
+    const order = shares.map((s, i) => [s - Math.floor(s), i]).sort((a, b) => b[0] - a[0])
+    for (const [, i] of order) {
+      if (missing <= 0) break
+      if (shares[i] > 0) {
+        percents[i]++
+        missing--
+      }
+    }
+  } else shares.forEach((s, i) => (percents[i] = Math.round(s)))
+  let start = 0
+  return shares.map((length, i) => {
+    const slice = { start: round2(start), length: round2(length), percent: percents[i] }
+    start += length
+    return slice
+  })
+}
+
+/** Parte del rango que ocupa el valor, de 0 a 1. */
+export function meterRatio(value, min = 0, max = 100) {
+  if (!(max > min) || !finite(value)) return 0
+  return Math.round(Math.min(1, Math.max(0, (value - min) / (max - min))) * 1e6) / 1e6
+}
+
+/**
+ * Tono de un medidor con el criterio de <meter> de HTML: la zona donde cae optimum es
+ * buena; la vecina, regular; la opuesta, mala. Sin low, high ni optimum: neutral.
+ */
+export function meterLevel({ value, min = 0, max = 100, low, high, optimum } = {}) {
+  if (low == null && high == null && optimum == null) return 'neutral'
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
+  const v = clamp(finite(value) ? value : min, min, max)
+  const lo = clamp(low ?? min, min, max)
+  const hi = clamp(high ?? max, lo, max)
+  const best = clamp(optimum ?? (min + max) / 2, min, max)
+  if (best < lo) return v <= lo ? 'good' : v <= hi ? 'fair' : 'poor'
+  if (best > hi) return v >= hi ? 'good' : v >= lo ? 'fair' : 'poor'
+  return v >= lo && v <= hi ? 'good' : 'fair'
+}
+
+/** Segmentos encendidos de un medidor por segmentos (redondeo al más cercano). */
+export function meterSegments(ratio, count) {
+  return Math.min(count, Math.max(0, Math.round(ratio * count)))
+}
+
+const ENERGY_STATES = {
+  solar: ['energyProducing', 'energyNoProduction', 'energyProducing'],
+  home: ['energyConsuming', 'energyNoConsumption', 'energyConsuming'],
+  battery: ['energyCharging', 'energyBatteryIdle', 'energyDischarging'],
+  grid: ['energyImporting', 'energyGridIdle', 'energyExporting'],
+}
+/**
+ * Sentido y texto de estado de un nodo del flujo de energía, respecto al inversor del
+ * centro: 'in' si la energía llega al inversor, 'out' si sale de él, 'none' si vale 0.
+ * battery: positivo = cargando. grid: positivo = importando de la red.
+ */
+export function energyFlow(node, value) {
+  const v = finite(value) ? value : 0
+  const [positive, idle, negative] = ENERGY_STATES[node] ?? ENERGY_STATES.solar
+  if (v === 0) return { flow: 'none', state: idle }
+  const towardHub = node === 'solar' || node === 'grid' ? v > 0 : node === 'battery' ? v < 0 : false
+  return { flow: towardHub ? 'in' : 'out', state: v > 0 ? positive : negative }
+}
+
+// ---------- Campos especiales (0.3) ----------
+// Cursor al reformatear un campo mientras se escribe («612 345 678», «ES91 2100…»): se cuentan
+// las letras y cifras que hay antes del cursor y se coloca detrás del mismo número en el texto nuevo.
+const SIGNIFICANT = /[0-9A-Za-z]/
+/** Letras y cifras que hay en `text` antes de la posición `end`. */
+export function significantCount(text, end = String(text ?? '').length) {
+  let count = 0
+  for (const char of String(text ?? '').slice(0, end)) if (SIGNIFICANT.test(char)) count++
+  return count
+}
+/** Posición en `text` justo detrás de la letra o cifra número `count`. */
+export function caretAfter(text, count) {
+  const value = String(text ?? '')
+  if (count <= 0) return 0
+  let seen = 0
+  for (let i = 0; i < value.length; i++) {
+    if (SIGNIFICANT.test(value[i]) && ++seen === count) return i + 1
+  }
+  return value.length
+}
+
+// ---------- Horas (TimePicker). Siempre «HH:MM», de 00:00 a 23:59 ----------
+
+/**
+ * Hora escrita por una persona → minutos desde las 00:00. Entiende «9», «930», «0930»,
+ * «9:30», «09.30» y «9h30». Devuelve null si no es una hora válida.
+ */
+export function parseTime(text) {
+  const raw = String(text ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[.,h]/g, ':')
+  let match = /^(\d{1,2}):?$/.exec(raw) ?? /^(\d{1,2}):(\d{2})$/.exec(raw)
+  if (!match) {
+    const digits = /^(\d{3,4})$/.exec(raw)
+    if (digits) match = [raw, raw.slice(0, -2), raw.slice(-2)]
+  }
+  if (!match) return null
+  const hours = Number(match[1]),
+    minutes = Number(match[2] ?? 0)
+  if (hours > 23 || minutes > 59) return null
+  return hours * 60 + minutes
+}
+
+/** Minutos desde las 00:00 → «HH:MM». */
+export function formatTime(minutes) {
+  if (minutes == null || Number.isNaN(minutes)) return ''
+  const total = ((Math.round(minutes) % 1440) + 1440) % 1440
+  return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`
+}
+
+/** «930» → «09:30». Devuelve null si no es una hora. */
+export function normalizeTime(text) {
+  const minutes = parseTime(text)
+  return minutes == null ? null : formatTime(minutes)
+}
+
+/** Franjas cada `step` minutos de `min` a `max`, ambas incluidas: «08:00», «08:15»… */
+export function timeSlots(min = '00:00', max = '23:59', step = 15) {
+  const from = parseTime(min) ?? 0,
+    to = parseTime(max) ?? 1439,
+    every = Math.max(1, Math.round(step))
+  const slots = []
+  for (let minutes = from; minutes <= to; minutes += every) slots.push(formatTime(minutes))
+  return slots
+}
+
+/** Posición de la franja más cercana a `time` (la primera si empatan), o -1. */
+export function nearestTime(slots, time) {
+  const target = parseTime(time)
+  if (target == null || !slots.length) return -1
+  let best = -1,
+    distance = Infinity
+  slots.forEach((slot, index) => {
+    const d = Math.abs((parseTime(slot) ?? 0) - target)
+    if (d < distance) {
+      best = index
+      distance = d
+    }
+  })
+  return best
+}
+
+/** Error de una hora escrita: formato o fuera de `min`–`max`. Vacío no es error. */
+export function timeError(text, { min, max } = {}, texts) {
+  const messages = textsOr(texts)
+  if (!String(text ?? '').trim()) return ''
+  const minutes = parseTime(text)
+  if (minutes == null) return messages.timeInvalid
+  if (min && minutes < (parseTime(min) ?? 0)) return formatMessage(messages.timeMin, { min: normalizeTime(min) })
+  if (max && minutes > (parseTime(max) ?? 1439)) return formatMessage(messages.timeMax, { max: normalizeTime(max) })
+  return ''
+}
+
+// ---------- Teléfonos (PhoneInput). El valor es E.164: «+34612345678» ----------
+
+// groups: cifras de cada bloque sin el 0 inicial. trunk: el 0 nacional se quita en E.164.
+// example: un móvil de ejemplo, para el placeholder.
+const PHONE_RULES = {
+  ES: { dial: '34', groups: [3, 3, 3], trunk: false, valid: /^[6789]\d{8}$/, example: '612345678' },
+  PT: { dial: '351', groups: [3, 3, 3], trunk: false, valid: /^[239]\d{8}$/, example: '912345678' },
+  FR: { dial: '33', groups: [1, 2, 2, 2, 2], trunk: true, valid: /^[1-9]\d{8}$/, example: '612345678' },
+  DE: { dial: '49', groups: [3, 4, 4], trunk: true, valid: /^[1-9]\d{5,10}$/, example: '15123456789' },
+  IT: { dial: '39', groups: [3, 3, 4], trunk: false, valid: /^(3\d{8,9}|0\d{5,10})$/, example: '3123456789' },
+  GB: { dial: '44', groups: [4, 6], trunk: true, valid: /^[1-9]\d{8,9}$/, example: '7400123456' },
+}
+
+const phoneRule = (country) => PHONE_RULES[String(country ?? '').toUpperCase()] ?? PHONE_RULES.ES
+
+/** Países con prefijo, en el orden del selector, y un número de ejemplo ya formateado. */
+export const PHONE_COUNTRIES = Object.entries(PHONE_RULES).map(([code, rule]) => ({
+  code,
+  dial: `+${rule.dial}`,
+  example: formatPhone(rule.example, code),
+}))
+
+/** País de un número internacional («+351…» → «PT»), o null si no es de la lista. */
+export function phoneCountryOf(text) {
+  const digits = String(text ?? '')
+    .trim()
+    .replace(/^00/, '+')
+  if (!digits.startsWith('+')) return null
+  const plain = digits.replace(/\D/g, '')
+  return Object.keys(PHONE_RULES).find((code) => plain.startsWith(PHONE_RULES[code].dial)) ?? null
+}
+
+/**
+ * Texto escrito → país y cifras nacionales (con el 0 inicial si se escribió). Si empieza por
+ * «+» o «00» y un prefijo conocido, el país sale del número.
+ */
+export function parsePhone(text, country = 'ES') {
+  const raw = String(text ?? '').trim()
+  const detected = phoneCountryOf(raw)
+  const code = detected ?? (PHONE_RULES[String(country).toUpperCase()] ? String(country).toUpperCase() : 'ES')
+  let digits = raw.replace(/\D/g, '')
+  if (detected) digits = digits.replace(/^00/, '').slice(PHONE_RULES[detected].dial.length)
+  return { country: code, digits }
+}
+
+const significantPhone = (digits, rule) => (rule.trunk ? digits.replace(/^0/, '') : digits)
+
+/** «612345678» → «612 345 678». En Francia, «0612345678» → «06 12 34 56 78». */
+export function formatPhone(text, country = 'ES') {
+  const { country: code, digits } = parsePhone(text, country)
+  const rule = phoneRule(code)
+  const trunk = rule.trunk && digits.startsWith('0') ? '0' : ''
+  let rest = digits.slice(trunk.length)
+  const parts = []
+  rule.groups.forEach((size, index) => {
+    if (!rest) return
+    const take = index === rule.groups.length - 1 ? rest.length : size
+    parts.push(rest.slice(0, take))
+    rest = rest.slice(take)
+  })
+  if (parts.length) parts[0] = trunk + parts[0]
+  else if (trunk) parts.push(trunk)
+  return parts.join(' ')
+}
+
+/** Número en E.164 («+34612345678»), o '' si no hay cifras. */
+export function toE164(text, country = 'ES') {
+  const { country: code, digits } = parsePhone(text, country)
+  const rule = phoneRule(code)
+  const national = significantPhone(digits, rule)
+  return national ? `+${rule.dial}${national}` : ''
+}
+
+/** Cifras nacionales de un número E.164 de `country`, sin el prefijo. */
+export function nationalNumber(e164, country = 'ES') {
+  const { digits } = parsePhone(e164, country)
+  return digits
+}
+
+/** Error de un teléfono: '' si es válido o está vacío. */
+export function phoneError(text, country = 'ES', texts) {
+  const messages = textsOr(texts)
+  const { country: code, digits } = parsePhone(text, country)
+  if (!digits) return ''
+  const rule = phoneRule(code)
+  const national = significantPhone(digits, rule)
+  if (rule.valid.test(national)) return ''
+  if (code === 'ES') return national.length !== 9 ? messages.phoneSpainLength : messages.phoneSpainStart
+  return messages.phoneInvalid
+}
+
+export function isValidPhone(text, country = 'ES') {
+  return Boolean(parsePhone(text, country).digits) && !phoneError(text, country)
+}
+
+// ---------- NIF: DNI, NIE y CIF ----------
+
+const DNI_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE'
+const CIF_LETTERS = 'JABCDEFGHI'
+
+/** Mayúsculas, sin espacios, guiones, puntos ni barras. Quita el «ES» del NIF-IVA. */
+export function normalizeNif(text) {
+  const value = String(text ?? '')
+    .toUpperCase()
+    .replace(/[\s.\-/]/g, '')
+  return /^ES[0-9A-Z]\d{7}[0-9A-Z]$/.test(value) ? value.slice(2) : value
+}
+
+/** 'dni', 'nie' o 'cif' según la forma (sin comprobar el control), o null. */
+export function nifKind(text) {
+  const value = normalizeNif(text)
+  if (/^\d/.test(value)) return 'dni'
+  if (/^[XYZ]/.test(value)) return 'nie'
+  if (/^[ABCDEFGHJNPQRSUVW]/.test(value)) return 'cif'
+  return null
+}
+
+function cifControl(digits) {
+  let sum = 0
+  for (let i = 0; i < 7; i++) {
+    const n = Number(digits[i])
+    if (i % 2 === 0) {
+      const doubled = n * 2
+      sum += Math.floor(doubled / 10) + (doubled % 10)
+    } else sum += n
+  }
+  return (10 - (sum % 10)) % 10
+}
+
+/** Error concreto de un DNI, NIE o CIF: '' si es válido o está vacío. */
+export function nifError(text, texts) {
+  const messages = textsOr(texts)
+  const value = normalizeNif(text)
+  if (!value) return ''
+  const kind = nifKind(value)
+  if (kind === 'dni') {
+    if (!/^\d{8}[A-Z]$/.test(value)) return messages.nifDniFormat
+    return DNI_LETTERS[Number(value.slice(0, 8)) % 23] === value[8] ? '' : messages.nifDniLetter
+  }
+  if (kind === 'nie') {
+    if (!/^[XYZ]\d{7}[A-Z]$/.test(value)) return messages.nifNieFormat
+    const number = Number('XYZ'.indexOf(value[0]) + value.slice(1, 8))
+    return DNI_LETTERS[number % 23] === value[8] ? '' : messages.nifNieLetter
+  }
+  if (kind === 'cif') {
+    if (!/^[A-Z]\d{7}[0-9A-J]$/.test(value)) return messages.nifCifFormat
+    const digit = cifControl(value.slice(1, 8)),
+      control = value[8]
+    // Llevan letra los de entidades sin ánimo de lucro, organismos públicos y no residentes;
+    // número las sociedades anónimas y limitadas, las comunidades de bienes y las de propietarios.
+    const letterOnly = 'NPQRSW'.includes(value[0]) || value.slice(1, 3) === '00'
+    const digitOnly = 'ABEH'.includes(value[0])
+    const ok = (!letterOnly && control === String(digit)) || (!digitOnly && control === CIF_LETTERS[digit])
+    return ok ? '' : messages.nifCifControl
+  }
+  return messages.nifInvalid
+}
+
+export function isValidNif(text) {
+  return Boolean(normalizeNif(text)) && !nifError(text)
+}
+
+// ---------- IBAN ----------
+
+/** Longitud del IBAN de cada país (registro SWIFT). */
+export const IBAN_LENGTHS = Object.fromEntries(
+  'AD24 AE23 AL28 AT20 AZ28 BA20 BE16 BG22 BH22 BR29 BY28 CH21 CR22 CY28 CZ24 DE22 DK18 DO28 EE20 EG29 ES24 FI18 FO18 FR27 GB22 GE22 GI23 GL18 GR27 GT28 HR21 HU28 IE22 IL23 IQ23 IS26 IT27 JO30 KW30 KZ20 LB28 LC32 LI21 LT20 LU20 LV21 MC27 MD24 ME22 MK19 MR27 MT31 MU30 NL18 NO15 PK24 PL28 PS29 PT25 QA29 RO24 RS22 SA24 SC31 SE24 SI19 SK24 SM27 ST25 SV28 TL23 TN24 TR26 UA29 VA22 VG24 XK20'
+    .split(' ')
+    .map((entry) => [entry.slice(0, 2), Number(entry.slice(2))]),
+)
+
+/** Mayúsculas, solo letras y cifras: el valor que se guarda. */
+export function normalizeIban(text) {
+  return String(text ?? '')
+    .toUpperCase()
+    .replace(/[^0-9A-Z]/g, '')
+}
+
+/** «es9121000418…» → «ES91 2100 0418 …», en bloques de cuatro. */
+export function formatIban(text) {
+  return normalizeIban(text).replace(/(.{4})(?=.)/g, '$1 ')
+}
+
+function ibanMod97(value) {
+  const moved = value.slice(4) + value.slice(0, 4)
+  let rest = 0
+  for (const char of moved) {
+    const n = char >= 'A' ? String(char.charCodeAt(0) - 55) : char
+    for (const digit of n) rest = (rest * 10 + Number(digit)) % 97
+  }
+  return rest
+}
+
+/** Error de un IBAN: país, longitud o dígitos de control. '' si es válido o está vacío. */
+export function ibanError(text, texts) {
+  const messages = textsOr(texts)
+  const value = normalizeIban(text)
+  if (!value) return ''
+  if (!/^[A-Z]{2}\d{2}/.test(value)) return messages.ibanCountry
+  const country = value.slice(0, 2),
+    length = IBAN_LENGTHS[country]
+  if (length && value.length !== length) return formatMessage(messages.ibanLength, { country, length })
+  if (!length && (value.length < 15 || value.length > 34)) return messages.ibanInvalid
+  return ibanMod97(value) === 1 ? '' : messages.ibanChecksum
+}
+
+export function isValidIban(text) {
+  return Boolean(normalizeIban(text)) && !ibanError(text)
+}
+
+// ---------- Superposiciones y acciones (0.3) ----------
+
+/** «1 seleccionada», «3 seleccionadas»: el texto de ActionBar. */
+export function selectedCount(count, texts) {
+  const messages = textsOr(texts)
+  return count === 1 ? messages.selectedCountOne : formatMessage(messages.selectedCountMany, { count })
+}
+
+/**
+ * Posición de un menú flotante (ContextMenu) que no se sale de la ventana. Se abre hacia abajo
+ * y a la derecha del punto; si no cabe, hacia el otro lado; nunca a menos de `margin` del borde.
+ */
+export function menuPosition(point, size, viewport, margin = 8) {
+  const axis = (start, length, room) => {
+    if (start + length <= room - margin) return Math.max(margin, start)
+    if (start - length >= margin) return start - length
+    return Math.max(margin, room - margin - length)
+  }
+  return { x: axis(point.x, size.width, viewport.width), y: axis(point.y, size.height, viewport.height) }
+}
+
+/** Valores de un ToggleGroup tras pulsar `value`. single: uno o ninguno; multiple: los que haya, en el orden de las opciones. */
+export function toggleValues(current, value, type = 'single', order = []) {
+  const on = current.includes(value)
+  if (type !== 'multiple') return on ? [] : [value]
+  const next = on ? current.filter((item) => item !== value) : [...current, value]
+  return order.length ? order.filter((item) => next.includes(item)) : next
+}

@@ -1,48 +1,43 @@
-/* Indicadores: como KpiStrip de 1komma5es_help. En el tema marca, tarjetas separadas. */
+/* Indicadores sin caja: cada uno con una línea fina arriba; el elegido, con la línea en
+   berenjena. La cifra es lo más grande; la variación, texto de color. En el tema marca,
+   tarjetas separadas. */
 .k5-kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-  overflow: hidden;
-  border: 1px solid var(--k5-border);
-  border-radius: var(--k5-radius-panel);
-  background: var(--k5-card);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--k5-space-5) var(--k5-space-6);
 }
 .k5-kpi {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--k5-space-1-5);
+  gap: var(--k5-space-1);
   min-width: 0;
-  margin: 0 -1px -1px 0;
-  padding: var(--k5-space-3-5) var(--k5-space-4);
+  margin: 0;
+  padding: var(--k5-space-3) 0 0;
   border: 0;
-  border-right: 1px solid var(--k5-border);
-  border-bottom: 1px solid var(--k5-border);
+  border-top: var(--k5-border-width) solid var(--k5-border);
   background: transparent;
-  color: var(--k5-card-foreground);
+  color: var(--k5-foreground);
   font: inherit;
   text-align: left;
 }
 button.k5-kpi {
   cursor: pointer;
-  transition: background-color var(--k5-duration-base);
+  transition: border-color var(--k5-duration-base);
 }
 button.k5-kpi:hover {
-  background: color-mix(in srgb, var(--k5-muted) 60%, transparent);
+  border-top-color: var(--k5-muted-foreground);
 }
 button.k5-kpi:focus-visible {
   outline: 2px solid var(--k5-ring);
-  outline-offset: -2px;
-}
-.k5-kpi[aria-pressed='true'] {
-  background: color-mix(in srgb, var(--k5-primary) 6%, transparent);
+  outline-offset: 4px;
+  border-radius: var(--k5-radius-xs);
 }
 .k5-kpi[aria-pressed='true']::after {
   content: '';
   position: absolute;
-  inset: auto 0 0;
-  height: 2px;
+  inset: calc(var(--k5-border-width) * -1) 0 auto;
+  height: var(--k5-border-width-strong);
   background: var(--k5-primary);
 }
 .k5-kpi__label {
@@ -65,10 +60,14 @@ button.k5-kpi:focus-visible {
   font-size: var(--k5-text-title);
   font-weight: var(--k5-weight-semibold);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: var(--k5-tracking-title);
+  line-height: var(--k5-leading-title);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+/* trend: sparkline decorativa bajo la cifra, del color de la variación. */
+.k5-kpi__trend {
+  margin-top: var(--k5-space-0-5);
 }
 .k5-kpi--danger .k5-kpi__value {
   color: var(--k5-destructive-text);
@@ -86,25 +85,20 @@ button.k5-kpi:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: var(--k5-space-0-5);
-  padding: 0.0625rem var(--k5-space-1-5);
-  border-radius: var(--k5-radius-badge);
   font-variant-numeric: tabular-nums;
   font-weight: var(--k5-weight-semibold);
 }
 .k5-kpi__change svg {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: var(--k5-icon-sm);
+  height: var(--k5-icon-sm);
 }
 .k5-kpi__change--good {
-  background: color-mix(in srgb, var(--k5-success) 10%, transparent);
-  color: var(--k5-success-text);
+  color: var(--k5-success);
 }
 .k5-kpi__change--bad {
-  background: color-mix(in srgb, var(--k5-destructive) 10%, transparent);
-  color: var(--k5-destructive-text);
+  color: var(--k5-destructive);
 }
 .k5-kpi__change--flat {
-  background: var(--k5-muted);
   color: var(--k5-muted-foreground);
 }
 
@@ -117,6 +111,7 @@ button.k5-kpi:focus-visible {
   box-shadow: none;
 }
 :where([data-k5-theme='marca']) .k5-kpi:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  gap: var(--k5-space-1-5);
   margin: 0;
   padding: var(--k5-space-4) 1.125rem;
   border: 0;

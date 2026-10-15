@@ -1,15 +1,14 @@
-/* Tarjeta: superficie estándar (rounded-2xl, borde de 1 px, sombra sutil). */
+/* Tarjeta: una sola superficie con borde de 1 px (nivel 0 de elevación). La variante alert
+   marca el problema con el borde, no con el fondo. */
 .k5-card {
   overflow: hidden;
-  border: 1px solid var(--k5-border);
+  border: var(--k5-border-width) solid var(--k5-border);
   border-radius: var(--k5-radius-panel);
   background: var(--k5-card);
   color: var(--k5-card-foreground);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
 }
 .k5-card--alert {
-  border-color: color-mix(in srgb, var(--k5-destructive) 40%, transparent);
-  background: color-mix(in srgb, var(--k5-destructive) 3%, var(--k5-card));
+  border-color: var(--k5-destructive-border);
 }
 .k5-card--plain {
   border-color: transparent;
@@ -55,7 +54,5 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--k5-space-2);
-  padding: var(--k5-space-3) var(--k5-space-4);
-  border-top: 1px solid var(--k5-border);
-  background: color-mix(in srgb, var(--k5-muted) 40%, transparent);
+  padding: 0 var(--k5-space-4) var(--k5-space-4);
 }

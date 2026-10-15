@@ -1,8 +1,16 @@
 {
   "name": "@1k5/grado",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Sistema de diseño de 1KOMMA5° España: tokens de color, tipografía y forma para React, Vue y cualquier web.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1K5-TECH-ES/grado-system-design.git",
+    "directory": "packages/grado"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -51,6 +59,7 @@
     },
     "./tokens.json": "./src/tokens.json",
     "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
+    "./tokens-studio.json": "./dist/tokens-studio.json",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
   },

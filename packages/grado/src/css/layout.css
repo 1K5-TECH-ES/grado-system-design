@@ -1,0 +1,150 @@
+/* Maquetación: Stack (pila), Grid (rejilla) y Container (ancho máximo). Solo clases, sin estilos en línea. */
+
+/* Stack: hijos en columna o en fila. En fila se centran en vertical salvo que se pida otra alineación. */
+.k5-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-4);
+  min-width: 0;
+}
+.k5-stack--row {
+  flex-direction: row;
+  align-items: center;
+}
+.k5-stack--wrap {
+  flex-wrap: wrap;
+}
+
+/* Grid: una columna en móvil; las columnas fijas aparecen desde 600 px. */
+.k5-grid {
+  --_min: 16rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--k5-space-4);
+  min-width: 0;
+}
+.k5-grid--cols-1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.k5-grid--auto {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_min)), 1fr));
+}
+.k5-grid--min-sm {
+  --_min: 12rem;
+}
+.k5-grid--min-lg {
+  --_min: 20rem;
+}
+@media (min-width: 600px) {
+  .k5-grid--cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .k5-grid--cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .k5-grid--cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .k5-grid--cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .k5-grid--cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Hueco de la escala de espacio: k5-gap-<clave> usa el token --k5-space-<clave>. Sirve en cualquier flex o grid. */
+.k5-gap-0-5 {
+  gap: var(--k5-space-0-5);
+}
+.k5-gap-1 {
+  gap: var(--k5-space-1);
+}
+.k5-gap-1-5 {
+  gap: var(--k5-space-1-5);
+}
+.k5-gap-2 {
+  gap: var(--k5-space-2);
+}
+.k5-gap-2-5 {
+  gap: var(--k5-space-2-5);
+}
+.k5-gap-3 {
+  gap: var(--k5-space-3);
+}
+.k5-gap-3-5 {
+  gap: var(--k5-space-3-5);
+}
+.k5-gap-4 {
+  gap: var(--k5-space-4);
+}
+.k5-gap-5 {
+  gap: var(--k5-space-5);
+}
+.k5-gap-6 {
+  gap: var(--k5-space-6);
+}
+.k5-gap-8 {
+  gap: var(--k5-space-8);
+}
+.k5-gap-10 {
+  gap: var(--k5-space-10);
+}
+.k5-gap-12 {
+  gap: var(--k5-space-12);
+}
+.k5-gap-16 {
+  gap: var(--k5-space-16);
+}
+
+/* Alineación en el eje cruzado y reparto en el principal (flex o grid). */
+.k5-align-start {
+  align-items: flex-start;
+}
+.k5-align-center {
+  align-items: center;
+}
+.k5-align-end {
+  align-items: flex-end;
+}
+.k5-align-stretch {
+  align-items: stretch;
+}
+.k5-align-baseline {
+  align-items: baseline;
+}
+.k5-justify-start {
+  justify-content: flex-start;
+}
+.k5-justify-center {
+  justify-content: center;
+}
+.k5-justify-end {
+  justify-content: flex-end;
+}
+.k5-justify-between {
+  justify-content: space-between;
+}
+
+/* Container: centrado, con margen lateral de 16 px (24 px desde 768 px) incluido en el ancho máximo. */
+.k5-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--k5-container-lg);
+  margin-inline: auto;
+  padding-inline: var(--k5-space-4);
+}
+@media (min-width: 768px) {
+  .k5-container {
+    padding-inline: var(--k5-space-6);
+  }
+}
+.k5-container--sm {
+  max-width: var(--k5-container-sm);
+}
+.k5-container--md {
+  max-width: var(--k5-container-md);
+}
+.k5-container--flush {
+  padding-inline: 0;
+}

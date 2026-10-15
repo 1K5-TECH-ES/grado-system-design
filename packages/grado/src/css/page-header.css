@@ -1,4 +1,4 @@
-/* Cabecera de página: título de 24 px, subtítulo y acciones a la derecha. */
+/* Cabecera de página: título de 28 px, subtítulo y acciones a la derecha. */
 .k5-page-header {
   display: flex;
   flex-wrap: wrap;
@@ -18,7 +18,7 @@
   font-size: var(--k5-text-title);
   font-weight: var(--k5-weight-semibold);
   letter-spacing: var(--k5-tracking-title);
-  line-height: 1.2;
+  line-height: var(--k5-leading-title);
   text-wrap: balance;
 }
 .k5-page-header__subtitle {

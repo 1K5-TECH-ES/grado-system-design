@@ -1,0 +1,44 @@
+/* Teléfono: selector nativo de prefijo a la izquierda, separado por una línea, y el número. */
+.k5-phone-input {
+  display: grid;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-phone-input .k5-input-wrap {
+  padding-left: 0;
+}
+.k5-phone-input .k5-input-wrap__affix {
+  display: flex;
+  align-self: stretch;
+}
+.k5-phone-input .k5-input {
+  font-variant-numeric: tabular-nums;
+}
+.k5-phone-input__country {
+  height: 100%;
+  margin: 0;
+  padding: 0 var(--k5-space-6) 0 var(--k5-space-3);
+  border: 0;
+  border-right: var(--k5-border-width) solid var(--k5-input);
+  border-radius: var(--k5-radius) 0 0 var(--k5-radius);
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23828282' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right var(--k5-space-2) center / 0.875rem;
+  color: var(--k5-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-label);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  appearance: none;
+}
+.k5-phone-input__country:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: -2px;
+}
+.k5-phone-input__country:disabled {
+  cursor: not-allowed;
+}
+.k5-phone-input__country option {
+  background: var(--k5-popover);
+  color: var(--k5-popover-foreground);
+}

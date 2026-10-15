@@ -1,0 +1,54 @@
+/* Sparkline: línea de tendencia sin ejes. El SVG se estira al ancho disponible y el trazo
+   mantiene su grosor (vector-effect). El punto final es HTML para que siga siendo redondo. */
+.k5-sparkline {
+  --_height: 2rem;
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 3rem;
+  height: var(--_height);
+  color: var(--k5-primary);
+}
+.k5-sparkline--brand {
+  color: var(--k5-primary);
+}
+.k5-sparkline--success {
+  color: var(--k5-success);
+}
+.k5-sparkline--danger {
+  color: var(--k5-destructive);
+}
+.k5-sparkline--neutral {
+  color: var(--k5-muted-foreground);
+}
+.k5-sparkline__plot {
+  position: absolute;
+  inset: calc(var(--k5-space-1-5) / 2);
+}
+.k5-sparkline__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.k5-sparkline__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.k5-sparkline__area {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.12;
+}
+.k5-sparkline__dot {
+  position: absolute;
+  width: var(--k5-space-1-5);
+  height: var(--k5-space-1-5);
+  border-radius: var(--k5-radius-full);
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}

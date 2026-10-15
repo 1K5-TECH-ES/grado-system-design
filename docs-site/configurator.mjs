@@ -1,11 +1,12 @@
 // Configurador de temas de la web («Personalizar»).
 // Controles y vista previa con los componentes de @1k5/grado-react; solo el marco
-// de la vista previa, las muestras de color y los selectores segmentados son de la web.
+// de la vista previa, las muestras de color y las miniaturas de estilo son de la web.
 import { createElement as h, useEffect, useId, useMemo, useRef, useState } from 'react'
 import * as G from '@1k5/grado-react'
 import { themes } from '@1k5/grado/tokens'
 import gradoPackage from '@1k5/grado/package.json' with { type: 'json' }
 import { GradoLogo } from './brand.mjs'
+import { CodeBlock, TextLink } from './site/ui.mjs'
 import {
   BRAND,
   DEFAULTS,
@@ -45,7 +46,6 @@ const icon =
 const plus = icon(['M12 5v14', 'M5 12h14'])
 const check = icon(['m5 12 5 5 9-10'], 3)
 const downloadIcon = icon(['M12 4v12', 'm7 11 5 5 5-5', 'M5 20h14'])
-const linkIcon = icon(['M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1', 'M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'])
 const pasteIcon = icon(['M9 3h6v4H9z', 'M15 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2'])
 const fileIcon = icon(['M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z', 'M14 3v5h5'])
 const RADIUS_NAMES = { r4: 'rectas', r8: 'suaves', r12: 'redondas' }
@@ -102,23 +102,6 @@ function previewVariables(theme, mode) {
   return { ...out, ...cssVariables(theme.tokens, mode) }
 }
 
-async function copyText(text) {
-  try {
-    if (!navigator.clipboard?.writeText) throw new Error('Portapapeles no disponible')
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    const area = document.createElement('textarea')
-    area.value = text
-    area.style.cssText = 'position:fixed;left:-9999px;top:0'
-    document.body.append(area)
-    area.select()
-    const ok = document.execCommand('copy')
-    area.remove()
-    return ok
-  }
-}
-
 function downloadFile(name, text) {
   const url = URL.createObjectURL(new Blob([text], { type: 'text/css' }))
   const link = Object.assign(document.createElement('a'), { href: url, download: name })
@@ -128,72 +111,19 @@ function downloadFile(name, text) {
   setTimeout(() => URL.revokeObjectURL(url), 0)
 }
 
-/** `text` puede ser una función para calcular el valor al pulsar (el enlace depende de la URL). */
-function CopyButton({ text, label = 'Copiar', doneLabel = 'Copiado ✓', icon: Icon, className = 'copy-button' }) {
-  const [done, setDone] = useState(false)
-  const timer = useRef()
-  useEffect(() => () => clearTimeout(timer.current), [])
-  return h(
-    'button',
-    {
-      type: 'button',
-      className,
-      onClick: async () => {
-        setDone(await copyText(typeof text === 'function' ? text() : text))
-        clearTimeout(timer.current)
-        timer.current = setTimeout(() => setDone(false), 1800)
-      },
-    },
-    Icon && h(Icon, { 'aria-hidden': 'true' }),
-    done ? doneLabel : label,
-    h('span', { className: 'sr-only', role: 'status' }, done ? 'Copiado al portapapeles' : ''),
-  )
-}
-
-function CodeBlock({ label, code, collapsible = false }) {
-  const [open, setOpen] = useState(false)
-  const lines = code.split('\n').length
-  const collapsed = collapsible && !open && lines > 14
-  return h(
-    'div',
-    { className: `code-block${collapsed ? ' code-block--collapsed' : ''}` },
-    h('div', { className: 'code-bar' }, h('span', null, label), h(CopyButton, { text: code })),
-    h('pre', { tabIndex: 0 }, h('code', null, code)),
-    collapsible &&
-      lines > 14 &&
-      h(
-        'button',
-        { type: 'button', className: 'code-expand', 'aria-expanded': open, onClick: () => setOpen(!open) },
-        open ? 'Contraer' : `Ver el archivo completo · ${lines} líneas`,
-      ),
-  )
-}
-
-/** Selector segmentado de la web: botones con aria-pressed. Una opción [clave, texto, desactivada]. */
-export function Segmented({ label, value, options, onChange, disabledTitle }) {
-  const id = useId()
+/** Selector segmentado con su etiqueta visible: SegmentedControl de Grado. Una opción [clave, texto, desactivada]. */
+export function Segmented({ label, value, options, onChange }) {
   return h(
     'div',
     { className: 'segmented-field' },
-    h('span', { className: 'segmented-label', id }, label),
-    h(
-      'div',
-      { className: 'segmented', role: 'group', 'aria-labelledby': id },
-      options.map(([key, text, disabled = false]) =>
-        h(
-          'button',
-          {
-            key,
-            type: 'button',
-            'aria-pressed': value === key,
-            disabled,
-            title: disabled ? disabledTitle : undefined,
-            onClick: () => onChange(key),
-          },
-          text,
-        ),
-      ),
-    ),
+    h('span', { className: 'segmented-label', 'aria-hidden': 'true' }, label),
+    h(G.SegmentedControl, {
+      label,
+      size: 'sm',
+      value,
+      onValueChange: onChange,
+      options: options.map(([key, text, disabled = false]) => ({ value: key, label: text, disabled })),
+    }),
   )
 }
 
@@ -664,18 +594,16 @@ export function Configurator() {
           { className: 'theme-code' },
           h('span', null, 'Código'),
           h('code', null, theme.code),
-          h(CopyButton, { text: theme.code, label: 'Copiar', className: G.buttonClass({ variant: 'ghost', size: 'sm' }) }),
+          h(G.CopyButton, { value: theme.code, size: 'sm' }),
         ),
         h(
           'div',
           { className: 'cfg-head__buttons' },
           h(G.Button, { variant: 'secondary', icon: pasteIcon, onClick: () => setImportOpen(true) }, 'Pegar código'),
-          h(CopyButton, {
-            text: () => `${location.origin}${location.pathname}#${theme.code}`,
+          h(G.CopyButton, {
+            value: typeof location === 'undefined' ? `#${theme.code}` : `${location.origin}${location.pathname}#${theme.code}`,
             label: 'Copiar enlace',
-            doneLabel: 'Enlace copiado ✓',
-            icon: linkIcon,
-            className: G.buttonClass({ variant: 'secondary' }),
+            copiedLabel: 'Enlace copiado',
           }),
           h(G.Button, { icon: downloadIcon, onClick: () => downloadFile('grado-tema.css', css) }, 'Descargar grado-tema.css'),
         ),
@@ -842,7 +770,6 @@ export function Configurator() {
                 ['both', 'Claro y oscuro', !config.dark],
               ],
               onChange: setView,
-              disabledTitle: 'Activa «Incluir modo oscuro» para verlo',
             }),
           ),
         ),
@@ -863,7 +790,7 @@ export function Configurator() {
           'p',
           { className: 'canvas-note' },
           'Componentes reales de Grado con las variables de tu tema. Los datos son de ejemplo. ',
-          h('a', { href: 'componentes?vista=mi-tema' }, 'Ver todos los componentes con tu tema →'),
+          h(TextLink, { to: '/componentes?vista=mi-tema' }, 'Ver todos los componentes con tu tema →'),
         ),
       ),
     ),
@@ -938,7 +865,7 @@ export function Configurator() {
               'div',
               { className: 'file-card__actions' },
               h(G.Button, { size: 'sm', icon: downloadIcon, onClick: () => downloadFile('grado-tema.css', css) }, 'Descargar'),
-              h(CopyButton, { text: css, label: 'Copiar', className: G.buttonClass({ variant: 'secondary', size: 'sm' }) }),
+              h(G.CopyButton, { value: css, size: 'sm' }),
               h(
                 G.Button,
                 { variant: 'ghost', size: 'sm', 'aria-expanded': showFile, onClick: () => setShowFile(!showFile) },

@@ -1,0 +1,29 @@
+/* Dirección: Input con chincheta y sugerencias de dos líneas en la lista de Combobox. */
+.k5-address-input {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.k5-address-input__icon {
+  display: block;
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+}
+.k5-address-input__option {
+  align-items: flex-start;
+}
+.k5-address-input__option .k5-combobox__check {
+  margin-top: var(--k5-space-0-5);
+}
+.k5-address-input__text {
+  display: grid;
+  gap: var(--k5-space-0-5);
+}
+.k5-address-input__description {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-address-input__option[data-active='true'] .k5-address-input__description {
+  color: inherit;
+}

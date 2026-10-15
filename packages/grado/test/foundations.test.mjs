@@ -4,6 +4,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { loadTokens } from '../scripts/lib/tokens.mjs'
+import { contrast } from '../scripts/lib/color.mjs'
 
 const tokens = loadTokens()
 const dist = new URL('../dist/', import.meta.url)
@@ -17,6 +18,50 @@ test('tokens.css declara espaciado, movimiento, capas y puntos de corte', () => 
   for (const name of Object.keys(tokens.z)) assert.match(tokensCss, new RegExp(`--k5-z-${name}: \\d+;`))
   for (const name of Object.keys(tokens.breakpoint)) assert.match(tokensCss, new RegExp(`--k5-breakpoint-${name}: \\d+px;`))
   assert.match(tokensCss, /@media \(prefers-reduced-motion: reduce\) \{\s*:root \{\s*--k5-duration-fast: 0s;/)
+})
+
+test('tokens.css declara la escala tipográfica, iconos, contenedores, bordes, opacidad y densidad', () => {
+  for (const step of ['caption', 'small', 'body', 'lead', 'heading', 'title', 'display']) {
+    assert.match(tokensCss, new RegExp(`--k5-text-${step}: [0-9.]+rem;`))
+    assert.match(tokensCss, new RegExp(`--k5-leading-${step}: [0-9.]+rem;`))
+  }
+  // Los nombres antiguos siguen existiendo y valen lo mismo que su paso.
+  assert.equal(tokens.typography['text-label'], tokens.typography['text-caption'])
+  assert.equal(tokens.typography['text-section'], tokens.typography['text-heading'])
+  for (const name of Object.keys(tokens.icon)) assert.match(tokensCss, new RegExp(`--k5-icon-${name}: `))
+  for (const name of Object.keys(tokens.container)) assert.match(tokensCss, new RegExp(`--k5-container-${name}: `))
+  for (const name of Object.keys(tokens.border)) assert.match(tokensCss, new RegExp(`--k5-border-${name}: `))
+  for (const name of Object.keys(tokens.opacity)) assert.match(tokensCss, new RegExp(`--k5-opacity-${name}: `))
+  for (const name of Object.keys(tokens.density))
+    assert.match(tokensCss, new RegExp(`\\[data-k5-density='${name}'\\] \\{\\s*--k5-control-h-sm`))
+  assert.match(tokensCss, /@media \(pointer: coarse\) \{\s*:root:not\(\[data-k5-density\]\) \{\s*--k5-control-h-sm: 2\.25rem;/)
+  // La densidad va después de los temas: si no, el tema la pisaría.
+  assert.ok(tokensCss.indexOf("[data-k5-density='compact']") > tokensCss.lastIndexOf('[data-k5-theme="marca"]'))
+})
+
+test('cada color de estado tiene su escala tonal: subtle, border y text', () => {
+  for (const source of ['primary', 'success', 'warning', 'destructive', 'info']) {
+    for (const suffix of ['subtle', 'border', 'text']) assert.ok(tokens.keys.color.includes(`${source}-${suffix}`), `${source}-${suffix}`)
+  }
+  for (const [theme, modes] of Object.entries(tokens.themes)) {
+    for (const mode of ['light', 'dark']) {
+      const c = modes[mode].full.color
+      // El texto de la escala se lee sobre su fondo: es el mismo tinte con el que se calculó.
+      for (const source of ['primary', 'success', 'warning', 'destructive', 'info']) {
+        const ratio = contrast(c[`${source}-text`].color, c[`${source}-subtle`].color)
+        assert.ok(ratio >= 4.5, `${theme}.${mode}: ${source}-text sobre ${source}-subtle = ${ratio.toFixed(2)}`)
+      }
+    }
+  }
+})
+
+test('radios con nombre en todos los temas, y sombra raised para el nivel 1', () => {
+  for (const [theme, modes] of Object.entries(tokens.themes)) {
+    const size = modes.light.full.size
+    for (const step of ['radius-xs', 'radius-sm', 'radius-md', 'radius-lg', 'radius-full']) assert.ok(size[step], `${theme}: ${step}`)
+    assert.equal(size['radius-md'], size.radius, `${theme}: radius-md es el radio de los controles`)
+    for (const mode of ['light', 'dark']) assert.ok(modes[mode].full.shadow.raised, `${theme}.${mode}: shadow-raised`)
+  }
 })
 
 test('las capas van de abajo arriba sin empates', () => {
@@ -61,6 +106,17 @@ test('grado.min.css, grado.layer.css y css/*.css contienen lo mismo que grado.cs
   for (const selector of ['.k5-btn--primary', '.k5-segmented__option', '.k5-number__step']) assert.ok(joined.includes(selector), selector)
 })
 
+test('tokens-studio.json trae un tema de Figma por tema y modo, sobre el conjunto global', () => {
+  const data = JSON.parse(read('tokens-studio.json'))
+  assert.deepEqual(data.$metadata.tokenSetOrder, ['global', 'consola/light', 'consola/dark', 'marca/light', 'marca/dark'])
+  assert.deepEqual(
+    data.$themes.map((t) => t.name),
+    ['Consola · claro', 'Consola · oscuro', 'Marca · claro', 'Marca · oscuro'],
+  )
+  for (const theme of data.$themes) assert.equal(theme.selectedTokenSets.global, 'source')
+  assert.equal(data['marca/light'].color.sidebar.$value, '#5C068C')
+})
+
 test('fonts.css apunta a archivos que existen en el paquete', () => {
   const fonts = read('fonts.css')
   const urls = [...fonts.matchAll(/url\('([^']+)'\)/g)].map((m) => m[1])
@@ -90,4 +146,8 @@ test('tokens.dtcg.json sigue el formato W3C: cada token tiene $type y $value', (
   assert.equal(data['consola/light'].color.primary.$value, '#5C068C')
   assert.deepEqual(data.global.ease.emphasized.$value, [0.32, 0.72, 0, 1])
   assert.equal(data.global.z.dropdown.$value, 60)
+  assert.equal(data.global.text.display.$value, '2.5rem')
+  assert.equal(data.global.leading.body.$value, '1.25rem')
+  assert.equal(data.global.density.comfortable['control-h'].$value, '2.75rem')
+  assert.ok(data['marca/dark'].color['primary-subtle'].$value)
 })

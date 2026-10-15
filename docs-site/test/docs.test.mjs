@@ -4,20 +4,27 @@ import { existsSync, readFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
 import ts from 'typescript'
 import { parse, compileScript, compileTemplate } from '@vue/compiler-sfc'
+import { createElement as h } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom'
+import { StaticApp, pageModules } from '../site/App.mjs'
+import { routes as siteRoutes } from '../site/routes.mjs'
+import { siteData } from '../site-data.mjs'
 
 const out = new URL('../dist/', import.meta.url)
-const routes = {
-  '/': 'home',
-  '/personalizar': 'customize',
-  '/instalacion': 'installation',
-  '/componentes': 'components',
-  '/estado': 'status',
-  '/cambios': 'changelog',
-}
+const routes = Object.fromEntries(siteRoutes.map((route) => [route.path, route.key]))
 const decode = (text) =>
-  text.replace(/&(amp|lt|gt|quot|#39);/g, (_, entity) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" })[entity])
+  text.replace(/&(amp|lt|gt|quot|#39|#x27);/g, (_, entity) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'" })[entity])
 const read = (path) => readFileSync(new URL(path, out), 'utf8')
-const pageData = Object.fromEntries(Object.values(routes).map((key) => [key, JSON.parse(read(`assets/pages/${key}.json`))]))
+// Cada página se pinta como en la web: el mismo AppShell, con los datos del build. Los ejemplos
+// de código salen en el framework elegido, así que se pintan en React y en Vue.
+const data = siteData()
+const pages = Object.fromEntries(await Promise.all(siteRoutes.map(async ({ key }) => [key, (await pageModules[key]()).default])))
+const renderPage = (path, framework) =>
+  renderToStaticMarkup(h(StaticRouter, { location: path }, h(StaticApp, { data, page: pages[routes[path]], framework })))
+const pageData = Object.fromEntries(
+  siteRoutes.map(({ path, key }) => [key, { html: renderPage(path, 'react'), vue: renderPage(path, 'vue') }]),
+)
 const pageHtml = (key) => pageData[key].html
 
 test('todas las páginas, recursos, rutas y anclas internas existen', () => {
@@ -46,7 +53,7 @@ test('todas las páginas, recursos, rutas y anclas internas existen', () => {
 test('cada ejemplo React y Vue tiene sintaxis válida', () => {
   let reactCount = 0,
     vueCount = 0
-  for (const html of Object.values(pageData).map((page) => page.html)) {
+  for (const html of Object.values(pageData).flatMap((page) => [page.html, page.vue])) {
     for (const match of html.matchAll(/<pre\b[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)) {
       const source = decode(match[1])
       if (source.startsWith('<script setup>')) {
@@ -96,22 +103,23 @@ test('las descargas contienen paquetes compilados y sus versiones coinciden', ()
 
 test('cada componente tiene su guía de uso con las tres partes', () => {
   const html = pageHtml('components')
-  const sections = [...html.matchAll(/<section class="k5-card component-section" id="([^"]+)">([\s\S]*?)<\/section>/g)]
-  assert.ok(sections.length >= 41)
+  const sections = [...html.matchAll(/<section id="([^"]+)" class="docs-component"[^>]*>([\s\S]*?)<\/section>/g)]
+  assert.equal(sections.length, data.coverage.length)
   for (const [, id, body] of sections) {
     for (const title of ['Cuándo usarlo', 'Qué evitar', 'Accesibilidad'])
-      assert.ok(body.includes(`<h4>${title}</h4>`), `${id}: falta «${title}»`)
+      assert.ok(new RegExp(`<h4>(?:<svg[^]*?</svg>)?${title}</h4>`).test(body), `${id}: falta «${title}»`)
   }
 })
 
 test('Estado lista todos los componentes y Cambios empieza por la versión actual', () => {
   const version = JSON.parse(readFileSync(new URL('../../packages/grado/package.json', import.meta.url), 'utf8')).version
   const status = pageHtml('status')
-  const components = [...pageHtml('components').matchAll(/<section class="k5-card component-section" id="([^"]+)"/g)].map((m) => m[1])
-  for (const id of components) assert.ok(status.includes(`href="componentes#${id}"`), `Estado no enlaza ${id}`)
+  const components = [...pageHtml('components').matchAll(/<section id="([^"]+)" class="docs-component"/g)].map((m) => m[1])
+  assert.ok(components.length >= 74)
+  for (const id of components) assert.ok(status.includes(`href="/componentes#${id}"`), `Estado no enlaza ${id}`)
   assert.match(status, /Sales Coach/)
   const changelog = pageHtml('changelog')
-  assert.match(changelog, new RegExp(`<h2 id="v-${version.replaceAll('.', '-')}">${version.replaceAll('.', '\\.')}`))
+  assert.match(changelog, new RegExp(`<h2[^>]* id="v-${version.replaceAll('.', '-')}"[^>]*>${version.replaceAll('.', '\\.')}<`))
 })
 
 test('la web carga Barlow del paquete, sin Google Fonts', () => {

@@ -1,0 +1,22 @@
+/* Hora: un Input con reloj delante y la lista de franjas de Combobox debajo.
+   El error de formato va bajo el campo, fuera de la caja que posiciona la lista. */
+.k5-time-picker {
+  display: grid;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-time-picker__control {
+  position: relative;
+}
+.k5-time-picker__icon {
+  display: block;
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+}
+.k5-time-picker .k5-input {
+  font-variant-numeric: tabular-nums;
+}
+.k5-time-picker .k5-combobox__list {
+  max-height: 15rem;
+  font-variant-numeric: tabular-nums;
+}

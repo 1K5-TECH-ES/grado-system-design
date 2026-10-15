@@ -1,0 +1,7 @@
+/* Botón de solo icono. Conmutado (aria-pressed="true"): fondo y texto del tono primario. */
+.k5-btn--icon[aria-pressed='true'],
+.k5-btn--icon[aria-pressed='true']:hover {
+  border-color: transparent;
+  background: var(--k5-primary-subtle);
+  color: var(--k5-primary-text);
+}

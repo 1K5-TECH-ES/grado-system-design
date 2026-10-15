@@ -1,0 +1,11 @@
+/* NIF e IBAN: cifras tabulares y el error de validación bajo el campo. */
+.k5-nif-input,
+.k5-iban-input {
+  display: grid;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-nif-input .k5-input,
+.k5-iban-input .k5-input {
+  font-variant-numeric: tabular-nums;
+}

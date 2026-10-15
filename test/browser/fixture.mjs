@@ -3,6 +3,13 @@ import { createRoot } from 'react-dom/client'
 import { createApp, defineComponent, h, reactive } from 'vue'
 import * as R from '@1k5/grado-react'
 import * as V from '@1k5/grado-vue'
+import * as maquetacion from './groups/maquetacion.fixture.mjs'
+import * as datos from './groups/datos.fixture.mjs'
+import * as graficos from './groups/graficos.fixture.mjs'
+import * as entradas from './groups/entradas.fixture.mjs'
+import * as superposiciones from './groups/superposiciones.fixture.mjs'
+
+const groups = [maquetacion, datos, graficos, entradas, superposiciones]
 
 const initial = () => ({
   auto: false,
@@ -29,6 +36,7 @@ const initial = () => ({
   query: '',
   accordion: [],
   reduced: false,
+  ...Object.assign({}, ...groups.map((g) => g.initial)),
 })
 function renderUI(framework, state, update) {
   const isVue = framework === 'vue',
@@ -384,6 +392,7 @@ function renderUI(framework, state, update) {
         selectable: true,
       }),
     ),
+    ...groups.flatMap((g) => g.render({ C, make, section, button, set, state, update, isVue })),
   ])
 }
 if (new URLSearchParams(location.search).get('framework') === 'vue')

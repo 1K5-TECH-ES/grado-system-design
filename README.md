@@ -16,6 +16,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 4. Documentación web | Introducción, instalación, componentes, ejemplos React/Vue y paquetes descargables | Lista para publicar en vuestro hosting |
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
+| 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
 
 ## Decisiones tomadas
 
@@ -25,6 +26,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 - **Tonos al 10, 25, 50 y 75 %:** calculados como mezcla con blanco. Se sustituyen si marca facilita los valores oficiales.
 - **Tipografía:** Barlow, la de marca, incluida en el paquete (`@1k5/grado/fonts.css`, licencia OFL). La fuente del sistema queda de respaldo.
 - **Contraste:** todas las combinaciones de color llegan a 4,5 : 1 en los dos temas y los dos modos (desde 0.2.0).
+- **Minimalismo (desde 0.3.0):** un solo acento por vista; borde o fondo, nunca los dos; jerarquía por tamaño y peso; estado con punto y texto. Consola se separa así del aspecto de 1komma5es_help en badges, tablas, tarjetas y KPI; los colores siguen siendo los mismos.
 
 ## Comandos
 
@@ -41,7 +43,16 @@ npm run contrast      # informe de contraste de todos los temas
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
+npm run release:check -- 0.3.0  # versiones de los tres paquetes y sección del CHANGELOG antes de etiquetar
 ```
+
+## Publicar una versión
+
+1. Sube la versión en los tres `package.json` (y la dependencia `@1k5/grado` de React y Vue) y escribe su sección en `CHANGELOG.md`.
+2. `npm run release:check -- X.Y.Z`.
+3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
+
+Antes de la primera publicación hay que decidir el registro: configura la variable `NPM_REGISTRY_URL` y el secreto `NPM_TOKEN` en GitHub. GitHub Packages solo admite paquetes cuyo ámbito sea el nombre de la organización (`@1k5-tech-es/…`); para mantener `@1k5/…` hace falta otro registro privado (Artifactory, Verdaccio, npm de pago).
 
 Los cambios de cada versión están en [CHANGELOG.md](CHANGELOG.md).
 
@@ -62,10 +73,10 @@ Los tests comprueban:
 - que el tema `consola` sigue siendo idéntico a 1komma5es_help, salvo las cuatro correcciones de marca;
 - que todos los temas tienen los mismos tokens;
 - que cada color se convierte a HSL sin perder precisión;
-- que ninguna combinación de color baja de 4,5 : 1 de contraste, sin excepciones;
+- que ninguna combinación de color baja de 4,5 : 1 de contraste, sin excepciones, tampoco el texto de la escala tonal sobre su fondo suave;
 - que `grado.css` usa los tokens de movimiento y capas, y los puntos de corte de `tokens.json`;
 - que Tailwind 3 y Tailwind 4 compilan las clases esperadas;
-- que React y Vue generan el mismo HTML para las mismas props (`test/parity.test.mjs`, 22 escenarios);
+- que React y Vue generan el mismo HTML para las mismas props (`test/parity.test.mjs` y `test/parity-*.test.mjs`, uno por grupo de componentes);
 - que cada clase que generan los componentes existe en `grado.css`;
 - que los textos de los tres idiomas tienen las mismas claves y variables.
 
@@ -94,17 +105,21 @@ Y, desde 0.2.0, las correcciones de contraste:
 
 ```
 CHANGELOG.md             cambios de cada versión (la web los publica en /cambios)
+.github/workflows/       CI (ci.yml) y publicación por etiqueta (release.yml)
 eslint.config.mjs        ESLint; .stylelintrc.json y .prettierrc.json para CSS y formato
 playwright.config.mjs    regresión visual (test/visual/)
 packages/grado-react/    componentes React (tsc)
-packages/grado-vue/      componentes Vue (tsc, sin .vue)
-test/parity.test.mjs     React y Vue generan el mismo HTML
+packages/grado-vue/      componentes Vue (tsc, sin .vue); en los dos, un archivo por componente
+                         y group-*.ts reúne los de 0.3 por grupo
+test/parity.test.mjs     React y Vue generan el mismo HTML (y parity-<grupo>.test.mjs para los de 0.3)
+test/patterns-*.test.mjs lógica compartida: validación de NIF, IBAN y teléfono, gráficos, horas…
 test/i18n.test.mjs       idiomas: mismas claves y mismo HTML en React y Vue
-test/browser/            teclado, foco y axe-core en Chrome
+test/browser/            teclado, foco y axe-core en Chrome; groups/ tiene la parte de cada grupo de 0.3
 test/visual/             capturas de referencia del catálogo
-scripts/catalog.mjs      genera catalog/index.html
+scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las secciones de 0.3)
+scripts/release.mjs      comprobaciones y notas de publicación
 scripts/docs.mjs         genera docs-site/dist/ con documentación y ejemplos
-docs-site/               estilos, interacción y guía de publicación de la web
+docs-site/               estilos, interacción y guía de publicación de la web (groups/: fichas y demos de 0.3)
 packages/grado/
   src/tokens.json        fuente única
   src/css/               un archivo CSS por componente; el build los une en dist/grado.css
@@ -117,6 +132,6 @@ packages/grado/
   assets/                logos en SVG y Barlow (fonts/, licencia OFL)
   test/                  tests con node:test
   dist/                  generado: tokens.css, tokens-hsl.css, tailwind.css, tailwind-preset, tokens.js,
-                         tokens.dtcg.json, grado.css, grado.min.css, grado.layer.css, css/, fonts.css, preview.html
+                         tokens.dtcg.json, tokens-studio.json, grado.css, grado.min.css, grado.layer.css, css/, fonts.css, preview.html
 ```
 # grado-system-design

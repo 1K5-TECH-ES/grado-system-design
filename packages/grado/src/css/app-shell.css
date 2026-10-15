@@ -1,4 +1,4 @@
-/* Armazón de aplicación: cabecera, barra lateral y contenido.
+/* Armazón de aplicación: cabecera, aviso (Banner), barra lateral y contenido.
    Consola: cabecera berenjena a todo el ancho y barra lateral clara (1komma5es_help).
    Marca: barra lateral berenjena a toda altura con el logo y cabecera clara.
    Móvil (< 768 px): la barra lateral se abre como cajón desde el botón de menú. */
@@ -14,8 +14,8 @@
 .k5-app {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas: 'header header' 'sidebar main';
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas: 'header header' 'banner banner' 'sidebar main';
   height: 100dvh;
   background: var(--k5-background);
   color: var(--k5-foreground);
@@ -187,6 +187,13 @@
   padding: var(--k5-space-3) var(--k5-space-3) 0;
   border-top: 1px solid var(--k5-sidebar-border);
 }
+/* Aviso de toda la aplicación (Banner): bajo la cabecera, sobre barra lateral y contenido.
+   Sin aviso, su fila mide 0. */
+.k5-app__banner {
+  grid-area: banner;
+  min-width: 0;
+}
+
 /* Posicionado: lo absoluto de dentro (textos .k5-sr-only, por ejemplo) se queda en su
    scroll y no alarga la página, que tendría entonces un segundo scroll. */
 .k5-app__main {
@@ -248,7 +255,7 @@
 /* Tema marca. :not(…) excluye lo que esté dentro de un bloque Consola metido en una página
    Marca (vistas previas de temas, por ejemplo): ahí manda Consola, el tema más cercano. */
 :where([data-k5-theme='marca']) .k5-app:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
-  grid-template-areas: 'sidebar header' 'sidebar main';
+  grid-template-areas: 'sidebar header' 'sidebar banner' 'sidebar main';
 }
 :where([data-k5-theme='marca']) .k5-app__header:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
   border-bottom: 1px solid var(--k5-border);
@@ -282,7 +289,7 @@
   .k5-app,
   :where([data-k5-theme='marca']) .k5-app:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'header' 'main';
+    grid-template-areas: 'header' 'banner' 'main';
   }
   .k5-app__header {
     padding: 0 var(--k5-space-2) 0 var(--k5-space-1);

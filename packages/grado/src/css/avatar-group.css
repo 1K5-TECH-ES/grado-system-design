@@ -1,0 +1,27 @@
+/* AvatarGroup: avatares solapados y un círculo «+N» con los que no caben. */
+.k5-avatar-group {
+  --_overlap: -0.25rem;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.k5-avatar-group--sm {
+  --_overlap: -0.1875rem;
+}
+.k5-avatar-group--lg {
+  --_overlap: -0.375rem;
+}
+/* Un anillo del color de la superficie separa cada avatar del anterior. */
+.k5-avatar-group > .k5-avatar {
+  box-shadow: 0 0 0 2px var(--_ring, var(--k5-background));
+}
+.k5-avatar-group > .k5-avatar + .k5-avatar {
+  margin-left: var(--_overlap);
+}
+.k5-card .k5-avatar-group {
+  --_ring: var(--k5-card);
+}
+.k5-avatar-group__more {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}

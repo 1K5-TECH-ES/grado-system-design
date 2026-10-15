@@ -1,41 +1,16 @@
-import { createElement as h } from 'react'
-import { LiveDemo } from './demos.mjs'
+import { entry, react, vue, list } from './doc-helpers.mjs'
+import { entries as maquetacionEntries } from './groups/maquetacion.docs.mjs'
+import { entries as datosEntries } from './groups/datos.docs.mjs'
+import { entries as graficosEntries } from './groups/graficos.docs.mjs'
+import { entries as entradasEntries } from './groups/entradas.docs.mjs'
+import { entries as superposicionesEntries } from './groups/superposiciones.docs.mjs'
 
-// Ejemplos completos y formateados. Solo importan useState o ref cuando los usan.
-const indent = (text, spaces) =>
-  text
-    .split('\n')
-    .map((line) => (line ? ' '.repeat(spaces) + line : line))
-    .join('\n')
-const react = (names, markup, setup = '') => {
-  const hooks = setup.includes('useState') ? "import { useState } from 'react';\n" : ''
-  const state = setup ? `${indent(setup, 2)}\n` : ''
-  const jsx = markup.includes('\n') ? `(\n${indent(markup, 4)}\n  )` : markup
-  return `${hooks}import { ${names} } from '@1k5/grado-react';\n\nexport default function Ejemplo() {\n${state}  return ${jsx};\n}`
-}
-const vue = (names, markup, setup = '') => {
-  const refs = setup.includes('ref(') ? "import { ref } from 'vue';\n" : ''
-  return `<script setup>\n${refs}import { ${names} } from '@1k5/grado-vue';\n${setup ? `\n${setup}\n` : ''}</script>\n\n<template>\n${indent(markup, 2)}\n</template>`
-}
-const entry = (id, name, category, description, reactCode, vueCode, props, note) => ({
-  id,
-  name,
-  category,
-  description,
-  preview: h(LiveDemo, { id }),
-  live: true,
-  react: reactCode,
-  vue: vueCode,
-  props,
-  note,
-})
 const modalProps = [
   ['title / description', 'Título y descripción accesibles', 'title obligatorio'],
   ['open', 'React: onOpenChange · Vue: v-model:open', 'false'],
   ['footer', 'Contenido React / slot Vue', '—'],
   ['closeOnOutside', 'Cerrar al pulsar fuera; AlertDialog lo desactiva', 'true'],
 ]
-const list = (...rows) => `[\n${rows.map((row) => `  ${row},`).join('\n')}\n]`
 const items = list(
   "{ value: 'resumen', label: 'Resumen', content: 'Datos de la instalación' }",
   "{ value: 'documentos', label: 'Documentos', content: 'Memoria técnica' }",
@@ -60,7 +35,6 @@ const trail = list("{ label: 'Inicio', href: '/' }", "{ label: 'Instalaciones', 
 const tableRows = list("{ id: '1', cliente: 'Lucía', potencia: 6.2 }", "{ id: '2', cliente: 'Javier', potencia: 8.4 }")
 const tableCols = `[
   { key: 'cliente', header: 'Cliente', sortable: true },
-  // La unidad en la celda: las cabeceras van en mayúsculas.
   { key: 'potencia', header: 'Potencia', sortable: true, numeric: true,
     render: (row) => row.potencia.toLocaleString('es-ES') + ' kWp' },
 ]`
@@ -117,7 +91,7 @@ export const newComponents = [
     description="Confirma antes de continuar."
     footer={<>
       <Button variant="secondary" onClick={() => setOpen(false)}>Cancelar</Button>
-      <Button variant="danger" onClick={() => setOpen(false)}>Confirmar</Button>
+      <Button variant="destructive" onClick={() => setOpen(false)}>Confirmar</Button>
     </>}
   >
     Conecta la confirmación a tu lógica de negocio.
@@ -136,7 +110,7 @@ export const newComponents = [
   Conecta la confirmación a tu lógica de negocio.
   <template #footer>
     <Button variant="secondary" @click="open = false">Cancelar</Button>
-    <Button variant="danger" @click="open = false">Confirmar</Button>
+    <Button variant="destructive" @click="open = false">Confirmar</Button>
   </template>
 </AlertDialog>`,
       'const open = ref(false);',
@@ -790,3 +764,6 @@ function receive(incoming) {
     'La escala se redondea sola (0, 100, 200, 300). Los colores salen de chart-1 … chart-5 y siguen el tema y el modo oscuro. El dibujo está oculto a lectores de pantalla: leen la tabla con los mismos datos.',
   ),
 ]
+
+// Componentes de 0.3, por grupo.
+newComponents.push(...maquetacionEntries, ...datosEntries, ...graficosEntries, ...entradasEntries, ...superposicionesEntries)

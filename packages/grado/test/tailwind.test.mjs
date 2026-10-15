@@ -28,6 +28,12 @@ const CLASSES = [
   'shadow-overlay',
   'h-control',
   'text-2xs',
+  'text-caption',
+  'text-display',
+  'bg-primary-subtle',
+  'border-destructive-border',
+  'shadow-raised',
+  'rounded-xs',
   'font-sans',
   'dark:bg-card',
   'duration-base',
@@ -55,7 +61,12 @@ test('Tailwind 3 con el preset (1komma5es_help, Sales Coach)', async () => {
   assert.match(rule(css, '.rounded-md'), /calc\(var\(--radius\) - 2px\)/)
   assert.match(rule(css, '.shadow-overlay'), /var\(--shadow-overlay\)/)
   assert.match(rule(css, '.h-control'), /height: var\(--k5-control-h\)/)
-  assert.match(rule(css, '.text-2xs'), /font-size: 0\.6875rem/)
+  assert.match(rule(css, '.text-2xs'), /font-size: 0\.75rem/)
+  assert.match(rule(css, '.text-display'), /font-size: var\(--k5-text-display\);\s*line-height: var\(--k5-leading-display\)/)
+  assert.match(rule(css, '.bg-primary-subtle'), /hsl\(var\(--primary-subtle\)/)
+  assert.match(rule(css, '.border-destructive-border'), /hsl\(var\(--destructive-border\)/)
+  assert.match(rule(css, '.shadow-raised'), /var\(--shadow-raised\)/)
+  assert.match(rule(css, '.rounded-xs'), /var\(--k5-radius-xs\)/)
   assert.match(css, /\.dark\\:bg-card:is\(\.dark \*\)/)
   assert.match(rule(css, '.duration-base'), /transition-duration: var\(--k5-duration-base\)/)
   assert.match(rule(css, '.ease-emphasized'), /var\(--k5-ease-emphasized\)/)
@@ -78,6 +89,10 @@ test('Tailwind 4 con tailwind.css (Kompilot, Memorias)', async () => {
   assert.match(rule(css, '.rounded-lg'), /border-radius: var\(--radius\)/)
   assert.match(rule(css, '.h-control'), /height: var\(--k5-control-h\)/)
   assert.match(rule(css, '.text-2xs'), /font-size: var\(--k5-text-badge\)/)
+  assert.match(rule(css, '.text-caption'), /font-size: var\(--k5-text-caption\)/)
+  assert.match(rule(css, '.bg-primary-subtle'), /background-color: var\(--primary-subtle\)/)
+  assert.match(rule(css, '.shadow-raised'), /var\(--k5-shadow-raised\)/)
+  assert.match(rule(css, '.rounded-xs'), /border-radius: var\(--k5-radius-xs\)/)
   assert.match(css, /\.shadow-overlay/)
   assert.match(rule(css, '.ease-emphasized'), /transition-timing-function: var\(--k5-ease-emphasized\)/)
   assert.match(css, /\.dark\\:bg-card[^{]*:where\(\.dark, \.dark \*, \[data-theme="dark"\], \[data-theme="dark"\] \*\)/)

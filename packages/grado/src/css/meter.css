@@ -1,0 +1,74 @@
+/* Meter: valor dentro de un rango conocido. Barra continua o segmentos tipo batería. El
+   color solo dice el estado (bien, regular, mal); sin umbrales, berenjena. */
+.k5-meter {
+  --_tone: var(--k5-primary);
+  display: grid;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-meter--neutral {
+  --_tone: var(--k5-primary);
+}
+.k5-meter--good {
+  --_tone: var(--k5-success);
+}
+.k5-meter--fair {
+  --_tone: var(--k5-warning);
+}
+.k5-meter--poor {
+  --_tone: var(--k5-destructive);
+}
+.k5-meter--segments {
+  gap: var(--k5-space-2);
+}
+.k5-meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--k5-space-2);
+  font-size: var(--k5-text-small);
+  line-height: var(--k5-leading-small);
+}
+.k5-meter__label {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--k5-muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-meter__value {
+  margin-left: auto;
+  color: var(--k5-foreground);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-semibold);
+  white-space: nowrap;
+}
+.k5-meter__track {
+  display: block;
+  height: var(--k5-space-2);
+  overflow: hidden;
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-muted);
+}
+.k5-meter__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--_tone);
+  transition: width var(--k5-duration-slow) var(--k5-ease-standard);
+}
+.k5-meter__segments {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: var(--k5-space-1);
+  height: var(--k5-space-3);
+}
+.k5-meter__segment {
+  border-radius: var(--k5-radius-xs);
+  background: var(--k5-muted);
+  transition: background-color var(--k5-duration-base);
+}
+.k5-meter__segment--on {
+  background: var(--_tone);
+}

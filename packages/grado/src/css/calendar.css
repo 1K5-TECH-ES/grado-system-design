@@ -84,7 +84,7 @@
 }
 /* Dentro de un periodo: tinte continuo de lado a lado, con los extremos sólidos. */
 .k5-calendar__grid td[data-in-range='true'] {
-  background: color-mix(in srgb, var(--k5-primary) 12%, transparent);
+  background: var(--k5-primary-subtle);
 }
 .k5-calendar__grid td[data-range-start='true'] {
   border-radius: var(--k5-radius) 0 0 var(--k5-radius);

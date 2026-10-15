@@ -2,6 +2,62 @@
 
 Todas las versiones de `@1k5/grado`, `@1k5/grado-react` y `@1k5/grado-vue`. Los tres paquetes comparten número de versión.
 
+## 0.3.0 · sin publicar
+
+Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las APIs de 0.2.0 siguen funcionando; lo que cambia de aspecto está en «Al actualizar desde 0.2.0».
+
+### Principios
+
+- Un solo acento por vista; borde o fondo, nunca los dos; jerarquía por tamaño y peso; estado con punto y texto. Están en la nueva página Fundamentos de la web.
+
+### Tokens
+
+- Escala tipográfica de siete pasos con interlineado: `--k5-text-caption|small|body|lead|heading|title|display` y `--k5-leading-*` (12, 13, 14, 16, 20, 28 y 40 px). En Tailwind, `text-caption` … `text-display`. Los nombres antiguos (`text-badge`, `text-label`, `text-nav`, `text-section`) son alias de un paso. Nuevos `--k5-weight-bold`, `--k5-tracking-display` y `--k5-tracking-caps`.
+- Escala tonal de cada color de estado, calculada en el build para cada tema y modo: `--k5-<primary|success|warning|destructive|info>-subtle` y `-border`, junto a los `-text` que ya existían. Un test comprueba que el texto llega a 4,5 : 1 sobre su fondo suave. En Tailwind, `bg-primary-subtle`, `border-destructive-border`…
+- Elevación en cuatro niveles: borde, `--k5-shadow-raised` (nueva), `popover` y `overlay`. En Tailwind, `shadow-raised`.
+- Radios con nombre en todos los temas: `--k5-radius-xs|sm|md|lg|full`. `radius-md` es el de los controles. En Tailwind, `rounded-xs`.
+- Densidad: `data-k5-density="compact"` o `"comfortable"` en cualquier contenedor cambia la altura de los controles. Con puntero táctil y sin atributo, se aplica «comfortable» (44 px); `data-k5-density="default"` mantiene la altura del tema.
+- Iconos (`--k5-icon-sm|md|lg`), anchos de contenido (`--k5-container-sm|md|lg`), bordes (`--k5-border-width`, `--k5-border-width-strong`) y opacidad (`--k5-opacity-disabled`, `--k5-opacity-muted`).
+- `tokens-studio.json`: todos los tokens para el plugin Tokens Studio de Figma, con un tema de Figma por tema y modo.
+
+### Componentes nuevos
+
+- Maquetación y tipografía: `Stack`, `Grid`, `Container`, `Text` y `Heading`. Las clases `k5-gap-*`, `k5-align-*` y `k5-justify-*` sirven también en cualquier flex o grid propio.
+- Datos y piezas: `Status` (punto y texto, la alternativa discreta a Badge en tablas), `Progress` (con variante por pasos), `DescriptionList`, `CopyButton`, `Tag`, `AvatarGroup`, `Kbd`, `Separator` y `Link`.
+- Gráficos: `Sparkline`, `LineChart`, `AreaChart`, `Donut`, `Meter` y `EnergyFlow` (flujo en vivo entre placas, casa, batería y red).
+- Campos especiales: `SearchInput`, `PasswordInput`, `Slider`, `TimePicker`, `PhoneInput`, `NifInput`, `IbanInput` y `AddressInput`. Validación española de teléfonos, DNI, NIE, CIF e IBAN en `@1k5/grado/patterns`.
+- Superposiciones y acciones: `Popover`, `Banner`, `ActionBar`, `ContextMenu`, `IconButton` y `ToggleGroup`.
+
+### Componentes que cambian
+
+- `Button`: nueva variante `destructive` (rojo sólido) para confirmar un borrado en AlertDialog.
+- `Table`: nueva prop `plain` para quitar la caja cuando la tabla ya está dentro de un panel.
+- `Kpi`: nueva prop `trend` (number[]) que dibuja una línea de tendencia bajo la cifra.
+- `Avatar`: nueva prop `src` para la foto; si no carga, se ven las iniciales.
+- `AppShell`: nueva prop `banner` (slot `#banner` en Vue) para un Banner bajo la cabecera.
+- Textos nuevos en español, alemán e inglés para todos los componentes nuevos.
+
+### Calidad y distribución
+
+- CI en GitHub Actions: lint, tests, navegador, web y capturas en cada pull request. Las capturas se hacen dentro de la imagen de Playwright y se pueden regenerar lanzando el workflow a mano.
+- Publicación con la etiqueta `vX.Y.Z`: publica los tres paquetes en el registro privado y crea la release con estas notas. `npm run release:check <versión>` comprueba versiones y CHANGELOG antes.
+- Los componentes de `Patterns` viven ahora cada uno en su archivo. Los imports desde el paquete no cambian.
+- La web tiene una página nueva, Fundamentos, con todas las escalas, los principios y la política de versiones. La página Estado cuenta también los tests de los componentes nuevos.
+- La web es ahora una aplicación hecha con `@1k5/grado-react`: `AppShell`, `CommandPalette` para buscar, `SegmentedControl`, `Tabs`, `Accordion`, `Table`, `CopyButton`… en todas las páginas. Cada página se descarga al visitarla.
+
+### Al actualizar desde 0.2.0
+
+- `Badge`: sin borde. `highlight` deja de ser un bloque fucsia: ahora es un punto fucsia con texto normal sobre un tinte suave.
+- `Button` `danger`: pasa a texto rojo sin fondo ni borde (el fondo aparece al pasar el ratón). Para el botón que confirma un borrado usa `destructive`.
+- `KpiGroup` en Consola: sin caja ni fondo de selección. Cada indicador lleva una línea fina arriba y el elegido la lleva en berenjena. La variación es texto de color, sin pastilla. En Marca no cambia.
+- `Table`: la cabecera ya no tiene fondo ni va en mayúsculas. `k5-unit` ya no hace falta.
+- `Card`: sin sombra; el pie ya no tiene fondo ni línea; la variante `alert` marca el problema con el borde rojo, sin fondo.
+- `Alert`: sin borde de color. `Toast`: sin la barra lateral de color.
+- `Spinner`: muestra la pista del círculo.
+- Tamaños de letra: `text-badge` pasa de 11 a 12 px (y `text-2xs` en Tailwind), `text-section` de 18 a 20 px y `text-title` de 24 a 28 px (título de PageHeader y cifra de KPI).
+- `radius-panel` en Consola pasa de 16 a 12 px (tarjetas, tablas y paneles).
+- En pantallas táctiles los controles miden 44 px de alto si no se indica otra densidad. Para mantener la altura del tema, pon `data-k5-density="default"` en `<html>`.
+
 ## 0.2.0 · sin publicar
 
 ### Accesibilidad

@@ -1,6 +1,16 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { ARROW_PATHS, ICON_ATTRS, formatChange, kpiClass, kpiTrend, type KpiBetter, type KpiTone } from '@1k5/grado/classes'
+import {
+  ARROW_PATHS,
+  ICON_ATTRS,
+  formatChange,
+  kpiClass,
+  kpiSparklineTone,
+  kpiTrend,
+  type KpiBetter,
+  type KpiTone,
+} from '@1k5/grado/classes'
 import { useGrado } from './Locale.js'
+import { Sparkline } from './Sparkline.js'
 
 const TREND_KEYS = { up: 'trendUp', down: 'trendDown', flat: 'trendFlat' } as const
 
@@ -35,6 +45,8 @@ export const Kpi = defineComponent({
     selectable: Boolean,
     selected: Boolean,
     locale: String,
+    /** Serie reciente (por ejemplo, los últimos 7 días): se dibuja como sparkline decorativa bajo la cifra. */
+    trend: Array as PropType<number[]>,
   },
   setup(props, { slots }) {
     const t = useGrado()
@@ -45,6 +57,7 @@ export const Kpi = defineComponent({
       return h(props.selectable ? 'button' : 'div', { ...interactive, class: kpiClass({ tone: props.tone }) }, [
         h('span', { class: 'k5-kpi__label' }, String(props.label)),
         h('span', { class: 'k5-kpi__row' }, [h('span', { class: 'k5-kpi__value' }, String(props.value)), slots.default?.()]),
+        props.trend?.length ? h(Sparkline, { class: 'k5-kpi__trend', data: props.trend, tone: kpiSparklineTone(trend), height: 28 }) : null,
         h('span', { class: 'k5-kpi__foot' }, [
           trend && props.change != null
             ? h('span', { class: `k5-kpi__change k5-kpi__change--${trend.tone}` }, [

@@ -36,8 +36,9 @@ export const AppLogo = defineComponent({
 })
 
 /**
- * Slots: #brand (sustituye a logo + producto), #search, #actions, #sidebar,
- * #sidebar-footer y el slot por defecto (contenido de la página).
+ * Slots: #brand (sustituye a logo + producto), #search, #actions, #banner (aviso bajo
+ * la cabecera, normalmente Banner), #sidebar, #sidebar-footer y el slot por defecto
+ * (contenido de la página).
  */
 export const AppShell = defineComponent({
   name: 'K5AppShell',
@@ -107,6 +108,7 @@ export const AppShell = defineComponent({
           slots.search ? h('div', { class: 'k5-app__search' }, slots.search()) : null,
           slots.actions ? h('div', { class: 'k5-app__actions' }, slots.actions()) : null,
         ]),
+        slots.banner ? h('div', { class: 'k5-app__banner' }, slots.banner()) : null,
         hasSidebar
           ? h('aside', { ref: sidebar, id: SIDEBAR_ID, class: 'k5-app__sidebar', onClick: closeOnLink }, [
               h('div', { class: 'k5-app__sidebar-brand' }, brand()),

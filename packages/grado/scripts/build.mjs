@@ -42,7 +42,26 @@ function globalBlock() {
   for (const [name, value] of Object.entries(tokens.z)) lines.push(`  --k5-z-${name}: ${value};`)
   lines.push('', '  /* Puntos de corte: referencia para JS; los media queries no aceptan variables */')
   for (const [name, value] of Object.entries(tokens.breakpoint)) lines.push(`  --k5-breakpoint-${name}: ${value};`)
+  lines.push('', '  /* Iconos, contenedores, bordes y opacidad */')
+  for (const [name, value] of Object.entries(tokens.icon)) lines.push(`  --k5-icon-${name}: ${value};`)
+  for (const [name, value] of Object.entries(tokens.container)) lines.push(`  --k5-container-${name}: ${value};`)
+  for (const [name, value] of Object.entries(tokens.border)) lines.push(`  --k5-border-${name}: ${value};`)
+  for (const [name, value] of Object.entries(tokens.opacity)) lines.push(`  --k5-opacity-${name}: ${value};`)
   return `:root {\n${lines.join('\n')}\n}\n`
+}
+
+// Densidad: data-k5-density en cualquier contenedor cambia la altura de los controles.
+// Con puntero táctil y sin atributo, «comfortable». Va después de los temas para ganarles.
+function densityBlock() {
+  const decl = (sizes, pad) =>
+    Object.entries(sizes)
+      .map(([name, value]) => `${pad}--k5-${name}: ${value};`)
+      .join('\n')
+  const blocks = Object.entries(tokens.density).map(
+    ([name, sizes]) => `/* densidad · ${name} */\n[data-k5-density='${name}'] {\n${decl(sizes, '  ')}\n}\n`,
+  )
+  blocks.push(`@media (pointer: coarse) {\n  :root:not([data-k5-density]) {\n${decl(tokens.density.comfortable, '    ')}\n  }\n}\n`)
+  return blocks.join('\n')
 }
 
 // Con «reducir movimiento», las transiciones pasan a ser instantáneas.
@@ -87,9 +106,13 @@ function tokensCss(format) {
   const parts = [globalBlock()]
   const order = [BASE_THEME, ...Object.keys(tokens.themes).filter((t) => t !== BASE_THEME)]
   for (const theme of order) for (const mode of MODES) parts.push(themeBlock(theme, mode, format))
+  parts.push(densityBlock())
   parts.push(reducedMotionBlock())
   return parts.join('\n')
 }
+
+// Pasos de la escala tipográfica (caption … display), en orden.
+const typeSteps = () => Object.keys(tokens.raw.typography.scale)
 
 // ---------- Tailwind 4 ----------
 
@@ -104,13 +127,19 @@ function tailwind4Css() {
     '  --font-mono: var(--k5-font-mono);',
     '  --text-2xs: var(--k5-text-badge);',
     '  --text-2xs--line-height: 1rem;',
+    ...typeSteps().flatMap((step) => [
+      `  --text-${step}: var(--k5-text-${step});`,
+      `  --text-${step}--line-height: var(--k5-leading-${step});`,
+    ]),
     '',
+    '  --radius-xs: var(--k5-radius-xs);',
     '  --radius-sm: calc(var(--radius) - 4px);',
     '  --radius-md: calc(var(--radius) - 2px);',
     '  --radius-lg: var(--radius);',
     '  --radius-panel: var(--k5-radius-panel);',
     '  --radius-badge: var(--k5-radius-badge);',
     '',
+    '  --shadow-raised: var(--k5-shadow-raised);',
     '  --shadow-overlay: var(--k5-shadow-overlay);',
     '  --shadow-popover: var(--k5-shadow-popover);',
     '',
@@ -176,10 +205,14 @@ function tailwind3Preset() {
           sm: 'calc(var(--radius) - 4px)',
           panel: 'var(--k5-radius-panel)',
           badge: 'var(--k5-radius-badge)',
+          xs: 'var(--k5-radius-xs)',
         },
-        boxShadow: { overlay: 'var(--shadow-overlay)', popover: 'var(--shadow-popover)' },
+        boxShadow: { raised: 'var(--shadow-raised)', overlay: 'var(--shadow-overlay)', popover: 'var(--shadow-popover)' },
         fontFamily: { sans: stack(tokens.typography['font-sans']), mono: stack(tokens.typography['font-mono']) },
-        fontSize: { '2xs': [tokens.typography['text-badge'], { lineHeight: '1rem' }] },
+        fontSize: {
+          '2xs': [tokens.typography['text-badge'], { lineHeight: '1rem' }],
+          ...Object.fromEntries(typeSteps().map((step) => [step, [`var(--k5-text-${step})`, { lineHeight: `var(--k5-leading-${step})` }]])),
+        },
         spacing: {
           'control-sm': 'var(--k5-control-h-sm)',
           control: 'var(--k5-control-h)',
@@ -228,6 +261,11 @@ function jsData() {
     motion: tokens.motion,
     z: Object.fromEntries(Object.entries(tokens.z).map(([k, v]) => [k, Number(v)])),
     breakpoint: tokens.breakpoint,
+    icon: tokens.icon,
+    container: tokens.container,
+    border: tokens.border,
+    opacity: Object.fromEntries(Object.entries(tokens.opacity).map(([k, v]) => [k, Number(v)])),
+    density: tokens.density,
     themes,
   }
 }
@@ -256,12 +294,20 @@ export type SpaceToken = ${union(Object.keys(data.space))}
 export type MotionToken = ${union(Object.keys(data.motion))}
 export type LayerToken = ${union(Object.keys(data.z))}
 export type BreakpointToken = ${union(Object.keys(data.breakpoint))}
+export type IconToken = ${union(Object.keys(data.icon))}
+export type ContainerToken = ${union(Object.keys(data.container))}
+export type DensityName = ${union(Object.keys(data.density))}
 
 export declare const typography: Record<string, string>
 export declare const space: Record<SpaceToken, string>
 export declare const motion: Record<MotionToken, string>
 export declare const z: Record<LayerToken, number>
 export declare const breakpoint: Record<BreakpointToken, string>
+export declare const icon: Record<IconToken, string>
+export declare const container: Record<ContainerToken, string>
+export declare const border: Record<string, string>
+export declare const opacity: Record<string, number>
+export declare const density: Record<DensityName, Partial<Record<SizeToken, string>>>
 export declare const themes: Record<ThemeName, Record<ThemeMode, ThemeValues>>
 declare const tokens: {
   brand: typeof brand
@@ -271,6 +317,11 @@ declare const tokens: {
   motion: typeof motion
   z: typeof z
   breakpoint: typeof breakpoint
+  icon: typeof icon
+  container: typeof container
+  border: typeof border
+  opacity: typeof opacity
+  density: typeof density
   themes: typeof themes
 }
 export default tokens
@@ -324,13 +375,23 @@ const data = jsData()
 const json = JSON.stringify(data, null, 2)
 write(
   'tokens.js',
-  `${banner('tokens para JavaScript')}\nconst tokens = ${json}\n\nexport const { brand, palette, typography, space, motion, z, breakpoint, themes } = tokens\nexport default tokens\n`,
+  `${banner('tokens para JavaScript')}\nconst tokens = ${json}\n\nexport const { brand, palette, typography, space, motion, z, breakpoint, icon, container, border, opacity, density, themes } = tokens\nexport default tokens\n`,
 )
 write(
   'tokens.cjs',
   `${banner('tokens para JavaScript')}\nconst tokens = ${json}\n\nmodule.exports = tokens\nmodule.exports.default = tokens\n`,
 )
 write('tokens.d.ts', tokensDts(data))
+
+function GROUP_CSS() {
+  return [
+    ...['layout', 'text'], // Maquetación y tipografía
+    ...['status', 'progress', 'description-list', 'copy-button', 'tag', 'avatar-group', 'kbd', 'separator', 'link'], // Datos y piezas
+    ...['sparkline', 'donut', 'meter', 'energy-flow'], // Gráficos
+    ...['search-input', 'password-input', 'slider', 'time-picker', 'phone-input', 'code-input', 'address-input'], // Campos especiales
+    ...['popover', 'banner', 'action-bar', 'icon-button', 'toggle-group', 'context-menu'], // Superposiciones y acciones
+  ]
+}
 
 // Componentes en CSS: un archivo por componente, en este orden.
 const COMPONENT_CSS = [
@@ -368,6 +429,8 @@ const COMPONENT_CSS = [
   'calendar',
   'command-palette',
   'chart',
+  // Componentes de 0.3, por grupo.
+  ...GROUP_CSS(),
 ]
 const missing = readdirSync(`${root}src/css`).filter((f) => f.endsWith('.css') && !COMPONENT_CSS.includes(f.slice(0, -4)))
 if (missing.length) throw new Error(`Añade a COMPONENT_CSS: ${missing.join(', ')}`)
@@ -436,6 +499,14 @@ function dtcg() {
       ),
       dimension,
     ),
+    leading: set(
+      Object.fromEntries(
+        Object.entries(tokens.typography)
+          .filter(([k]) => k.startsWith('leading-'))
+          .map(([k, v]) => [k.slice(8), v]),
+      ),
+      dimension,
+    ),
     weight: set(
       Object.fromEntries(
         Object.entries(tokens.typography)
@@ -463,6 +534,11 @@ function dtcg() {
     ),
     z: set(data.z, (v) => ({ $type: 'number', $value: v })),
     breakpoint: set(tokens.breakpoint, dimension),
+    icon: set(tokens.icon, dimension),
+    container: set(tokens.container, dimension),
+    border: set(tokens.border, dimension),
+    opacity: set(data.opacity, (v) => ({ $type: 'number', $value: v })),
+    density: Object.fromEntries(Object.entries(tokens.density).map(([name, sizes]) => [name, set(sizes, dimension)])),
   }
   const out = { $description: `${pkg.name} ${pkg.version}. Un conjunto global y uno por tema y modo (Tokens Studio: token sets).`, global }
   for (const [theme, modes] of Object.entries(data.themes)) {
@@ -479,7 +555,27 @@ function dtcg() {
 }
 // Las curvas con nombre de CSS, como puntos de Bézier (lo que pide el formato W3C).
 const EASE_POINTS = { ease: [0.25, 0.1, 0.25, 1], 'ease-out': [0, 0, 0.58, 1], 'cubic-bezier(0.32, 0.72, 0, 1)': [0.32, 0.72, 0, 1] }
-write('tokens.dtcg.json', JSON.stringify(dtcg(), null, 2) + '\n')
+const dtcgData = dtcg()
+write('tokens.dtcg.json', JSON.stringify(dtcgData, null, 2) + '\n')
+
+// Tokens Studio (plugin de Figma): el mismo contenido en un solo archivo, con el orden de los
+// conjuntos y un tema de Figma por tema y modo. Se carga con «Sync → JSON file» o desde el repo.
+function tokensStudio(sets) {
+  const names = Object.keys(sets).filter((k) => !k.startsWith('$'))
+  const themes = names
+    .filter((name) => name !== 'global')
+    .map((name) => {
+      const [theme, mode] = name.split('/')
+      return {
+        id: name.replace('/', '-'),
+        name: `${theme[0].toUpperCase()}${theme.slice(1)} · ${mode === 'light' ? 'claro' : 'oscuro'}`,
+        group: 'Grado',
+        selectedTokenSets: { global: 'source', [name]: 'enabled' },
+      }
+    })
+  return { ...sets, $themes: themes, $metadata: { tokenSetOrder: names } }
+}
+write('tokens-studio.json', JSON.stringify(tokensStudio(dtcgData), null, 2) + '\n')
 
 const logoWhite = readFileSync(`${root}assets/logo-1k5-white.svg`, 'utf8')
 write('preview.html', renderPreview({ css, data, contrast: contrastReport(), logoWhite, version: pkg.version, tintNote: tokens.tintNote }))

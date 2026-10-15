@@ -1,7 +1,7 @@
 // Traduce props a clases de grado.css. Lo usan @1k5/grado-react y @1k5/grado-vue,
 // y cualquier otra tecnología puede usarlo igual. Cambiar aquí cambia las dos.
 
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'link']
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'destructive', 'link']
 export const SIZES = ['sm', 'md', 'lg']
 export const BADGE_TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'danger', 'highlight']
 export const CARD_VARIANTS = ['panel', 'alert', 'plain']
@@ -41,6 +41,11 @@ export function cardClass({ variant = 'panel' } = {}) {
 
 export function tableClass({ compact = false } = {}) {
   return cx('k5-table', compact && 'k5-table--compact')
+}
+
+/** Contenedor de la tabla. plain: sin caja, para tablas que ya están dentro de un panel. */
+export function tableWrapClass({ plain = false } = {}) {
+  return cx('k5-table-wrap', plain && 'k5-table-wrap--plain')
 }
 
 export function spinnerClass({ size = 'md' } = {}) {
@@ -157,3 +162,278 @@ export const STATUS_ICONS = { info: 'info', success: 'circleCheck', warning: 'tr
 
 /** Texto para lectores de pantalla del punto de estado del avatar. */
 export const AVATAR_STATUS_LABELS = { online: 'Disponible', away: 'Ausente', busy: 'Ocupado' }
+
+// ---------- Datos y piezas (0.3) ----------
+export const STATUS_TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'danger']
+export const PROGRESS_TONES = ['brand', 'success', 'warning', 'danger']
+export const DESCRIPTION_LAYOUTS = ['columns', 'stacked']
+export const LINK_TONES = ['default', 'muted']
+export const LINK_UNDERLINES = ['hover', 'always']
+const SMALL_SIZES = ['sm', 'md']
+
+/** Estado de una fila: punto de color y texto. pulse: el punto late (estados «en vivo»). */
+export function statusClass({ tone = 'neutral', pulse = false } = {}) {
+  return cx('k5-status', `k5-status--${pick(tone, STATUS_TONES, 'neutral')}`, pulse && 'k5-status--pulse')
+}
+
+/** Barra de progreso. steps: variante por pasos; indeterminate: sin valor conocido. */
+export function progressClass({ tone = 'brand', size = 'md', indeterminate = false, steps = false } = {}) {
+  const s = pick(size, SMALL_SIZES, 'md')
+  return cx(
+    'k5-progress',
+    `k5-progress--${pick(tone, PROGRESS_TONES, 'brand')}`,
+    s !== 'md' && `k5-progress--${s}`,
+    indeterminate && 'k5-progress--indeterminate',
+    steps && 'k5-progress--steps',
+  )
+}
+
+export function descriptionListClass({ layout = 'columns' } = {}) {
+  return cx('k5-dl', pick(layout, DESCRIPTION_LAYOUTS, 'columns') === 'stacked' && 'k5-dl--stacked')
+}
+
+/** Botón de copiar: un botón ghost (sm por defecto) con su marca de copiado. */
+export function copyButtonClass({ size = 'sm', iconOnly = false, copied = false } = {}) {
+  return cx(buttonClass({ variant: 'ghost', size, iconOnly }), 'k5-copy__button', copied && 'k5-copy__button--copied')
+}
+
+export function tagClass({ size = 'md', disabled = false } = {}) {
+  const s = pick(size, SMALL_SIZES, 'md')
+  return cx('k5-tag', s !== 'md' && `k5-tag--${s}`, disabled && 'k5-tag--disabled')
+}
+
+export function avatarGroupClass({ size = 'md' } = {}) {
+  const s = pick(size, SIZES, 'md')
+  return cx('k5-avatar-group', s !== 'md' && `k5-avatar-group--${s}`)
+}
+
+export function separatorClass({ orientation = 'horizontal', label = false } = {}) {
+  return cx('k5-separator', orientation === 'vertical' && 'k5-separator--vertical', label && 'k5-separator--label')
+}
+
+export function linkClass({ tone = 'default', underline = 'hover' } = {}) {
+  return cx(
+    'k5-link',
+    pick(tone, LINK_TONES, 'default') === 'muted' && 'k5-link--muted',
+    pick(underline, LINK_UNDERLINES, 'hover') === 'always' && 'k5-link--underline',
+  )
+}
+
+/** Iconos de Lucide de CopyButton y Link: copy y external-link. */
+export const DATA_ICON_PATHS = {
+  copy: [
+    'M10 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2',
+    'M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2',
+  ],
+  externalLink: ['M15 3h6v6', 'M10 14 21 3', 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'],
+}
+
+// ---------- Gráficos (0.3) ----------
+export const SPARKLINE_TONES = ['brand', 'success', 'danger', 'neutral']
+export const METER_VARIANTS = ['bar', 'segments']
+export const METER_LEVELS = ['good', 'fair', 'poor', 'neutral']
+/** Dónde va cada nodo del flujo de energía alrededor del inversor. */
+export const ENERGY_POSITIONS = { solar: 'top', home: 'right', battery: 'bottom', grid: 'left' }
+
+/** Sparkline: el tono colorea la línea, el relleno y el punto final. */
+export function sparklineClass({ tone = 'brand' } = {}) {
+  return cx('k5-sparkline', `k5-sparkline--${pick(tone, SPARKLINE_TONES, 'brand')}`)
+}
+
+/** Tono de la sparkline de un Kpi: el mismo que su variación (buena, mala o neutra). */
+export function kpiSparklineTone(trend) {
+  return trend?.tone === 'good' ? 'success' : trend?.tone === 'bad' ? 'danger' : 'neutral'
+}
+
+export function donutClass({ size = 'md' } = {}) {
+  const s = pick(size, SIZES, 'md')
+  return cx('k5-donut', s !== 'md' && `k5-donut--${s}`)
+}
+
+/** Medidor: barra continua o segmentos tipo batería; level sale de meterLevel() en patterns. */
+export function meterClass({ variant = 'bar', level = 'neutral' } = {}) {
+  return cx(
+    'k5-meter',
+    pick(variant, METER_VARIANTS, 'bar') === 'segments' && 'k5-meter--segments',
+    `k5-meter--${pick(level, METER_LEVELS, 'neutral')}`,
+  )
+}
+
+const ENERGY_ARROWS = {
+  top: { in: 'down', out: 'up' },
+  bottom: { in: 'up', out: 'down' },
+  left: { in: 'right', out: 'left' },
+  right: { in: 'left', out: 'right' },
+}
+/** Línea entre un nodo y el inversor. flow: 'in' (hacia el inversor), 'out' o 'none' (apagada). */
+export function energyLineClass(node, flow = 'none') {
+  const position = ENERGY_POSITIONS[node] ?? 'top'
+  const arrow = ENERGY_ARROWS[position][flow]
+  return cx('k5-energy__line', `k5-energy__line--${node}`, arrow ? `k5-energy__line--${arrow}` : 'k5-energy__line--off')
+}
+
+export function energyNodeClass(node, flow = 'none') {
+  return cx('k5-energy__node', `k5-energy__node--${node}`, flow === 'none' && 'k5-energy__node--idle')
+}
+
+/** Iconos de los nodos (trazos de Lucide: sun, house, battery, utility-pole y zap). */
+export const ENERGY_ICONS = {
+  solar: [
+    'M8 12a4 4 0 1 0 8 0 4 4 0 1 0-8 0',
+    'M12 2v2',
+    'M12 20v2',
+    'm4.93 4.93 1.41 1.41',
+    'm17.66 17.66 1.41 1.41',
+    'M2 12h2',
+    'M20 12h2',
+    'm6.34 17.66-1.41 1.41',
+    'm19.07 4.93-1.41 1.41',
+  ],
+  home: [
+    'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8',
+    'M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+  ],
+  battery: ['M22 14v-4', 'M4 6h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z', 'M6 10v4', 'M10 10v4'],
+  grid: ['M12 2v20', 'M2 5h20', 'M3 3v2', 'M7 3v2', 'M17 3v2', 'M21 3v2', 'm19 5-7 7-7-7'],
+  hub: [
+    'M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z',
+  ],
+  arrow: ['m9 18 6-6-6-6'],
+}
+
+// ---------- Campos especiales (0.3) ----------
+/** Iconos de los campos especiales (SearchInput, PasswordInput, TimePicker, AddressInput). Trazos de Lucide. */
+export const FIELD_ICON_PATHS = {
+  eye: [
+    'M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0',
+    'M9 12a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+  ],
+  eyeOff: [
+    'M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49',
+    'M14.084 14.158a3 3 0 0 1-4.242-4.242',
+    'M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143',
+    'm2 2 20 20',
+  ],
+  clock: ['M2 12a10 10 0 1 0 20 0 10 10 0 1 0-20 0', 'M12 6v6l4 2'],
+  mapPin: [
+    'M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0',
+    'M9 10a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+  ],
+}
+
+// ---------- Superposiciones y acciones (0.3) ----------
+
+export const BANNER_TONES = ['info', 'success', 'warning', 'danger', 'brand']
+export const ICON_BUTTON_VARIANTS = ['ghost', 'secondary', 'primary']
+export const POPOVER_ALIGNS = ['start', 'center', 'end']
+
+/** Aviso de toda la aplicación, de borde a borde. */
+export function bannerClass({ tone = 'info' } = {}) {
+  return cx('k5-banner', `k5-banner--${pick(tone, BANNER_TONES, 'info')}`)
+}
+
+/** Botón de solo icono: un Button cuadrado. pressed añade el estado de botón conmutador. */
+export function iconButtonClass({ variant = 'ghost', size = 'md' } = {}) {
+  return buttonClass({ variant: pick(variant, ICON_BUTTON_VARIANTS, 'ghost'), size, iconOnly: true })
+}
+
+/** Panel del Popover. align: borde del disparador con el que se alinea; side: arriba o abajo. */
+export function popoverClass({ align = 'start', side = 'bottom' } = {}) {
+  return cx(
+    'k5-popover__content',
+    `k5-popover__content--${pick(align, POPOVER_ALIGNS, 'start')}`,
+    side === 'top' && 'k5-popover__content--top',
+  )
+}
+
+/** Barra de acciones en lote. inline: en su sitio, sin flotar (documentación y ejemplos). */
+export function actionBarClass({ inline = false } = {}) {
+  return cx('k5-action-bar', inline && 'k5-action-bar--inline')
+}
+
+export function toggleGroupClass({ size = 'md', iconOnly = false } = {}) {
+  const s = pick(size, SIZES, 'md')
+  return cx('k5-toggle-group', s !== 'md' && `k5-toggle-group--${s}`, iconOnly && 'k5-toggle-group--icon')
+}
+
+// ---------- Maquetación y tipografía (0.3) ----------
+/** Claves de la escala de espacio (tokens.space). k5-gap-<clave> pone ese hueco: k5-gap-1-5 = --k5-space-1-5. */
+export const SPACE_STEPS = ['0-5', '1', '1-5', '2', '2-5', '3', '3-5', '4', '5', '6', '8', '10', '12', '16']
+export const STACK_DIRECTIONS = ['column', 'row']
+export const STACK_ALIGNS = ['start', 'center', 'end', 'stretch', 'baseline']
+export const STACK_JUSTIFIES = ['start', 'center', 'end', 'between']
+export const GRID_COLUMNS = [1, 2, 3, 4, 5, 6, 'auto']
+export const GRID_MIN_WIDTHS = ['sm', 'md', 'lg']
+export const CONTAINER_SIZES = ['sm', 'md', 'lg']
+export const TEXT_SIZES = ['caption', 'small', 'body', 'lead']
+export const TEXT_TONES = ['default', 'muted', 'primary', 'success', 'warning', 'danger', 'info']
+export const TEXT_WEIGHTS = ['regular', 'medium', 'semibold']
+export const HEADING_LEVELS = [1, 2, 3, 4, 5, 6]
+export const HEADING_SIZES = ['lead', 'heading', 'title', 'display']
+
+/** Hueco de la escala de espacio. Admite '1-5' y también 1.5 o '1.5'. Por defecto, 4 (16 px). */
+export function gapClass(gap = '4') {
+  return `k5-gap-${pick(String(gap ?? '4').replace('.', '-'), SPACE_STEPS, '4')}`
+}
+
+/** Stack: hijos en columna (por defecto) o en fila, con un hueco de la escala de espacio. */
+export function stackClass({ direction = 'column', gap = '4', align, justify, wrap = false } = {}) {
+  return cx(
+    'k5-stack',
+    pick(direction, STACK_DIRECTIONS, 'column') === 'row' && 'k5-stack--row',
+    wrap && 'k5-stack--wrap',
+    gapClass(gap),
+    STACK_ALIGNS.includes(align) && `k5-align-${align}`,
+    STACK_JUSTIFIES.includes(justify) && `k5-justify-${justify}`,
+  )
+}
+
+/** Grid: columns 1–6 (una sola por debajo de 600 px) o 'auto', que mete tantas como quepan de minItemWidth. */
+export function gridClass({ columns = 'auto', gap = '4', minItemWidth = 'md' } = {}) {
+  const n = columns === 'auto' ? 'auto' : Number(columns)
+  const c = GRID_COLUMNS.includes(n) ? n : 'auto'
+  const min = pick(minItemWidth, GRID_MIN_WIDTHS, 'md')
+  return cx(
+    'k5-grid',
+    c === 'auto' ? 'k5-grid--auto' : `k5-grid--cols-${c}`,
+    c === 'auto' && min !== 'md' && `k5-grid--min-${min}`,
+    gapClass(gap),
+  )
+}
+
+/** Container: ancho máximo centrado. padded (por defecto) deja margen lateral; sin él, k5-container--flush. */
+export function containerClass({ size = 'lg', padded = true } = {}) {
+  const s = pick(size, CONTAINER_SIZES, 'lg')
+  return cx('k5-container', s !== 'lg' && `k5-container--${s}`, !padded && 'k5-container--flush')
+}
+
+/** Text: tamaño body, peso regular y el color del contexto salvo que se pida otra cosa. */
+export function textClass({ size = 'body', tone = 'default', weight = 'regular', truncate = false, numeric = false } = {}) {
+  const s = pick(size, TEXT_SIZES, 'body')
+  const t = pick(tone, TEXT_TONES, 'default')
+  const w = pick(weight, TEXT_WEIGHTS, 'regular')
+  return cx(
+    'k5-text',
+    s !== 'body' && `k5-text--${s}`,
+    t !== 'default' && `k5-text--${t}`,
+    w !== 'regular' && `k5-text--${w}`,
+    truncate && 'k5-text--truncate',
+    numeric && 'k5-text--numeric',
+  )
+}
+
+/** Nivel de encabezado entre 1 y 6. Admite '2' (atributo en Vue). Si no es válido, 2. */
+export function headingLevel(level) {
+  const n = Number(level)
+  return HEADING_LEVELS.includes(n) ? n : 2
+}
+
+/** Tamaño por defecto de cada nivel: 1 → title, 2 → heading, 3 a 6 → lead. */
+export function headingSize(level) {
+  const n = headingLevel(level)
+  return n === 1 ? 'title' : n === 2 ? 'heading' : 'lead'
+}
+
+export function headingClass({ level = 2, size } = {}) {
+  return cx('k5-heading', `k5-heading--${pick(size, HEADING_SIZES, headingSize(level))}`)
+}

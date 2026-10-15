@@ -1,0 +1,15 @@
+/* Menú contextual: la zona que lo abre y el menú en la posición del puntero.
+   El menú usa la misma superficie y elementos que DropdownMenu (k5-menu__content). */
+.k5-context-menu {
+  display: block;
+  border-radius: var(--k5-radius-md);
+}
+.k5-context-menu:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-context-menu__content.k5-menu__content {
+  position: fixed;
+  right: auto;
+  margin: 0;
+}

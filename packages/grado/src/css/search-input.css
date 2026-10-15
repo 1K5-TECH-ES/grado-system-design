@@ -1,0 +1,48 @@
+/* Búsqueda: lupa (o spinner) delante y botón de borrar detrás, dentro de .k5-input-wrap.
+   .k5-input-action es el botón de icono dentro de un campo: borrar, mostrar la contraseña. */
+.k5-search-input {
+  display: block;
+  min-width: 0;
+}
+.k5-search-input__icon {
+  display: block;
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+}
+/* Sin la x nativa de type="search": ya está la de Grado. */
+.k5-search-input .k5-input::-webkit-search-cancel-button,
+.k5-search-input .k5-input::-webkit-search-decoration {
+  appearance: none;
+}
+
+.k5-input-action {
+  display: grid;
+  place-items: center;
+  width: calc(var(--_h) - var(--k5-space-2));
+  height: calc(var(--_h) - var(--k5-space-2));
+  margin-right: calc(var(--k5-space-2) * -1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--k5-radius-sm);
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base);
+}
+.k5-input-action:hover:not(:disabled) {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+.k5-input-action:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 0;
+}
+.k5-input-action:disabled {
+  cursor: not-allowed;
+}
+.k5-input-action svg {
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+}

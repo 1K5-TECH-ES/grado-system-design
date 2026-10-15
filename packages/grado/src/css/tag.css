@@ -1,0 +1,73 @@
+/* Tag: etiqueta que se puede quitar (provincias, palabras clave). Fondo neutro sin borde:
+   Badge solo informa y FilterChip marca un filtro activo. */
+.k5-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-0-5);
+  max-width: 100%;
+  min-height: 1.5rem;
+  padding: 0 var(--k5-space-2);
+  border-radius: var(--k5-radius-xs);
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-small);
+  font-weight: var(--k5-weight-medium);
+  line-height: var(--k5-leading-small);
+  vertical-align: middle;
+}
+.k5-tag:has(.k5-tag__remove) {
+  padding-right: var(--k5-space-0-5);
+}
+.k5-tag--sm {
+  min-height: 1.25rem;
+  padding: 0 var(--k5-space-1-5);
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-caption);
+}
+.k5-tag__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-tag__remove {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--k5-radius-xs);
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  cursor: pointer;
+}
+.k5-tag--sm .k5-tag__remove {
+  width: 1rem;
+  height: 1rem;
+}
+.k5-tag__remove svg {
+  width: var(--k5-icon-sm);
+  height: var(--k5-icon-sm);
+}
+.k5-tag__remove:hover {
+  background: color-mix(in srgb, var(--k5-foreground) 10%, transparent);
+  color: var(--k5-foreground);
+}
+.k5-tag__remove:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 1px;
+}
+/* Desactivada: el texto sigue legible (gris secundario); solo el botón se atenúa. */
+.k5-tag--disabled {
+  color: var(--k5-muted-foreground);
+}
+.k5-tag__remove:disabled {
+  opacity: var(--k5-opacity-disabled);
+  cursor: not-allowed;
+}
+.k5-tag__remove:disabled:hover {
+  background: transparent;
+  color: var(--k5-muted-foreground);
+}

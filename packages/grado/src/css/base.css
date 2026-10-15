@@ -27,8 +27,8 @@
   flex-shrink: 0;
   width: var(--_size);
   height: var(--_size);
-  border: 2px solid currentColor;
-  border-right-color: transparent;
+  border: 2px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: k5-spin 0.7s linear infinite;
 }

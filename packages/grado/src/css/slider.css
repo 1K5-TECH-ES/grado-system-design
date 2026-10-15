@@ -1,0 +1,125 @@
+/* Slider: input range nativo con pista, tramo relleno y tirador propios.
+   --_fill (de 0 a 1) llega del componente; el relleno acaba en el centro del tirador. */
+.k5-slider {
+  --_fill: 0;
+  --_thumb: var(--k5-icon-lg);
+  --_track: var(--k5-space-1-5);
+  --_stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_fill));
+  display: flex;
+  align-items: flex-start;
+  gap: var(--k5-space-4);
+  min-width: 0;
+}
+.k5-slider__track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.k5-slider--marks .k5-slider__track {
+  padding-bottom: calc(var(--k5-leading-small) + var(--k5-space-1));
+}
+.k5-slider__input {
+  display: block;
+  width: 100%;
+  height: var(--_thumb);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+.k5-slider__input:focus {
+  outline: 2px solid transparent;
+}
+.k5-slider__input:disabled {
+  cursor: not-allowed;
+}
+
+/* Pista: berenjena hasta el tirador y gris después. */
+.k5-slider__input::-webkit-slider-runnable-track {
+  height: var(--_track);
+  border-radius: var(--k5-radius-full);
+  background: linear-gradient(to right, var(--k5-primary) var(--_stop), var(--k5-input) var(--_stop));
+}
+.k5-slider__input::-moz-range-track {
+  height: var(--_track);
+  border: 0;
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-input);
+}
+.k5-slider__input::-moz-range-progress {
+  height: var(--_track);
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-primary);
+}
+
+/* Tirador: un círculo berenjena separado de la pista por el color del fondo. */
+.k5-slider__input::-webkit-slider-thumb {
+  box-sizing: border-box;
+  width: var(--_thumb);
+  height: var(--_thumb);
+  margin-top: calc((var(--_track) - var(--_thumb)) / 2);
+  border: var(--k5-border-width-strong) solid var(--k5-background);
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-primary);
+  box-shadow: var(--k5-shadow-raised);
+  appearance: none;
+  transition: box-shadow var(--k5-duration-base);
+}
+.k5-slider__input::-moz-range-thumb {
+  box-sizing: border-box;
+  width: var(--_thumb);
+  height: var(--_thumb);
+  border: var(--k5-border-width-strong) solid var(--k5-background);
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-primary);
+  box-shadow: var(--k5-shadow-raised);
+  transition: box-shadow var(--k5-duration-base);
+}
+.k5-slider__input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--k5-ring);
+}
+.k5-slider__input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 2px var(--k5-ring);
+}
+.k5-slider__input[aria-invalid='true']::-webkit-slider-thumb {
+  background: var(--k5-destructive);
+}
+.k5-slider__input[aria-invalid='true']::-moz-range-thumb {
+  background: var(--k5-destructive);
+}
+.k5-slider:has(.k5-slider__input:disabled) {
+  opacity: var(--k5-opacity-disabled);
+}
+
+/* Marcas: cada una bajo su punto de la pista. La primera se alinea a la izquierda, la última a
+   la derecha y las de en medio se desplazan en proporción, así ninguna se sale de la pista. */
+.k5-slider__marks {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--k5-leading-small);
+}
+.k5-slider__mark {
+  --_at: 0;
+  position: absolute;
+  top: 0;
+  left: calc(100% * var(--_at));
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-small);
+  white-space: nowrap;
+  transform: translateX(calc(var(--_at) * -100%));
+}
+
+.k5-slider__value {
+  flex-shrink: 0;
+  min-width: 4.5rem;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--_thumb);
+  text-align: right;
+}

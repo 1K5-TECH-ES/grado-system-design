@@ -1,5 +1,10 @@
 import { createElement as h, useEffect, useRef, useState } from 'react'
 import * as G from '@1k5/grado-react'
+import { demos as maquetacionDemos } from './groups/maquetacion.demos.mjs'
+import { demos as datosDemos } from './groups/datos.demos.mjs'
+import { demos as graficosDemos } from './groups/graficos.demos.mjs'
+import { demos as entradasDemos } from './groups/entradas.demos.mjs'
+import { demos as superposicionesDemos } from './groups/superposiciones.demos.mjs'
 
 export const choices = [
   { value: 'solar', label: 'Placas solares', description: 'Autoconsumo residencial' },
@@ -46,7 +51,6 @@ export const rows = [
 ]
 const kwp = (value) => `${value.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kWp`
 const tones = { Conectada: 'success', 'En obra': 'info', Pendiente: 'warning' }
-// La unidad va en la celda: la cabecera se escribe en mayúsculas y «kWp» quedaría «KWP».
 export const columns = [
   { key: 'cliente', header: 'Cliente', sortable: true },
   { key: 'potencia', header: 'Potencia', sortable: true, numeric: true, render: (item) => kwp(item.potencia) },
@@ -97,7 +101,14 @@ const stack = (...children) => h('div', { className: 'live-stack' }, ...children
 const trigger = (...children) => h('div', { className: 'live-stack live-stack--start' }, ...children)
 const status = (text) => h('p', { className: 'demo-status', role: 'status' }, text)
 
+// Demos de 0.3, por grupo: cada una es su propio componente, con sus propios hooks.
+const groupDemos = Object.assign({}, maquetacionDemos, datosDemos, graficosDemos, entradasDemos, superposicionesDemos)
+
 export function LiveDemo({ id }) {
+  return groupDemos[id] ? h(groupDemos[id]) : h(CoreDemo, { id })
+}
+
+function CoreDemo({ id }) {
   const [open, setOpen] = useState(false),
     [message, setMessage] = useState(''),
     [value, setValue] = useState(''),
@@ -145,7 +156,7 @@ export function LiveDemo({ id }) {
             h(
               G.Button,
               {
-                variant: id === 'alert-dialog' ? 'danger' : 'primary',
+                variant: id === 'alert-dialog' ? 'destructive' : 'primary',
                 onClick: () => {
                   setOpen(false)
                   setMessage(id === 'alert-dialog' ? 'Eliminación confirmada (demostración).' : 'Cambios guardados (demostración).')

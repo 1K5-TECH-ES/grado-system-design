@@ -1,0 +1,82 @@
+/* Tipografía: Text (párrafo o texto en línea) y Heading (título). Jerarquía por tamaño y peso; el color, solo para estado. */
+
+/* Text hereda el color del contexto; tone lo cambia. */
+.k5-text {
+  margin: 0;
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-regular);
+  line-height: var(--k5-leading-body);
+}
+.k5-text--caption {
+  font-size: var(--k5-text-caption);
+  line-height: var(--k5-leading-caption);
+}
+.k5-text--small {
+  font-size: var(--k5-text-small);
+  line-height: var(--k5-leading-small);
+}
+.k5-text--lead {
+  font-size: var(--k5-text-lead);
+  line-height: var(--k5-leading-lead);
+}
+.k5-text--muted {
+  color: var(--k5-muted-foreground);
+}
+.k5-text--primary {
+  color: var(--k5-primary-text);
+}
+.k5-text--success {
+  color: var(--k5-success-text);
+}
+.k5-text--warning {
+  color: var(--k5-warning-text);
+}
+.k5-text--danger {
+  color: var(--k5-destructive-text);
+}
+.k5-text--info {
+  color: var(--k5-info-text);
+}
+.k5-text--medium {
+  font-weight: var(--k5-weight-medium);
+}
+.k5-text--semibold {
+  font-weight: var(--k5-weight-semibold);
+}
+
+/* Una sola línea con puntos suspensivos. Necesita un ancho: dentro de flex, min-width: 0 ya va incluido. */
+.k5-text--truncate {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-text--numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Heading: semibold y líneas equilibradas. title y display se aprietan un poco. */
+.k5-heading {
+  margin: 0;
+  font-weight: var(--k5-weight-semibold);
+  text-wrap: balance;
+}
+.k5-heading--lead {
+  font-size: var(--k5-text-lead);
+  line-height: var(--k5-leading-lead);
+}
+.k5-heading--heading {
+  font-size: var(--k5-text-heading);
+  line-height: var(--k5-leading-heading);
+}
+.k5-heading--title {
+  font-size: var(--k5-text-title);
+  letter-spacing: var(--k5-tracking-title);
+  line-height: var(--k5-leading-title);
+}
+.k5-heading--display {
+  font-size: var(--k5-text-display);
+  letter-spacing: var(--k5-tracking-display);
+  line-height: var(--k5-leading-display);
+}

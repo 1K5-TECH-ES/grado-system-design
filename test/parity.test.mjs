@@ -146,6 +146,14 @@ const SCENARIOS = {
     r(R.Card, { variant: 'alert' }, r(R.CardContent, null, r(R.CardTitle, { as: 'h2' }, 'Pago rechazado'))),
     () => h(V.Card, { variant: 'alert' }, () => h(V.CardContent, null, () => h(V.CardTitle, { as: 'h2' }, text('Pago rechazado')))),
   ],
+  'tabla sin caja': [
+    r(R.Table, { plain: true }, r('tbody', null, r('tr', null, r('td', null, 'Marta Gil')))),
+    () => h(V.Table, { plain: true }, () => [h('tbody', [h('tr', [h('td', 'Marta Gil')])])]),
+  ],
+  'botón destructive para confirmar': [
+    r(R.Button, { variant: 'destructive' }, 'Eliminar instalación'),
+    () => h(V.Button, { variant: 'destructive' }, text('Eliminar instalación')),
+  ],
   'tabla compacta con título': [
     r(
       R.Table,

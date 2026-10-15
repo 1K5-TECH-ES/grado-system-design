@@ -123,3 +123,150 @@ export declare function isShortcut(
   event: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey' | 'altKey'>,
   key: string | false | null | undefined,
 ): boolean
+
+// ---------- Datos y piezas (0.3) ----------
+export interface DescriptionItem {
+  /** Para el slot de Vue con contenido propio y como key. */
+  id?: string
+  term: string
+  description?: string
+  /** Añade un CopyButton que copia este valor. */
+  copy?: string
+  /** Cifra o código (CUPS, referencia catastral): fuente monoespaciada. */
+  mono?: boolean
+}
+export interface AvatarItem {
+  name: string
+  src?: string
+}
+export interface ProgressState {
+  indeterminate: boolean
+  stepped: boolean
+  max: number
+  now: number | null
+  ratio: number
+  text: string
+}
+export declare function formatPercent(ratio: number | null | undefined, locale?: string, decimals?: number): string
+export declare function progressState(options?: {
+  value?: number | null
+  max?: number
+  steps?: number
+  locale?: string
+  messages?: Messages
+}): ProgressState
+export declare function splitAvatars<T>(items?: T[], max?: number): { shown: T[]; rest: T[] }
+export declare function tagFocusTarget(button: Element | null | undefined): HTMLElement | null
+export declare function copyText(text: string, env?: { navigator?: Navigator; document?: Document }): Promise<boolean>
+
+// ---------- Gráficos (0.3) ----------
+export interface ChartPoint {
+  x: number
+  y: number
+}
+export interface DonutSegment {
+  label: string
+  value: number
+  /** Color chart-1 … chart-5. Por defecto, el orden del segmento. */
+  tone?: 1 | 2 | 3 | 4 | 5
+}
+export interface DonutSlice {
+  /** Inicio y longitud, de 0 a 100. */
+  start: number
+  length: number
+  /** Porcentaje entero. */
+  percent: number
+}
+export type MeterLevel = 'good' | 'fair' | 'poor' | 'neutral'
+export type EnergyNode = 'solar' | 'home' | 'battery' | 'grid'
+export interface EnergyNodeState {
+  /** 'in': la energía llega al inversor; 'out': sale de él; 'none': no hay flujo. */
+  flow: 'in' | 'out' | 'none'
+  state: import('./messages.js').MessageKey
+}
+
+export declare function sparklinePoints(values: readonly number[] | null | undefined): ChartPoint[]
+export declare function chartPoints(values: readonly number[], max: number): ChartPoint[]
+export declare function linePath(points: readonly ChartPoint[]): string
+export declare function areaPath(points: readonly ChartPoint[], base?: number): string
+export declare function donutSlices(values: readonly number[], total?: number): DonutSlice[]
+export declare function meterRatio(value: number, min?: number, max?: number): number
+export declare function meterLevel(options: {
+  value: number
+  min?: number
+  max?: number
+  low?: number
+  high?: number
+  optimum?: number
+}): MeterLevel
+export declare function meterSegments(ratio: number, count: number): number
+export declare function energyFlow(node: EnergyNode, value: number | null | undefined): EnergyNodeState
+
+// ---------- Campos especiales (0.3) ----------
+/** Dirección elegida en AddressInput. */
+export interface AddressValue {
+  street: string
+  postalCode: string
+  city: string
+  province: string
+  /** Referencia catastral, si el proveedor la da. */
+  cadastralRef?: string
+}
+/** Sugerencia de AddressInput: lo que devuelve tu función suggest. */
+export interface AddressOption {
+  id: string
+  /** Texto de la opción y del campo: «Calle de Alcalá, 48». */
+  label: string
+  /** Segunda línea: «28014 Madrid». */
+  description?: string
+  value: AddressValue
+}
+/** Una marca bajo el Slider: { value: 2, label: '2 kWp' }. */
+export interface SliderMark {
+  value: number
+  label: string
+}
+export type PhoneCountryCode = 'ES' | 'PT' | 'FR' | 'DE' | 'IT' | 'GB'
+export interface PhoneCountry {
+  code: PhoneCountryCode
+  dial: string
+  /** Número de ejemplo ya formateado: «612 345 678». */
+  example: string
+}
+export type NifKind = 'dni' | 'nie' | 'cif'
+
+export declare function significantCount(text: string | null | undefined, end?: number): number
+export declare function caretAfter(text: string | null | undefined, count: number): number
+export declare function parseTime(text: string | null | undefined): number | null
+export declare function formatTime(minutes: number | null | undefined): string
+export declare function normalizeTime(text: string | null | undefined): string | null
+export declare function timeSlots(min?: string, max?: string, step?: number): string[]
+export declare function nearestTime(slots: string[], time: string | null | undefined): number
+export declare function timeError(text: string | null | undefined, range?: { min?: string; max?: string }, messages?: Messages): string
+export declare const PHONE_COUNTRIES: PhoneCountry[]
+export declare function phoneCountryOf(text: string | null | undefined): PhoneCountryCode | null
+export declare function parsePhone(text: string | null | undefined, country?: string): { country: PhoneCountryCode; digits: string }
+export declare function formatPhone(text: string | null | undefined, country?: string): string
+export declare function toE164(text: string | null | undefined, country?: string): string
+export declare function nationalNumber(e164: string | null | undefined, country?: string): string
+export declare function phoneError(text: string | null | undefined, country?: string, messages?: Messages): string
+export declare function isValidPhone(text: string | null | undefined, country?: string): boolean
+export declare function normalizeNif(text: string | null | undefined): string
+export declare function nifKind(text: string | null | undefined): NifKind | null
+export declare function nifError(text: string | null | undefined, messages?: Messages): string
+export declare function isValidNif(text: string | null | undefined): boolean
+export declare const IBAN_LENGTHS: Record<string, number>
+export declare function normalizeIban(text: string | null | undefined): string
+export declare function formatIban(text: string | null | undefined): string
+export declare function ibanError(text: string | null | undefined, messages?: Messages): string
+export declare function isValidIban(text: string | null | undefined): boolean
+
+// ---------- Superposiciones y acciones (0.3) ----------
+export declare function selectedCount(count: number, messages?: Messages): string
+export declare function menuPosition(
+  point: { x: number; y: number },
+  size: { width: number; height: number },
+  viewport: { width: number; height: number },
+  margin?: number,
+): { x: number; y: number }
+export declare function toggleValues(current: string[], value: string, type?: 'single' | 'multiple', order?: string[]): string[]

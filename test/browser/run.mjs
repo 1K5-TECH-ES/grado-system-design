@@ -6,6 +6,11 @@ import { createServer } from 'node:http'
 import { build } from 'esbuild'
 import { chromium, expect } from '@playwright/test'
 import { createRequire } from 'node:module'
+import { check as maquetacionCheck } from './groups/maquetacion.check.mjs'
+import { check as datosCheck } from './groups/datos.check.mjs'
+import { check as graficosCheck } from './groups/graficos.check.mjs'
+import { check as entradasCheck } from './groups/entradas.check.mjs'
+import { check as superposicionesCheck } from './groups/superposiciones.check.mjs'
 
 // Análisis de accesibilidad: axe-core con las reglas de WCAG 2.2 A y AA.
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8')
@@ -260,6 +265,9 @@ try {
     // GradoProvider: la paginación en alemán.
     await expect(page.locator('#german [aria-label="Nächste Seite"]')).toBeVisible()
 
+    // Componentes de 0.3, por grupo.
+    for (const check of [maquetacionCheck, datosCheck, graficosCheck, entradasCheck, superposicionesCheck])
+      await check(page, { expect, framework })
     expect(errors).toEqual([])
     // Accesibilidad en los dos temas y los dos modos, más una pasada con listas y la paleta abiertas.
     // Con «reducir movimiento» las duraciones valen 0 y axe no mide colores a mitad de transición.

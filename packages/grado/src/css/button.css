@@ -30,7 +30,7 @@
 }
 .k5-btn:disabled,
 .k5-btn[aria-disabled='true'] {
-  opacity: 0.5;
+  opacity: var(--k5-opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -88,13 +88,21 @@
   color: var(--k5-foreground);
 }
 
+/* danger: acción destructiva junto a otras (texto rojo, fondo solo al pasar).
+   destructive: el botón sólido que confirma un borrado en AlertDialog. */
 .k5-btn--danger {
-  border-color: color-mix(in srgb, var(--k5-destructive) 28%, transparent);
-  background: color-mix(in srgb, var(--k5-destructive) 10%, transparent);
   color: var(--k5-destructive-text);
 }
 .k5-btn--danger:hover {
-  background: color-mix(in srgb, var(--k5-destructive) 16%, transparent);
+  background: var(--k5-destructive-subtle);
+}
+
+.k5-btn--destructive {
+  background: var(--k5-destructive);
+  color: var(--k5-destructive-foreground);
+}
+.k5-btn--destructive:hover {
+  background: color-mix(in srgb, var(--k5-destructive) 90%, transparent);
 }
 
 .k5-btn--link {
