@@ -1,0 +1,55 @@
+/* Badge: pequeño, con borde de 1 px y fondo tintado. El texto usa los tokens
+   *-text, calculados para llegar a 4,5 : 1 sobre su propio tinte. */
+.k5-badge {
+  --_c: var(--k5-muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1);
+  padding: var(--k5-space-1) var(--k5-space-1-5);
+  border: 1px solid color-mix(in srgb, var(--_c) 28%, transparent);
+  border-radius: var(--k5-radius-badge);
+  background: color-mix(in srgb, var(--_c) 10%, transparent);
+  color: var(--_text, var(--_c));
+  font-size: var(--k5-text-badge);
+  font-weight: var(--k5-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.k5-badge svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+}
+
+.k5-badge--neutral {
+  --_c: var(--k5-muted-foreground);
+  background: var(--k5-muted);
+  border-color: var(--k5-border);
+}
+.k5-badge--brand {
+  --_c: var(--k5-primary);
+  --_text: var(--k5-primary-text);
+}
+.k5-badge--info {
+  --_c: var(--k5-info);
+  --_text: var(--k5-info-text);
+}
+.k5-badge--success {
+  --_c: var(--k5-success);
+  --_text: var(--k5-success-text);
+}
+.k5-badge--warning {
+  --_c: var(--k5-warning);
+  --_text: var(--k5-warning-text);
+}
+.k5-badge--danger {
+  --_c: var(--k5-destructive);
+  --_text: var(--k5-destructive-text);
+}
+/* Fucsia de marca, sólido: novedades y destacados. Texto grafito (6,2 : 1). */
+.k5-badge--highlight {
+  background: var(--k5-fuchsia);
+  border-color: var(--k5-fuchsia);
+  color: var(--k5-graphite);
+}

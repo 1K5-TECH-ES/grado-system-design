@@ -1,0 +1,55 @@
+/* Historial: línea vertical con un punto por evento, coloreado por tono. */
+.k5-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.k5-timeline__item {
+  position: relative;
+  margin-left: 0.3125rem;
+  padding: 0 0 var(--k5-space-5) var(--k5-space-5);
+  border-left: 1px solid var(--k5-border);
+  font-size: var(--k5-text-body);
+  line-height: 1.4;
+}
+.k5-timeline__item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+.k5-timeline__dot {
+  position: absolute;
+  top: 0.3125rem;
+  left: -0.3125rem;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  border-radius: 50%;
+  background: var(--k5-primary);
+  box-shadow: 0 0 0 3px var(--k5-background);
+}
+.k5-timeline__dot--success {
+  background: var(--k5-success);
+}
+.k5-timeline__dot--warning {
+  background: var(--k5-warning);
+}
+.k5-timeline__dot--danger {
+  background: var(--k5-destructive);
+}
+.k5-timeline__dot--info {
+  background: var(--k5-info);
+}
+.k5-timeline__title {
+  display: block;
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-timeline__description,
+.k5-timeline__date {
+  display: block;
+  margin-top: var(--k5-space-0-5);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-timeline__date {
+  font-variant-numeric: tabular-nums;
+}

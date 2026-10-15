@@ -1,0 +1,64 @@
+/* Control segmentado: una opción de pocas (Día · Semana · Mes). Es un grupo de radios
+   con forma de pastilla; la opción elegida se levanta sobre el fondo gris. */
+.k5-segmented {
+  --_h: var(--k5-control-h);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-0-5);
+  max-width: 100%;
+  height: var(--_h);
+  padding: var(--k5-space-0-5);
+  border-radius: var(--k5-radius);
+  background: var(--k5-muted);
+  overflow-x: auto;
+}
+.k5-segmented--sm {
+  --_h: var(--k5-control-h-sm);
+}
+.k5-segmented--lg {
+  --_h: var(--k5-control-h-lg);
+}
+.k5-segmented--block {
+  display: flex;
+  width: 100%;
+}
+.k5-segmented--block .k5-segmented__option {
+  flex: 1;
+}
+.k5-segmented__option {
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 var(--k5-space-3);
+  border: 0;
+  border-radius: calc(var(--k5-radius) - 2px);
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base),
+    box-shadow var(--k5-duration-base);
+}
+.k5-segmented--lg .k5-segmented__option {
+  font-size: var(--k5-text-body);
+}
+.k5-segmented__option:hover {
+  color: var(--k5-foreground);
+}
+.k5-segmented__option[aria-checked='true'] {
+  background: var(--k5-card);
+  color: var(--k5-foreground);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--k5-foreground) 12%, transparent);
+}
+.k5-segmented__option:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 1px;
+}
+.k5-segmented__option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

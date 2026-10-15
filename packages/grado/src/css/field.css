@@ -1,0 +1,159 @@
+/* Campo: etiqueta, control, ayuda y error. Mismo aspecto que .settings-field de 1komma5es_help. */
+/* align-content: start. Si la fila de una rejilla estira el campo (un Select junto a un
+   Textarea), el espacio sobrante no se reparte entre la etiqueta y el control. */
+.k5-field {
+  display: grid;
+  align-content: start;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-field__label {
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-field__required {
+  margin-left: var(--k5-space-0-5);
+  color: var(--k5-destructive-text);
+}
+.k5-field__hint,
+.k5-field__error {
+  margin: 0;
+  font-size: var(--k5-text-label);
+}
+.k5-field__hint {
+  color: var(--k5-muted-foreground);
+}
+.k5-field__error {
+  color: var(--k5-destructive-text);
+}
+
+.k5-input,
+.k5-select,
+.k5-textarea {
+  --_h: var(--k5-control-h);
+  width: 100%;
+  min-width: 0;
+  height: var(--_h);
+  margin: 0;
+  padding: 0 var(--k5-space-3);
+  border: 1px solid var(--k5-input);
+  border-radius: var(--k5-radius);
+  background: var(--k5-background);
+  color: var(--k5-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-body);
+  line-height: 1.4;
+  outline: none;
+  transition:
+    border-color var(--k5-duration-base),
+    box-shadow var(--k5-duration-base);
+}
+.k5-input--sm {
+  --_h: var(--k5-control-h-sm);
+  padding: 0 var(--k5-space-2-5);
+  font-size: var(--k5-text-label);
+}
+.k5-input--lg {
+  --_h: var(--k5-control-h-lg);
+}
+.k5-textarea {
+  height: auto;
+  min-height: 5rem;
+  padding: var(--k5-space-2) var(--k5-space-3);
+  resize: vertical;
+}
+.k5-select {
+  appearance: none;
+  padding-right: var(--k5-space-8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23828282' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 0.625rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  cursor: pointer;
+}
+.k5-input::placeholder,
+.k5-textarea::placeholder {
+  color: var(--k5-muted-foreground);
+  opacity: 1;
+}
+/* El anillo es la sombra. El contorno transparente reaparece en modo de alto contraste
+   y evita que un :focus-visible global de la aplicación dibuje un segundo anillo. */
+.k5-input:focus,
+.k5-select:focus,
+.k5-textarea:focus {
+  outline: 2px solid transparent;
+  border-color: var(--k5-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
+}
+.k5-input[aria-invalid='true'],
+.k5-select[aria-invalid='true'],
+.k5-textarea[aria-invalid='true'] {
+  border-color: var(--k5-destructive);
+}
+.k5-input[aria-invalid='true']:focus,
+.k5-select[aria-invalid='true']:focus,
+.k5-textarea[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-destructive) 20%, transparent);
+}
+.k5-input:disabled,
+.k5-select:disabled,
+.k5-textarea:disabled {
+  background: var(--k5-muted);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Input con prefijo o sufijo: €, kWp, kWh… El contenedor dibuja el borde. */
+.k5-input-wrap {
+  --_h: var(--k5-control-h);
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-2);
+  min-width: 0;
+  height: var(--_h);
+  padding: 0 var(--k5-space-3);
+  border: 1px solid var(--k5-input);
+  border-radius: var(--k5-radius);
+  background: var(--k5-background);
+  transition:
+    border-color var(--k5-duration-base),
+    box-shadow var(--k5-duration-base);
+}
+.k5-input-wrap--sm {
+  --_h: var(--k5-control-h-sm);
+  padding: 0 var(--k5-space-2-5);
+}
+.k5-input-wrap--lg {
+  --_h: var(--k5-control-h-lg);
+}
+.k5-input-wrap:focus-within {
+  outline: 2px solid transparent;
+  border-color: var(--k5-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
+}
+.k5-input-wrap:has(.k5-input[aria-invalid='true']) {
+  border-color: var(--k5-destructive);
+}
+.k5-input-wrap:has(.k5-input:disabled) {
+  background: var(--k5-muted);
+  opacity: 0.6;
+}
+.k5-input-wrap .k5-input,
+.k5-input-wrap .k5-input:focus,
+.k5-input-wrap .k5-input:disabled {
+  flex: 1;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+}
+.k5-input-wrap__affix {
+  flex-shrink: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  white-space: nowrap;
+}

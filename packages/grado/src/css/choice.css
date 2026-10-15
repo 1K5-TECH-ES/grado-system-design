@@ -1,0 +1,75 @@
+/* Casilla y opciones: controles nativos en berenjena, como los checkbox de 1komma5es_help. */
+/* margin-top: centra el control (16 px) con la primera línea del texto (14 px × 1,4). */
+.k5-checkbox,
+.k5-radio {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.1125rem 0 0;
+  accent-color: var(--k5-primary);
+  cursor: pointer;
+}
+.k5-checkbox:focus-visible,
+.k5-radio:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-checkbox:disabled,
+.k5-radio:disabled {
+  cursor: not-allowed;
+}
+
+.k5-checkbox-field,
+.k5-radio-option {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--k5-space-2-5);
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  line-height: 1.4;
+  cursor: pointer;
+}
+.k5-checkbox-field:has(:disabled),
+.k5-radio-option:has(:disabled) {
+  color: var(--k5-muted-foreground);
+  cursor: not-allowed;
+}
+/* Misma tipografía que Switch: etiqueta media y descripción atenuada. */
+.k5-choice__text {
+  display: grid;
+  gap: var(--k5-space-0-5);
+  min-width: 0;
+}
+.k5-choice__text > :first-child {
+  font-weight: var(--k5-weight-medium);
+}
+.k5-choice__description {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-regular);
+  line-height: 1.4;
+}
+
+.k5-radio-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.k5-radio-group > legend,
+.k5-date-range > legend {
+  margin-bottom: var(--k5-space-2-5);
+  padding: 0;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-radio-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-3);
+}
+.k5-radio-group--horizontal .k5-radio-group__options {
+  flex-flow: row wrap;
+  gap: var(--k5-space-3) var(--k5-space-6);
+}

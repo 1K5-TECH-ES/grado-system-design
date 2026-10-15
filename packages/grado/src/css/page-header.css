@@ -1,0 +1,35 @@
+/* Cabecera de página: título de 24 px, subtítulo y acciones a la derecha. */
+.k5-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--k5-space-4);
+  margin-bottom: var(--k5-space-8);
+}
+.k5-page-header__titles {
+  display: grid;
+  flex: 1 1 18rem;
+  gap: var(--k5-space-1);
+  min-width: 0;
+}
+.k5-page-header__title {
+  margin: 0;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-title);
+  font-weight: var(--k5-weight-semibold);
+  letter-spacing: var(--k5-tracking-title);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.k5-page-header__subtitle {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-body);
+}
+.k5-page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-2);
+}

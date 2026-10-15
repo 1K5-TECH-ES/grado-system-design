@@ -1,0 +1,45 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "selector-class-pattern": [
+      "^(dark|k5-[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?)$",
+      {
+        "message": "Usa BEM con prefijo: k5-bloque__elemento--modificador"
+      }
+    ],
+    "custom-property-pattern": [
+      "^(_[a-z]+|k5-[a-z0-9-]+)$",
+      {
+        "message": "Variables: --k5-… para tokens y --_… para valores locales"
+      }
+    ],
+    "keyframes-name-pattern": "^k5-[a-z-]+$",
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreKeywords": ["currentColor"]
+      }
+    ],
+    "declaration-block-single-line-max-declarations": null,
+    "rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "at-rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "alpha-value-notation": null,
+    "media-feature-range-notation": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "no-descending-specificity": null,
+    "selector-not-notation": null
+  },
+  "overrides": [
+    {
+      "files": ["docs-site/**/*.css"],
+      "rules": {
+        "selector-class-pattern": null,
+        "custom-property-pattern": null,
+        "keyframes-name-pattern": null,
+        "property-no-vendor-prefix": null
+      }
+    }
+  ]
+}

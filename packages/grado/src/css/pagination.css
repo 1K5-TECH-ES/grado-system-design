@@ -1,0 +1,60 @@
+/* Paginación: como ListPagination de 1komma5es_help (rango a la izquierda, página actual en berenjena). */
+.k5-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--k5-space-3) var(--k5-space-4);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  font-variant-numeric: tabular-nums;
+}
+.k5-pagination__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-1);
+}
+.k5-pagination button {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--k5-control-h);
+  height: var(--k5-control-h);
+  padding: 0 var(--k5-space-2);
+  border: 1px solid var(--k5-border);
+  border-radius: calc(var(--k5-radius) - 2px);
+  background: var(--k5-card);
+  color: var(--k5-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    border-color var(--k5-duration-base);
+}
+.k5-pagination button svg {
+  width: 1rem;
+  height: 1rem;
+}
+.k5-pagination button:hover:not(:disabled) {
+  background: var(--k5-muted);
+}
+.k5-pagination button[aria-current='page'] {
+  border-color: var(--k5-primary);
+  background: var(--k5-primary);
+  color: var(--k5-primary-foreground);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-pagination button:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.k5-pagination__ellipsis {
+  min-width: 1.25rem;
+  text-align: center;
+}

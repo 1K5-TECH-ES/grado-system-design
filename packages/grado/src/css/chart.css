@@ -1,0 +1,158 @@
+/* Gráfico de barras en HTML: los textos se leen igual de nítidos a cualquier ancho y los
+   colores salen de chart-1 … chart-5, así que siguen el tema y el modo oscuro.
+   Para lectores de pantalla, los datos van en una tabla oculta. */
+.k5-chart {
+  --_plot: 15rem;
+  display: grid;
+  gap: var(--k5-space-3);
+  min-width: 0;
+  margin: 0;
+}
+.k5-chart__header {
+  display: grid;
+  gap: var(--k5-space-0-5);
+}
+.k5-chart__title {
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-chart__description {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-chart__body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: var(--_plot) auto;
+  column-gap: var(--k5-space-2);
+  row-gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-chart__axis {
+  position: relative;
+  min-width: 1.5rem;
+}
+.k5-chart__tick {
+  position: absolute;
+  right: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-badge);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateY(50%);
+}
+.k5-chart__plot {
+  position: relative;
+  min-width: 0;
+  border-bottom: 1px solid var(--k5-border);
+}
+.k5-chart__gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--k5-border) 80%, transparent);
+}
+.k5-chart__groups {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.k5-chart__group {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 0;
+}
+.k5-chart__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: min(64%, 4rem);
+  height: 100%;
+}
+.k5-chart__bars--stacked {
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 1px;
+}
+.k5-chart__bar {
+  flex: 1;
+  min-width: 0;
+  border-radius: 3px 3px 0 0;
+  transition: opacity var(--k5-duration-base);
+}
+.k5-chart__bars--stacked .k5-chart__bar {
+  flex: none;
+  width: 100%;
+  border-radius: 0;
+}
+.k5-chart__bars--stacked .k5-chart__bar:last-child {
+  border-radius: 3px 3px 0 0;
+}
+.k5-chart__bar--1 {
+  background: var(--k5-chart-1);
+}
+.k5-chart__bar--2 {
+  background: var(--k5-chart-2);
+}
+.k5-chart__bar--3 {
+  background: var(--k5-chart-3);
+}
+.k5-chart__bar--4 {
+  background: var(--k5-chart-4);
+}
+.k5-chart__bar--5 {
+  background: var(--k5-chart-5);
+}
+.k5-chart__plot:hover .k5-chart__bar {
+  opacity: 0.55;
+}
+.k5-chart__plot:hover .k5-chart__bar:hover {
+  opacity: 1;
+}
+.k5-chart__categories {
+  grid-column: 2;
+  display: flex;
+  min-width: 0;
+}
+.k5-chart__category {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-badge);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k5-space-1) var(--k5-space-4);
+  margin: 0;
+  padding: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  list-style: none;
+}
+.k5-chart__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1-5);
+}
+.k5-chart__swatch {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 2px;
+}
+.k5-chart__swatch.k5-chart__bar--1,
+.k5-chart__swatch.k5-chart__bar--2,
+.k5-chart__swatch.k5-chart__bar--3,
+.k5-chart__swatch.k5-chart__bar--4,
+.k5-chart__swatch.k5-chart__bar--5 {
+  flex: none;
+  border-radius: 2px;
+}

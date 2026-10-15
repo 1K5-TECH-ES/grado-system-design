@@ -1,0 +1,56 @@
+/* Tabla: como las de 1komma5es_help (cabecera en mayúsculas sobre gris, celdas px-4 py-3). */
+.k5-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius-panel);
+  background: var(--k5-card);
+}
+.k5-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--k5-card-foreground);
+  font-size: var(--k5-text-body);
+}
+.k5-table caption {
+  padding: var(--k5-space-3-5) var(--k5-space-4) var(--k5-space-2);
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-semibold);
+  text-align: left;
+}
+.k5-table th {
+  padding: var(--k5-space-3) var(--k5-space-4);
+  border-bottom: 1px solid var(--k5-border);
+  background: color-mix(in srgb, var(--k5-muted) 60%, transparent);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.k5-table td {
+  padding: var(--k5-space-3) var(--k5-space-4);
+  border-top: 1px solid var(--k5-border);
+  vertical-align: middle;
+}
+.k5-table tbody tr:first-child td {
+  border-top: 0;
+}
+.k5-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--k5-muted) 50%, transparent);
+}
+.k5-table .k5-num {
+  text-align: right;
+}
+/* Unidades en la cabecera: «Potencia (kWp)» no pasa a «KWP». */
+.k5-table th .k5-unit {
+  letter-spacing: 0;
+  text-transform: none;
+}
+.k5-table--compact th {
+  padding: var(--k5-space-2) var(--k5-space-3);
+}
+.k5-table--compact td {
+  padding: var(--k5-space-2) var(--k5-space-3);
+}

@@ -1,0 +1,47 @@
+/* Utilidades mínimas que usan los componentes. */
+.k5-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.k5-num {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes k5-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.k5-spinner {
+  --_size: 1rem;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--_size);
+  height: var(--_size);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: k5-spin 0.7s linear infinite;
+}
+.k5-spinner--sm {
+  --_size: 0.875rem;
+}
+.k5-spinner--lg {
+  --_size: 1.25rem;
+  border-width: 2.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k5-spinner {
+    animation-duration: 1.6s;
+  }
+}

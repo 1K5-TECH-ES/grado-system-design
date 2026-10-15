@@ -1,0 +1,73 @@
+/* Interruptor: un checkbox nativo con role="switch". Mismo tamaño que .settings-switch. */
+.k5-switch {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.5rem;
+  margin: 0;
+  border: 1px solid var(--k5-input);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--k5-muted-foreground) 30%, transparent);
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    border-color var(--k5-duration-base);
+}
+.k5-switch::after {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--k5-white);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  transition: transform var(--k5-duration-base);
+}
+.k5-switch:checked {
+  border-color: var(--k5-primary);
+  background: var(--k5-primary);
+}
+.k5-switch:checked::after {
+  transform: translateX(1.25rem);
+}
+.k5-switch:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.k5-switch-field {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--k5-space-2-5);
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  line-height: 1.4;
+  cursor: pointer;
+}
+/* Desactivado: el texto se atenúa como en Checkbox y RadioGroup. */
+.k5-switch-field:has(.k5-switch:disabled) {
+  color: var(--k5-muted-foreground);
+  cursor: not-allowed;
+}
+/* padding-top: centra la primera línea (14 px × 1,4) con el interruptor (24 px). */
+.k5-switch-field__text {
+  display: grid;
+  gap: var(--k5-space-0-5);
+  min-width: 0;
+  padding-top: 0.1375rem;
+}
+.k5-switch-field__label {
+  font-weight: var(--k5-weight-medium);
+}
+.k5-switch-field__description {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  line-height: 1.4;
+}

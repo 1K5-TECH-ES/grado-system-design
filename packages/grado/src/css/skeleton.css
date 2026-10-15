@@ -1,0 +1,22 @@
+/* Esqueleto de carga: forma del contenido con un pulso suave. */
+@keyframes k5-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+.k5-skeleton {
+  display: block;
+  min-height: 0.5rem;
+  border-radius: calc(var(--k5-radius) - 2px);
+  background: color-mix(in srgb, var(--k5-foreground) 11%, transparent);
+  animation: k5-pulse 1.8s ease-in-out infinite;
+}
+.k5-skeleton--circle {
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k5-skeleton {
+    animation: none;
+  }
+}

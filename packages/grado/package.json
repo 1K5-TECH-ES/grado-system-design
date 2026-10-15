@@ -1,0 +1,69 @@
+{
+  "name": "@1k5/grado",
+  "version": "0.2.0",
+  "description": "Sistema de diseño de 1KOMMA5° España: tokens de color, tipografía y forma para React, Vue y cualquier web.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "assets",
+    "src/tokens.json",
+    "src/classes.js",
+    "src/classes.d.ts",
+    "src/patterns.js",
+    "src/patterns.d.ts",
+    "src/messages.js",
+    "src/messages.d.ts"
+  ],
+  "exports": {
+    "./patterns": {
+      "types": "./src/patterns.d.ts",
+      "default": "./src/patterns.js"
+    },
+    "./messages": {
+      "types": "./src/messages.d.ts",
+      "default": "./src/messages.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens-hsl.css": "./dist/tokens-hsl.css",
+    "./tailwind.css": "./dist/tailwind.css",
+    "./grado.css": "./dist/grado.css",
+    "./grado.min.css": "./dist/grado.min.css",
+    "./grado.layer.css": "./dist/grado.layer.css",
+    "./css/*": "./dist/css/*",
+    "./fonts.css": "./dist/fonts.css",
+    "./tailwind-preset": {
+      "types": "./dist/tailwind-preset.d.ts",
+      "import": "./dist/tailwind-preset.js",
+      "require": "./dist/tailwind-preset.cjs"
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js",
+      "require": "./dist/tokens.cjs"
+    },
+    "./classes": {
+      "types": "./src/classes.d.ts",
+      "default": "./src/classes.js"
+    },
+    "./tokens.json": "./src/tokens.json",
+    "./tokens.dtcg.json": "./dist/tokens.dtcg.json",
+    "./assets/*": "./assets/*",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/build.mjs && node --test \"test/*.test.mjs\"",
+    "contrast": "node scripts/contrast.mjs",
+    "prepack": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

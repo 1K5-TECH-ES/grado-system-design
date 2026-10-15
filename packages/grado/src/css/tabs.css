@@ -1,0 +1,83 @@
+/* Pestañas. «line»: subrayado berenjena. «pill»: como el TabsList de 1komma5es_help. */
+.k5-tabs {
+  width: 100%;
+  min-width: 0;
+}
+.k5-tabs__list {
+  display: flex;
+  gap: var(--k5-space-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--k5-border);
+  scrollbar-width: none;
+}
+.k5-tabs__tab {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--k5-space-1-5);
+  margin-bottom: -1px;
+  padding: var(--k5-space-2-5) var(--k5-space-0-5);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--k5-duration-base),
+    border-color var(--k5-duration-base),
+    background-color var(--k5-duration-base);
+}
+.k5-tabs__tab:hover:not(:disabled) {
+  color: var(--k5-foreground);
+}
+.k5-tabs__tab[aria-selected='true'] {
+  border-bottom-color: var(--k5-primary);
+  color: var(--k5-primary-text);
+}
+.k5-tabs__tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.k5-tabs__tab:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: -2px;
+  border-radius: calc(var(--k5-radius) - 4px);
+}
+
+.k5-tabs--pill .k5-tabs__list {
+  display: inline-flex;
+  max-width: 100%;
+  gap: var(--k5-space-1);
+  padding: var(--k5-space-1);
+  border: 0;
+  border-radius: var(--k5-radius);
+  background: var(--k5-muted);
+}
+.k5-tabs--pill .k5-tabs__tab {
+  margin: 0;
+  padding: 0.3125rem var(--k5-space-3);
+  border: 0;
+  border-radius: calc(var(--k5-radius) - 2px);
+}
+.k5-tabs--pill .k5-tabs__tab[aria-selected='true'] {
+  background: var(--k5-card);
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-semibold);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+.k5-tabs__panel {
+  padding-top: var(--k5-space-4);
+  font-size: var(--k5-text-body);
+}
+.k5-tabs__panel:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+  border-radius: calc(var(--k5-radius) - 4px);
+}
+.k5-tabs__panel[hidden] {
+  display: none;
+}

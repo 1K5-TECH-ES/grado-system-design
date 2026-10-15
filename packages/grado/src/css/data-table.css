@@ -1,0 +1,76 @@
+/* Tabla de datos: Table con orden, selección, acciones y paginación. */
+.k5-data-table {
+  display: grid;
+  gap: var(--k5-space-3);
+  width: 100%;
+  min-width: 0;
+}
+.k5-data-table__selection {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-data-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1);
+  margin: calc(var(--k5-space-1) * -1) calc(var(--k5-space-1-5) * -1);
+  padding: var(--k5-space-1) var(--k5-space-1-5);
+  border: 0;
+  border-radius: calc(var(--k5-radius) - 4px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base);
+}
+.k5-data-table__sort:hover:not(:disabled) {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+.k5-data-table__sort:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 1px;
+}
+.k5-data-table__sort svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+.k5-data-table__sort-icon {
+  opacity: 0.45;
+}
+th[aria-sort] .k5-data-table__sort {
+  color: var(--k5-foreground);
+}
+.k5-table .k5-data-table__check {
+  width: 1px;
+  padding-right: 0;
+}
+.k5-data-table__check .k5-checkbox {
+  display: block;
+  margin: 0;
+}
+.k5-table .k5-data-table__actions {
+  width: 1px;
+  text-align: right;
+  white-space: nowrap;
+}
+.k5-table tr[data-selected='true'] td {
+  background: color-mix(in srgb, var(--k5-primary) 5%, transparent);
+}
+.k5-data-table__empty {
+  padding: var(--k5-space-10) var(--k5-space-4) !important;
+  color: var(--k5-muted-foreground);
+  text-align: center;
+}
+.k5-data-table__empty [role='alert'] {
+  color: var(--k5-destructive-text);
+}
+.k5-table td.k5-data-table__loading {
+  padding-top: var(--k5-space-3-5);
+  padding-bottom: var(--k5-space-3-5);
+}

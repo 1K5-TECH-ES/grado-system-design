@@ -1,0 +1,47 @@
+/* Avatar: iniciales sobre menta, como el menú de usuario de 1komma5es_help. */
+.k5-avatar {
+  --_s: 1.75rem;
+  --_dot: 0.5rem;
+  position: relative;
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--_s);
+  height: var(--_s);
+  border-radius: 50%;
+  background: var(--k5-mint);
+  color: var(--k5-graphite);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-semibold);
+  line-height: 1;
+  user-select: none;
+}
+.k5-avatar--sm {
+  --_s: 1.5rem;
+  --_dot: 0.4375rem;
+  font-size: 0.625rem;
+}
+.k5-avatar--lg {
+  --_s: 2.5rem;
+  --_dot: 0.625rem;
+  font-size: var(--k5-text-body);
+}
+/* El punto, sobre el borde del círculo y proporcional al tamaño, para no tapar las iniciales. */
+.k5-avatar__status {
+  position: absolute;
+  right: -0.0625rem;
+  bottom: -0.0625rem;
+  width: var(--_dot);
+  height: var(--_dot);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--_ring, var(--k5-background));
+}
+.k5-avatar__status--online {
+  background: var(--k5-success);
+}
+.k5-avatar__status--away {
+  background: var(--k5-warning);
+}
+.k5-avatar__status--busy {
+  background: var(--k5-destructive);
+}

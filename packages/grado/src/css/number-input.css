@@ -1,0 +1,108 @@
+/* Número con botones de menos y más, prefijo y unidad: [−] 8,4 kWp [+].
+   El contenedor dibuja el borde, como .k5-input-wrap. */
+.k5-number {
+  --_h: var(--k5-control-h);
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  height: var(--_h);
+  border: 1px solid var(--k5-input);
+  border-radius: var(--k5-radius);
+  background: var(--k5-background);
+  overflow: hidden;
+  transition:
+    border-color var(--k5-duration-base),
+    box-shadow var(--k5-duration-base);
+}
+.k5-number--sm {
+  --_h: var(--k5-control-h-sm);
+}
+.k5-number--lg {
+  --_h: var(--k5-control-h-lg);
+}
+.k5-number:focus-within {
+  border-color: var(--k5-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
+}
+.k5-number:has(.k5-number__input[aria-invalid='true']) {
+  border-color: var(--k5-destructive);
+}
+.k5-number:has(.k5-number__input[aria-invalid='true']):focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-destructive) 20%, transparent);
+}
+.k5-number:has(.k5-number__input:disabled) {
+  background: var(--k5-muted);
+  opacity: 0.6;
+}
+.k5-number__input {
+  flex: 1;
+  min-width: 3rem;
+  height: 100%;
+  margin: 0;
+  padding: 0 var(--k5-space-3);
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--k5-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-body);
+  font-variant-numeric: tabular-nums;
+}
+.k5-number--sm .k5-number__input {
+  padding: 0 var(--k5-space-2);
+  font-size: var(--k5-text-label);
+}
+.k5-number__input::placeholder {
+  color: var(--k5-muted-foreground);
+  opacity: 1;
+}
+.k5-number__input:disabled {
+  cursor: not-allowed;
+}
+.k5-number__affix {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  padding: 0 var(--k5-space-2-5);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  white-space: nowrap;
+}
+.k5-number__affix--prefix {
+  padding-right: 0;
+}
+.k5-number__affix--prefix + .k5-number__input {
+  padding-left: var(--k5-space-1-5);
+}
+.k5-number__step {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--_h);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base);
+}
+.k5-number__step:first-child {
+  border-right: 1px solid var(--k5-input);
+}
+.k5-number__step:last-child {
+  border-left: 1px solid var(--k5-input);
+}
+.k5-number__step:hover:not(:disabled) {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+.k5-number__step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.k5-number__step svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}

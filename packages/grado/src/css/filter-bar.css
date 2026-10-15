@@ -1,0 +1,64 @@
+/* Barra de filtros: búsqueda con lupa, controles propios y chips quitables. */
+.k5-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-2) var(--k5-space-3);
+  width: 100%;
+}
+.k5-filter-bar__search {
+  flex: 1 1 14rem;
+  min-width: 10rem;
+}
+.k5-filter-bar__search .k5-input-wrap__affix svg {
+  display: block;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.k5-filter-bar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k5-space-1-5);
+  width: 100%;
+}
+.k5-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1);
+  max-width: 100%;
+  padding: 0.1875rem var(--k5-space-1) 0.1875rem var(--k5-space-2);
+  border: 1px solid color-mix(in srgb, var(--k5-primary) 22%, var(--k5-border));
+  border-radius: var(--k5-radius-badge);
+  background: color-mix(in srgb, var(--k5-primary) 6%, var(--k5-card));
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  line-height: 1.25rem;
+}
+.k5-chip:not(:has(.k5-chip__remove)) {
+  padding-right: var(--k5-space-2);
+}
+.k5-chip__remove {
+  display: inline-grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--k5-radius-badge) - 1px);
+  background: transparent;
+  color: var(--k5-muted-foreground);
+  cursor: pointer;
+}
+.k5-chip__remove svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.k5-chip__remove:hover {
+  background: color-mix(in srgb, var(--k5-primary) 12%, transparent);
+  color: var(--k5-foreground);
+}
+.k5-chip__remove:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 1px;
+}

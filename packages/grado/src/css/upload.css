@@ -1,0 +1,122 @@
+/* Subida de archivos: zona discontinua y una fila por archivo con su estado. */
+.k5-upload {
+  display: grid;
+  gap: var(--k5-space-3);
+  width: 100%;
+  min-width: 0;
+}
+.k5-upload__zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k5-space-3);
+  padding: var(--k5-space-6);
+  border: 1px dashed color-mix(in srgb, var(--k5-muted-foreground) 45%, var(--k5-border));
+  border-radius: var(--k5-radius-panel);
+  background: color-mix(in srgb, var(--k5-muted) 40%, var(--k5-card));
+  text-align: center;
+  transition:
+    border-color var(--k5-duration-base),
+    background-color var(--k5-duration-base);
+}
+.k5-upload__zone[data-dragging='true'] {
+  border-color: var(--k5-primary);
+  background: color-mix(in srgb, var(--k5-primary) 5%, var(--k5-card));
+}
+.k5-upload__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--k5-primary) 10%, transparent);
+  color: var(--k5-primary-text);
+}
+.k5-upload__icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.k5-upload__hint {
+  margin: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-upload__error {
+  margin: 0;
+  color: var(--k5-destructive-text);
+  font-size: var(--k5-text-label);
+}
+.k5-upload__error > p {
+  margin: 0;
+}
+.k5-upload__list {
+  display: grid;
+  gap: var(--k5-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.k5-upload__file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-2) var(--k5-space-3);
+  padding: var(--k5-space-2-5) var(--k5-space-3);
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius);
+  background: var(--k5-card);
+  font-size: var(--k5-text-body);
+}
+.k5-upload__file[data-status='error'] {
+  border-color: color-mix(in srgb, var(--k5-destructive) 40%, var(--k5-border));
+}
+.k5-upload__file-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: var(--k5-muted-foreground);
+}
+/* flex-basis: por debajo de ~12rem para el nombre, las acciones pasan a la línea siguiente,
+   alineadas a la derecha. */
+.k5-upload__file-content {
+  display: grid;
+  flex: 1 1 12rem;
+  gap: var(--k5-space-1);
+  min-width: 0;
+}
+.k5-upload__file-content + * {
+  margin-left: auto;
+}
+.k5-upload__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-upload__done {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--k5-success-text);
+}
+.k5-upload__progress {
+  display: block;
+  width: 100%;
+  height: 0.25rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--k5-foreground) 10%, transparent);
+  appearance: none;
+}
+.k5-upload__progress::-webkit-progress-bar {
+  background: color-mix(in srgb, var(--k5-foreground) 10%, transparent);
+}
+.k5-upload__progress::-webkit-progress-value {
+  background: var(--k5-primary);
+  border-radius: 999px;
+  transition: width var(--k5-duration-slow);
+}
+.k5-upload__progress::-moz-progress-bar {
+  background: var(--k5-primary);
+  border-radius: 999px;
+}

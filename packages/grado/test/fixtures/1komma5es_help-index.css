@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+
+    --muted: 278 15% 96%;
+    --muted-foreground: 278 8% 40%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+
+    --border: 278 15% 90%;
+    --input: 278 15% 90%;
+    --ring: 278 92% 29%;
+
+    --primary: 278 92% 29%;
+    --primary-foreground: 0 0% 100%;
+    --header: 278 92% 29%;
+
+    --secondary: 278 20% 95%;
+    --secondary-foreground: 278 92% 20%;
+
+    --accent: 173 69% 51%;
+    --accent-foreground: 0 0% 7%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 152 58% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 30 60% 10%;
+    --warning-strong: 32 100% 27%;
+    --info: 217 88% 52%;
+    --info-foreground: 0 0% 100%;
+
+    --brand-pink: 310 100% 64%;
+
+    --radius: 0.5rem;
+
+    --shadow-overlay: 0 12px 42px -12px hsl(278 60% 14% / 0.34), 0 8px 18px -14px hsl(278 60% 14% / 0.22);
+    --shadow-popover: 0 4px 12px -2px hsl(278 40% 12% / 0.12), 0 2px 6px -2px hsl(278 40% 12% / 0.08);
+  }
+
+  .dark {
+    --background: 278 25% 6%;
+    --foreground: 0 0% 98%;
+
+    --muted: 278 15% 14%;
+    --muted-foreground: 278 8% 65%;
+
+    --popover: 278 25% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --card: 278 25% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --border: 278 15% 18%;
+    --input: 278 15% 18%;
+    --ring: 278 70% 60%;
+
+    --primary: 278 70% 60%;
+    --primary-foreground: 0 0% 100%;
+    --header: 278 60% 18%;
+
+    --secondary: 278 15% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 173 60% 45%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 75% 62%;
+    --destructive-foreground: 0 0% 7%;
+
+    --success: 152 52% 48%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 90% 55%;
+    --warning-foreground: 30 60% 10%;
+    --warning-strong: 38 90% 60%;
+    --info: 217 82% 62%;
+    --info-foreground: 0 0% 100%;
+
+    --brand-pink: 310 90% 68%;
+
+    --shadow-overlay: 0 18px 50px -12px hsl(0 0% 0% / 0.7), 0 0 0 1px hsl(0 0% 100% / 0.05);
+    --shadow-popover: 0 8px 24px -6px hsl(0 0% 0% / 0.6), 0 0 0 1px hsl(0 0% 100% / 0.04);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  :where(a, button, summary, [role='button'], [role='tab'], [role='link']):focus-visible:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .app-header :where(a, button):focus-visible {
+    outline-color: hsl(0 0% 100%);
+  }
+
+  [role='menuitem'][data-highlighted],
+  [role='menuitemradio'][data-highlighted],
+  [role='menuitemcheckbox'][data-highlighted],
+  [role='option'][data-highlighted] {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+
+  .menu-item {
+    @apply flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  }
+
+  .settings-button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .settings-button-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .settings-switch {
+    @apply relative h-6 w-11 shrink-0 cursor-pointer appearance-none rounded-full border border-input bg-muted-foreground/30 transition-colors checked:border-primary checked:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .settings-switch::after {
+    content: '';
+    @apply absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform;
+  }
+
+  .settings-switch:checked::after {
+    @apply translate-x-5;
+  }
+
+  .settings-field {
+    @apply w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60;
+  }
+
+  .settings-panel {
+    @apply overflow-hidden rounded-2xl border border-border bg-card shadow-sm;
+  }
+
+  .settings-panel-footer {
+    @apply flex items-center justify-end gap-2 border-t border-border bg-muted/20 px-6 py-4;
+  }
+
+}
+
+.stats-chart {
+  --vis-font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --vis-axis-tick-label-color: hsl(var(--muted-foreground));
+  --vis-axis-tick-label-font-size: 11px;
+  --vis-axis-label-color: hsl(var(--muted-foreground));
+  --vis-axis-label-font-size: 11px;
+  --vis-axis-grid-color: hsl(var(--border));
+  --vis-axis-tick-color: transparent;
+  --vis-axis-domain-color: transparent;
+  --vis-tooltip-background-color: hsl(var(--popover));
+  --vis-tooltip-border-color: hsl(var(--border));
+  --vis-tooltip-text-color: hsl(var(--popover-foreground));
+  --vis-tooltip-padding: 6px 10px;
+  --vis-tooltip-border-radius: 8px;
+  --vis-tooltip-shadow-color: rgb(0 0 0 / 0.08);
+  --vis-crosshair-line-stroke-color: hsl(var(--primary));
+  --vis-crosshair-circle-stroke-color: hsl(var(--card));
+  --vis-color0: hsl(var(--primary));
+  --vis-donut-central-label-font-size: 22px;
+  --vis-donut-central-label-font-weight: 700;
+  --vis-donut-central-label-text-color: hsl(var(--foreground));
+  --vis-donut-central-sub-label-font-size: 10px;
+  --vis-donut-central-sub-label-text-color: hsl(var(--muted-foreground));
+}
+
+.stats-chart text {
+  font-variant-numeric: tabular-nums;
+}
+/* Analytics layouts keep wide tables and charts inside their own panels. */
+.analytics-page .grid > * { min-width: 0; }
+.analytics-page .stats-chart { min-width: 0; }

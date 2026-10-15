@@ -1,0 +1,133 @@
+/* Navegación lateral. El elemento activo se marca con aria-current="page", que ya
+   ponen RouterLink (Vue) y NavLink (React); la prop active lo fuerza. */
+.k5-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-0-5);
+}
+.k5-nav__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-0-5);
+}
+.k5-nav__section + .k5-nav__section {
+  margin-top: var(--k5-space-3);
+}
+.k5-nav__title {
+  margin: 0;
+  padding: var(--k5-space-2) var(--k5-space-3) var(--k5-space-1);
+  color: color-mix(in srgb, var(--k5-sidebar-foreground) 65%, transparent);
+  font-size: var(--k5-text-badge);
+  font-weight: var(--k5-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.k5-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-3);
+  width: 100%;
+  min-height: 2.25rem;
+  padding: var(--k5-space-2) var(--k5-space-3);
+  border: 0;
+  border-radius: var(--k5-radius);
+  background: none;
+  color: var(--k5-sidebar-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-medium);
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base);
+}
+.k5-nav-item svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.k5-nav-item:hover {
+  background: var(--k5-accent);
+  color: var(--k5-accent-foreground);
+}
+.k5-nav-item:focus-visible {
+  outline: 2px solid var(--k5-sidebar-ring);
+  outline-offset: -2px;
+}
+.k5-nav-item[aria-current='page'],
+.k5-nav-item[data-active='true'] {
+  background: var(--k5-sidebar-accent);
+  color: var(--k5-sidebar-accent-foreground);
+}
+.k5-nav-item__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-nav-item__badge {
+  flex-shrink: 0;
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--k5-sidebar-primary) 12%, transparent);
+  color: var(--k5-sidebar-accent-foreground);
+  font-size: var(--k5-text-badge);
+  font-weight: var(--k5-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.k5-nav-group__chevron {
+  transition: transform var(--k5-duration-base);
+}
+.k5-nav-item[aria-expanded='true'] .k5-nav-group__chevron {
+  transform: rotate(90deg);
+}
+.k5-nav-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-0-5);
+  margin: var(--k5-space-0-5) 0 0;
+  padding: 0 0 0 2.25rem;
+  list-style: none;
+}
+.k5-nav-group__items[hidden] {
+  display: none;
+}
+.k5-nav-group__items .k5-nav-item {
+  min-height: 2rem;
+  padding: var(--k5-space-1-5) var(--k5-space-3);
+  border-radius: calc(var(--k5-radius) - 2px);
+  color: color-mix(in srgb, var(--k5-sidebar-foreground) 75%, transparent);
+  font-size: var(--k5-text-nav);
+}
+.k5-nav-group__items .k5-nav-item[aria-current='page'] {
+  color: var(--k5-sidebar-accent-foreground);
+}
+
+/* Tema marca: barra berenjena, hover discreto, anillo menta en la sección activa
+   y contadores en fucsia. :not(…) deja fuera un bloque Consola metido en una página Marca. */
+:where([data-k5-theme='marca']) .k5-nav-item:hover:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  background: color-mix(in srgb, var(--k5-sidebar-accent) 70%, transparent);
+  color: var(--k5-sidebar-accent-foreground);
+}
+:where([data-k5-theme='marca'])
+  .k5-nav-item[aria-current='page']:not(.k5-nav-group__items .k5-nav-item):not(
+    :where([data-k5-theme='marca'] [data-k5-theme='consola'] *)
+  )::after {
+  content: '';
+  flex-shrink: 0;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border: 2.5px solid var(--k5-sidebar-primary);
+  border-radius: 50%;
+}
+:where([data-k5-theme='marca']) .k5-nav-item__badge:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  background: var(--k5-fuchsia);
+  color: var(--k5-graphite);
+}

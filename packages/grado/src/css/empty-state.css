@@ -1,0 +1,43 @@
+/* Estado vacío: icono atenuado, título, descripción y una acción opcional. */
+.k5-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k5-space-2);
+  padding: var(--k5-space-10) var(--k5-space-6);
+  color: var(--k5-muted-foreground);
+  text-align: center;
+}
+.k5-empty__icon {
+  display: inline-flex;
+  color: color-mix(in srgb, var(--k5-muted-foreground) 55%, transparent);
+}
+.k5-empty__icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+.k5-empty__title {
+  margin: 0;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-empty__description {
+  max-width: 28rem;
+  margin: 0;
+  font-size: var(--k5-text-body);
+}
+.k5-empty__action {
+  margin-top: var(--k5-space-2);
+}
+.k5-empty--compact {
+  gap: var(--k5-space-1-5);
+  padding: var(--k5-space-4);
+}
+.k5-empty--compact .k5-empty__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.k5-empty--compact .k5-empty__description {
+  font-size: var(--k5-text-label);
+}

@@ -1,0 +1,108 @@
+/* Botón. Equivale al Button de 1komma5es_help: compacto, rounded-md, texto de 12 px. */
+.k5-btn {
+  --_h: var(--k5-control-h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--k5-space-1-5);
+  height: var(--_h);
+  padding: 0 var(--k5-space-3);
+  border: 1px solid transparent;
+  border-radius: calc(var(--k5-radius) - 2px);
+  background: transparent;
+  color: var(--k5-foreground);
+  font-family: inherit;
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--k5-duration-base),
+    color var(--k5-duration-base),
+    border-color var(--k5-duration-base);
+}
+.k5-btn:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+.k5-btn:disabled,
+.k5-btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.k5-btn[aria-busy='true'] {
+  cursor: progress;
+}
+.k5-btn svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.k5-btn--sm {
+  --_h: var(--k5-control-h-sm);
+  padding: 0 var(--k5-space-2-5);
+}
+.k5-btn--lg {
+  --_h: var(--k5-control-h-lg);
+  padding: 0 var(--k5-space-4);
+  font-size: var(--k5-text-body);
+}
+.k5-btn--lg svg {
+  width: 1rem;
+  height: 1rem;
+}
+.k5-btn--icon {
+  width: var(--_h);
+  padding: 0;
+}
+.k5-btn--block {
+  width: 100%;
+}
+
+.k5-btn--primary {
+  background: var(--k5-primary);
+  color: var(--k5-primary-foreground);
+}
+.k5-btn--primary:hover {
+  background: color-mix(in srgb, var(--k5-primary) 90%, transparent);
+}
+
+.k5-btn--secondary {
+  border-color: var(--k5-border);
+  color: var(--k5-foreground);
+}
+.k5-btn--secondary:hover {
+  background: var(--k5-muted);
+}
+
+.k5-btn--ghost {
+  color: var(--k5-muted-foreground);
+}
+.k5-btn--ghost:hover {
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+}
+
+.k5-btn--danger {
+  border-color: color-mix(in srgb, var(--k5-destructive) 28%, transparent);
+  background: color-mix(in srgb, var(--k5-destructive) 10%, transparent);
+  color: var(--k5-destructive-text);
+}
+.k5-btn--danger:hover {
+  background: color-mix(in srgb, var(--k5-destructive) 16%, transparent);
+}
+
+.k5-btn--link {
+  height: auto;
+  padding: 0;
+  color: var(--k5-primary-text);
+  text-underline-offset: 4px;
+}
+.k5-btn--link:hover {
+  text-decoration: underline;
+}

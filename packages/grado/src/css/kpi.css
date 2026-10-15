@@ -1,0 +1,134 @@
+/* Indicadores: como KpiStrip de 1komma5es_help. En el tema marca, tarjetas separadas. */
+.k5-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius-panel);
+  background: var(--k5-card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+.k5-kpi {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+  margin: 0 -1px -1px 0;
+  padding: var(--k5-space-3-5) var(--k5-space-4);
+  border: 0;
+  border-right: 1px solid var(--k5-border);
+  border-bottom: 1px solid var(--k5-border);
+  background: transparent;
+  color: var(--k5-card-foreground);
+  font: inherit;
+  text-align: left;
+}
+button.k5-kpi {
+  cursor: pointer;
+  transition: background-color var(--k5-duration-base);
+}
+button.k5-kpi:hover {
+  background: color-mix(in srgb, var(--k5-muted) 60%, transparent);
+}
+button.k5-kpi:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: -2px;
+}
+.k5-kpi[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--k5-primary) 6%, transparent);
+}
+.k5-kpi[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--k5-primary);
+}
+.k5-kpi__label {
+  overflow: hidden;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+  font-weight: var(--k5-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-kpi__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--k5-space-2);
+}
+.k5-kpi__value {
+  overflow: hidden;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-title);
+  font-weight: var(--k5-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-kpi--danger .k5-kpi__value {
+  color: var(--k5-destructive-text);
+}
+.k5-kpi__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--k5-space-0-5) var(--k5-space-1-5);
+  min-height: 1.25rem;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-label);
+}
+.k5-kpi__change {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-0-5);
+  padding: 0.0625rem var(--k5-space-1-5);
+  border-radius: var(--k5-radius-badge);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-kpi__change svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.k5-kpi__change--good {
+  background: color-mix(in srgb, var(--k5-success) 10%, transparent);
+  color: var(--k5-success-text);
+}
+.k5-kpi__change--bad {
+  background: color-mix(in srgb, var(--k5-destructive) 10%, transparent);
+  color: var(--k5-destructive-text);
+}
+.k5-kpi__change--flat {
+  background: var(--k5-muted);
+  color: var(--k5-muted-foreground);
+}
+
+/* :not(…) deja fuera un bloque Consola metido en una página Marca: ahí manda Consola. */
+:where([data-k5-theme='marca']) .k5-kpis:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  gap: var(--k5-space-3);
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+:where([data-k5-theme='marca']) .k5-kpi:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  margin: 0;
+  padding: var(--k5-space-4) 1.125rem;
+  border: 0;
+  border-radius: var(--k5-radius-panel);
+  background: var(--k5-card);
+  box-shadow: var(--k5-shadow-popover);
+}
+:where([data-k5-theme='marca']) .k5-kpi[aria-pressed='true']:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  box-shadow:
+    var(--k5-shadow-popover),
+    inset 0 0 0 2px var(--k5-mint);
+}
+:where([data-k5-theme='marca']) .k5-kpi[aria-pressed='true']:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *))::after {
+  display: none;
+}

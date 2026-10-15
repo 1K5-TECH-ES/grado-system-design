@@ -1,0 +1,10 @@
+**/dist/
+catalog/
+node_modules/
+package-lock.json
+test-results/
+playwright-report/
+test/visual/__screenshots__/
+packages/grado/test/fixtures/
+packages/grado/assets/
+*.md

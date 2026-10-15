@@ -1,0 +1,11 @@
+{
+  "nota": "Qué versión de Grado usa cada app. Actualízalo al migrar o al subir de versión; la página Estado de la web lo muestra.",
+  "apps": [
+    { "app": "Sales Coach", "estado": "migrando", "version": "0.1.0", "detalle": "Rama feat/grado" },
+    { "app": "Memorias", "estado": "pendiente", "version": null, "detalle": "Siguiente en el orden de migración" },
+    { "app": "Kompilot", "estado": "pendiente", "version": null, "detalle": "" },
+    { "app": "Radar-Link", "estado": "pendiente", "version": null, "detalle": "" },
+    { "app": "OfferTool", "estado": "pendiente", "version": null, "detalle": "" }
+  ],
+  "figma": {}
+}
