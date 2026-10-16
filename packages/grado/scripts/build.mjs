@@ -32,7 +32,7 @@ function globalBlock() {
     const note = entry.kind === 'tint' ? ' /* calculado */' : ''
     lines.push(`  --k5-${name}: ${toHex(entry.color)};${note}`)
   }
-  lines.push('', '  /* Tipografía: Barlow (fonts.css) con la fuente del sistema de respaldo */')
+  lines.push('', '  /* Tipografía: Inter (fonts.css) con la fuente del sistema de respaldo */')
   // Los alias de 0.3 (text-badge…) se retiran en 1.0: el comentario dice cuál usar.
   const aliases = tokens.raw.typography.aliases ?? {}
   for (const [name, value] of Object.entries(tokens.typography))
@@ -476,7 +476,7 @@ for (const [name, content] of Object.entries(componentCss)) {
   write(`css/${name}.css`, banner(`css/${name}.css · ${needs}`) + '\n' + content + '\n')
 }
 
-// ---------- Fuente: Barlow alojada en el propio paquete ----------
+// ---------- Fuente: Inter alojada en el propio paquete ----------
 
 const FONT_RANGES = {
   latin:
@@ -488,16 +488,16 @@ const FONT_WEIGHTS = [400, 500, 600, 700]
 const faces = []
 for (const weight of FONT_WEIGHTS) {
   for (const [subset, range] of Object.entries(FONT_RANGES)) {
-    const file = `barlow-${subset}-${weight}-normal.woff2`
+    const file = `inter-${subset}-${weight}-normal.woff2`
     readFileSync(`${root}assets/fonts/${file}`) // falla aquí si falta el archivo
     faces.push(
-      `@font-face {\n  font-family: 'Barlow';\n  font-style: normal;\n  font-weight: ${weight};\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
+      `@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: ${weight};\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
     )
   }
 }
 write(
   'fonts.css',
-  `${banner('fonts.css · Barlow 400, 500, 600 y 700. Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
+  `${banner('fonts.css · Inter 400, 500, 600 y 700. Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
 )
 
 // ---------- Formato W3C (DTCG), para Tokens Studio y Figma ----------

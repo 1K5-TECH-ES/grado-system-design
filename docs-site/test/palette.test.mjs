@@ -156,7 +156,7 @@ test('el panel de contraste revisa el modo claro y, si el tema lo incluye, el os
 })
 
 test('el código de tema guarda y recupera la configuración', () => {
-  const config = { primary: '#1D4ED8', accent: '#F5B000', variant: 'S', radius: 'r12', font: 'barlow', base: 'marca', dark: true }
+  const config = { primary: '#1D4ED8', accent: '#F5B000', variant: 'S', radius: 'r12', font: 'inter', base: 'marca', dark: true }
   const code = encodeTheme(config)
   assert.equal(code, 'GRADO-1D4ED8-F5B000-S-R12-M-D')
   assert.deepEqual(decodeTheme(code), config)
@@ -165,7 +165,7 @@ test('el código de tema guarda y recupera la configuración', () => {
     accent: '#2ED8C3',
     variant: 'F',
     radius: 'r8',
-    font: 'barlow',
+    font: 'inter',
     base: 'consola',
     dark: false,
   })
@@ -182,18 +182,18 @@ test('el código de tema guarda y recupera la configuración', () => {
     assert.equal(decodeTheme(bad), null)
 })
 
-test('el código de tema guarda la fuente, salvo la de marca', () => {
+test('el código de tema guarda la fuente, salvo la de Grado', () => {
   for (const font of FONTS) {
     const config = { primary: '#1D4ED8', accent: '#F5B000', variant: 'C', radius: 'r4', font: font.id, base: 'consola', dark: false }
     const code = encodeTheme(config)
-    assert.equal(code.includes(font.id.toUpperCase()), font.id !== 'barlow', code)
+    assert.equal(code.includes(font.id.toUpperCase()), font.id !== 'inter', code)
     assert.deepEqual(decodeTheme(code), config)
   }
-  assert.equal(encodeTheme({ font: 'inter', base: 'marca', dark: true }), 'GRADO-5C068C-2ED8C3-F-R8-INTER-M-D')
+  assert.equal(encodeTheme({ font: 'barlow', base: 'marca', dark: true }), 'GRADO-5C068C-2ED8C3-F-R8-BARLOW-M-D')
   assert.equal(decodeTheme('grado-5c068c-2ed8c3-f-r8-m-plex').font, 'plex')
 })
 
-test('las fuentes tienen nombre, pila, paquete y hoja de Google Fonts; Barlow coincide con los tokens', () => {
+test('las fuentes tienen nombre, pila, paquete y hoja de Google Fonts; Inter coincide con los tokens', () => {
   assert.equal(new Set(FONTS.map((font) => font.id)).size, FONTS.length)
   for (const font of FONTS) {
     assert.match(font.stack, /(^|, )ui-sans-serif, system-ui, sans-serif, /, font.id)
@@ -202,12 +202,12 @@ test('las fuentes tienen nombre, pila, paquete y hoja de Google Fonts; Barlow co
       assert.equal(font.href, undefined)
       continue
     }
-    if (font.bundled) assert.equal(font.package, undefined, 'Barlow viene en @1k5-tech-es/grado/fonts.css')
+    if (font.bundled) assert.equal(font.package, undefined, 'Inter viene en @1k5-tech-es/grado/fonts.css')
     else assert.match(font.package, /^@fontsource\/[a-z0-9-]+$/, font.id)
     assert.match(font.href, /^https:\/\/fonts\.googleapis\.com\/css2\?family=[A-Za-z0-9+]+:wght@400;500;600;700&display=swap$/, font.id)
   }
   const tokensFont = tokensCss.match(/--k5-font-sans: ([^;]+);/)[1]
-  assert.equal(FONTS.find((font) => font.id === 'barlow').stack, tokensFont)
+  assert.equal(FONTS.find((font) => font.id === 'inter').stack, tokensFont)
   assert.equal(FONTS.find((font) => font.id === 'sourcesans').stack.split(',')[0], '"Source Sans 3"')
 })
 
@@ -224,9 +224,9 @@ test('el CSS del tema define cada token con y sin prefijo', () => {
 })
 
 test('el CSS del tema lleva la fuente y, con Tailwind 3, la aplica por encima del preset', () => {
-  const theme = resolveTheme({ font: 'inter' })
-  assert.match(themeCss(theme), /--k5-font-sans: Inter, ui-sans-serif,/)
-  assert.match(themeCss(theme), /Fuente Inter/)
+  const theme = resolveTheme({ font: 'barlow' })
+  assert.match(themeCss(theme), /--k5-font-sans: Barlow, ui-sans-serif,/)
+  assert.match(themeCss(theme), /Fuente Barlow/)
   assert.doesNotMatch(themeCss(theme), /font-family:/)
   assert.match(themeCss(theme, { styles: 'tailwind3' }), /:root \{\n {2}font-family: var\(--k5-font-sans\);\n\}/)
 })
@@ -249,26 +249,26 @@ test('los pasos de instalación usan los paquetes y los imports reales', () => {
 })
 
 test('los pasos de instalación cargan la fuente elegida', () => {
-  const inter = resolveTheme({ font: 'inter', dark: false })
-  const tailwind = installSteps(inter, { framework: 'vue', styles: 'tailwind4' })
-  assert.match(tailwind[0].code, /@1k5-tech-es\/grado-vue \\\n {2}@fontsource\/inter$/)
-  assert.equal(tailwind[3].label, 'Entrada de tu aplicación · main.ts · fuente Inter')
+  const barlow = resolveTheme({ font: 'barlow', dark: false })
+  const tailwind = installSteps(barlow, { framework: 'vue', styles: 'tailwind4' })
+  assert.match(tailwind[0].code, /@1k5-tech-es\/grado-vue \\\n {2}@fontsource\/barlow$/)
+  assert.equal(tailwind[3].label, 'Entrada de tu aplicación · main.ts · fuente Barlow')
   assert.equal(
     tailwind[3].code,
-    "import '@fontsource/inter/400.css';\nimport '@fontsource/inter/500.css';\nimport '@fontsource/inter/600.css';\nimport '@fontsource/inter/700.css';",
+    "import '@fontsource/barlow/400.css';\nimport '@fontsource/barlow/500.css';\nimport '@fontsource/barlow/600.css';\nimport '@fontsource/barlow/700.css';",
   )
-  const css = installSteps(inter, { framework: 'react', styles: 'css' })
+  const css = installSteps(barlow, { framework: 'react', styles: 'css' })
   assert.equal(css.length, 3)
-  assert.match(css[2].code, /^import '@fontsource\/inter\/400\.css';[\s\S]*import '\.\/grado-tema\.css';$/)
-  const html = installSteps(inter, { framework: 'html' })
+  assert.match(css[2].code, /^import '@fontsource\/barlow\/400\.css';[\s\S]*import '\.\/grado-tema\.css';$/)
+  const html = installSteps(barlow, { framework: 'html' })
   assert.equal(html[0].code, 'npm install @1k5-tech-es/grado')
   assert.match(
     html[2].code,
-    /<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Inter:wght@400;500;600;700&display=swap">\n {2}<link rel="stylesheet" href="\/grado\/tokens\.css">/,
+    /<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Barlow:wght@400;500;600;700&display=swap">\n {2}<link rel="stylesheet" href="\/grado\/tokens\.css">/,
   )
-  const barlow = installSteps(resolveTheme({ font: 'barlow', dark: false }), { framework: 'react', styles: 'tailwind4' })
-  assert.doesNotMatch(barlow[0].code, /fontsource/)
-  assert.equal(barlow.at(-1).code, "import '@1k5-tech-es/grado/fonts.css';")
+  const inter = installSteps(resolveTheme({ font: 'inter', dark: false }), { framework: 'react', styles: 'tailwind4' })
+  assert.doesNotMatch(inter[0].code, /fontsource/)
+  assert.equal(inter.at(-1).code, "import '@1k5-tech-es/grado/fonts.css';")
   const system = resolveTheme({ font: 'sistema' })
   for (const framework of ['react', 'html'])
     for (const step of installSteps(system, { framework })) assert.doesNotMatch(step.code ?? '', /fontsource|fonts\.googleapis/)

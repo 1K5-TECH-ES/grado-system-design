@@ -159,7 +159,7 @@ export default function Home() {
         ),
         card(
           'Tipografía',
-          'Barlow, incluida en el paquete.',
+          'Inter, incluida en el paquete.',
           h(
             'ul',
             { className: 'docs-scale-list' },

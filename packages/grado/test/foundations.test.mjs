@@ -120,10 +120,10 @@ test('tokens-studio.json trae un tema de Figma por tema y modo, sobre el conjunt
 test('fonts.css apunta a archivos que existen en el paquete', () => {
   const fonts = read('fonts.css')
   const urls = [...fonts.matchAll(/url\('([^']+)'\)/g)].map((m) => m[1])
-  assert.equal(urls.length, 8, 'Barlow 400–700 en latin y latin-ext')
+  assert.equal(urls.length, 8, 'Inter 400–700 en latin y latin-ext')
   for (const url of urls) assert.ok(existsSync(new URL(url, dist)), url)
   assert.ok(existsSync(new URL('../assets/fonts/OFL.txt', dist)), 'la licencia OFL viaja con las fuentes')
-  assert.match(tokens.typography['font-sans'], /^Barlow, /)
+  assert.match(tokens.typography['font-sans'], /^Inter, /)
 })
 
 test('tokens.dtcg.json sigue el formato W3C: cada token tiene $type y $value', () => {

@@ -21,7 +21,7 @@ rmSync(new URL('downloads/', out), { recursive: true, force: true })
 mkdirSync(new URL('downloads/', out), { recursive: true })
 for (const file of ['tokens.css', 'grado.css', 'labs.css'])
   copyFileSync(new URL(`packages/grado/dist/${file}`, root), new URL(`assets/${file}`, out))
-// Barlow desde el propio paquete: la web no depende de Google Fonts para su fuente.
+// Inter desde el propio paquete: la web no depende de Google Fonts para su fuente.
 writeFileSync(new URL('assets/fonts.css', out), read('packages/grado/dist/fonts.css').replaceAll('../assets/fonts/', 'fonts/'))
 cpSync(new URL('packages/grado/assets/fonts/', root), new URL('assets/fonts/', out), { recursive: true })
 writeFileSync(new URL('assets/grado-mark.svg', out), renderToStaticMarkup(h(GradoMark, { xmlns: 'http://www.w3.org/2000/svg' })))

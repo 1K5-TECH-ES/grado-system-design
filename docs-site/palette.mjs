@@ -54,14 +54,14 @@ export const RADII = { r4: '0.25rem', r8: '0.5rem', r12: '0.75rem' }
 
 /**
  * Fuentes del configurador, todas en Google Fonts y en Fontsource con los pesos 400 a 700.
- * Barlow es la de marca y la de tokens.json, y viene en el propio paquete (@1k5-tech-es/grado/fonts.css).
+ * Inter es la de tokens.json y viene en el propio paquete (@1k5-tech-es/grado/fonts.css).
  * «Sistema» no descarga nada.
  */
 const FALLBACK = 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
 export const FONT_WEIGHTS = [400, 500, 600, 700]
 export const FONTS = [
-  { id: 'barlow', name: 'Barlow', note: 'La de marca. Algo estrecha, de aire técnico.' },
-  { id: 'inter', name: 'Inter', note: 'Neutra y muy legible en pantalla.' },
+  { id: 'inter', name: 'Inter', note: 'La de Grado. Neutra y muy legible en pantalla.' },
+  { id: 'barlow', name: 'Barlow', note: 'La de la guía de marca. Algo estrecha, de aire técnico.' },
   { id: 'roboto', name: 'Roboto', note: 'La de Android. Familiar para casi todos.' },
   { id: 'opensans', name: 'Open Sans', note: 'Abierta y amable. Lee bien en textos largos.' },
   { id: 'sourcesans', name: 'Source Sans 3', note: 'Clara y compacta, pensada para interfaces.' },
@@ -75,11 +75,11 @@ export const FONTS = [
 ].map((font) => {
   if (font.system) return { ...font, stack: FALLBACK }
   const family = /^[a-z-]+$/i.test(font.name) ? font.name : `"${font.name}"`
-  const bundled = font.id === 'barlow'
+  const bundled = font.id === 'inter'
   return {
     ...font,
     stack: `${family}, ${FALLBACK}`,
-    // Barlow no necesita paquete aparte: la trae @1k5-tech-es/grado.
+    // Inter no necesita paquete aparte: la trae @1k5-tech-es/grado.
     ...(bundled ? { bundled: true } : { package: `@fontsource/${font.name.toLowerCase().replaceAll(' ', '-')}` }),
     // Hoja de estilos de Google Fonts: la web la usa para las muestras y las páginas HTML sin bundler.
     href: `https://fonts.googleapis.com/css2?family=${font.name.replaceAll(' ', '+')}:wght@${FONT_WEIGHTS.join(';')}&display=swap`,
@@ -93,7 +93,7 @@ export const DEFAULTS = {
   variant: 'F',
   base: 'consola',
   radius: 'r8',
-  font: 'barlow',
+  font: 'inter',
   dark: true,
 }
 
@@ -276,7 +276,7 @@ export function buildPalettes(primary, accent, variant = 'F') {
  * Tokens de Grado para una paleta. Siguen las mismas fórmulas que el tema Consola
  * (grises con el tono del principal) y, con base «marca», la barra lateral de color.
  */
-export function themeTokens(palette, { base = 'consola', radius = 'r8', font = 'barlow' } = {}) {
+export function themeTokens(palette, { base = 'consola', radius = 'r8', font = 'inter' } = {}) {
   const { primary, accent, highlight } = palette.colors
   const h = Math.round(hsl(primary).h),
     ps = hsl(primary).s,
@@ -392,8 +392,8 @@ export function cssVariables(tokens, mode = 'light') {
 
 /**
  * Código corto que guarda la configuración: GRADO-5C068C-2ED8C3-F-R8[-INTER][-M][-D], con el
- * principal, el acento y la variante. Con Barlow, la fuente por defecto, no se escribe: los
- * códigos anteriores siguen valiendo.
+ * principal, el acento y la variante. Con la fuente por defecto (Inter desde 0.6;
+ * antes, Barlow) no se escribe.
  */
 export function encodeTheme(config) {
   const c = { ...DEFAULTS, ...config }
@@ -516,7 +516,7 @@ export function themeCss({ config, palette, variant, font, tokens, code }, { sty
 }
 
 /**
- * Pasos de instalación con el tema, según framework y estilos. Con bundler, Barlow sale de
+ * Pasos de instalación con el tema, según framework y estilos. Con bundler, Inter sale de
  * @1k5-tech-es/grado/fonts.css y las demás fuentes de Fontsource; en HTML, se enlazan a Google Fonts.
  */
 export function installSteps({ config, font }, { framework = 'react', styles = 'tailwind4' } = {}) {

@@ -21,7 +21,7 @@ El resultado completo queda en `docs-site/dist/`:
 - `/componentes`: ejemplos, propiedades y guía de uso (cuándo usarlo, qué evitar y accesibilidad); `?vista=mi-tema` aplica el tema guardado.
 - `/estado`: cobertura de cada componente (React, Vue, mismo HTML, navegador, captura, guía, Figma), calculada a partir de los tests al generar la web, y adopción por aplicación.
 - `/cambios`: el `CHANGELOG.md` del repositorio.
-- `assets/`: CSS, JavaScript (`app.js` y un fragmento por página en `chunks/`), logos y la fuente Barlow (copiada del paquete), sin servicios externos. Solo las muestras de otras fuentes del configurador se cargan desde Google Fonts.
+- `assets/`: CSS, JavaScript (`app.js` y un fragmento por página en `chunks/`), logos y la fuente Inter (copiada del paquete), sin servicios externos. Solo las muestras de otras fuentes del configurador se cargan desde Google Fonts.
 - `downloads/`: paquetes npm `.tgz` de la versión compilada.
 
 ## Publicar en vuestro hosting

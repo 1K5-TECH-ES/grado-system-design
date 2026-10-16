@@ -27,7 +27,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 - **Colores:** los de la guía de marca (Aubergine `#5C068C`, Mint `#2ED8C3`, Fuchsia `#FA65EC`, Graphite `#222222`). Para Graphite 75 y 25 se usa el HEX del PDF, que es el que cuadra con su CMYK; el RGB que aparece en la guía no coincide.
 - **Grises de interfaz:** con un ligero tinte berenjena, como 1komma5es_help.
 - **Tonos al 10, 25, 50 y 75 %:** calculados como mezcla con blanco. Se sustituyen si marca facilita los valores oficiales.
-- **Tipografía:** Barlow, la de marca, incluida en el paquete (`@1k5-tech-es/grado/fonts.css`, licencia OFL). La fuente del sistema queda de respaldo.
+- **Tipografía:** Inter, incluida en el paquete (`@1k5-tech-es/grado/fonts.css`, licencia OFL), desde 0.6. Hasta 0.5 era Barlow, la de la guía de marca; se cambió por decisión de producto. La fuente del sistema queda de respaldo.
 - **Contraste:** todas las combinaciones de color llegan a 4,5 : 1 en los dos temas y los dos modos (desde 0.2.0).
 - **Minimalismo (desde 0.3.0):** un solo acento por vista; borde o fondo, nunca los dos; jerarquía por tamaño y peso; estado con punto y texto. Consola se separa así del aspecto de 1komma5es_help en badges, tablas, tarjetas y KPI; los colores siguen siendo los mismos.
 
@@ -174,7 +174,7 @@ packages/grado/
   scripts/build.mjs      genera dist/ (sin dependencias)
   scripts/contrast.mjs   informe de contraste
   scripts/lib/           color, carga de tokens, vista previa
-  assets/                logos en SVG y Barlow (fonts/, licencia OFL)
+  assets/                logos en SVG e Inter (fonts/, licencia OFL)
   test/                  tests con node:test
   dist/                  generado: tokens.css, tokens-hsl.css, tailwind.css, tailwind-preset, tokens.js,
                          tokens.dtcg.json, tokens-studio.json, grado.css, grado.min.css, grado.layer.css, css/, fonts.css, preview.html

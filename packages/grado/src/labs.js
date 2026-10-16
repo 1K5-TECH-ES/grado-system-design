@@ -341,9 +341,9 @@ const escapeXml = (text) =>
 
 /**
  * La firma como SVG independiente, para guardarla con la oferta o meterla en un PDF. La escrita
- * va en cursiva con la fuente que digas (por defecto, Barlow con la del sistema de respaldo).
+ * va en cursiva con la fuente que digas (por defecto, Inter con la del sistema de respaldo).
  */
-export function signatureSvg(value, { size = SIGNATURE_SIZE, color = '#222222', font = 'Barlow, system-ui, sans-serif' } = {}) {
+export function signatureSvg(value, { size = SIGNATURE_SIZE, color = '#222222', font = 'Inter, system-ui, sans-serif' } = {}) {
   const { width, height } = size
   const body =
     typeof value?.typed === 'string'

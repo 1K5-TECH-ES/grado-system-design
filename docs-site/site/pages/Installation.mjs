@@ -416,7 +416,7 @@ export default function Installation() {
                   {
                     term: 'fonts.css',
                     mono: true,
-                    description: 'Barlow en 400, 500, 600 y 700. Si tu app ya carga Barlow, no lo importes.',
+                    description: 'Inter en 400, 500, 600 y 700. Si tu app ya carga Inter, no lo importes.',
                   },
                 ],
               }),

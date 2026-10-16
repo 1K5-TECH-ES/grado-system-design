@@ -6,6 +6,11 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`.
 
+### Fuente
+
+- Inter sustituye a Barlow como fuente de todo Grado: `--k5-font-sans`, el preset de Tailwind y `@1k5-tech-es/grado/fonts.css`, que trae Inter 400, 500, 600 y 700 (latín y latín extendido, licencia SIL OFL 1.1). Barlow sale del paquete. En el configurador de temas de la web, Inter es la fuente por defecto y Barlow una opción más.
+- Los códigos de tema sin fuente (`GRADO-5C068C-2ED8C3-F-R8`) abren ahora con Inter; para Barlow, `-BARLOW`.
+
 ### Labs
 
 - Entradas nuevas `@1k5-tech-es/grado/labs`, `@1k5-tech-es/grado-react/labs` y `@1k5-tech-es/grado-vue/labs`, y su CSS en `@1k5-tech-es/grado/labs.css` (aparte de `grado.css`). Lo de labs queda fuera de la promesa de la 1.0: puede cambiar en una versión menor hasta que pase al paquete principal. En la web, una familia nueva, «Labs».
@@ -24,6 +29,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 - Informe de la API de labs (`api/grado-react-labs.api.md` y `api/grado-vue-labs.api.md`) y presupuesto de tamaño para labs.
 - Las capturas por componente pintan el fondo alrededor de la vista previa aislada: lo que sobresale (una lista abierta) o las esquinas redondeadas ya no dejan ver la página de debajo.
+
+### Al actualizar desde 0.5.0
+
+- Cambia la fuente: con `@1k5-tech-es/grado/fonts.css`, las apps pasan a Inter sin tocar nada. Inter es algo más ancha que Barlow: revisa los textos que iban justos (botones, columnas estrechas, menús). Para seguir con Barlow, cárgala tú (por ejemplo, `@fontsource/barlow`) y pon `--k5-font-sans: Barlow, ui-sans-serif, system-ui, sans-serif`.
 
 ## 0.5.0 · 16 de octubre de 2026
 

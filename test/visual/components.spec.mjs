@@ -22,7 +22,7 @@ async function openComponents(page, theme, mode) {
   await page.goto('/componentes')
   await expect(page.locator('.docs-component').first()).toBeVisible()
   await page.evaluate(() => document.fonts.ready)
-  expect(await page.evaluate(() => document.fonts.check('600 14px Barlow'))).toBe(true)
+  expect(await page.evaluate(() => document.fonts.check('600 14px Inter'))).toBe(true)
   expect(await page.evaluate(() => document.documentElement.dataset.k5Theme)).toBe(theme)
   // La vista previa que se captura sale de su sitio y va arriba a la izquierda, con un ancho
   // fijo: así la captura no depende de lo que haya encima en la página (una línea más en una

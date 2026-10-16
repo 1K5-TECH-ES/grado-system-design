@@ -16,7 +16,7 @@ const pkg = (p) => new URL(`../packages/grado/${p}`, import.meta.url)
 const tokens = readFileSync(pkg('dist/tokens.css'), 'utf8')
 const grado = readFileSync(pkg('dist/grado.css'), 'utf8')
 const logo = readFileSync(pkg('assets/logo-1k5-white.svg'), 'utf8')
-// Barlow del propio paquete: sin Google Fonts, las capturas de regresión visual son estables.
+// Inter del propio paquete: sin Google Fonts, las capturas de regresión visual son estables.
 const fonts = readFileSync(pkg('dist/fonts.css'), 'utf8').replaceAll('../assets/fonts/', '../packages/grado/assets/fonts/')
 
 const icon = (...paths) =>

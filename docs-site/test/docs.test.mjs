@@ -122,7 +122,7 @@ test('Estado lista todos los componentes y Cambios empieza por la versión actua
   assert.match(changelog, new RegExp(`<h2[^>]* id="v-${version.replaceAll('.', '-')}"[^>]*>${version.replaceAll('.', '\\.')}<`))
 })
 
-test('la web carga Barlow del paquete, sin Google Fonts', () => {
+test('la web carga Inter del paquete, sin Google Fonts', () => {
   const index = read('index.html')
   assert.doesNotMatch(index, /fonts\.googleapis/)
   assert.match(index, /href="assets\/fonts\.css"/)
