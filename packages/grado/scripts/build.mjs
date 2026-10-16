@@ -32,7 +32,7 @@ function globalBlock() {
     const note = entry.kind === 'tint' ? ' /* calculado */' : ''
     lines.push(`  --k5-${name}: ${toHex(entry.color)};${note}`)
   }
-  lines.push('', '  /* Tipografía: Barlow (fonts.css) con la fuente del sistema de respaldo */')
+  lines.push('', '  /* Tipografía: Inter (fonts.css) con la fuente del sistema de respaldo */')
   // Los alias de 0.3 (text-badge…) se retiran en 1.0: el comentario dice cuál usar.
   const aliases = tokens.raw.typography.aliases ?? {}
   for (const [name, value] of Object.entries(tokens.typography))
@@ -109,7 +109,8 @@ function themeBlock(theme, mode, format) {
 
 function tokensCss(format) {
   const parts = [globalBlock()]
-  const order = [BASE_THEME, ...Object.keys(tokens.themes).filter((t) => t !== BASE_THEME)]
+  // Los temas con file (campo) van en dist/themes/: así tokens.css no crece para todos.
+  const order = [BASE_THEME, ...Object.keys(tokens.themes).filter((t) => t !== BASE_THEME && !tokens.themes[t].file)]
   for (const theme of order) for (const mode of MODES) parts.push(themeBlock(theme, mode, format))
   parts.push(densityBlock())
   parts.push(reducedMotionBlock())
@@ -362,6 +363,23 @@ const write = (file, content) => writeFileSync(dist + file, content)
 const css = banner('tokens.css · para Tailwind 4, shadcn v4 y CSS normal') + '\n' + tokensCss('hex')
 write('tokens.css', css)
 write('tokens-hsl.css', banner('tokens-hsl.css · para Tailwind 3 y shadcn-vue: hsl(var(--primary))') + '\n' + tokensCss('hsl'))
+
+// Temas en su propio archivo: se cargan después de tokens.css (o tokens-hsl.css) y se activan
+// con data-k5-theme en <html> o en un contenedor.
+rmSync(`${dist}themes`, { recursive: true, force: true })
+for (const [name, theme] of Object.entries(tokens.themes)) {
+  if (!theme.file) continue
+  mkdirSync(`${dist}themes`, { recursive: true })
+  for (const [suffix, format, after] of [
+    ['', 'hex', 'tokens.css'],
+    ['-hsl', 'hsl', 'tokens-hsl.css'],
+  ])
+    write(
+      `themes/${name}${suffix}.css`,
+      // La densidad se repite al final: un data-k5-density puesto a mano sigue mandando sobre el tema.
+      `${banner(`themes/${name}${suffix}.css · tema «${name}». Cárgalo después de ${after} y pon data-k5-theme="${name}"`)}\n${MODES.map((mode) => themeBlock(name, mode, format)).join('\n')}\n${densityBlock()}`,
+    )
+}
 write('tailwind.css', tailwind4Css())
 
 const preset = JSON.stringify(tailwind3Preset(), null, 2)
@@ -457,6 +475,17 @@ const { transform } = await import('esbuild')
 const minified = await transform(gradoCss, { loader: 'css', minify: true, target: ['chrome111', 'safari16.2', 'firefox113'] })
 write('grado.min.css', `/* ${pkg.name} ${pkg.version} · grado.min.css */\n${minified.code}`)
 
+// Labs (0.6): aparte de grado.css, para que solo lo descarguen las apps que usan labs.
+const labsCss = readdirSync(`${root}src/css/labs`)
+  .filter((f) => f.endsWith('.css'))
+  .sort()
+  .map((f) => readFileSync(`${root}src/css/labs/${f}`, 'utf8').trim())
+  .join('\n\n')
+write(
+  'labs.css',
+  banner('labs.css · componentes de labs, fuera de la promesa de la 1.0. Necesita tokens.css y grado.css') + '\n' + labsCss + '\n',
+)
+
 // Un archivo por componente. Todos necesitan tokens.css y css/base.css.
 rmSync(`${dist}css`, { recursive: true, force: true })
 mkdirSync(`${dist}css`, { recursive: true })
@@ -465,7 +494,7 @@ for (const [name, content] of Object.entries(componentCss)) {
   write(`css/${name}.css`, banner(`css/${name}.css · ${needs}`) + '\n' + content + '\n')
 }
 
-// ---------- Fuente: Barlow alojada en el propio paquete ----------
+// ---------- Fuente: Inter alojada en el propio paquete ----------
 
 const FONT_RANGES = {
   latin:
@@ -477,16 +506,16 @@ const FONT_WEIGHTS = [400, 500, 600, 700]
 const faces = []
 for (const weight of FONT_WEIGHTS) {
   for (const [subset, range] of Object.entries(FONT_RANGES)) {
-    const file = `barlow-${subset}-${weight}-normal.woff2`
+    const file = `inter-${subset}-${weight}-normal.woff2`
     readFileSync(`${root}assets/fonts/${file}`) // falla aquí si falta el archivo
     faces.push(
-      `@font-face {\n  font-family: 'Barlow';\n  font-style: normal;\n  font-weight: ${weight};\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
+      `@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: ${weight};\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
     )
   }
 }
 write(
   'fonts.css',
-  `${banner('fonts.css · Barlow 400, 500, 600 y 700. Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
+  `${banner('fonts.css · Inter 400, 500, 600 y 700. Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
 )
 
 // ---------- Formato W3C (DTCG), para Tokens Studio y Figma ----------

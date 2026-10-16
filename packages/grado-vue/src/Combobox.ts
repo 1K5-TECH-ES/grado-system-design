@@ -1,6 +1,7 @@
 import { computed, defineComponent, h, ref, watch, type PropType } from 'vue'
 import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
+import { comboboxReduce, comboboxState, comboboxView, type ComboboxEvent, type ComboboxState } from '@1k5-tech-es/grado/core'
 import { Input, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -28,77 +29,48 @@ export const Combobox = defineComponent({
       props.defaultValue,
       (value) => emit('update:modelValue', value),
     )
-    const open = ref(false),
-      query = ref(''),
-      active = ref(-1),
+    const state = ref<ComboboxState>(comboboxState()),
       root = ref<HTMLElement>(),
       field = useField(),
       auto = autoId('k5-combobox'),
       t = useGrado()
     const placeholder = computed(() => props.placeholder ?? t.value.messages.searchPlaceholder)
     const id = computed(() => props.id ?? field?.value.id ?? auto),
-      filtered = computed(() => filterOptions(props.options, query.value))
-    const pick = (option: ChoiceOption) => {
-      if (option.disabled) return
-      select(option.value)
-      query.value = ''
-      open.value = false
-      ;(root.value?.querySelector('input[role="combobox"]') as HTMLInputElement)?.focus()
-    }
+      filtered = computed(() => filterOptions(props.options, state.value.query))
     watch(
-      [active, open],
+      () => [state.value.active, state.value.open],
       () => {
-        if (open.value && active.value >= 0)
-          document.getElementById(`${id.value}-option-${active.value}`)?.scrollIntoView({ block: 'nearest' })
+        const { open, active } = state.value
+        if (open && active >= 0) document.getElementById(`${id.value}-option-${active}`)?.scrollIntoView({ block: 'nearest' })
       },
       { flush: 'post' },
     )
-    const keydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        event.stopPropagation()
-        open.value = false
-        query.value = ''
-        return
-      }
-      if (event.key === 'Enter' && open.value) {
-        event.preventDefault()
-        const option = filtered.value[active.value]
-        if (!props.loading && option) pick(option)
-        return
-      }
-      if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
-        if (!open.value && ['Home', 'End'].includes(event.key)) return
-        event.preventDefault()
-        open.value = true
-        const enabled = filtered.value.map((option, i) => (option.disabled ? -1 : i)).filter((i) => i >= 0),
-          position = enabled.indexOf(active.value)
-        active.value =
-          event.key === 'Home'
-            ? (enabled[0] ?? -1)
-            : event.key === 'End'
-              ? (enabled[enabled.length - 1] ?? -1)
-              : (enabled[
-                  position < 0
-                    ? event.key === 'ArrowDown'
-                      ? 0
-                      : enabled.length - 1
-                    : (position + (event.key === 'ArrowDown' ? 1 : -1) + enabled.length) % enabled.length
-                ] ?? -1)
-      }
+    // Cada evento pasa por el núcleo común (@1k5-tech-es/grado/core), igual que en React y en grado-elements.
+    const send = (event: ComboboxEvent, dom?: Event) => {
+      const result = comboboxReduce(state.value, event, { filtered: filtered.value, loading: props.loading })
+      if (result.preventDefault) dom?.preventDefault()
+      if (result.stopPropagation) dom?.stopPropagation()
+      state.value = result.state
+      if (result.query !== undefined) emit('queryChange', result.query)
+      if (result.select !== undefined) select(result.select)
+      if (result.focusInput) (root.value?.querySelector('input[role="combobox"]') as HTMLInputElement)?.focus()
     }
-    return () =>
-      h(
+    return () => {
+      const view = comboboxView(state.value, {
+        options: props.options,
+        filtered: filtered.value,
+        selected: selected.value,
+        id: id.value,
+        placeholder: placeholder.value,
+      })
+      const open = state.value.open
+      return h(
         'div',
         {
           ref: root,
           class: 'k5-combobox',
           onFocusout: (event: FocusEvent) => {
-            if (!root.value?.contains(event.relatedTarget as Node)) {
-              open.value = false
-              query.value = ''
-              active.value = -1
-            }
+            if (!root.value?.contains(event.relatedTarget as Node)) send({ type: 'leave' })
           },
         },
         [
@@ -108,40 +80,26 @@ export const Combobox = defineComponent({
             role: 'combobox',
             'aria-label': props.label,
             'aria-autocomplete': 'list',
-            'aria-expanded': open.value,
-            'aria-controls': open.value ? `${id.value}-list` : undefined,
-            'aria-activedescendant':
-              open.value && filtered.value[active.value] && !filtered.value[active.value].disabled
-                ? `${id.value}-option-${active.value}`
-                : undefined,
+            'aria-expanded': open,
+            'aria-controls': open ? view.listId : undefined,
+            'aria-activedescendant': view.activeDescendant,
             'aria-busy': props.loading || undefined,
             autocomplete: 'off',
-            placeholder: open.value
-              ? (props.options.find((option) => option.value === selected.value)?.label ?? placeholder.value)
-              : placeholder.value,
+            placeholder: view.inputPlaceholder,
             disabled: props.disabled,
             required: props.required,
-            modelValue: open.value ? query.value : (props.options.find((option) => option.value === selected.value)?.label ?? ''),
-            onFocus: () => {
-              open.value = true
-              active.value = -1
-            },
-            onClick: () => (open.value = true),
-            'onUpdate:modelValue': (value: string) => {
-              query.value = value
-              emit('queryChange', value)
-              active.value = -1
-              open.value = true
-              if (!value) select('')
-            },
-            onKeydown: keydown,
+            modelValue: view.inputValue,
+            onFocus: () => send({ type: 'focus' }),
+            onClick: () => send({ type: 'click' }),
+            'onUpdate:modelValue': (value: string) => send({ type: 'input', value }),
+            onKeydown: (event: KeyboardEvent) => send({ type: 'key', key: event.key }, event),
           }),
-          open.value
+          open
             ? h(
                 'ul',
                 {
                   class: 'k5-combobox__list',
-                  id: `${id.value}-list`,
+                  id: view.listId,
                   role: 'listbox',
                   'aria-label': props.label ?? t.value.messages.options,
                 },
@@ -158,17 +116,15 @@ export const Combobox = defineComponent({
                         'li',
                         {
                           role: 'option',
-                          id: `${id.value}-option-${index}`,
+                          id: view.optionId(index),
                           key: option.value,
                           'aria-selected': option.value === selected.value,
                           'aria-disabled': option.disabled || undefined,
-                          'data-active': index === active.value,
+                          'data-active': index === state.value.active,
                           class: 'k5-combobox__option',
                           onMousedown: (event: MouseEvent) => event.preventDefault(),
-                          onMousemove: () => {
-                            if (!option.disabled) active.value = index
-                          },
-                          onClick: () => pick(option),
+                          onMousemove: () => send({ type: 'hover', index }),
+                          onClick: () => send({ type: 'pick', option }),
                         },
                         [h('span', null, option.label), pathIcon(ICON_PATHS.check, 'k5-combobox__check')],
                       ),
@@ -177,5 +133,6 @@ export const Combobox = defineComponent({
             : null,
         ],
       )
+    }
   },
 })

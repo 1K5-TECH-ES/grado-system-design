@@ -26,6 +26,10 @@
     "src/classes.d.ts",
     "src/patterns.js",
     "src/patterns.d.ts",
+    "src/core.js",
+    "src/core.d.ts",
+    "src/labs.js",
+    "src/labs.d.ts",
     "src/messages.js",
     "src/messages.d.ts",
     "src/messages",
@@ -39,6 +43,14 @@
     "./patterns": {
       "types": "./src/patterns.d.ts",
       "default": "./src/patterns.js"
+    },
+    "./core": {
+      "types": "./src/core.d.ts",
+      "default": "./src/core.js"
+    },
+    "./labs": {
+      "types": "./src/labs.d.ts",
+      "default": "./src/labs.js"
     },
     "./messages": {
       "types": "./src/messages.d.ts",
@@ -54,10 +66,12 @@
     },
     "./tokens.css": "./dist/tokens.css",
     "./tokens-hsl.css": "./dist/tokens-hsl.css",
+    "./themes/*": "./dist/themes/*",
     "./tailwind.css": "./dist/tailwind.css",
     "./grado.css": "./dist/grado.css",
     "./grado.min.css": "./dist/grado.min.css",
     "./grado.layer.css": "./dist/grado.layer.css",
+    "./labs.css": "./dist/labs.css",
     "./css/*": "./dist/css/*",
     "./fonts.css": "./dist/fonts.css",
     "./tailwind-preset": {

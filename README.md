@@ -19,15 +19,15 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 | 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt. Fase 3: textos en alemán e inglés aparte, alias de tamaño obsoletos, política de versiones y filas virtuales en `DataTable` | Hecha |
-| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Siguiente |
+| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha: utilidades y componentes de energía en `labs`, tema «campo», Inter, núcleo común y Web Components |
 
 ## Decisiones tomadas
 
-- **Dirección visual:** la propuesta A («Consola») es el tema por defecto. La B («Marca») es un segundo tema para lo que ve el cliente. Los dos comparten tokens y componentes.
+- **Dirección visual:** la propuesta A («Consola») es el tema por defecto. La B («Marca») es un segundo tema para lo que ve el cliente. Desde 0.6, «Campo» (alto contraste, 7 : 1 y controles de 44 px) es el tercero, para técnicos al sol, en su propio archivo (`themes/campo.css`). Los tres comparten tokens y componentes.
 - **Colores:** los de la guía de marca (Aubergine `#5C068C`, Mint `#2ED8C3`, Fuchsia `#FA65EC`, Graphite `#222222`). Para Graphite 75 y 25 se usa el HEX del PDF, que es el que cuadra con su CMYK; el RGB que aparece en la guía no coincide.
 - **Grises de interfaz:** con un ligero tinte berenjena, como 1komma5es_help.
 - **Tonos al 10, 25, 50 y 75 %:** calculados como mezcla con blanco. Se sustituyen si marca facilita los valores oficiales.
-- **Tipografía:** Barlow, la de marca, incluida en el paquete (`@1k5-tech-es/grado/fonts.css`, licencia OFL). La fuente del sistema queda de respaldo.
+- **Tipografía:** Inter, incluida en el paquete (`@1k5-tech-es/grado/fonts.css`, licencia OFL), desde 0.6. Hasta 0.5 era Barlow, la de la guía de marca; se cambió por decisión de producto. La fuente del sistema queda de respaldo.
 - **Contraste:** todas las combinaciones de color llegan a 4,5 : 1 en los dos temas y los dos modos (desde 0.2.0).
 - **Minimalismo (desde 0.3.0):** un solo acento por vista; borde o fondo, nunca los dos; jerarquía por tamaño y peso; estado con punto y texto. Consola se separa así del aspecto de 1komma5es_help en badges, tablas, tarjetas y KPI; los colores siguen siendo los mismos.
 
@@ -145,6 +145,7 @@ eslint.config.mjs        ESLint; .stylelintrc.json y .prettierrc.json para CSS y
 playwright.config.mjs    regresión visual (test/visual/)
 packages/grado-react/    componentes React (tsc)
 packages/grado-vue/      componentes Vue (tsc, sin .vue); en los dos, un archivo por componente
+packages/grado-elements/ Web Components para HTML sin framework (k5-combobox, k5-dialog, k5-tabs, k5-menu, k5-toaster)
                          y group-*.ts reúne los de 0.3 por grupo
 test/parity.test.mjs     React y Vue generan el mismo HTML (y parity-<grupo>.test.mjs para los de 0.3)
 test/patterns-*.test.mjs lógica compartida: validación de NIF, IBAN y teléfono, gráficos, horas…
@@ -168,13 +169,14 @@ packages/grado/
   src/css/               un archivo CSS por componente; el build los une en dist/grado.css
   src/classes.js         props → clases k5-*, compartido por React y Vue
   src/patterns.js        comportamiento compartido: búsqueda, números, fechas, escalas, cola de avisos
+  src/core.js            núcleo común: estado y teclado de Combobox, Calendar y DataTable para React, Vue y grado-elements
   src/messages.js        textos en es-ES, de-DE y en-GB
   src/migrate.js         reglas del codemod; bin/grado.mjs tiene las órdenes «migrate» y «usage»
   src/usage.js           inventario de uso de una app
   scripts/build.mjs      genera dist/ (sin dependencias)
   scripts/contrast.mjs   informe de contraste
   scripts/lib/           color, carga de tokens, vista previa
-  assets/                logos en SVG y Barlow (fonts/, licencia OFL)
+  assets/                logos en SVG e Inter (fonts/, licencia OFL)
   test/                  tests con node:test
   dist/                  generado: tokens.css, tokens-hsl.css, tailwind.css, tailwind-preset, tokens.js,
                          tokens.dtcg.json, tokens-studio.json, grado.css, grado.min.css, grado.layer.css, css/, fonts.css, preview.html

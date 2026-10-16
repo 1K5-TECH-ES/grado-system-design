@@ -13,7 +13,7 @@ export default preset;
 ## dist/tokens.d.ts
 
 ```ts
-export type ThemeName = "consola" | "marca";
+export type ThemeName = "consola" | "marca" | "campo";
 export type ThemeMode = 'light' | 'dark';
 export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
 export type ShadowToken = "raised" | "overlay" | "popover";
@@ -304,6 +304,329 @@ export declare function batteryClass(options?: {
     level?: number;
     size?: 'sm' | 'md';
 }): string;
+```
+
+## src/core.d.ts
+
+```ts
+import type { ChoiceOption, DateRangeValue, SortState, VirtualWindow } from './patterns.js';
+export interface ComboboxState {
+    open: boolean;
+    query: string;
+    active: number;
+}
+export type ComboboxEvent = {
+    type: 'focus';
+} | {
+    type: 'click';
+} | {
+    type: 'input';
+    value: string;
+} | {
+    type: 'key';
+    key: string;
+} | {
+    type: 'hover';
+    index: number;
+} | {
+    type: 'leave';
+} | {
+    type: 'pick';
+    option: ChoiceOption;
+};
+export interface ComboboxResult {
+    state: ComboboxState;
+    select?: string;
+    query?: string;
+    focusInput?: boolean;
+    preventDefault?: boolean;
+    stopPropagation?: boolean;
+}
+export declare function comboboxState(): ComboboxState;
+export declare function comboboxReduce(state: ComboboxState, event: ComboboxEvent, context?: {
+    filtered?: ChoiceOption[];
+    loading?: boolean;
+}): ComboboxResult;
+export interface ComboboxView {
+    chosen: ChoiceOption | undefined;
+    activeOption: ChoiceOption | undefined;
+    listId: string;
+    optionId: (index: number) => string;
+    activeDescendant: string | undefined;
+    inputValue: string;
+    inputPlaceholder: string;
+}
+export declare function comboboxView(state: ComboboxState, options: {
+    options: ChoiceOption[];
+    filtered: ChoiceOption[];
+    selected: string;
+    id: string;
+    placeholder: string;
+}): ComboboxView;
+export interface CalendarDayView {
+    iso: string;
+    day: number;
+    outside: boolean;
+    endpoint?: boolean;
+    between?: boolean;
+    selected?: boolean;
+    rangeStart?: boolean;
+    rangeEnd?: boolean;
+    today?: boolean;
+    disabled?: boolean;
+    tabbable?: boolean;
+    label?: string;
+}
+export interface CalendarView {
+    title: string;
+    names: {
+        short: string;
+        long: string;
+    }[];
+    weeks: CalendarDayView[][];
+    prevBlocked: boolean;
+    nextBlocked: boolean;
+}
+export declare function calendarMove(key: string, from: string | undefined, options?: {
+    shift?: boolean;
+    weekStartsOn?: number;
+    min?: string;
+    max?: string;
+}): string | null;
+export declare function calendarChoose(value: string | DateRangeValue, iso: string, mode?: 'single' | 'range'): string | DateRangeValue;
+export declare function calendarAnchor(value: string | DateRangeValue | undefined, options: {
+    mode?: 'single' | 'range';
+    today: string;
+    min?: string;
+    max?: string;
+}): string;
+export declare function calendarView(options: {
+    visible: string;
+    value: string | DateRangeValue | undefined;
+    mode?: 'single' | 'range';
+    today: string;
+    min?: string;
+    max?: string;
+    focusDate?: string | null;
+    weekStartsOn?: number;
+    locale?: string;
+}): CalendarView;
+export declare function calendarShift(visible: string, months: number): string;
+export declare function nextSort(sort: SortState | null | undefined, key: string): SortState;
+export declare function toggleAllRows(selected: string[], keys: string[], checked: boolean): string[];
+export declare function toggleRow(selected: string[], key: string, checked: boolean): string[];
+export declare function toggleColumn(hidden: string[], key: string, visible: boolean): string[];
+export interface TableColumnLike {
+    key: string;
+    sortable?: boolean;
+    sortValue?: (row: never) => unknown;
+}
+export declare function sortRows<T>(rows: T[], columns: TableColumnLike[], sort: SortState | null | undefined, manual?: boolean): T[];
+export interface TableView<T> {
+    keyOf: (row: T) => string;
+    total: number;
+    size: number;
+    count: number;
+    current: number;
+    visible: T[];
+    keys: string[];
+    all: boolean;
+    some: boolean;
+    range: VirtualWindow | null;
+}
+export declare function tableView<T>(options: {
+    rows: T[];
+    columns: TableColumnLike[];
+    rowKey: string | ((row: T) => string);
+    sort?: SortState | null;
+    page: number;
+    pageSize?: number;
+    manual?: boolean;
+    totalRows?: number;
+    selected?: string[];
+    maxHeight?: number | string;
+    loading?: boolean;
+    error?: string;
+    scroll?: {
+        top: number;
+        viewport: number;
+        rowHeight: number;
+    };
+    sorted?: T[];
+}): TableView<T>;
+```
+
+## src/labs.d.ts
+
+```ts
+export interface EuroOptions {
+    locale?: string;
+    decimals?: number;
+    grouping?: 'always' | 'auto' | 'min2';
+    signed?: boolean;
+}
+export declare function formatEuro(value: number | null | undefined, options?: EuroOptions): string;
+export interface EnergyOptions {
+    locale?: string;
+    decimals?: number;
+    unit?: 'kWh' | 'MWh' | 'GWh';
+    scale?: boolean;
+    signed?: boolean;
+}
+export declare function formatEnergy(kwh: number | null | undefined, options?: EnergyOptions): string;
+export interface PowerOptions {
+    locale?: string;
+    decimals?: number;
+    unit?: 'kW' | 'MW' | 'GW';
+    scale?: boolean;
+    peak?: boolean;
+    signed?: boolean;
+}
+export declare function formatPower(kw: number | null | undefined, options?: PowerOptions): string;
+export type AmountUnit = 'eur' | 'kWh' | 'kW' | 'kWp' | 'percent' | 'number';
+export declare const AMOUNT_UNITS: AmountUnit[];
+export declare function formatAmount(value: number | null | undefined, options?: {
+    unit?: AmountUnit;
+    locale?: string;
+    decimals?: number;
+    scale?: boolean;
+    signed?: boolean;
+}): string;
+export type DateInput = Date | string | number;
+export declare function formatRelative(value: DateInput, options?: {
+    now?: DateInput;
+    locale?: string;
+    max?: number;
+}): string;
+export declare function formatDateTime(value: DateInput, options?: {
+    locale?: string;
+}): string;
+export declare function relativeRefresh(value: DateInput, now?: DateInput): number | null;
+export type ThemeMode = 'light' | 'dark' | 'system';
+export declare const THEME_MODES: ThemeMode[];
+export declare const THEME_STORAGE_KEY: string;
+export declare function readThemeMode(key?: string): ThemeMode;
+export declare function saveThemeMode(mode: ThemeMode, key?: string): void;
+export declare function resolveThemeMode(mode: ThemeMode, prefersDark: boolean): 'light' | 'dark';
+export declare function applyThemeMode(mode: ThemeMode, root?: HTMLElement): void;
+export declare function themeScript(key?: string): string;
+export interface Hotkey {
+    key: string;
+    mod: boolean;
+    ctrl: boolean;
+    meta: boolean;
+    alt: boolean;
+    shift: boolean;
+}
+export declare function parseHotkey(hotkey: string): Hotkey;
+export declare function matchesHotkey(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey' | 'shiftKey'>, hotkey: string | Hotkey): boolean;
+export declare function isTypingTarget(target: EventTarget | null): boolean;
+export declare function hotkeyLabel(hotkey: string, options?: {
+    mac?: boolean;
+}): string;
+export interface PeriodValues {
+    punta?: number;
+    llano?: number;
+    valle?: number;
+}
+export interface Tariff {
+    id?: string;
+    name: string;
+    energy: number | PeriodValues;
+    power: number | {
+        punta?: number;
+        valle?: number;
+    };
+    monthly?: number;
+}
+export interface TariffOptions {
+    consumption: number | PeriodValues;
+    power?: number | {
+        punta?: number;
+        valle?: number;
+    };
+    days?: number;
+    taxes?: {
+        electricityTax?: number;
+        vat?: number;
+    };
+}
+export interface TariffCost {
+    energy: number;
+    power: number;
+    fixed: number;
+    taxes: number;
+    total: number;
+}
+export declare function tariffCost(tariff: Tariff, options: TariffOptions): TariffCost;
+export interface TariffRow {
+    id: string;
+    name: string;
+    cost: TariffCost;
+    cheapest: boolean;
+    delta: number;
+    monthly: number;
+    ratio: number;
+}
+export declare function compareTariffs(tariffs: Tariff[], options: TariffOptions): {
+    cheapest: string | null;
+    rows: TariffRow[];
+};
+export type SignaturePoint = [
+    number,
+    number
+];
+export type SignatureValue = {
+    strokes: SignaturePoint[][];
+} | {
+    typed: string;
+};
+export declare const SIGNATURE_SIZE: {
+    width: number;
+    height: number;
+};
+export declare function isSignatureEmpty(value: SignatureValue | null | undefined): boolean;
+export declare function signaturePoint(rect: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}, clientX: number, clientY: number, size?: {
+    width: number;
+    height: number;
+}): SignaturePoint;
+export declare function signaturePath(stroke: SignaturePoint[]): string;
+export interface SignatureSvgOptions {
+    size?: {
+        width: number;
+        height: number;
+    };
+    color?: string;
+    font?: string;
+}
+export declare function signatureSvg(value: SignatureValue | null | undefined, options?: SignatureSvgOptions): string;
+export declare function signatureDataUrl(value: SignatureValue | null | undefined, options?: SignatureSvgOptions): string;
+export type WeatherKind = 'sun' | 'partly' | 'cloud' | 'rain';
+export declare const WEATHER_ICON_PATHS: Record<WeatherKind, string[]>;
+export declare const WEATHER_KINDS: WeatherKind[];
+export interface ForecastSummary {
+    done: number;
+    forecastTotal: number;
+    actualTotal: number;
+    expectedSoFar: number;
+    deviation: number | null;
+    status: 'above' | 'below' | 'on-track' | null;
+}
+export declare function forecastSummary(options: {
+    forecast?: number[];
+    actual?: (number | null | undefined)[];
+    tolerance?: number;
+}): ForecastSummary;
+export declare function slotLabel(index: number, count?: number): string;
+export type LabsMessageKey = 'themeLabel' | 'themeLight' | 'themeDark' | 'themeSystem' | 'tariffName' | 'tariffAnnual' | 'tariffMonthly' | 'tariffCheapest' | 'tariffMore' | 'tariffEnergy' | 'tariffPower' | 'tariffTaxesIncluded' | 'tariffNoTaxes' | 'signatureHint' | 'signatureClear' | 'signatureTypeInstead' | 'signatureDrawInstead' | 'signatureTypedLabel' | 'signatureEmpty' | 'signatureDrawn' | 'signatureTyped' | 'forecastExpected' | 'forecastActual' | 'forecastUntil' | 'forecastAbove' | 'forecastBelow' | 'forecastOnTrack' | 'forecastWeather' | 'forecastHour' | 'weatherSun' | 'weatherPartly' | 'weatherCloud' | 'weatherRain';
+export type LabsMessages = Record<LabsMessageKey, string>;
+export declare const LABS_MESSAGES: Record<'es-ES' | 'de-DE' | 'en-GB', LabsMessages>;
+export declare function labsMessagesFor(locale?: string, overrides?: Partial<Record<string, string>>): LabsMessages;
 ```
 
 ## src/messages.d.ts

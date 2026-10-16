@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs'
 
 const root = new URL('../', import.meta.url)
 const read = (path) => readFileSync(new URL(path, root), 'utf8')
-const PACKAGES = ['grado', 'grado-react', 'grado-vue']
+const PACKAGES = ['grado', 'grado-react', 'grado-vue', 'grado-elements']
 const [command, version] = process.argv.slice(2)
 
 if (!/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version ?? '')) {

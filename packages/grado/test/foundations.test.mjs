@@ -108,10 +108,18 @@ test('grado.min.css, grado.layer.css y css/*.css contienen lo mismo que grado.cs
 
 test('tokens-studio.json trae un tema de Figma por tema y modo, sobre el conjunto global', () => {
   const data = JSON.parse(read('tokens-studio.json'))
-  assert.deepEqual(data.$metadata.tokenSetOrder, ['global', 'consola/light', 'consola/dark', 'marca/light', 'marca/dark'])
+  assert.deepEqual(data.$metadata.tokenSetOrder, [
+    'global',
+    'consola/light',
+    'consola/dark',
+    'marca/light',
+    'marca/dark',
+    'campo/light',
+    'campo/dark',
+  ])
   assert.deepEqual(
     data.$themes.map((t) => t.name),
-    ['Consola · claro', 'Consola · oscuro', 'Marca · claro', 'Marca · oscuro'],
+    ['Consola · claro', 'Consola · oscuro', 'Marca · claro', 'Marca · oscuro', 'Campo · claro', 'Campo · oscuro'],
   )
   for (const theme of data.$themes) assert.equal(theme.selectedTokenSets.global, 'source')
   assert.equal(data['marca/light'].color.sidebar.$value, '#5C068C')
@@ -120,17 +128,17 @@ test('tokens-studio.json trae un tema de Figma por tema y modo, sobre el conjunt
 test('fonts.css apunta a archivos que existen en el paquete', () => {
   const fonts = read('fonts.css')
   const urls = [...fonts.matchAll(/url\('([^']+)'\)/g)].map((m) => m[1])
-  assert.equal(urls.length, 8, 'Barlow 400–700 en latin y latin-ext')
+  assert.equal(urls.length, 8, 'Inter 400–700 en latin y latin-ext')
   for (const url of urls) assert.ok(existsSync(new URL(url, dist)), url)
   assert.ok(existsSync(new URL('../assets/fonts/OFL.txt', dist)), 'la licencia OFL viaja con las fuentes')
-  assert.match(tokens.typography['font-sans'], /^Barlow, /)
+  assert.match(tokens.typography['font-sans'], /^Inter, /)
 })
 
 test('tokens.dtcg.json sigue el formato W3C: cada token tiene $type y $value', () => {
   const data = JSON.parse(read('tokens.dtcg.json'))
   assert.deepEqual(
     Object.keys(data).filter((k) => !k.startsWith('$')),
-    ['global', 'consola/light', 'consola/dark', 'marca/light', 'marca/dark'],
+    ['global', 'consola/light', 'consola/dark', 'marca/light', 'marca/dark', 'campo/light', 'campo/dark'],
   )
   let count = 0
   const walk = (node, path) => {

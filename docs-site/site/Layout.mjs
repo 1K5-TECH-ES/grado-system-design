@@ -47,6 +47,7 @@ function AppearanceSwitches() {
       options: [
         { value: 'consola', label: 'Consola' },
         { value: 'marca', label: 'Marca' },
+        { value: 'campo', label: 'Campo' },
       ],
     }),
     h(G.SegmentedControl, {

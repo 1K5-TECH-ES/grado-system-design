@@ -18,7 +18,7 @@ export function normalize(html) {
           .sort()
         return `<${tag}${list.length ? ` ${list.join(' ')}` : ''}>`
       })
-      // useId: «_R_x_» en React 19.1+, «R2q» en React 18 (de «:R2q:»), «v-0-1» en Vue y «v0» en Vue 3.5.0 (de «v:0»).
-      .replace(/(k5-[a-z-]*?)(?:_R_[A-Za-z0-9]*_|R[0-9a-v]+(?![A-Za-z0-9])|v-?\d+(?:-\d+)*)/g, '$1AUTO')
+      // useId: «_R_x_» en React 19.1+, «R2q» en React 18 (de «:R2q:»), «v-0-1» en Vue y «v0» en Vue 3.5.0 (de «v:0») y «e1» en grado-elements.
+      .replace(/(k5-[a-z-]*?)(?:_R_[A-Za-z0-9]*_|R[0-9a-v]+(?![A-Za-z0-9])|v-?\d+(?:-\d+)*|e\d+(?![A-Za-z0-9]))/g, '$1AUTO')
   )
 }

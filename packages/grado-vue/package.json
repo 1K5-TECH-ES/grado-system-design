@@ -25,6 +25,10 @@
       "types": "./dist/vee-validate.d.ts",
       "default": "./dist/vee-validate.js"
     },
+    "./labs": {
+      "types": "./dist/labs.d.ts",
+      "default": "./dist/labs.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

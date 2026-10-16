@@ -145,7 +145,7 @@ export default function Foundations() {
         id: 'tipografia',
         title: 'Tipografía',
         description:
-          'Barlow en siete pasos, cada uno con su interlineado: `--k5-text-*` y `--k5-leading-*`. En Tailwind, `text-caption` … `text-display`. Los nombres antiguos (`text-badge`, `text-label`, `text-nav`, `text-section`) siguen funcionando como alias.',
+          'Inter en siete pasos, cada uno con su interlineado: `--k5-text-*` y `--k5-leading-*`. En Tailwind, `text-caption` … `text-display`. Los nombres antiguos (`text-badge`, `text-label`, `text-nav`, `text-section`) siguen funcionando como alias.',
       },
       h(
         G.Card,

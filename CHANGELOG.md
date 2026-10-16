@@ -2,6 +2,56 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
+## 0.6.0 · sin publicar
+
+0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter. Fase 4: un núcleo común para React y Vue, y Web Components para HTML sin framework.
+
+### Web Components
+
+- Paquete nuevo, `@1k5-tech-es/grado-elements`, para HTML sin framework (PHP, Twig, páginas estáticas): `k5-combobox`, `k5-dialog`, `k5-tabs`, `k5-menu` y `k5-toaster` con `toast()`. Generan el mismo HTML que los componentes de React (un test lo compara), con el mismo teclado y los mismos textos, en el DOM normal: `grado.css` y los estilos de la app se aplican igual.
+- `k5-combobox` con `name` envía su valor con el formulario; `k5-dialog` se abre con un botón `data-k5-open="id"` sin escribir JavaScript; `k5-menu` avisa con `k5-select`; `toast()` usa la misma cola que en React y Vue.
+- `dist/grado-elements.min.js` lo trae todo en un archivo (12,6 KB con gzip) para cargarlo con `<script type="module">` sin bundler; con bundler, `import '@1k5-tech-es/grado-elements'`.
+- Probados en el navegador con teclado, formulario, avisos y axe en los tres temas y los dos modos, y con una app de prueba HTML + Vite que los instala desde el `.tgz`. Se publica junto a los otros tres paquetes, con el mismo número de versión.
+
+### Núcleo común
+
+- `@1k5-tech-es/grado/core`: el estado y el teclado de `Combobox`, `Calendar` y `DataTable`, que React y Vue tenían cada uno por su cuenta, en funciones sin framework (`comboboxReduce`, `calendarView`, `tableView`…). React, Vue y `grado-elements` las usan igual, así que se comportan igual y se prueban una vez. Ningún componente cambia de API ni de HTML.
+
+### Tema «campo»
+
+- Tema nuevo de alto contraste para el trabajo de campo, para técnicos con la tablet al sol: todo el texto llega a 7 : 1 (AAA) en claro y en oscuro, también el de los avisos sobre fondo tintado; bordes y campos que se ven (el borde llega a 4 : 1 sobre el fondo); controles de 44 px (36 y 52 en los tamaños pequeño y grande). Hereda de Consola.
+- Va en su propio archivo para que no lo descargue quien no lo usa: `import '@1k5-tech-es/grado/themes/campo.css'` (o `themes/campo-hsl.css` con Tailwind 3) después de los tokens, y `data-k5-theme="campo"` en `<html>` o en una zona. Un `data-k5-density` puesto a mano sigue mandando.
+- `minContrast` en un tema de `tokens.json` sube el contraste mínimo que comprueban los tests y el del texto sobre tintes. Tokens Studio y el formato W3C traen también «Campo · claro» y «Campo · oscuro».
+- En la web, «Campo» en el selector de tema, en Inicio y en Instalación; axe y las capturas por componente lo prueban en claro y oscuro.
+
+### Fuente
+
+- Inter sustituye a Barlow como fuente de todo Grado: `--k5-font-sans`, el preset de Tailwind y `@1k5-tech-es/grado/fonts.css`, que trae Inter 400, 500, 600 y 700 (latín y latín extendido, licencia SIL OFL 1.1). Barlow sale del paquete. En el configurador de temas de la web, Inter es la fuente por defecto y Barlow una opción más.
+- Los códigos de tema sin fuente (`GRADO-5C068C-2ED8C3-F-R8`) abren ahora con Inter; para Barlow, `-BARLOW`.
+
+### Labs
+
+- Entradas nuevas `@1k5-tech-es/grado/labs`, `@1k5-tech-es/grado-react/labs` y `@1k5-tech-es/grado-vue/labs`, y su CSS en `@1k5-tech-es/grado/labs.css` (aparte de `grado.css`). Lo de labs queda fuera de la promesa de la 1.0: puede cambiar en una versión menor hasta que pase al paquete principal. En la web, una familia nueva, «Labs».
+- `Amount`, `formatEuro()`, `formatEnergy()` y `formatPower()`: importes, energía y potencia con el formato español, cifras alineadas y espacio duro antes de la unidad («1234,50 €», «7,2 kWh», «6,4 kWp»); con `scale`, MWh y MW; con `signed` y `colored`, variaciones en verde o rojo. `Amount` es un `<data>` con el número sin formato en `value`.
+- `RelativeTime` y `formatRelative()`: «hace 5 minutos», «ayer», «16 oct» pasada una semana; la fecha completa en `title` y `datetime`, y se actualiza sola.
+- `ThemeToggle`, `useTheme()` y `themeScript()`: Claro, Oscuro o Sistema, guardado en `localStorage` y aplicado con la clase `dark` en `<html>`; todos los controles de la página se enteran. `themeScript()` en el `<head>` evita el parpadeo al cargar. Con `apply: false` solo guarda la elección.
+- `ScrollArea`: zona con scroll propio, barra fina y nombre, que recibe el foco y se desplaza con las flechas.
+- `useHotkey()` y `hotkeyLabel()`: atajos como `'mod+k'` (⌘ en Mac, Ctrl en el resto) o `'?'`; los de una tecla no saltan mientras se escribe en un campo.
+- `VisuallyHidden`: texto solo para lectores de pantalla.
+- `TariffComparison`, `tariffCost()` y `compareTariffs()`: lo que cuesta al año el mismo consumo con dos o tres tarifas de la 2.0TD (precio único o por periodo, potencia por periodo, cuota mensual), con la más barata marcada, lo que cuesta al mes y cuánto más cuesta cada una. Sin impuestos salvo que se pasen (`taxes: { electricityTax, vat }`): cambian con el tiempo y Grado no los inventa. Es una tabla, con la más barata dicha también con texto.
+- `SignaturePad`: firma de la oferta con el dedo, un lápiz o el ratón, o escribiendo el nombre (la alternativa para el teclado y los lectores de pantalla). La firma es `{ strokes }` o `{ typed }`; `signatureSvg()` y `signatureDataUrl()` la exportan como SVG, y con `name` viaja en un campo oculto del formulario. La página no se desplaza mientras se firma.
+- `SolarForecast` y `forecastSummary()`: producción solar prevista frente a la real, hora a hora (o por cuartos de hora), con el tiempo de cada franja. El resumen da el total previsto, lo producido hasta la última hora con dato y si va más de un 5 % por encima o por debajo. Se recorre con las flechas como los demás gráficos, con tabla oculta para lectores de pantalla.
+- Los textos de labs (los del tema, las tarifas, la firma y la previsión) van en `@1k5-tech-es/grado/labs` (`LABS_MESSAGES`, `labsMessagesFor()`), no en los mensajes principales: una app que no usa labs no los descarga. Se cambian con el mismo `messages` de `GradoProvider`.
+
+### Calidad
+
+- Informe de la API de labs (`api/grado-react-labs.api.md` y `api/grado-vue-labs.api.md`) y presupuesto de tamaño para labs.
+- Las capturas por componente pintan el fondo alrededor de la vista previa aislada: lo que sobresale (una lista abierta) o las esquinas redondeadas ya no dejan ver la página de debajo.
+
+### Al actualizar desde 0.5.0
+
+- Cambia la fuente: con `@1k5-tech-es/grado/fonts.css`, las apps pasan a Inter sin tocar nada. Inter es algo más ancha que Barlow: revisa los textos que iban justos (botones, columnas estrechas, menús). Para seguir con Barlow, cárgala tú (por ejemplo, `@fontsource/barlow`) y pon `--k5-font-sans: Barlow, ui-sans-serif, system-ui, sans-serif`.
+
 ## 0.5.0 · 16 de octubre de 2026
 
 0.5, «Estabilidad»: las apps a producción, lo que prometemos probado y la API lista para congelarla en la 1.0.

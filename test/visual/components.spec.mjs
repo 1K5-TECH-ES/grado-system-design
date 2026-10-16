@@ -1,5 +1,5 @@
 // Una captura por componente: la vista previa real de cada ficha de /componentes en la web,
-// en los dos temas y los dos modos. Si cambia un componente, falla solo su captura y
+// en los tres temas y los dos modos. Si cambia un componente, falla solo su captura y
 // Playwright deja la diferencia en test-results/. La web la sirve playwright.config.mjs.
 // Para regenerar: npm run test:visual:docker -- --update-snapshots (misma imagen que el CI).
 import { test, expect } from '@playwright/test'
@@ -22,14 +22,16 @@ async function openComponents(page, theme, mode) {
   await page.goto('/componentes')
   await expect(page.locator('.docs-component').first()).toBeVisible()
   await page.evaluate(() => document.fonts.ready)
-  expect(await page.evaluate(() => document.fonts.check('600 14px Barlow'))).toBe(true)
+  expect(await page.evaluate(() => document.fonts.check('600 14px Inter'))).toBe(true)
   expect(await page.evaluate(() => document.documentElement.dataset.k5Theme)).toBe(theme)
   // La vista previa que se captura sale de su sitio y va arriba a la izquierda, con un ancho
   // fijo: así la captura no depende de lo que haya encima en la página (una línea más en una
-  // guía movía todo una fracción de píxel y cambiaba el suavizado de todas las capturas).
+  // guía movía todo una fracción de píxel y cambiaba el suavizado de todas las capturas). La
+  // sombra pinta el fondo alrededor: lo que sobresale (una lista abierta) no deja ver la página.
   await page.addStyleTag({
     content: `[data-k5-shot] { position: fixed !important; inset: 0 auto auto 0 !important; width: 940px !important;
-      margin: 0 !important; z-index: 2147483000; background: var(--k5-background); }`,
+      margin: 0 !important; z-index: 2147483000; background: var(--k5-background);
+      box-shadow: 0 0 0 100vmax var(--k5-background) !important; }`,
   })
 }
 
@@ -42,7 +44,7 @@ async function isolate(page, id) {
   return page.locator(`#${id} .demo-preview`)
 }
 
-for (const theme of ['consola', 'marca']) {
+for (const theme of ['consola', 'marca', 'campo']) {
   for (const mode of ['light', 'dark']) {
     test(`componentes · ${theme} · ${mode}`, async ({ page }) => {
       test.setTimeout(240_000)

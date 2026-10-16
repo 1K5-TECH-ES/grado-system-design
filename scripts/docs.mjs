@@ -19,8 +19,11 @@ mkdirSync(new URL('assets/', out), { recursive: true })
 // Solo los paquetes de esta versión: npm pack los vuelve a generar después.
 rmSync(new URL('downloads/', out), { recursive: true, force: true })
 mkdirSync(new URL('downloads/', out), { recursive: true })
-for (const file of ['tokens.css', 'grado.css']) copyFileSync(new URL(`packages/grado/dist/${file}`, root), new URL(`assets/${file}`, out))
-// Barlow desde el propio paquete: la web no depende de Google Fonts para su fuente.
+for (const file of ['tokens.css', 'grado.css', 'labs.css'])
+  copyFileSync(new URL(`packages/grado/dist/${file}`, root), new URL(`assets/${file}`, out))
+// Temas en su propio archivo (campo): la web enseña los tres.
+cpSync(new URL('packages/grado/dist/themes/', root), new URL('assets/themes/', out), { recursive: true })
+// Inter desde el propio paquete: la web no depende de Google Fonts para su fuente.
 writeFileSync(new URL('assets/fonts.css', out), read('packages/grado/dist/fonts.css').replaceAll('../assets/fonts/', 'fonts/'))
 cpSync(new URL('packages/grado/assets/fonts/', root), new URL('assets/fonts/', out), { recursive: true })
 writeFileSync(new URL('assets/grado-mark.svg', out), renderToStaticMarkup(h(GradoMark, { xmlns: 'http://www.w3.org/2000/svg' })))
@@ -44,7 +47,7 @@ cpSync(new URL('docs-site/assets/', root), new URL('assets/', out), {
 
 // El marco es el AppShell de Grado: sigue el tema elegido, Marca por defecto.
 const documentHtml = `<!doctype html>
-<html lang="es" data-k5-theme="marca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="description" content="Grado, el sistema de diseño de 1KOMMA5° España. Guía de instalación, configurador de temas, componentes y ejemplos para React, Vue y HTML."><title>Grado · Sistema de diseño</title><link rel="icon" href="assets/grado-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/tokens.css"><link rel="stylesheet" href="assets/grado.css"><link rel="stylesheet" href="assets/docs.css"><script src="assets/theme.js"></script></head>
+<html lang="es" data-k5-theme="marca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="description" content="Grado, el sistema de diseño de 1KOMMA5° España. Guía de instalación, configurador de temas, componentes y ejemplos para React, Vue y HTML."><title>Grado · Sistema de diseño</title><link rel="icon" href="assets/grado-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/tokens.css"><link rel="stylesheet" href="assets/themes/campo.css"><link rel="stylesheet" href="assets/grado.css"><link rel="stylesheet" href="assets/labs.css"><link rel="stylesheet" href="assets/docs.css"><script src="assets/theme.js"></script></head>
 <body><div id="app"></div><script src="assets/app.js" type="module"></script></body></html>`
 writeFileSync(new URL('index.html', out), documentHtml)
 

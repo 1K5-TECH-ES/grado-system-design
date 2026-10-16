@@ -1,4 +1,4 @@
-// npm run test:smoke [-- vite-react|next|nuxt …]
+// npm run test:smoke [-- vite-react|next|nuxt|html …]
 // Apps de prueba (test/smoke/): cada una instala Grado desde los .tgz, como una app de verdad
 // fuera del monorepo, y compila con su framework. Falla si alguna no compila o si el
 // resultado no lleva lo que debería. Necesita el build hecho y red para instalar los frameworks.
@@ -13,6 +13,8 @@ const APPS = {
   'vite-react': { out: 'dist', expect: [/k5-btn/, /k5-data-table/] },
   next: { out: '.next', expect: [/k5-kpi/, /k5-card/] },
   nuxt: { out: '.output', expect: [/k5-kpi/, /k5-data-table/] },
+  // HTML sin framework con los Web Components (0.6).
+  html: { out: 'dist', expect: [/k5-combobox/, /k5-toaster/, /customElements/] },
 }
 const wanted = process.argv.slice(2)
 const apps = wanted.length ? wanted : Object.keys(APPS)
@@ -56,7 +58,8 @@ try {
     const dir = join(work, app)
     cpSync(join(root, 'test/smoke', app), dir, { recursive: true })
     const manifest = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-    const framework = app === 'nuxt' ? '@1k5-tech-es/grado-vue' : '@1k5-tech-es/grado-react'
+    const framework = { nuxt: '@1k5-tech-es/grado-vue', html: '@1k5-tech-es/grado-elements' }[app] ?? '@1k5-tech-es/grado-react'
+    manifest.dependencies ??= {}
     manifest.dependencies['@1k5-tech-es/grado'] = `file:${tgz['@1k5-tech-es/grado']}`
     manifest.dependencies[framework] = `file:${tgz[framework]}`
     writeFileSync(join(dir, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`)

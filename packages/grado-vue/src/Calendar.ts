@@ -1,32 +1,10 @@
 import { computed, defineComponent, h, nextTick, ref, type PropType } from 'vue'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import {
-  addDays,
-  addMonths,
-  clampDate,
-  dateLabel,
-  monthTitle,
-  monthWeeks,
-  nextRange,
-  startOfWeek,
-  todayIso,
-  weekdayNames,
-  type DateRangeValue,
-} from '@1k5-tech-es/grado/patterns'
+import { todayIso, type DateRangeValue } from '@1k5-tech-es/grado/patterns'
+import { calendarAnchor, calendarChoose, calendarMove, calendarShift, calendarView } from '@1k5-tech-es/grado/core'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { autoId, model } from './helpers.js'
-
-const KEY_MOVES: Record<string, (iso: string, shift: boolean, weekStartsOn: number) => string> = {
-  ArrowLeft: (iso) => addDays(iso, -1),
-  ArrowRight: (iso) => addDays(iso, 1),
-  ArrowUp: (iso) => addDays(iso, -7),
-  ArrowDown: (iso) => addDays(iso, 7),
-  Home: (iso, _, start) => startOfWeek(iso, start),
-  End: (iso, _, start) => addDays(startOfWeek(iso, start), 6),
-  PageUp: (iso, shift) => addMonths(iso, shift ? -12 : -1),
-  PageDown: (iso, shift) => addMonths(iso, shift ? 12 : 1),
-}
 
 /**
  * Un mes para elegir una fecha (mode="single", v-model con texto ISO) o un periodo
@@ -61,49 +39,51 @@ export const Calendar = defineComponent({
       props.defaultValue ?? (props.mode === 'range' ? { start: '', end: '' } : ''),
       (value) => emit('update:modelValue', value),
     )
-    const single = computed(() => (typeof current.value === 'string' ? current.value : ''))
-    const span = computed<DateRangeValue>(() =>
-      typeof current.value === 'object' && current.value ? current.value : { start: '', end: '' },
-    )
-    const anchor = (range.value ? span.value.start : single.value) || clampDate(today.value, props.min, props.max)
     const [visible, setVisible] = model(
       () => props.month,
-      props.defaultMonth ?? anchor.slice(0, 7),
+      props.defaultMonth ?? calendarAnchor(current.value, { mode: props.mode, today: today.value, min: props.min, max: props.max }),
       (value) => emit('update:month', value),
     )
     const focusDate = ref<string | null>(null)
     const grid = ref<HTMLTableElement>()
     const locale = computed(() => props.locale ?? t.value.locale)
 
-    const go = (target: string) => {
-      const next = clampDate(target, props.min, props.max)
+    // Rejilla, teclado y periodo salen del núcleo común (@1k5-tech-es/grado/core), como en React.
+    const choose = (iso: string) => {
+      focusDate.value = iso
+      setCurrent(calendarChoose(current.value, iso, props.mode))
+    }
+    const onKeydown = (event: KeyboardEvent) => {
+      const next = calendarMove(event.key, (event.target as HTMLElement).dataset.date, {
+        shift: event.shiftKey,
+        weekStartsOn: props.weekStartsOn,
+        min: props.min,
+        max: props.max,
+      })
+      if (!next) return
+      event.preventDefault()
       focusDate.value = next
       if (!next.startsWith(visible.value)) setVisible(next.slice(0, 7))
       nextTick(() => grid.value?.querySelector<HTMLButtonElement>(`[data-date="${next}"]`)?.focus())
     }
-    const choose = (iso: string) => {
-      focusDate.value = iso
-      setCurrent(range.value ? nextRange(span.value, iso) : iso)
-    }
-    const onKeydown = (event: KeyboardEvent) => {
-      const from = (event.target as HTMLElement).dataset.date
-      const move = KEY_MOVES[event.key]
-      if (!from || !move) return
-      event.preventDefault()
-      go(move(from, event.shiftKey, props.weekStartsOn))
-    }
     const shiftMonth = (months: number) => {
-      setVisible(addMonths(`${visible.value}-01`, months).slice(0, 7))
+      setVisible(calendarShift(visible.value, months))
       focusDate.value = null
     }
 
     return () => {
       const m = t.value.messages
-      const month = visible.value
-      const inMonth = (iso: string | null | undefined) => Boolean(iso && iso.startsWith(month))
-      const tabbable = [focusDate.value, range.value ? span.value.start : single.value, today.value, `${month}-01`].find(inMonth)
-      const blocked = (iso: string) => Boolean((props.min && iso < props.min) || (props.max && iso > props.max))
-      const { start, end } = span.value
+      const view = calendarView({
+        visible: visible.value,
+        value: current.value,
+        mode: props.mode,
+        today: today.value,
+        min: props.min,
+        max: props.max,
+        focusDate: focusDate.value,
+        weekStartsOn: props.weekStartsOn,
+        locale: locale.value,
+      })
       return h(
         'div',
         { class: cx('k5-calendar', props.plain && 'k5-calendar--plain'), role: 'group', 'aria-label': props.label ?? m.calendar },
@@ -115,19 +95,19 @@ export const Calendar = defineComponent({
                 type: 'button',
                 class: 'k5-btn k5-btn--ghost k5-btn--icon k5-btn--sm',
                 'aria-label': m.previousMonth,
-                disabled: Boolean(props.min && `${month}-01` <= props.min),
+                disabled: view.prevBlocked,
                 onClick: () => shiftMonth(-1),
               },
               [pathIcon(ICON_PATHS.chevronLeft)],
             ),
-            h('span', { class: 'k5-calendar__title', id: `${id}-title`, 'aria-live': 'polite' }, monthTitle(month, locale.value)),
+            h('span', { class: 'k5-calendar__title', id: `${id}-title`, 'aria-live': 'polite' }, view.title),
             h(
               'button',
               {
                 type: 'button',
                 class: 'k5-btn k5-btn--ghost k5-btn--icon k5-btn--sm',
                 'aria-label': m.nextMonth,
-                disabled: Boolean(props.max && addMonths(`${month}-01`, 1) > props.max),
+                disabled: view.nextBlocked,
                 onClick: () => shiftMonth(1),
               },
               [pathIcon(ICON_PATHS.chevronRight)],
@@ -148,52 +128,48 @@ export const Calendar = defineComponent({
                 h(
                   'tr',
                   null,
-                  weekdayNames(locale.value, props.weekStartsOn).map((name) =>
-                    h('th', { key: name.long, scope: 'col', abbr: name.long }, name.short),
-                  ),
+                  view.names.map((name) => h('th', { key: name.long, scope: 'col', abbr: name.long }, name.short)),
                 ),
               ]),
               h(
                 'tbody',
                 null,
-                monthWeeks(month, props.weekStartsOn).map((week) =>
+                view.weeks.map((week) =>
                   h(
                     'tr',
                     { key: week[0].iso },
-                    week.map((day) => {
-                      if (day.outside)
-                        return h('td', { key: day.iso }, [h('span', { class: 'k5-calendar__outside', 'aria-hidden': 'true' }, day.day)])
-                      // En un periodo, todos sus días constan como seleccionados; los extremos van en sólido.
-                      const endpoint = range.value ? day.iso === start || day.iso === end : day.iso === single.value
-                      const between = Boolean(range.value && start && end && day.iso >= start && day.iso <= end)
-                      return h(
-                        'td',
-                        {
-                          key: day.iso,
-                          'aria-selected': endpoint || between,
-                          'data-endpoint': endpoint ? true : undefined,
-                          'data-in-range': between ? true : undefined,
-                          'data-range-start': between && day.iso === start ? true : undefined,
-                          'data-range-end': between && day.iso === end ? true : undefined,
-                        },
-                        [
+                    week.map((day) =>
+                      day.outside
+                        ? h('td', { key: day.iso }, [h('span', { class: 'k5-calendar__outside', 'aria-hidden': 'true' }, day.day)])
+                        : // En un periodo, todos sus días constan como seleccionados; los extremos van en sólido.
                           h(
-                            'button',
+                            'td',
                             {
-                              type: 'button',
-                              class: 'k5-calendar__day',
-                              'data-date': day.iso,
-                              tabindex: day.iso === tabbable ? 0 : -1,
-                              'aria-label': dateLabel(day.iso, locale.value),
-                              'aria-current': day.iso === today.value ? 'date' : undefined,
-                              disabled: blocked(day.iso),
-                              onClick: () => choose(day.iso),
+                              key: day.iso,
+                              'aria-selected': day.selected,
+                              'data-endpoint': day.endpoint ? true : undefined,
+                              'data-in-range': day.between ? true : undefined,
+                              'data-range-start': day.rangeStart ? true : undefined,
+                              'data-range-end': day.rangeEnd ? true : undefined,
                             },
-                            day.day,
+                            [
+                              h(
+                                'button',
+                                {
+                                  type: 'button',
+                                  class: 'k5-calendar__day',
+                                  'data-date': day.iso,
+                                  tabindex: day.tabbable ? 0 : -1,
+                                  'aria-label': day.label,
+                                  'aria-current': day.today ? 'date' : undefined,
+                                  disabled: day.disabled,
+                                  onClick: () => choose(day.iso),
+                                },
+                                day.day,
+                              ),
+                            ],
                           ),
-                        ],
-                      )
-                    }),
+                    ),
                   ),
                 ),
               ),

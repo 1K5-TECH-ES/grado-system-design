@@ -13,16 +13,8 @@ import {
   type Ref,
 } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import {
-  compareValues,
-  pageCount,
-  pixelHeight,
-  selectionLabel,
-  VIRTUAL_ROWS,
-  virtualWindow,
-  visibleColumns,
-  type SortState,
-} from '@1k5-tech-es/grado/patterns'
+import { pixelHeight, selectionLabel, visibleColumns, type SortState } from '@1k5-tech-es/grado/patterns'
+import { nextSort, sortRows, tableView, toggleAllRows, toggleColumn, toggleRow } from '@1k5-tech-es/grado/core'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Button } from './Button.js'
 import { PathIcon } from './PathIcon.js'
@@ -127,30 +119,30 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
   const selected = selectedKeys ?? innerSelected
   const [hidden, setHidden] = useValue(hiddenColumns, defaultHiddenColumns, onHiddenColumnsChange)
   const shown = visibleColumns(columns, hidden)
-  const total = manual ? (totalRows ?? rows.length) : rows.length
-  const size = Math.max(1, pageSize),
-    count = pageCount(total, size),
-    current = Math.min(count, Math.max(1, page ?? innerPage))
-  const keyOf = (row: T) => (typeof rowKey === 'function' ? rowKey(row) : String(row[rowKey]))
+  // Página, orden, selección y filas virtuales salen del núcleo común (@1k5-tech-es/grado/core), como en Vue.
+  const sorted = useMemo(() => sortRows(rows, columns, sorting, manual), [rows, columns, sorting, manual])
+  const view = tableView({
+    rows,
+    columns,
+    rowKey,
+    sort: sorting,
+    page: page ?? innerPage,
+    pageSize,
+    manual,
+    totalRows,
+    selected,
+    maxHeight,
+    loading,
+    error,
+    scroll,
+    sorted,
+  })
+  const { keyOf, total, size, count, current, visible, keys, all, some, range } = view
+  const virtual = range != null
   // Clamp uncontrolled pagination when filtering or deleting the last page.
   useEffect(() => {
     if (page === undefined && !manual) setInnerPage((old) => Math.max(1, Math.min(count, old)))
   }, [count, page, manual])
-  const sorted = useMemo(() => {
-    const column = columns.find((col) => col.key === sorting?.key && col.sortable)
-    if (manual || !column || !sorting) return rows
-    return [...rows].sort(
-      (a, b) =>
-        compareValues(column.sortValue ? column.sortValue(a) : a[column.key], column.sortValue ? column.sortValue(b) : b[column.key]) *
-        (sorting.direction === 'asc' ? 1 : -1),
-    )
-  }, [rows, columns, sorting, manual])
-  const visible = manual ? rows : sorted.slice((current - 1) * size, current * size),
-    keys = visible.map(keyOf)
-  const virtual = maxHeight != null && !loading && !error && visible.length > VIRTUAL_ROWS
-  const range = virtual
-    ? virtualWindow({ count: visible.length, rowHeight: scroll.rowHeight, scrollTop: scroll.top, viewport: scroll.viewport })
-    : null
   useEffect(() => {
     const wrap = root.current?.querySelector<HTMLElement>('.k5-table-wrap')
     if (!virtual || !wrap) return
@@ -174,8 +166,6 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
       cancelAnimationFrame(frame)
     }
   }, [virtual])
-  const all = keys.length > 0 && keys.every((key) => selected.includes(key)),
-    some = keys.some((key) => selected.includes(key))
   const updateSelection = (next: string[]) => {
     if (selectedKeys === undefined) setInnerSelected(next)
     onSelectionChange?.(next)
@@ -185,7 +175,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
     onPageChange?.(next)
   }
   const changeSort = (key: string) => {
-    const next: SortState = { key, direction: sorting?.key === key && sorting.direction === 'asc' ? 'desc' : 'asc' }
+    const next = nextSort(sorting, key)
     if (sort === undefined) setInnerSort(next)
     onSortChange?.(next)
     changePage(1)
@@ -236,7 +226,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
                       checked={on}
                       // Siempre queda al menos una columna a la vista.
                       disabled={on && shown.length === 1}
-                      onCheckedChange={(next) => setHidden(next ? hidden.filter((key) => key !== column.key) : [...hidden, column.key])}
+                      onCheckedChange={(next) => setHidden(toggleColumn(hidden, column.key, next))}
                     />
                   )
                 })}
@@ -257,9 +247,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
                   checked={all}
                   indeterminate={some && !all}
                   disabled={loading || !!error || keys.length === 0}
-                  onCheckedChange={(checked) =>
-                    updateSelection(checked ? [...new Set([...selected, ...keys])] : selected.filter((key) => !keys.includes(key)))
-                  }
+                  onCheckedChange={(checked) => updateSelection(toggleAllRows(selected, keys, checked))}
                 />
               </th>
             )}
@@ -333,9 +321,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
                         <Checkbox
                           aria-label={formatMessage(m.selectRow, { key })}
                           checked={selected.includes(key)}
-                          onCheckedChange={(checked) =>
-                            updateSelection(checked ? [...new Set([...selected, key])] : selected.filter((value) => value !== key))
-                          }
+                          onCheckedChange={(checked) => updateSelection(toggleRow(selected, key, checked))}
                         />
                       </td>
                     )}

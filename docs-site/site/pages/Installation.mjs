@@ -172,6 +172,7 @@ createApp(App).use(Grado, { locale: 'de-DE', messages: de }).mount('#app');`
 const themeOptions = [
   ['Consola', 'Herramientas internas', 'sin atributo'],
   ['Marca', 'Lo que ve el cliente', 'data-k5-theme="marca"'],
+  ['Campo', 'Técnicos al sol: 7 : 1 y controles de 44 px. Carga además @1k5-tech-es/grado/themes/campo.css', 'data-k5-theme="campo"'],
 ]
 const migration = [
   ['Empieza por los tokens', 'Reemplaza las variables equivalentes y revisa los colores escritos directamente.'],
@@ -384,6 +385,21 @@ export default function Installation() {
                   'En HTML sin bundler, copia las carpetas `dist/` y `assets/fonts/` del paquete base a tu carpeta pública, con esa misma estructura, y carga `dist/fonts.css`, `dist/tokens.css` y `dist/grado.min.css`, en ese orden, con `<link rel="stylesheet">`.',
                 ),
                 h(CodeBlock, { code: '<button class="k5-btn k5-btn--primary">Guardar cambios</button>', label: 'HTML' }),
+                P(
+                  'Para lo interactivo sin framework (PHP, Twig, páginas estáticas), `@1k5-tech-es/grado-elements` trae Web Components con el mismo HTML, teclado y textos que los de React y Vue: `k5-combobox`, `k5-dialog`, `k5-tabs`, `k5-menu` y `k5-toaster` con `toast()`. Copia `grado-elements.min.js` (lo trae todo) y cárgalo como módulo.',
+                ),
+                h(CodeBlock, {
+                  code: `<script type="module" src="/vendor/grado-elements.min.js"></script>
+
+<k5-combobox label="Provincia" name="provincia">
+  <option value="md">Madrid</option>
+  <option value="vlc">Valencia</option>
+</k5-combobox>
+
+<button data-k5-open="nota">Nueva nota</button>
+<k5-dialog id="nota" label="Nueva nota">…</k5-dialog>`,
+                  label: 'HTML · Web Components',
+                }),
               ),
             },
           ],
@@ -416,7 +432,7 @@ export default function Installation() {
                   {
                     term: 'fonts.css',
                     mono: true,
-                    description: 'Barlow en 400, 500, 600 y 700. Si tu app ya carga Barlow, no lo importes.',
+                    description: 'Inter en 400, 500, 600 y 700. Si tu app ya carga Inter, no lo importes.',
                   },
                 ],
               }),
@@ -446,7 +462,7 @@ export default function Installation() {
             G.Card,
             { variant: 'plain', className: 'docs-option' },
             h(G.Text, { weight: 'semibold' }, 'Tu tema'),
-            h(G.Text, { size: 'small', tone: 'muted' }, 'Tus colores sobre cualquiera de los dos'),
+            h(G.Text, { size: 'small', tone: 'muted' }, 'Tus colores sobre cualquiera de ellos'),
             h(TextLink, { to: '/personalizar' }, 'Crear en Personalizar'),
           ),
         ),

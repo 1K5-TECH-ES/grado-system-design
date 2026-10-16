@@ -147,6 +147,10 @@ export function loadTokens(path = TOKENS_PATH) {
     }
     themes[name] = {
       description: def.description,
+      // Contraste mínimo del tema, si pide más que AA: campo, 7 : 1 (AAA).
+      ...(def.minContrast ? { minContrast: def.minContrast } : {}),
+      // En su propio archivo (dist/themes/<tema>.css), fuera de tokens.css.
+      ...(def.file ? { file: true } : {}),
       light: { block: light, full: merge(baseLight, light) },
       dark: { block: darkBlock, full: merge(baseDarkFull, { color: {}, shadow: {}, size: light.size }, darkBlock) },
     }
@@ -254,10 +258,12 @@ function addDerived(derived, themes, keys) {
     if (keys.color.includes(name)) throw new Error(`derived.${name}: ya existe un token con ese nombre`)
   }
   for (const modes of Object.values(themes)) {
+    // El texto sobre tinte llega al mínimo del tema (campo pide 7 : 1) o al general.
+    const options = { ...derived, min: modes.minContrast ?? derived.min }
     for (const mode of MODES) {
       const { block, full } = modes[mode]
       const values = [
-        ...text.map(([name, source]) => [name, { color: deriveText(full.color, source, derived), ref: null, derivedFrom: source }]),
+        ...text.map(([name, source]) => [name, { color: deriveText(full.color, source, options), ref: null, derivedFrom: source }]),
         ...surfaces.map(([name, source, amount]) => [
           name,
           { color: mix(full.color.card.color, full.color[source].color, amount), ref: null, derivedFrom: source },

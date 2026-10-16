@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve, extname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -14,6 +14,8 @@ import { check as superposicionesCheck } from './groups/superposiciones.check.mj
 import { check as formulariosCheck } from './groups/formularios.check.mjs'
 import { check as tablasCheck } from './groups/tablas.check.mjs'
 import { check as energiaCheck } from './groups/energia.check.mjs'
+import { check as labsCheck } from './groups/labs.check.mjs'
+import { checkElements, page as elementsPage } from './elements.check.mjs'
 
 // Análisis de accesibilidad: axe-core con las reglas de WCAG 2.2 A y AA.
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8')
@@ -53,11 +55,15 @@ await build({
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
   },
 })
-for (const file of ['grado.css', 'tokens.css'])
+mkdirSync(join(directory, 'themes'))
+for (const file of ['grado.css', 'tokens.css', 'labs.css', 'themes/campo.css'])
   writeFileSync(join(directory, file), readFileSync(new URL(`packages/grado/dist/${file}`, root)))
+// grado-elements: una página HTML sin framework con el archivo para usar sin bundler.
+writeFileSync(join(directory, 'grado-elements.min.js'), readFileSync(new URL('packages/grado-elements/dist/grado-elements.min.js', root)))
+writeFileSync(join(directory, 'elements.html'), elementsPage)
 writeFileSync(
   join(directory, 'index.html'),
-  '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Grado · pruebas</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="grado.css"><style>*{box-sizing:border-box}body{font:14px system-ui;margin:0;background:var(--k5-background);color:var(--k5-foreground)}section{max-width:800px}input{font:inherit}</style></head><body><div id="app"></div><script src="fixture.js"></script></body></html>',
+  '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Grado · pruebas</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="themes/campo.css"><link rel="stylesheet" href="grado.css"><link rel="stylesheet" href="labs.css"><style>*{box-sizing:border-box}body{font:14px system-ui;margin:0;background:var(--k5-background);color:var(--k5-foreground)}section{max-width:800px}input{font:inherit}</style></head><body><div id="app"></div><script src="fixture.js"></script></body></html>',
 )
 const server = createServer((request, response) => {
   const pathname = new URL(request.url, 'http://local').pathname
@@ -302,14 +308,15 @@ try {
       tablasCheck,
       graficosInteractiveCheck,
       energiaCheck,
+      labsCheck,
     ])
       await check(page, { expect, framework })
     expect(errors).toEqual([])
-    // Accesibilidad en los dos temas y los dos modos, más una pasada con listas y la paleta abiertas.
+    // Accesibilidad en los tres temas y los dos modos, más una pasada con listas y la paleta abiertas.
     // Con «reducir movimiento» las duraciones valen 0 y axe no mide colores a mitad de transición.
     await page.emulateMedia({ reducedMotion: 'reduce' })
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--k5-duration-base').trim())).toBe('0s')
-    for (const theme of ['consola', 'marca']) {
+    for (const theme of ['consola', 'marca', 'campo']) {
       for (const mode of ['light', 'dark']) {
         await page.evaluate(
           ([t, m]) => {
@@ -394,7 +401,7 @@ try {
     expect(tab).toBe(highlight)
     await forced.close()
     console.log(
-      `✓ ${framework}: modal, foco, teclado, filtros, archivos, fechas, temporizadores, tabla, componentes nuevos, idioma, armazón móvil, impresión, alto contraste y axe (2 temas × 2 modos)`,
+      `✓ ${framework}: modal, foco, teclado, filtros, archivos, fechas, temporizadores, tabla, componentes nuevos, idioma, armazón móvil, impresión, alto contraste y axe (3 temas × 2 modos)`,
     )
   }
   // ref: cada componente de React la pasa al elemento que toca.
@@ -407,6 +414,8 @@ try {
   expect(results).toEqual(cases.map(([name, , selector]) => `${name}: ${selector}`))
   await refs.close()
   console.log(`✓ react: ${results.length} componentes pasan ref al elemento esperado`)
+  await checkElements(browser, base, { expect, axe })
+  console.log('✓ grado-elements: mismo HTML que React, teclado, formulario, avisos y axe (3 temas × 2 modos)')
 } finally {
   await browser.close()
   await new Promise((done) => server.close(done))

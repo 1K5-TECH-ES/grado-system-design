@@ -10,8 +10,8 @@ const catalog = (file, query) => `file://${fileURLToPath(new URL(`../../catalog/
 async function open(page, url) {
   await page.goto(url)
   await page.evaluate(() => document.fonts.ready)
-  // Barlow tiene que haberse cargado: si no, la captura saldría con la fuente de respaldo.
-  expect(await page.evaluate(() => document.fonts.check('600 14px Barlow'))).toBe(true)
+  // Inter tiene que haberse cargado: si no, la captura saldría con la fuente de respaldo.
+  expect(await page.evaluate(() => document.fonts.check('600 14px Inter'))).toBe(true)
 }
 
 test('armazón · consola · escritorio', async ({ page }) => {

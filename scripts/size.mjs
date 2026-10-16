@@ -14,9 +14,18 @@ const KB = 1024
 const LIMITS = {
   'grado.min.css': 17 * KB,
   'tokens.css': 4 * KB,
+  // Temas en su propio archivo (0.6): solo los cargan las apps que los usan.
+  'themes/campo.css': 1.6 * KB,
+  // Web Components (0.6): el archivo para usar sin bundler, con todo dentro. 12,6 KB al crearlo.
+  'grado-elements.min.js': 14 * KB,
   // Los adaptadores, con los componentes que usan; sin la librería de formularios.
   '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
   '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,
+  // Labs (0.6): todo junto, con sus textos en tres idiomas. Fase 1 (utilidades): 14 y 14,5 KB;
+  // fase 2 (TariffComparison, SignaturePad, SolarForecast): 20,7 y 21,2 KB. Un 10 % de margen.
+  'labs.css': 2.2 * KB,
+  '@1k5-tech-es/grado-react/labs': 23 * KB,
+  '@1k5-tech-es/grado-vue/labs': 23.5 * KB,
 }
 // El paquete entero, como referencia: pasar de aquí avisa pero no falla.
 const WARNINGS = {
@@ -62,8 +71,13 @@ async function bundleImport(entry, names) {
 const rows = [
   { name: 'grado.min.css', size: gzip(readFileSync(path('packages/grado/dist/grado.min.css'))) },
   { name: 'tokens.css', size: gzip(readFileSync(path('packages/grado/dist/tokens.css'))) },
+  { name: 'themes/campo.css', size: gzip(readFileSync(path('packages/grado/dist/themes/campo.css'))) },
+  { name: 'grado-elements.min.js', size: gzip(readFileSync(path('packages/grado-elements/dist/grado-elements.min.js'))) },
   { name: '@1k5-tech-es/grado-react/react-hook-form', size: gzip(await bundle('packages/grado-react/dist/react-hook-form.js')) },
   { name: '@1k5-tech-es/grado-vue/vee-validate', size: gzip(await bundle('packages/grado-vue/dist/vee-validate.js')) },
+  { name: 'labs.css', size: gzip(readFileSync(path('packages/grado/dist/labs.css'))) },
+  { name: '@1k5-tech-es/grado-react/labs', size: gzip(await bundle('packages/grado-react/dist/labs.js')) },
+  { name: '@1k5-tech-es/grado-vue/labs', size: gzip(await bundle('packages/grado-vue/dist/labs.js')) },
 ].map((row) => ({ ...row, limit: LIMITS[row.name] }))
 for (const framework of ['react', 'vue'])
   for (const [label, { names, limit }] of Object.entries(IMPORTS))

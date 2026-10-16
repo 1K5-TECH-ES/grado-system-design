@@ -1,15 +1,7 @@
 import { computed, defineComponent, h, onBeforeUnmount, ref, watch, type PropType, type VNodeChild } from 'vue'
 import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import {
-  compareValues,
-  pageCount,
-  pixelHeight,
-  selectionLabel,
-  VIRTUAL_ROWS,
-  virtualWindow,
-  visibleColumns,
-  type SortState,
-} from '@1k5-tech-es/grado/patterns'
+import { pixelHeight, selectionLabel, VIRTUAL_ROWS, visibleColumns, type SortState } from '@1k5-tech-es/grado/patterns'
+import { nextSort, sortRows, tableView, toggleAllRows, toggleColumn, toggleRow } from '@1k5-tech-es/grado/core'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Button } from './Button.js'
 import { model } from './helpers.js'
@@ -82,23 +74,30 @@ export const DataTable = defineComponent({
       (keys: string[]) => emit('update:hiddenColumns', keys),
     )
     const shown = computed(() => visibleColumns(props.columns, hidden.value))
-    const total = computed(() => (props.manual ? (props.totalRows ?? props.rows.length) : props.rows.length))
-    const size = computed(() => Math.max(1, props.pageSize)),
-      count = computed(() => pageCount(total.value, size.value)),
-      current = computed(() => Math.min(count.value, Math.max(1, props.page ?? innerPage.value)))
-    const keyOf = (row: DataRow) => (typeof props.rowKey === 'function' ? props.rowKey(row) : String(row[props.rowKey]))
+    // Página, orden, selección y filas virtuales salen del núcleo común (@1k5-tech-es/grado/core), como en React.
+    const sorted = computed(() => sortRows(props.rows, props.columns, sorting.value, props.manual))
+    const scroll = ref({ top: 0, viewport: pixelHeight(props.maxHeight) ?? 600, rowHeight: 0 })
+    const view = computed(() =>
+      tableView({
+        rows: props.rows,
+        columns: props.columns,
+        rowKey: props.rowKey,
+        sort: sorting.value,
+        page: props.page ?? innerPage.value,
+        pageSize: props.pageSize,
+        manual: props.manual,
+        totalRows: props.totalRows,
+        selected: selected.value,
+        maxHeight: props.maxHeight,
+        loading: props.loading,
+        error: props.error,
+        scroll: scroll.value,
+        sorted: sorted.value,
+      }),
+    )
+    const count = computed(() => view.value.count)
     watch(count, () => {
       if (props.page === undefined && !props.manual) innerPage.value = Math.max(1, Math.min(count.value, innerPage.value))
-    })
-    const sorted = computed(() => {
-      const sort = sorting.value,
-        column = props.columns.find((col) => col.key === sort?.key && col.sortable)
-      if (props.manual || !column || !sort) return props.rows
-      return [...props.rows].sort(
-        (a, b) =>
-          compareValues(column.sortValue ? column.sortValue(a) : a[column.key], column.sortValue ? column.sortValue(b) : b[column.key]) *
-          (sort.direction === 'asc' ? 1 : -1),
-      )
     })
     const updateSelection = (keys: string[]) => {
       if (props.selectedKeys === undefined) innerSelected.value = keys
@@ -109,18 +108,15 @@ export const DataTable = defineComponent({
       emit('update:page', page)
     }
     const changeSort = (key: string) => {
-      const next: SortState = { key, direction: sorting.value?.key === key && sorting.value.direction === 'asc' ? 'desc' : 'asc' }
+      const next = nextSort(sorting.value, key)
       if (props.sort === undefined) innerSort.value = next
       emit('update:sort', next)
       changePage(1)
     }
     // Filas virtuales: dónde está el scroll, cuánto se ve y cuánto mide una fila.
     const root = ref<HTMLElement | null>(null)
-    const scroll = ref({ top: 0, viewport: pixelHeight(props.maxHeight) ?? 600, rowHeight: 0 })
-    const visibleRows = computed(() =>
-      props.manual ? props.rows : sorted.value.slice((current.value - 1) * size.value, current.value * size.value),
-    )
-    const virtual = computed(() => props.maxHeight != null && !props.loading && !props.error && visibleRows.value.length > VIRTUAL_ROWS)
+    // Solo depende de si hay filas virtuales, no de su tramo: así medir no vuelve a enganchar los eventos.
+    const virtual = computed(() => props.maxHeight != null && !props.loading && !props.error && view.value.visible.length > VIRTUAL_ROWS)
     let stop: (() => void) | null = null
     watch(
       [virtual, root],
@@ -159,18 +155,7 @@ export const DataTable = defineComponent({
         : pathIcon(sorting.value.direction === 'asc' ? ICON_PATHS.arrowUp : ICON_PATHS.arrowDown)
     return () => {
       const m = t.value.messages,
-        visible = visibleRows.value,
-        keys = visible.map(keyOf),
-        range = virtual.value
-          ? virtualWindow({
-              count: visible.length,
-              rowHeight: scroll.value.rowHeight,
-              scrollTop: scroll.value.top,
-              viewport: scroll.value.viewport,
-            })
-          : null,
-        all = keys.length > 0 && keys.every((key) => selected.value.includes(key)),
-        some = keys.some((key) => selected.value.includes(key)),
+        { visible, keys, range, all, some, keyOf, total, size, current } = view.value,
         span = shown.value.length + Number(props.selectable) + Number(!!slots.actions)
       const selection = props.selectable
         ? h('span', { class: 'k5-data-table__selection', role: 'status' }, selectionLabel(selected.value.length, m))
@@ -195,8 +180,7 @@ export const DataTable = defineComponent({
                       modelValue: on,
                       // Siempre queda al menos una columna a la vista.
                       disabled: on && shown.value.length === 1,
-                      'onUpdate:modelValue': (next: boolean) =>
-                        setHidden(next ? hidden.value.filter((key: string) => key !== column.key) : [...hidden.value, column.key]),
+                      'onUpdate:modelValue': (next: boolean) => setHidden(toggleColumn(hidden.value, column.key, next)),
                     })
                   }),
               ),
@@ -228,10 +212,7 @@ export const DataTable = defineComponent({
                             modelValue: all,
                             indeterminate: some && !all,
                             disabled: props.loading || !!props.error || keys.length === 0,
-                            'onUpdate:modelValue': (checked: boolean) =>
-                              updateSelection(
-                                checked ? [...new Set([...selected.value, ...keys])] : selected.value.filter((key) => !keys.includes(key)),
-                              ),
+                            'onUpdate:modelValue': (checked: boolean) => updateSelection(toggleAllRows(selected.value, keys, checked)),
                           }),
                         ])
                       : null,
@@ -274,7 +255,7 @@ export const DataTable = defineComponent({
                   'tbody',
                   null,
                   props.loading
-                    ? Array.from({ length: Math.min(size.value, 3) }, (_, i) =>
+                    ? Array.from({ length: Math.min(size, 3) }, (_, i) =>
                         h('tr', { key: i }, [
                           h('td', { colspan: span, class: 'k5-data-table__loading' }, [
                             i === 0 ? h('span', { class: 'k5-sr-only', role: 'status' }, m.loadingData) : null,
@@ -308,11 +289,7 @@ export const DataTable = defineComponent({
                                           'aria-label': formatMessage(m.selectRow, { key }),
                                           modelValue: selected.value.includes(key),
                                           'onUpdate:modelValue': (checked: boolean) =>
-                                            updateSelection(
-                                              checked
-                                                ? [...new Set([...selected.value, key])]
-                                                : selected.value.filter((value) => value !== key),
-                                            ),
+                                            updateSelection(toggleRow(selected.value, key, checked)),
                                         }),
                                       ])
                                     : null,
@@ -334,7 +311,7 @@ export const DataTable = defineComponent({
           ),
           // Con datos del servidor la paginación sigue a la vista mientras llega la página.
           !props.error && (props.manual || !props.loading)
-            ? h(Pagination, { total: total.value, pageSize: size.value, page: current.value, 'onUpdate:page': changePage })
+            ? h(Pagination, { total, pageSize: size, page: current, 'onUpdate:page': changePage })
             : null,
         ],
       )

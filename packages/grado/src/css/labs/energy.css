@@ -1,0 +1,200 @@
+/* Labs · energía y ventas: TariffComparison, SignaturePad y SolarForecast. */
+
+/* TariffComparison: una tabla con la más barata marcada y una barra con el coste relativo. */
+.k5-tariffs {
+  display: grid;
+  width: 100%;
+  gap: var(--k5-space-3);
+  min-width: 0;
+  margin: 0;
+}
+.k5-tariffs__header {
+  display: grid;
+  gap: var(--k5-space-0-5);
+}
+.k5-tariffs__title {
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-tariffs__description {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+}
+.k5-tariffs__table {
+  width: 100%;
+}
+/* El nombre de cada tarifa es encabezado de fila, pero se ve como una celda más. */
+.k5-tariffs__table tbody th {
+  border-top: 1px solid var(--k5-border);
+  border-bottom: 0;
+  color: var(--k5-card-foreground);
+  font-size: var(--k5-text-body);
+  white-space: normal;
+}
+.k5-tariffs__table tbody tr:first-child th {
+  border-top: 0;
+}
+.k5-tariffs__table tbody tr:hover th {
+  background: color-mix(in srgb, var(--k5-muted) 50%, transparent);
+}
+.k5-tariffs__name {
+  margin-right: var(--k5-space-2);
+}
+.k5-tariffs__total {
+  display: block;
+  font-weight: var(--k5-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.k5-tariffs__detail {
+  display: block;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-caption);
+  white-space: nowrap;
+}
+.k5-tariffs__bar {
+  display: block;
+  width: var(--_ratio, 100%);
+  height: 4px;
+  margin-top: var(--k5-space-1-5);
+  margin-left: auto;
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-border);
+}
+.k5-tariffs__table tr[data-cheapest] .k5-tariffs__bar {
+  background: var(--k5-success);
+}
+
+/* SignaturePad: zona de firma con línea base; el trazo sigue al dedo sin desplazar la página. */
+.k5-signature__pad {
+  position: relative;
+  border: 1px solid var(--k5-input);
+  border-radius: var(--k5-radius-md);
+  background: var(--k5-card);
+}
+.k5-signature__pad--invalid {
+  border-color: var(--k5-destructive);
+}
+.k5-signature__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1;
+  touch-action: none;
+  cursor: crosshair;
+}
+.k5-signature--disabled .k5-signature__canvas {
+  cursor: not-allowed;
+  opacity: var(--k5-opacity-disabled);
+}
+.k5-signature__baseline {
+  stroke: var(--k5-border);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+}
+.k5-signature__strokes {
+  fill: none;
+  stroke: var(--k5-foreground);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.k5-signature__typed {
+  display: grid;
+  gap: var(--k5-space-2);
+}
+.k5-signature__preview {
+  min-height: 3.5rem;
+  padding: var(--k5-space-2) var(--k5-space-4);
+  border-bottom: 1.5px dashed var(--k5-border);
+  font-size: var(--k5-text-title);
+  font-style: italic;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.k5-signature__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k5-space-1);
+}
+
+/* SolarForecast: prevista con trazo discontinuo y área; real con trazo continuo hasta ahora. */
+.k5-forecast__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k5-space-1) var(--k5-space-4);
+  margin-top: var(--k5-space-1);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+}
+.k5-forecast__summary strong {
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.k5-forecast__status--above {
+  color: var(--k5-success-text);
+}
+.k5-forecast__status--below {
+  color: var(--k5-warning-text);
+}
+.k5-forecast__expected {
+  color: var(--k5-muted-foreground);
+}
+.k5-forecast__expected .k5-chart__line {
+  stroke-dasharray: 4 4;
+}
+.k5-forecast__actual,
+.k5-forecast__now {
+  color: var(--k5-primary);
+}
+.k5-forecast .k5-chart__body {
+  grid-template-rows: var(--_plot) auto auto;
+}
+.k5-forecast__weather {
+  grid-column: 2;
+  display: flex;
+  min-width: 0;
+  color: var(--k5-muted-foreground);
+}
+.k5-forecast__weather-slot {
+  flex: 1;
+  min-width: 0;
+  overflow: visible;
+}
+.k5-forecast__weather-slot svg {
+  width: var(--k5-icon-sm);
+  height: var(--k5-icon-sm);
+}
+.k5-forecast .k5-chart__category {
+  overflow: visible;
+  white-space: nowrap;
+}
+.k5-forecast__swatch--expected {
+  flex: none;
+  width: var(--k5-space-3);
+  height: 0;
+  border-top: var(--k5-border-width-strong) dashed var(--k5-muted-foreground);
+  border-radius: 0;
+  background: none;
+}
+.k5-forecast__swatch--actual {
+  flex: none;
+  width: var(--k5-space-3);
+  height: var(--k5-border-width-strong);
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-primary);
+}
+.k5-forecast__swatch--none {
+  flex: none;
+  width: var(--k5-space-3);
+}
+
+@media (forced-colors: active) {
+  .k5-tariffs__bar,
+  .k5-forecast__swatch--actual {
+    forced-color-adjust: none;
+  }
+  .k5-signature__strokes {
+    stroke: canvastext;
+  }
+}

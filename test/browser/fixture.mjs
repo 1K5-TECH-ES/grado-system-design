@@ -11,9 +11,10 @@ import * as superposiciones from './groups/superposiciones.fixture.mjs'
 import * as formularios from './groups/formularios.fixture.mjs'
 import * as tablas from './groups/tablas.fixture.mjs'
 import * as energia from './groups/energia.fixture.mjs'
+import * as labs from './groups/labs.fixture.mjs'
 import { cases, missing, renderRefs } from './refs.fixture.mjs'
 
-const groups = [maquetacion, datos, graficos, entradas, superposiciones, formularios, tablas, energia]
+const groups = [maquetacion, datos, graficos, entradas, superposiciones, formularios, tablas, energia, labs]
 
 const initial = () => ({
   auto: false,

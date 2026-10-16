@@ -107,14 +107,14 @@ kbd {
 .k5-app__header .docs-brand__name {
   font-size: 1.125rem;
 }
-/* Logo de Grado en las aplicaciones de ejemplo. Lleva siempre Barlow, la fuente de marca,
+/* Logo de Grado en las aplicaciones de ejemplo. Lleva siempre Inter, la fuente de Grado,
    aunque el tema que se configura use otra. */
 .grado-logo {
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 0.4em;
-  font-family: Barlow, ui-sans-serif, system-ui, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -367,6 +367,16 @@ kbd {
 }
 .docs-theme__mini--marca {
   background: #f7f3f9;
+}
+/* Campo: fondo blanco, bordes oscuros y texto negro. */
+.docs-theme__mini--campo::after {
+  border: 2px solid #6e6474;
+}
+.docs-theme__mini--campo b {
+  border-right: 2px solid #6e6474;
+}
+.docs-theme__mini--campo em {
+  background: #111;
 }
 .docs-theme__mini--marca i {
   width: 26%;

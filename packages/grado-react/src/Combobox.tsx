@@ -2,6 +2,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
+import { comboboxReduce, comboboxState, comboboxView, type ComboboxEvent } from '@1k5-tech-es/grado/core'
 import { Input, useField } from './Field.js'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -45,38 +46,35 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const { messages: m } = useGrado(),
     placeholder = placeholderProp ?? m.searchPlaceholder
   const [selected, select] = useValue(value, defaultValue, onValueChange),
-    [open, setOpen] = useState(false),
-    [query, setQuery] = useState(''),
-    [active, setActive] = useState(-1)
+    [state, setState] = useState(comboboxState)
   const field = useField(),
-    controlId = useAutoId('k5-combobox', id ?? field?.id),
-    listId = `${controlId}-list`
+    controlId = useAutoId('k5-combobox', id ?? field?.id)
   const input = useRef<HTMLInputElement>(null),
     root = useRef<HTMLDivElement>(null)
   useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
-  const filtered = useMemo(() => filterOptions(options, query), [options, query]),
-    chosen = options.find((option) => option.value === selected)
-  const activeOption = filtered[active]
+  const filtered = useMemo(() => filterOptions(options, state.query), [options, state.query])
+  const view = comboboxView(state, { options, filtered, selected, id: controlId, placeholder })
+  const { open, active } = state
+  const activeOption = view.activeOption
   useEffect(() => {
     if (open && activeOption) document.getElementById(`${controlId}-option-${active}`)?.scrollIntoView({ block: 'nearest' })
   }, [active, open, controlId, activeOption])
-  const pick = (option: ChoiceOption) => {
-    if (option.disabled) return
-    select(option.value)
-    setQuery('')
-    setOpen(false)
-    input.current?.focus()
+  // Cada evento pasa por el núcleo común (@1k5-tech-es/grado/core), igual que en Vue y en grado-elements.
+  const send = (event: ComboboxEvent, dom?: { preventDefault(): void; stopPropagation(): void }) => {
+    const result = comboboxReduce(state, event, { filtered, loading })
+    if (result.preventDefault) dom?.preventDefault()
+    if (result.stopPropagation) dom?.stopPropagation()
+    setState(result.state)
+    if (result.query !== undefined) onQueryChange?.(result.query)
+    if (result.select !== undefined) select(result.select)
+    if (result.focusInput) input.current?.focus()
   }
   return (
     <div
       ref={root}
       className={cx('k5-combobox', className)}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) {
-          setOpen(false)
-          setQuery('')
-          setActive(-1)
-        }
+        if (!event.currentTarget.contains(event.relatedTarget)) send({ type: 'leave' })
       }}
     >
       {name && <input type="hidden" name={name} value={selected} disabled={disabled} />}
@@ -87,63 +85,21 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         aria-label={label}
         aria-autocomplete="list"
         aria-expanded={open}
-        aria-controls={open ? listId : undefined}
-        aria-activedescendant={open && activeOption && !activeOption.disabled ? `${controlId}-option-${active}` : undefined}
+        aria-controls={open ? view.listId : undefined}
+        aria-activedescendant={view.activeDescendant}
         aria-busy={loading || undefined}
         autoComplete="off"
-        placeholder={open ? (chosen?.label ?? placeholder) : placeholder}
+        placeholder={view.inputPlaceholder}
         disabled={disabled}
         required={required}
-        value={open ? query : (chosen?.label ?? '')}
-        onFocus={() => {
-          setOpen(true)
-          setActive(-1)
-        }}
-        onClick={() => setOpen(true)}
-        onChange={(event) => {
-          setQuery(event.target.value)
-          onQueryChange?.(event.target.value)
-          setActive(-1)
-          setOpen(true)
-          if (!event.target.value) select('')
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            event.preventDefault()
-            event.stopPropagation()
-            setOpen(false)
-            setQuery('')
-            return
-          }
-          if (event.key === 'Enter' && open) {
-            event.preventDefault()
-            if (!loading && activeOption) pick(activeOption)
-            return
-          }
-          if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
-            if (!open && ['Home', 'End'].includes(event.key)) return
-            event.preventDefault()
-            setOpen(true)
-            const enabled = filtered.map((option, i) => (option.disabled ? -1 : i)).filter((i) => i >= 0)
-            const position = enabled.indexOf(active)
-            setActive(
-              event.key === 'Home'
-                ? (enabled[0] ?? -1)
-                : event.key === 'End'
-                  ? (enabled[enabled.length - 1] ?? -1)
-                  : (enabled[
-                      position < 0
-                        ? event.key === 'ArrowDown'
-                          ? 0
-                          : enabled.length - 1
-                        : (position + (event.key === 'ArrowDown' ? 1 : -1) + enabled.length) % enabled.length
-                    ] ?? -1),
-            )
-          }
-        }}
+        value={view.inputValue}
+        onFocus={() => send({ type: 'focus' })}
+        onClick={() => send({ type: 'click' })}
+        onChange={(event) => send({ type: 'input', value: event.target.value })}
+        onKeyDown={(event) => send({ type: 'key', key: event.key }, event)}
       />
       {open && (
-        <ul className="k5-combobox__list" id={listId} role="listbox" aria-label={label ?? m.options}>
+        <ul className="k5-combobox__list" id={view.listId} role="listbox" aria-label={label ?? m.options}>
           {loading || !filtered.length ? (
             <li role="presentation" className="k5-combobox__empty">
               {loading ? m.loadingEllipsis : (emptyLabel ?? m.noResults)}
@@ -152,17 +108,15 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
             filtered.map((option, index) => (
               <li
                 role="option"
-                id={`${controlId}-option-${index}`}
+                id={view.optionId(index)}
                 key={option.value}
                 aria-selected={option.value === selected}
                 aria-disabled={option.disabled || undefined}
                 data-active={index === active}
                 className="k5-combobox__option"
                 onMouseDown={(event) => event.preventDefault()}
-                onMouseMove={() => {
-                  if (!option.disabled) setActive(index)
-                }}
-                onClick={() => pick(option)}
+                onMouseMove={() => send({ type: 'hover', index })}
+                onClick={() => send({ type: 'pick', option })}
               >
                 <span>{option.label}</span>
                 <PathIcon paths={ICON_PATHS.check} className="k5-combobox__check" />

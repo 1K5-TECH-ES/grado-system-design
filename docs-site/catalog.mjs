@@ -537,7 +537,8 @@ import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5-tech-es/grado-v
 
 components.push(...newComponents)
 
-export const categories = ['Acciones', 'Formularios', 'Datos', 'Estructura', 'Navegación', 'Superposiciones', 'Respuesta']
+// Labs va al final: fuera de la promesa de la 1.0.
+export const categories = ['Acciones', 'Formularios', 'Datos', 'Estructura', 'Navegación', 'Superposiciones', 'Respuesta', 'Labs']
 export const byCategory = categories
   .map((name) => ({ name, items: components.filter((c) => c.category === name) }))
   .filter((group) => group.items.length)

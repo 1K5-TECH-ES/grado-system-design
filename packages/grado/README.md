@@ -14,7 +14,7 @@ Tokens de diseño de 1KOMMA5° España: colores de marca, tipografía, radios, s
 | JavaScript: gráficos, React Native, correos | `@1k5-tech-es/grado/tokens` | `themes.consola.light.color.primary` |
 | Figma con Tokens Studio | `@1k5-tech-es/grado/tokens.dtcg.json` | Formato W3C: un conjunto global y uno por tema y modo |
 
-Y, en cualquier caso, `@1k5-tech-es/grado/fonts.css` para la fuente Barlow (ver [Fuente](#fuente)).
+Y, en cualquier caso, `@1k5-tech-es/grado/fonts.css` para la fuente Inter (ver [Fuente](#fuente)).
 
 Los dos CSS declaran las mismas variables. La única diferencia está en los nombres de shadcn (`--primary`, `--background`…): en `tokens-hsl.css` son tripletes HSL (`278.5 91.8% 28.6%`), como espera Tailwind 3, y en `tokens.css` son colores completos (`#5C068C`). Las variables `--k5-*` son siempre colores completos en los dos archivos.
 
@@ -51,7 +51,7 @@ export default {
 }
 ```
 
-El preset trae los colores, `darkMode: ['class']`, los radios (`rounded-sm/md/lg`), las sombras (`shadow-overlay`, `shadow-popover`), la fuente (Barlow), `text-2xs` (11 px), las alturas `h-control-sm`, `h-control` y `h-control-lg`, las duraciones `duration-fast` a `duration-slower`, las curvas `ease-standard` y `ease-emphasized`, las capas `z-overlay` a `z-skip-link` y las animaciones de acordeón de shadcn.
+El preset trae los colores, `darkMode: ['class']`, los radios (`rounded-sm/md/lg`), las sombras (`shadow-overlay`, `shadow-popover`), la fuente (Inter), `text-2xs` (11 px), las alturas `h-control-sm`, `h-control` y `h-control-lg`, las duraciones `duration-fast` a `duration-slower`, las curvas `ease-standard` y `ease-emphasized`, las capas `z-overlay` a `z-skip-link` y las animaciones de acordeón de shadcn.
 
 ## Tailwind 4 (React)
 
@@ -110,13 +110,13 @@ Los badges, el botón de borrar y las variaciones de KPI ponen texto de color so
 
 ## Fuente
 
-Barlow es la fuente de marca y la primera de `--k5-font-sans`. Viene en el paquete (400, 500, 600 y 700; latín y latín extendido) con licencia SIL Open Font License 1.1 (`assets/fonts/OFL.txt`):
+Inter es la fuente de Grado y la primera de `--k5-font-sans` (hasta 0.5 era Barlow, la de la guía de marca). Viene en el paquete (400, 500, 600 y 700; latín y latín extendido) con licencia SIL Open Font License 1.1 (`assets/fonts/OFL.txt`):
 
 ```css
 @import '@1k5-tech-es/grado/fonts.css';
 ```
 
-Con bundler, impórtalo una vez junto a los tokens. Sin bundler, copia `dist/` y `assets/fonts/` manteniendo la estructura. Si tu app ya carga Barlow por su cuenta, no hace falta.
+Con bundler, impórtalo una vez junto a los tokens. Sin bundler, copia `dist/` y `assets/fonts/` manteniendo la estructura. Si tu app ya carga Inter por su cuenta, no hace falta. Para seguir con Barlow, cárgala tú (por ejemplo, `@fontsource/barlow`) y cambia `--k5-font-sans`.
 
 ## Idiomas
 
@@ -132,8 +132,9 @@ Pon la clase `dark` o el atributo `data-theme="dark"` en `<html>`. Es lo que ya 
 |---|---|---|
 | `consola` | Por defecto | Herramientas internas. Es 1komma5es_help con los colores oficiales. |
 | `marca` | `data-k5-theme="marca"` en `<html>` o en cualquier contenedor | Lo que ve el cliente: portal, widget, ofertas. Barra lateral berenjena, fondo lila claro, radios y controles más grandes, anillo menta en la sección activa (`--sidebar-primary`). |
+| `campo` | `data-k5-theme="campo"`, y cargar `@1k5-tech-es/grado/themes/campo.css` (o `campo-hsl.css` con Tailwind 3) después de los tokens | Trabajo de campo, con la tablet al sol: todo el texto a 7 : 1, bordes que se ven y controles de 44 px. Hereda de Consola. |
 
-Los dos temas tienen exactamente los mismos tokens, así que una pantalla funciona igual en los dos.
+Los tres temas tienen exactamente los mismos tokens, así que una pantalla funciona igual en todos.
 
 ## Tokens
 
@@ -141,7 +142,7 @@ Abre `dist/preview.html` en el navegador para verlos todos, con tema y modo inte
 
 - **Marca y neutros:** `--k5-aubergine`, `--k5-mint`, `--k5-fuchsia` con sus tonos `-75`, `-50`, `-25` y `-10`; `--k5-graphite` con `-75`, `-50`, `-25` y `-10`; `--k5-white` y `--k5-black`.
 - **Semánticos:** los de shadcn (`background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring`, `sidebar-*`, `chart-1` a `chart-5`) y los que usa 1komma5es_help (`success`, `warning`, `warning-strong`, `info`, `header`, `brand-pink`).
-- **Tipografía:** `--k5-font-sans` (Barlow y la fuente del sistema de respaldo) y `--k5-font-mono`, tamaños `--k5-text-badge` (11 px) a `--k5-text-title` (24 px), pesos y `--k5-tracking-title`.
+- **Tipografía:** `--k5-font-sans` (Inter y la fuente del sistema de respaldo) y `--k5-font-mono`, tamaños `--k5-text-badge` (11 px) a `--k5-text-title` (24 px), pesos y `--k5-tracking-title`.
 - **Espaciado:** escala de 4 px, `--k5-space-0-5` (2 px) a `--k5-space-16` (64 px). `space-4` = 1rem.
 - **Movimiento:** `--k5-duration-fast` (100 ms), `-base` (150 ms), `-slow` (200 ms), `-slower` (300 ms); `--k5-ease-standard`, `--k5-ease-out`, `--k5-ease-emphasized`. Con `prefers-reduced-motion` las duraciones valen 0.
 - **Capas:** `--k5-z-overlay` (40), `-drawer` (50), `-dropdown` (60), `-tooltip` (70), `-toast` (80), `-skip-link` (90). Los diálogos usan `<dialog>` nativo y no necesitan `z-index`.
