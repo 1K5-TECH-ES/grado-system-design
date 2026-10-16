@@ -2,7 +2,7 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
-## 0.5.0 · sin publicar
+## 0.5.0 · 16 de octubre de 2026
 
 0.5, «Estabilidad»: las apps a producción, lo que prometemos probado y la API lista para congelarla en la 1.0.
 
