@@ -669,7 +669,11 @@ function receive(incoming) {
         'Columnas ocultas (React: onHiddenColumnsChange · Vue: v-model:hidden-columns) y botón «Columnas»',
         '[] / false',
       ],
-      ['maxHeight', 'Alto máximo: scroll propio y cabecera fija', '—'],
+      [
+        'maxHeight',
+        'Alto máximo: scroll propio y cabecera fija. Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales); al imprimir salen esas, así que para papel pagina o exporta CSV',
+        '—',
+      ],
       ['loading / error / emptyLabel', 'Estados de respuesta', 'false / —'],
       ['Acciones y celdas', 'React: rowActions / render · Vue: slots actions / cell-{key}', '—'],
     ],

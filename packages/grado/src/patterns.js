@@ -1031,6 +1031,32 @@ export function downloadCsv(filename, csv, doc = document) {
   setTimeout(() => URL.revokeObjectURL(url))
 }
 
+// ---------- Filas virtuales de DataTable (0.5) ----------
+
+/** Con maxHeight y más de estas filas a la vista, DataTable solo pinta las que se ven. */
+export const VIRTUAL_ROWS = 200
+// Alto de una fila de tabla normal antes de poder medirla: 40 px de contenido y 1 de borde.
+const ROW_ESTIMATE = 41
+
+/**
+ * Tramo de filas que hay que pintar: las que caben en viewport desde scrollTop, con overscan
+ * más por cada lado. before y after son los altos de las filas vacías que mantienen el scroll.
+ * Sin medidas (render en servidor o primer render), el primer tramo.
+ */
+export function virtualWindow({ count, rowHeight = ROW_ESTIMATE, scrollTop = 0, viewport = 600, overscan = 10 }) {
+  const height = Math.max(1, rowHeight || ROW_ESTIMATE)
+  const start = Math.min(count, Math.max(0, Math.floor(scrollTop / height) - overscan))
+  const end = Math.min(count, Math.max(start, Math.ceil((scrollTop + viewport) / height) + overscan))
+  return { start, end, before: start * height, after: (count - end) * height }
+}
+
+/** maxHeight en píxeles si se sabe sin medir: 480 o «480px». Si no («60vh», «30rem»), null. */
+export function pixelHeight(value) {
+  if (typeof value === 'number') return value
+  const match = /^\s*(\d+(?:\.\d+)?)px\s*$/.exec(String(value ?? ''))
+  return match ? Number(match[1]) : null
+}
+
 // ---------- Gráficos interactivos (0.4) ----------
 
 /** Dato bajo el puntero: cada dato ocupa una franja igual del ancho del gráfico. */

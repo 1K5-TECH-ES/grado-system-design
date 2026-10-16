@@ -106,3 +106,8 @@ th[aria-sort] .k5-data-table__sort {
   top: 0;
   background: var(--k5-card);
 }
+/* Filas virtuales: dos filas vacías guardan el alto de las que no se pintan. */
+.k5-data-table__spacer td {
+  padding: 0;
+  border: 0;
+}

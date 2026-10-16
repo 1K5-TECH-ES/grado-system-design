@@ -2,7 +2,9 @@
 import {
   forwardRef,
   useEffect,
+  useImperativeHandle,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
   type ForwardedRef,
@@ -11,7 +13,16 @@ import {
   type Ref,
 } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { compareValues, pageCount, selectionLabel, visibleColumns, type SortState } from '@1k5-tech-es/grado/patterns'
+import {
+  compareValues,
+  pageCount,
+  pixelHeight,
+  selectionLabel,
+  VIRTUAL_ROWS,
+  virtualWindow,
+  visibleColumns,
+  type SortState,
+} from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Button } from './Button.js'
 import { PathIcon } from './PathIcon.js'
@@ -59,7 +70,10 @@ export interface DataTableProps<T extends object> {
   onHiddenColumnsChange?: (keys: string[]) => void
   /** Botón «Columnas» para elegir las que se ven. */
   columnPicker?: boolean
-  /** Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS. */
+  /**
+   * Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS.
+   * Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales).
+   */
   maxHeight?: number | string
   loading?: boolean
   error?: string
@@ -102,6 +116,10 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   const { messages: m } = useGrado()
+  const root = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => root.current as HTMLDivElement, [])
+  // Filas virtuales: dónde está el scroll, cuánto se ve y cuánto mide una fila.
+  const [scroll, setScroll] = useState({ top: 0, viewport: pixelHeight(maxHeight) ?? 600, rowHeight: 0 })
   const [innerPage, setInnerPage] = useState(1),
     [innerSort, setInnerSort] = useState<SortState | null>(defaultSort),
     [innerSelected, setInnerSelected] = useState<string[]>([])
@@ -129,6 +147,33 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
   }, [rows, columns, sorting, manual])
   const visible = manual ? rows : sorted.slice((current - 1) * size, current * size),
     keys = visible.map(keyOf)
+  const virtual = maxHeight != null && !loading && !error && visible.length > VIRTUAL_ROWS
+  const range = virtual
+    ? virtualWindow({ count: visible.length, rowHeight: scroll.rowHeight, scrollTop: scroll.top, viewport: scroll.viewport })
+    : null
+  useEffect(() => {
+    const wrap = root.current?.querySelector<HTMLElement>('.k5-table-wrap')
+    if (!virtual || !wrap) return
+    let frame = 0
+    const measure = () => {
+      frame = 0
+      const row = wrap.querySelector<HTMLElement>('tbody tr:not(.k5-data-table__spacer)')
+      const next = { top: wrap.scrollTop, viewport: wrap.clientHeight, rowHeight: row?.offsetHeight ?? 0 }
+      setScroll((old) => (old.top === next.top && old.viewport === next.viewport && old.rowHeight === next.rowHeight ? old : next))
+    }
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(measure)
+    }
+    measure()
+    wrap.addEventListener('scroll', schedule, { passive: true })
+    const resize = new ResizeObserver(schedule)
+    resize.observe(wrap)
+    return () => {
+      wrap.removeEventListener('scroll', schedule)
+      resize.disconnect()
+      cancelAnimationFrame(frame)
+    }
+  }, [virtual])
   const all = keys.length > 0 && keys.every((key) => selected.includes(key)),
     some = keys.some((key) => selected.includes(key))
   const updateSelection = (next: string[]) => {
@@ -160,7 +205,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
   ) : null
   return (
     <div
-      ref={ref}
+      ref={root}
       className={cx('k5-data-table', maxHeight != null && 'k5-data-table--scroll', className)}
       style={
         maxHeight == null ? undefined : ({ '--_height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight } as CSSProperties)
@@ -201,7 +246,8 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
       ) : (
         selection
       )}
-      <Table caption={caption}>
+      {/* Con filas virtuales, el lector de pantalla sabe cuántas hay y dónde está cada una. */}
+      <Table caption={caption} aria-rowcount={range ? visible.length + 1 : undefined}>
         <thead>
           <tr>
             {selectable && (
@@ -268,30 +314,46 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
               </td>
             </tr>
           ) : (
-            visible.map((row) => {
-              const key = keyOf(row)
-              return (
-                <tr key={key} data-selected={selectable && selected.includes(key) ? true : undefined}>
-                  {selectable && (
-                    <td className="k5-data-table__check">
-                      <Checkbox
-                        aria-label={formatMessage(m.selectRow, { key })}
-                        checked={selected.includes(key)}
-                        onCheckedChange={(checked) =>
-                          updateSelection(checked ? [...new Set([...selected, key])] : selected.filter((value) => value !== key))
-                        }
-                      />
-                    </td>
-                  )}
-                  {shown.map((column) => (
-                    <td key={column.key} className={column.numeric ? 'k5-num' : undefined}>
-                      {column.render ? column.render(row) : String(row[column.key] ?? '')}
-                    </td>
-                  ))}
-                  {rowActions && <td className="k5-data-table__actions">{rowActions(row)}</td>}
+            <>
+              {range && range.before > 0 ? (
+                <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.before }}>
+                  <td colSpan={span} />
                 </tr>
-              )
-            })
+              ) : null}
+              {(range ? visible.slice(range.start, range.end) : visible).map((row, i) => {
+                const key = keyOf(row)
+                return (
+                  <tr
+                    key={key}
+                    aria-rowindex={range ? range.start + i + 2 : undefined}
+                    data-selected={selectable && selected.includes(key) ? true : undefined}
+                  >
+                    {selectable && (
+                      <td className="k5-data-table__check">
+                        <Checkbox
+                          aria-label={formatMessage(m.selectRow, { key })}
+                          checked={selected.includes(key)}
+                          onCheckedChange={(checked) =>
+                            updateSelection(checked ? [...new Set([...selected, key])] : selected.filter((value) => value !== key))
+                          }
+                        />
+                      </td>
+                    )}
+                    {shown.map((column) => (
+                      <td key={column.key} className={column.numeric ? 'k5-num' : undefined}>
+                        {column.render ? column.render(row) : String(row[column.key] ?? '')}
+                      </td>
+                    ))}
+                    {rowActions && <td className="k5-data-table__actions">{rowActions(row)}</td>}
+                  </tr>
+                )
+              })}
+              {range && range.after > 0 ? (
+                <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.after }}>
+                  <td colSpan={span} />
+                </tr>
+              ) : null}
+            </>
           )}
         </tbody>
       </Table>

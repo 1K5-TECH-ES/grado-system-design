@@ -395,3 +395,20 @@ export declare function gridKeyMove(
   rows: number,
   columns: number,
 ): [number, number] | undefined
+
+// ---------- Filas virtuales de DataTable (0.5) ----------
+export declare const VIRTUAL_ROWS: number
+export interface VirtualWindow {
+  start: number
+  end: number
+  before: number
+  after: number
+}
+export declare function virtualWindow(options: {
+  count: number
+  rowHeight?: number
+  scrollTop?: number
+  viewport?: number
+  overscan?: number
+}): VirtualWindow
+export declare function pixelHeight(value: number | string | null | undefined): number | null

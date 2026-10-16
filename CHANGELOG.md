@@ -17,6 +17,19 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - El CI prueba los tests y el navegador también con React 18.3, Vue 3.5.0 y Node 24, además de React 19, la última Vue y Node 22. Lo que dicen `peerDependencies` y `engines` queda comprobado en cada pull request.
 - `engines`: Node.js 22 o superior para `npx @1k5-tech-es/grado` y para compilar el repositorio. Node 20 dejó de tener soporte el 30 de abril de 2026.
 
+### Filas virtuales
+
+- `DataTable`: con `maxHeight` y más de 200 filas a la vista, solo pinta las que se ven y unas pocas más; dos filas vacías guardan el alto, así que la barra de scroll y la cabecera fija se comportan igual. La tabla lleva `aria-rowcount` y cada fila su `aria-rowindex`, para que el lector de pantalla sepa cuántas hay y dónde está. No cambia ninguna prop. Al imprimir salen las filas pintadas: para papel, pagina o exporta CSV.
+- `VIRTUAL_ROWS`, `virtualWindow()` y `pixelHeight()` en `@1k5-tech-es/grado/patterns`: la cuenta que usan React y Vue.
+
+### Hacia la 1.0
+
+- Textos en alemán e inglés en su propio módulo: `@1k5-tech-es/grado/messages/de` y `/en`, para pasarlos en `messages` (`<GradoProvider locale="de-DE" messages={de}>`, `app.use(Grado, { locale: 'de-DE', messages: de })`). En 0.5 siguen viniendo de serie; en desarrollo, Grado avisa una vez en la consola si pides `de-DE` o `en-GB` sin pasar sus textos. En 1.0 solo vendrá el español, unos 4,5 KB menos en cada app.
+- Obsoleto, se retira en 1.0: los alias de tamaño `--k5-text-badge`, `--k5-text-label`, `--k5-text-nav` y `--k5-text-section`, y `text-2xs` en Tailwind. Usa `caption`, `small` y `heading`, que miden lo mismo. El CSS generado lo marca con un comentario; el CSS de Grado ya no los usa.
+- `npx @1k5-tech-es/grado usage` lista lo obsoleto que usa una app y `npx @1k5-tech-es/grado migrate` avisa, con archivo y línea, de `text-2xs` y de `GradoProvider` o del plugin en alemán o inglés sin sus textos (los tokens ya los cambiaba).
+- Política de versiones en Fundamentos: qué cuenta como un cambio que rompe, cómo se avisa de lo obsoleto y qué se retira en 1.0. Antes decía que los alias tipográficos se mantenían hasta la 2.0.
+- `Button`: la guía de uso aclara cuándo `danger` (el botón que abre la confirmación) y cuándo `destructive` (el que la confirma en `AlertDialog`). Las dos variantes se quedan.
+
 ### Impresión y alto contraste
 
 - Al imprimir, el armazón (cabecera, barra lateral, aviso), los botones, la paginación, las barras de filtros y de acciones, los avisos y lo que flota no salen en papel. `AppShell` deja de medir lo que la ventana y de tener su propio scroll, así que se imprime todo el contenido, no solo lo visible. Las tablas repiten la cabecera en cada página y no parten filas; tarjetas, KPI, avisos y gráficos no se parten entre páginas; gráficos, estados y barras conservan su color.
@@ -36,10 +49,14 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 - React 18: en `CommandPalette`, un Enter justo después de escribir no elegía nada, porque la primera opción se marcaba un instante después. Ahora se marca en el mismo render que el filtro.
 - Vue: el paquete compila con los tipos de Vue 3.5.0, que declaran `useId()` como `string | undefined`.
+- Web: la vista previa de `AppShell` en Componentes se quedaba en el esqueleto de carga (`flushSync` dentro de un efecto no pinta nada en React 19). Ahora se ve, a todo el ancho.
+- Las capturas por componente se hacen con la vista previa en una posición fija: una línea más en una guía de uso ya no mueve todas las demás una fracción de píxel.
 
 ### Al actualizar desde 0.4.0
 
 - Si compilas Grado o usas `npx @1k5-tech-es/grado` con Node 20, pasa a Node 22.
+- Si tu app usa Grado en alemán o en inglés, importa sus textos y pásalos en `messages` (lo de arriba). Si no, verás un aviso en la consola en desarrollo; en 1.0 los textos saldrían en español.
+- Si usas `--k5-text-badge`, `-label`, `-nav`, `-section` o `text-2xs`, cámbialos ya: `npx @1k5-tech-es/grado migrate` hace los tokens y avisa de `text-2xs`.
 - Al imprimir ya no salen los botones ni el armazón. Si un botón tiene que salir en papel, añádele `k5-print-keep`. Si tu app tenía su propio CSS de impresión para quitar la barra lateral, ya no hace falta.
 
 ## 0.4.0 · 16 de octubre de 2026

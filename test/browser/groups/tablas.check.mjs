@@ -34,4 +34,22 @@ export async function check(page, { expect }) {
   const [top, header] = await Promise.all([wrap.boundingBox(), table.locator('thead th').first().boundingBox()])
   expect(Math.abs(header.y - top.y)).toBeLessThan(2)
   await wrap.evaluate((element) => (element.scrollTop = 0))
+
+  // Filas virtuales: de 2000 filas solo hay unas pocas en el DOM, y al bajar llegan las demás.
+  const virtual = page.locator('#virtuales .k5-data-table')
+  const body = virtual.locator('tbody tr:not(.k5-data-table__spacer)')
+  await expect(virtual.locator('table')).toHaveAttribute('aria-rowcount', '2001')
+  await expect(body.first()).toHaveText(/Lectura 0001/)
+  expect(await body.count()).toBeLessThan(60)
+  const scroller = virtual.locator('.k5-table-wrap')
+  const total = await scroller.evaluate((element) => element.scrollHeight)
+  expect(total).toBeGreaterThan(2000 * 30)
+  await scroller.evaluate((element) => (element.scrollTop = element.scrollHeight))
+  await expect(virtual.locator('tbody tr', { hasText: 'Lectura 2000' })).toBeVisible()
+  await expect(virtual.locator('tbody tr', { hasText: 'Lectura 2000' })).toHaveAttribute('aria-rowindex', '2001')
+  expect(await body.count()).toBeLessThan(60)
+  await scroller.evaluate((element) => (element.scrollTop = element.scrollHeight / 2))
+  await expect(virtual.locator('tbody tr', { hasText: 'Lectura 1000' })).toBeVisible()
+  // La cabecera sigue fija y la barra no salta: el alto total no cambia al bajar.
+  expect(Math.abs((await scroller.evaluate((element) => element.scrollHeight)) - total)).toBeLessThan(100)
 }

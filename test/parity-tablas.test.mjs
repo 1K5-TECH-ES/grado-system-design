@@ -36,6 +36,15 @@ const SCENARIOS = {
   'columnas: selector y una oculta': { ...base, columnPicker: true, defaultHiddenColumns: ['provincia'], selectable: true },
   'alto máximo con cabecera fija': { ...base, maxHeight: 320 },
   'alto máximo como medida CSS': { ...base, maxHeight: '50vh' },
+  'filas virtuales: 1000 filas con alto máximo': {
+    rows: Array.from({ length: 1000 }, (_, i) => ({ id: `INS-${i + 1}`, cliente: `Cliente ${i + 1}`, provincia: 'Madrid', kwp: 5 })),
+    columns,
+    rowKey: 'id',
+    caption: 'Instalaciones',
+    pageSize: 1000,
+    maxHeight: 400,
+    selectable: true,
+  },
 }
 
 for (const [name, props] of Object.entries(SCENARIOS)) {
@@ -63,4 +72,22 @@ test('DataTable con columnas ocultas y alto máximo', () => {
   assert.doesNotMatch(picker, /Madrid/)
   const scroll = renderToStaticMarkup(r(R.DataTable, SCENARIOS['alto máximo con cabecera fija']))
   assert.match(scroll, /class="k5-data-table k5-data-table--scroll" style="--_height:320px"/)
+})
+
+test('DataTable con filas virtuales: solo el primer tramo, con su alto y su posición', () => {
+  const html = renderToStaticMarkup(r(R.DataTable, SCENARIOS['filas virtuales: 1000 filas con alto máximo']))
+  const rendered = html.match(/<tr aria-rowindex/g) ?? []
+  // 400 px de alto a ~41 px por fila más 10 de margen: unas 20, no 1000.
+  assert.ok(rendered.length > 10 && rendered.length < 40, `${rendered.length} filas pintadas`)
+  assert.match(html, /<table[^>]*aria-rowcount="1001"/)
+  assert.match(html, /<tr aria-rowindex="2"[^>]*>.*?Cliente 1</)
+  assert.doesNotMatch(html, /Cliente 1000/)
+  assert.match(html, /class="k5-data-table__spacer" aria-hidden="true" style="height:\d+px"/)
+  // Con 200 filas o menos, o sin alto máximo, se pintan todas como siempre.
+  const few = renderToStaticMarkup(r(R.DataTable, { ...SCENARIOS['filas virtuales: 1000 filas con alto máximo'], pageSize: 200 }))
+  assert.doesNotMatch(few, /aria-rowcount|k5-data-table__spacer/)
+  const noHeight = renderToStaticMarkup(
+    r(R.DataTable, { ...SCENARIOS['filas virtuales: 1000 filas con alto máximo'], maxHeight: undefined }),
+  )
+  assert.equal((noHeight.match(/<tr data-selected|<tr>/g) ?? []).length > 1000, true)
 })

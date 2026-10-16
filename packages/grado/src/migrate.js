@@ -12,6 +12,8 @@ const DANGER = /variant\s*[=:]\s*\{?\s*["'`]danger["'`]/g
 const HIGHLIGHT = /tone\s*[=:]\s*\{?\s*["'`]highlight["'`]/g
 // text-2xs del preset de Tailwind: se retira en 1.0. Solo se avisa, el nombre puede ser de la app.
 const TEXT_2XS = /(?<![\w-])text-2xs(?![\w-])/g
+// GradoProvider o el plugin en alemán o inglés: desde 1.0 hay que pasar sus textos en messages.
+const LOCALE = /locale\s*[=:]\s*\{?\s*["'`]?\s*["'`](de|en)(?:-[A-Z]{2})?["'`]/g
 
 export const RULES = {
   scope: '@1k5/… → @1k5-tech-es/…',
@@ -30,6 +32,10 @@ export const WARNINGS = {
   vendor: 'La dependencia apuntaba a un .tgz. Ya puedes borrar ese archivo: el paquete viene ahora de GitHub Packages.',
   npmrc: 'Falta el registro de GitHub Packages. Añadido a .npmrc; exporta GITHUB_TOKEN con un token classic con read:packages.',
   text2xs: 'text-2xs (Tailwind) se retira en 1.0: usa text-caption, que mide lo mismo. Si text-2xs es tuyo y no de Grado, ignora el aviso.',
+  messagesDe:
+    "Grado 1.0 solo traerá los textos en español. Importa los alemanes y pásalos: import de from '@1k5-tech-es/grado/messages/de' y messages={de} (Vue: messages: de).",
+  messagesEn:
+    "Grado 1.0 solo traerá los textos en español. Importa los ingleses y pásalos: import en from '@1k5-tech-es/grado/messages/en' y messages={en} (Vue: messages: en).",
 }
 
 /** «0.1», «0.2»… de una versión o rango de npm («^0.1.0», «file:vendor/1k5-grado-0.2.0.tgz»). */
@@ -94,6 +100,12 @@ export function migrateSource(text, { path = '', from = '0.1' } = {}) {
   // Avisos que valen desde cualquier versión: lo que se retira en 1.0 y no se cambia solo.
   TEXT_2XS.lastIndex = 0
   for (const match of next.matchAll(TEXT_2XS)) warnings.push({ rule: 'text2xs', line: lineOf(next, match.index) })
+  // Solo si en esa línea no se pasan ya los textos.
+  LOCALE.lastIndex = 0
+  for (const match of next.matchAll(LOCALE)) {
+    const line = lineOf(next, match.index)
+    if (!/messages/.test(next.split('\n')[line - 1])) warnings.push({ rule: match[1] === 'de' ? 'messagesDe' : 'messagesEn', line })
+  }
   return { text: next, changes, warnings }
 }
 

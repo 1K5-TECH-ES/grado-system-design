@@ -170,3 +170,24 @@ test('text-2xs: se avisa con su línea desde cualquier versión, sin cambiarlo',
     )
   }
 })
+
+test('alemán o inglés sin sus textos: se avisa con la línea; con messages, no', () => {
+  const source = [
+    '<GradoProvider locale="de-DE">',
+    "app.use(Grado, { locale: 'en-GB' })",
+    '<GradoProvider locale="de-DE" messages={de}>',
+    "app.use(Grado, { locale: 'de-DE', messages: de })",
+    '<GradoProvider locale="es-ES">',
+    '<GradoProvider :locale="\'en\'">',
+  ].join('\n')
+  const { text, warnings } = migrateSource(source, { path: 'main.tsx', from: '0.4' })
+  assert.equal(text, source)
+  assert.deepEqual(
+    warnings.filter((w) => w.rule.startsWith('messages')),
+    [
+      { rule: 'messagesDe', line: 1 },
+      { rule: 'messagesEn', line: 2 },
+      { rule: 'messagesEn', line: 6 },
+    ],
+  )
+})

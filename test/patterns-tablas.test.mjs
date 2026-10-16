@@ -1,7 +1,7 @@
 // Tablas con datos del servidor (0.4): columnas visibles y exportación a CSV.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { toCsv, visibleColumns } from '@1k5-tech-es/grado/patterns'
+import { pixelHeight, toCsv, virtualWindow, visibleColumns } from '@1k5-tech-es/grado/patterns'
 
 const columns = [
   { key: 'cliente', header: 'Cliente' },
@@ -38,4 +38,37 @@ test('columnas visibles: las ocultas salen, salvo las que no se pueden ocultar',
     ['cliente', 'kwp'],
   )
   assert.equal(visibleColumns(list).length, 3)
+})
+
+test('filas virtuales: el tramo visible con margen y el alto de lo que no se pinta', () => {
+  assert.deepEqual(virtualWindow({ count: 1000, rowHeight: 40, scrollTop: 0, viewport: 400, overscan: 10 }), {
+    start: 0,
+    end: 20,
+    before: 0,
+    after: 980 * 40,
+  })
+  // A mitad: desde 10 filas antes de la primera visible hasta 10 después de la última.
+  assert.deepEqual(virtualWindow({ count: 1000, rowHeight: 40, scrollTop: 20_000, viewport: 400, overscan: 10 }), {
+    start: 490,
+    end: 520,
+    before: 490 * 40,
+    after: 480 * 40,
+  })
+  // Al final no se pasa del total; sin medida de fila usa la estimación.
+  assert.deepEqual(virtualWindow({ count: 30, rowHeight: 40, scrollTop: 5000, viewport: 400 }), {
+    start: 30,
+    end: 30,
+    before: 1200,
+    after: 0,
+  })
+  assert.equal(virtualWindow({ count: 1000, rowHeight: 0, viewport: 410 }).end, 20)
+})
+
+test('pixelHeight: solo números y px', () => {
+  assert.equal(pixelHeight(480), 480)
+  assert.equal(pixelHeight('480px'), 480)
+  assert.equal(pixelHeight(' 32.5px '), 32.5)
+  assert.equal(pixelHeight('60vh'), null)
+  assert.equal(pixelHeight('30rem'), null)
+  assert.equal(pixelHeight(undefined), null)
 })

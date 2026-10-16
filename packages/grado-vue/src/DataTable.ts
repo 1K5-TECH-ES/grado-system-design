@@ -1,6 +1,15 @@
-import { computed, defineComponent, h, ref, watch, type PropType, type VNodeChild } from 'vue'
+import { computed, defineComponent, h, onBeforeUnmount, ref, watch, type PropType, type VNodeChild } from 'vue'
 import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { compareValues, pageCount, selectionLabel, visibleColumns, type SortState } from '@1k5-tech-es/grado/patterns'
+import {
+  compareValues,
+  pageCount,
+  pixelHeight,
+  selectionLabel,
+  VIRTUAL_ROWS,
+  virtualWindow,
+  visibleColumns,
+  type SortState,
+} from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Button } from './Button.js'
 import { model } from './helpers.js'
@@ -24,6 +33,10 @@ export interface DataColumn {
   /** Valor para toCsv() si no es el del campo: un número sin unidad, una fecha ISO… */
   csvValue?: (row: DataRow) => string | number | null | undefined
 }
+// Fila vacía que guarda el alto de las filas virtuales que no se pintan.
+const spacer = (height: number, span: number) =>
+  h('tr', { class: 'k5-data-table__spacer', 'aria-hidden': 'true', style: { height: `${height}px` } }, [h('td', { colspan: span })])
+
 export const DataTable = defineComponent({
   name: 'K5DataTable',
   props: {
@@ -46,7 +59,10 @@ export const DataTable = defineComponent({
     defaultHiddenColumns: { type: Array as PropType<string[]>, default: () => [] },
     /** Botón «Columnas» para elegir las que se ven. */
     columnPicker: Boolean,
-    /** Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS. */
+    /**
+     * Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS.
+     * Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales).
+     */
     maxHeight: [Number, String],
     loading: Boolean,
     error: String,
@@ -98,14 +114,61 @@ export const DataTable = defineComponent({
       emit('update:sort', next)
       changePage(1)
     }
+    // Filas virtuales: dónde está el scroll, cuánto se ve y cuánto mide una fila.
+    const root = ref<HTMLElement | null>(null)
+    const scroll = ref({ top: 0, viewport: pixelHeight(props.maxHeight) ?? 600, rowHeight: 0 })
+    const visibleRows = computed(() =>
+      props.manual ? props.rows : sorted.value.slice((current.value - 1) * size.value, current.value * size.value),
+    )
+    const virtual = computed(() => props.maxHeight != null && !props.loading && !props.error && visibleRows.value.length > VIRTUAL_ROWS)
+    let stop: (() => void) | null = null
+    watch(
+      [virtual, root],
+      () => {
+        stop?.()
+        stop = null
+        const wrap = root.value?.querySelector<HTMLElement>('.k5-table-wrap')
+        if (!virtual.value || !wrap) return
+        let frame = 0
+        const measure = () => {
+          frame = 0
+          const row = wrap.querySelector<HTMLElement>('tbody tr:not(.k5-data-table__spacer)')
+          const next = { top: wrap.scrollTop, viewport: wrap.clientHeight, rowHeight: row?.offsetHeight ?? 0 }
+          const old = scroll.value
+          if (old.top !== next.top || old.viewport !== next.viewport || old.rowHeight !== next.rowHeight) scroll.value = next
+        }
+        const schedule = () => {
+          if (!frame) frame = requestAnimationFrame(measure)
+        }
+        measure()
+        wrap.addEventListener('scroll', schedule, { passive: true })
+        const resize = new ResizeObserver(schedule)
+        resize.observe(wrap)
+        stop = () => {
+          wrap.removeEventListener('scroll', schedule)
+          resize.disconnect()
+          cancelAnimationFrame(frame)
+        }
+      },
+      { flush: 'post' },
+    )
+    onBeforeUnmount(() => stop?.())
     const sortIcon = (key: string) =>
       sorting.value?.key !== key
         ? pathIcon(ICON_PATHS.chevronsUpDown, 'k5-data-table__sort-icon')
         : pathIcon(sorting.value.direction === 'asc' ? ICON_PATHS.arrowUp : ICON_PATHS.arrowDown)
     return () => {
       const m = t.value.messages,
-        visible = props.manual ? props.rows : sorted.value.slice((current.value - 1) * size.value, current.value * size.value),
+        visible = visibleRows.value,
         keys = visible.map(keyOf),
+        range = virtual.value
+          ? virtualWindow({
+              count: visible.length,
+              rowHeight: scroll.value.rowHeight,
+              scrollTop: scroll.value.top,
+              viewport: scroll.value.viewport,
+            })
+          : null,
         all = keys.length > 0 && keys.every((key) => selected.value.includes(key)),
         some = keys.some((key) => selected.value.includes(key)),
         span = shown.value.length + Number(props.selectable) + Number(!!slots.actions)
@@ -143,6 +206,7 @@ export const DataTable = defineComponent({
       return h(
         'div',
         {
+          ref: root,
           class: ['k5-data-table', height != null && 'k5-data-table--scroll'],
           ...(height == null ? {} : { style: { '--_height': typeof height === 'number' ? `${height}px` : height } }),
           'aria-busy': props.loading || undefined,
@@ -151,7 +215,8 @@ export const DataTable = defineComponent({
           props.columnPicker ? h('div', { class: 'k5-data-table__toolbar' }, [selection, picker()]) : selection,
           h(
             Table,
-            { caption: props.caption },
+            // Con filas virtuales, el lector de pantalla sabe cuántas hay y dónde está cada una.
+            { caption: props.caption, ...(range ? { 'aria-rowcount': visible.length + 1 } : {}) },
             {
               default: () => [
                 h('thead', null, [
@@ -225,32 +290,44 @@ export const DataTable = defineComponent({
                         ]
                       : !visible.length
                         ? [h('tr', null, [h('td', { colspan: span, class: 'k5-data-table__empty' }, props.emptyLabel ?? m.noResults)])]
-                        : visible.map((row) => {
-                            const key = keyOf(row)
-                            return h('tr', { key, 'data-selected': props.selectable && selected.value.includes(key) ? true : undefined }, [
-                              props.selectable
-                                ? h('td', { class: 'k5-data-table__check' }, [
-                                    h(Checkbox, {
-                                      'aria-label': formatMessage(m.selectRow, { key }),
-                                      modelValue: selected.value.includes(key),
-                                      'onUpdate:modelValue': (checked: boolean) =>
-                                        updateSelection(
-                                          checked
-                                            ? [...new Set([...selected.value, key])]
-                                            : selected.value.filter((value) => value !== key),
-                                        ),
-                                    }),
-                                  ])
-                                : null,
-                              ...shown.value.map((column) =>
-                                h('td', { key: column.key, ...(column.numeric ? { class: 'k5-num' } : {}) }, [
-                                  slots[`cell-${column.key}`]?.({ row }) ??
-                                    (column.render ? column.render(row) : String(row[column.key] ?? '')),
-                                ]),
-                              ),
-                              slots.actions ? h('td', { class: 'k5-data-table__actions' }, slots.actions({ row })) : null,
-                            ])
-                          }),
+                        : [
+                            range && range.before > 0 ? spacer(range.before, span) : null,
+                            ...(range ? visible.slice(range.start, range.end) : visible).map((row, i) => {
+                              const key = keyOf(row)
+                              return h(
+                                'tr',
+                                {
+                                  key,
+                                  ...(range ? { 'aria-rowindex': range.start + i + 2 } : {}),
+                                  'data-selected': props.selectable && selected.value.includes(key) ? true : undefined,
+                                },
+                                [
+                                  props.selectable
+                                    ? h('td', { class: 'k5-data-table__check' }, [
+                                        h(Checkbox, {
+                                          'aria-label': formatMessage(m.selectRow, { key }),
+                                          modelValue: selected.value.includes(key),
+                                          'onUpdate:modelValue': (checked: boolean) =>
+                                            updateSelection(
+                                              checked
+                                                ? [...new Set([...selected.value, key])]
+                                                : selected.value.filter((value) => value !== key),
+                                            ),
+                                        }),
+                                      ])
+                                    : null,
+                                  ...shown.value.map((column) =>
+                                    h('td', { key: column.key, ...(column.numeric ? { class: 'k5-num' } : {}) }, [
+                                      slots[`cell-${column.key}`]?.({ row }) ??
+                                        (column.render ? column.render(row) : String(row[column.key] ?? '')),
+                                    ]),
+                                  ),
+                                  slots.actions ? h('td', { class: 'k5-data-table__actions' }, slots.actions({ row })) : null,
+                                ],
+                              )
+                            }),
+                            range && range.after > 0 ? spacer(range.after, span) : null,
+                          ],
                 ),
               ],
             },
