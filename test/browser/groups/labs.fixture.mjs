@@ -63,6 +63,28 @@ export function render({ make, section, isVue }) {
       ),
     ),
     section('labs-atajos', make(isVue ? VueHotkeys : ReactHotkeys)),
+    section(
+      'labs-tarifas',
+      C('TariffComparison', {
+        title: 'Tu consumo con cada tarifa',
+        consumption: { punta: 900, llano: 1100, valle: 1500 },
+        power: 4.6,
+        tariffs: [
+          { id: 'fija', name: 'Precio fijo', energy: 0.145, power: 0.09 },
+          { id: 'td', name: '2.0TD', energy: { punta: 0.21, llano: 0.14, valle: 0.09 }, power: { punta: 0.1, valle: 0.01 } },
+        ],
+      }),
+    ),
+    section('labs-firma', C('SignaturePad', { label: 'Firma del titular', name: 'firma', required: true })),
+    section(
+      'labs-prevision',
+      C('SolarForecast', {
+        title: 'Producción de hoy',
+        forecast: [0, 0, 0, 0, 0, 0, 0.2, 0.8, 1.6, 2.4, 3.1, 3.5, 3.6, 3.4, 2.9, 2.2, 1.4, 0.6, 0.1, 0, 0, 0, 0, 0],
+        actual: [0, 0, 0, 0, 0, 0, 0.3, 0.9, 1.8, 2.6, 3.3, 3.8, 3.9],
+        weather: Array.from({ length: 24 }, (_, i) => (i < 12 ? 'sun' : i < 16 ? 'partly' : 'cloud')),
+      }),
+    ),
     section('labs-oculto', make('button', { type: 'button' }, 'Ver', C('VisuallyHidden', null, ' la oferta OF-0418'))),
   ]
 }

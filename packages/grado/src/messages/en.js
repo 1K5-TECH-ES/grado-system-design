@@ -146,11 +146,6 @@ export const en = {
   selectedCountOne: '1 selected',
   selectedCountMany: '{count} selected',
   clearSelection: 'Clear selection',
-  // ---------- Labs (0.6) ----------
-  themeLabel: 'Theme',
-  themeLight: 'Light',
-  themeDark: 'Dark',
-  themeSystem: 'System',
 }
 
 export default en

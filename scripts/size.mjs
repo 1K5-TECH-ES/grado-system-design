@@ -17,10 +17,11 @@ const LIMITS = {
   // Los adaptadores, con los componentes que usan; sin la librería de formularios.
   '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
   '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,
-  // Labs (0.6): todo junto (14 y 14,5 KB al crearlo), con SegmentedControl para ThemeToggle.
-  'labs.css': 1 * KB,
-  '@1k5-tech-es/grado-react/labs': 15.5 * KB,
-  '@1k5-tech-es/grado-vue/labs': 16 * KB,
+  // Labs (0.6): todo junto, con sus textos en tres idiomas. Fase 1 (utilidades): 14 y 14,5 KB;
+  // fase 2 (TariffComparison, SignaturePad, SolarForecast): 20,7 y 21,2 KB. Un 10 % de margen.
+  'labs.css': 2.2 * KB,
+  '@1k5-tech-es/grado-react/labs': 23 * KB,
+  '@1k5-tech-es/grado-vue/labs': 23.5 * KB,
 }
 // El paquete entero, como referencia: pasar de aquí avisa pero no falla.
 const WARNINGS = {

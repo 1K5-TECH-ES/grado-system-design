@@ -69,6 +69,57 @@ function VisuallyHiddenDemo() {
   )
 }
 
+function TariffComparisonDemo() {
+  return h(L.TariffComparison, {
+    title: 'Tu consumo con cada tarifa',
+    consumption: { punta: 900, llano: 1100, valle: 1500 },
+    power: 4.6,
+    tariffs: [
+      { id: 'fija', name: 'Precio fijo', energy: 0.145, power: 0.09 },
+      { id: 'td', name: '2.0TD', energy: { punta: 0.21, llano: 0.14, valle: 0.09 }, power: { punta: 0.1, valle: 0.01 } },
+      { id: 'nocturna', name: 'Nocturna', energy: { punta: 0.25, llano: 0.16, valle: 0.07 }, power: 0.095, monthly: 2 },
+    ],
+  })
+}
+
+function SignaturePadDemo() {
+  const [value, setValue] = useState({
+    strokes: [
+      [
+        [60, 140],
+        [90, 80],
+        [120, 135],
+        [150, 70],
+        [185, 130],
+        [230, 95],
+        [280, 120],
+        [330, 100],
+      ],
+    ],
+  })
+  return h(
+    'div',
+    { style: { width: '100%', maxWidth: '28rem' } },
+    h(L.SignaturePad, { label: 'Firma del titular', value, onChange: setValue, required: true }),
+  )
+}
+
+// Un día de octubre en una instalación de 5,4 kWp: sol por la mañana, nubes por la tarde. Datos de ejemplo.
+const FORECAST = [0, 0, 0, 0, 0, 0, 0.2, 0.8, 1.6, 2.4, 3.1, 3.5, 3.6, 3.4, 2.9, 2.2, 1.4, 0.6, 0.1, 0, 0, 0, 0, 0]
+const ACTUAL = [0, 0, 0, 0, 0, 0, 0.3, 0.9, 1.8, 2.6, 3.3, 3.8, 3.9]
+const WEATHER = FORECAST.map((_, i) => (i < 12 ? 'sun' : i < 16 ? 'partly' : 'cloud'))
+
+function SolarForecastDemo() {
+  return h(L.SolarForecast, {
+    title: 'Producción de hoy',
+    description: 'Datos de ejemplo',
+    forecast: FORECAST,
+    actual: ACTUAL,
+    weather: WEATHER,
+    height: 180,
+  })
+}
+
 export const demos = {
   amount: AmountDemo,
   'relative-time': RelativeTimeDemo,
@@ -76,4 +127,7 @@ export const demos = {
   'scroll-area': ScrollAreaDemo,
   'use-hotkey': UseHotkeyDemo,
   'visually-hidden': VisuallyHiddenDemo,
+  'tariff-comparison': TariffComparisonDemo,
+  'signature-pad': SignaturePadDemo,
+  'solar-forecast': SolarForecastDemo,
 }

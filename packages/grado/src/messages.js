@@ -152,11 +152,6 @@ const es = {
   selectedCountOne: '1 seleccionada',
   selectedCountMany: '{count} seleccionadas',
   clearSelection: 'Quitar selección',
-  // ---------- Labs (0.6) ----------
-  themeLabel: 'Tema',
-  themeLight: 'Claro',
-  themeDark: 'Oscuro',
-  themeSystem: 'Sistema',
 }
 export const MESSAGES = { 'es-ES': es, 'de-DE': de, 'en-GB': en }
 

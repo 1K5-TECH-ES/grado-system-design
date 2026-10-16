@@ -21,6 +21,7 @@ import {
   type ThemeMode,
 } from '@1k5-tech-es/grado/labs'
 import { useGrado } from './Locale.js'
+import { labsMessages } from './labs-messages.js'
 import { SegmentedControl } from './Inputs.js'
 
 export { formatEuro, formatEnergy, formatPower, formatRelative, themeScript, hotkeyLabel } from '@1k5-tech-es/grado/labs'
@@ -185,7 +186,7 @@ export const ThemeToggle = defineComponent({
     const t = useGrado()
     const { mode, setMode } = useTheme({ storageKey: props.storageKey, apply: props.apply })
     return () => {
-      const m = t.value.messages
+      const m = labsMessages(t.value)
       return h(SegmentedControl, {
         size: props.size,
         label: m.themeLabel,
@@ -273,3 +274,20 @@ export const VisuallyHidden = defineComponent({
     return () => h(props.as, { class: 'k5-sr-only' }, slots.default?.())
   },
 })
+
+// ---------- Energía y ventas (0.6) ----------
+
+export { TariffComparison } from './TariffComparison.js'
+export { SignaturePad } from './SignaturePad.js'
+export { SolarForecast } from './SolarForecast.js'
+export {
+  compareTariffs,
+  tariffCost,
+  isSignatureEmpty,
+  signatureSvg,
+  signatureDataUrl,
+  forecastSummary,
+  type Tariff,
+  type SignatureValue,
+  type WeatherKind,
+} from '@1k5-tech-es/grado/labs'

@@ -127,9 +127,117 @@ export const entries = [
     [['as', 'Etiqueta del elemento', "'span'"]],
     `Usa la clase k5-sr-only de grado.css. ${LABS}`,
   ),
+  entry(
+    'tariff-comparison',
+    'TariffComparison',
+    'Labs',
+    'Lo que cuesta al año el mismo consumo con dos o tres tarifas, con la más barata marcada.',
+    reactCode(
+      'TariffComparison',
+      `<TariffComparison
+  title="Tu consumo con cada tarifa"
+  consumption={{ punta: 900, llano: 1100, valle: 1500 }}
+  power={4.6}
+  tariffs={[
+    { id: 'fija', name: 'Precio fijo', energy: 0.145, power: 0.09 },
+    { id: 'td', name: '2.0TD', energy: { punta: 0.21, llano: 0.14, valle: 0.09 }, power: { punta: 0.1, valle: 0.01 } },
+  ]}
+/>`,
+    ),
+    vueCode(
+      'TariffComparison',
+      `  <TariffComparison
+    title="Tu consumo con cada tarifa"
+    :consumption="{ punta: 900, llano: 1100, valle: 1500 }"
+    :power="4.6"
+    :tariffs="tarifas"
+  />`,
+    ),
+    [
+      ['tariffs', '{ id, name, energy: €/kWh o por periodo, power: €/kW·día o por periodo, monthly? }[]', '—'],
+      ['consumption', 'kWh al año por periodo de la 2.0TD ({ punta, llano, valle }) o en total', '—'],
+      ['power', 'kW contratados: una cifra o { punta, valle }', '0'],
+      ['taxes', '{ electricityTax, vat }: los suma; sin él, «Sin impuestos»', '—'],
+      ['days / breakdown', 'Días que se cuentan / columnas de energía y potencia', '365 / true'],
+      ['tariffCost · compareTariffs', 'Las mismas cuentas como funciones, en @1k5-tech-es/grado/labs', '—'],
+    ],
+    `Los impuestos cambian con el tiempo: Grado no los inventa, pásalos tú si quieres el total con ellos. ${LABS}`,
+  ),
+  entry(
+    'signature-pad',
+    'SignaturePad',
+    'Labs',
+    'Firma de la oferta con el dedo, un lápiz o el ratón, o escribiendo el nombre.',
+    reactCode('SignaturePad', `<SignaturePad label="Firma del titular" name="firma" required value={firma} onChange={setFirma} />`),
+    vueCode(
+      'SignaturePad',
+      `  <SignaturePad v-model="firma" label="Firma del titular" name="firma" required />`,
+      `const firma = ref(null);`,
+    ),
+    [
+      ['label', 'Nombre del campo', '—'],
+      ['value / onChange', '{ strokes } dibujada o { typed } escrita; null sin firmar (v-model en Vue)', 'null'],
+      ['name', 'Campo oculto con la firma en SVG (data URL) para enviar con el formulario', '—'],
+      ['hint / error / required / disabled', 'Como en Field', '—'],
+      ['signatureSvg · signatureDataUrl', 'La firma como SVG, para guardarla o meterla en un PDF', '—'],
+    ],
+    `«Escribir mi nombre» es la alternativa para quien no puede dibujar o usa el teclado. Dentro de la zona la página no se desplaza al firmar. ${LABS}`,
+  ),
+  entry(
+    'solar-forecast',
+    'SolarForecast',
+    'Labs',
+    'La producción solar prevista para hoy frente a la real, hora a hora, con el tiempo.',
+    reactCode('SolarForecast', `<SolarForecast title="Producción de hoy" forecast={prevista} actual={real} weather={tiempo} />`),
+    vueCode('SolarForecast', `  <SolarForecast title="Producción de hoy" :forecast="prevista" :actual="real" :weather="tiempo" />`),
+    [
+      ['forecast', 'kWh previstos por franja: 24 horas o 96 cuartos de hora', '—'],
+      ['actual', 'kWh reales hasta ahora; lo que falta, null u omitido', '[]'],
+      ['weather', "'sun' · 'partly' · 'cloud' · 'rain' por franja", '—'],
+      ['title / description / height / interactive', 'Como en LineChart', '— / — / — / true'],
+      ['forecastSummary', 'El resumen como función, en @1k5-tech-es/grado/labs', '—'],
+    ],
+    `El resumen dice el total previsto, lo producido hasta la última hora con dato y si va más de un 5 % por encima o por debajo. ${LABS}`,
+  ),
 ]
 
 export const guidelines = {
+  'tariff-comparison': {
+    use: [
+      'Úsalo en la oferta y en el área de cliente para enseñar por qué una tarifa compensa con su consumo real.',
+      'Compara dos o tres tarifas: con más, la tabla deja de leerse de un vistazo.',
+    ],
+    avoid: [
+      'No mezcles tarifas con y sin impuestos en la misma comparación.',
+      'No inventes el reparto por periodos: usa el consumo real de la factura o del contador.',
+    ],
+    a11y: ['Es una tabla con cabeceras: la más barata se dice con texto («Más barata»), no solo con color.'],
+  },
+  'signature-pad': {
+    use: [
+      'Úsalo para aceptar una oferta o un contrato en tablet o en el ordenador.',
+      'Pon name para que la firma viaje con el formulario.',
+    ],
+    avoid: [
+      'No la uses como única prueba legal sin el resto del proceso de firma (datos, fecha, aceptación).',
+      'No la hagas más pequeña que su tamaño por defecto en móvil.',
+    ],
+    a11y: [
+      '«Escribir mi nombre» permite firmar con el teclado o un lector de pantalla.',
+      'El estado («Sin firmar», «Firma dibujada») forma parte del nombre de la zona.',
+    ],
+  },
+  'solar-forecast': {
+    use: [
+      'Úsalo en la app del cliente y en los paneles de seguimiento para el día en curso.',
+      'Pasa weather para explicar por qué hoy se produce menos.',
+    ],
+    avoid: ['Para comparar varios días usa LineChart con una serie por día.'],
+    a11y: [
+      'Se recorre con las flechas: cada hora se anuncia con lo previsto, lo producido y el tiempo.',
+      'Previsto y real se distinguen por el trazo (discontinuo y continuo), no solo por el color.',
+    ],
+  },
   amount: {
     use: [
       'Úsalo para cualquier importe, energía o potencia que vea el usuario: el formato sale igual en todas las apps.',

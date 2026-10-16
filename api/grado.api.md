@@ -374,12 +374,115 @@ export declare function isTypingTarget(target: EventTarget | null): boolean;
 export declare function hotkeyLabel(hotkey: string, options?: {
     mac?: boolean;
 }): string;
+export interface PeriodValues {
+    punta?: number;
+    llano?: number;
+    valle?: number;
+}
+export interface Tariff {
+    id?: string;
+    name: string;
+    energy: number | PeriodValues;
+    power: number | {
+        punta?: number;
+        valle?: number;
+    };
+    monthly?: number;
+}
+export interface TariffOptions {
+    consumption: number | PeriodValues;
+    power?: number | {
+        punta?: number;
+        valle?: number;
+    };
+    days?: number;
+    taxes?: {
+        electricityTax?: number;
+        vat?: number;
+    };
+}
+export interface TariffCost {
+    energy: number;
+    power: number;
+    fixed: number;
+    taxes: number;
+    total: number;
+}
+export declare function tariffCost(tariff: Tariff, options: TariffOptions): TariffCost;
+export interface TariffRow {
+    id: string;
+    name: string;
+    cost: TariffCost;
+    cheapest: boolean;
+    delta: number;
+    monthly: number;
+    ratio: number;
+}
+export declare function compareTariffs(tariffs: Tariff[], options: TariffOptions): {
+    cheapest: string | null;
+    rows: TariffRow[];
+};
+export type SignaturePoint = [
+    number,
+    number
+];
+export type SignatureValue = {
+    strokes: SignaturePoint[][];
+} | {
+    typed: string;
+};
+export declare const SIGNATURE_SIZE: {
+    width: number;
+    height: number;
+};
+export declare function isSignatureEmpty(value: SignatureValue | null | undefined): boolean;
+export declare function signaturePoint(rect: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}, clientX: number, clientY: number, size?: {
+    width: number;
+    height: number;
+}): SignaturePoint;
+export declare function signaturePath(stroke: SignaturePoint[]): string;
+export interface SignatureSvgOptions {
+    size?: {
+        width: number;
+        height: number;
+    };
+    color?: string;
+    font?: string;
+}
+export declare function signatureSvg(value: SignatureValue | null | undefined, options?: SignatureSvgOptions): string;
+export declare function signatureDataUrl(value: SignatureValue | null | undefined, options?: SignatureSvgOptions): string;
+export type WeatherKind = 'sun' | 'partly' | 'cloud' | 'rain';
+export declare const WEATHER_ICON_PATHS: Record<WeatherKind, string[]>;
+export declare const WEATHER_KINDS: WeatherKind[];
+export interface ForecastSummary {
+    done: number;
+    forecastTotal: number;
+    actualTotal: number;
+    expectedSoFar: number;
+    deviation: number | null;
+    status: 'above' | 'below' | 'on-track' | null;
+}
+export declare function forecastSummary(options: {
+    forecast?: number[];
+    actual?: (number | null | undefined)[];
+    tolerance?: number;
+}): ForecastSummary;
+export declare function slotLabel(index: number, count?: number): string;
+export type LabsMessageKey = 'themeLabel' | 'themeLight' | 'themeDark' | 'themeSystem' | 'tariffName' | 'tariffAnnual' | 'tariffMonthly' | 'tariffCheapest' | 'tariffMore' | 'tariffEnergy' | 'tariffPower' | 'tariffTaxesIncluded' | 'tariffNoTaxes' | 'signatureHint' | 'signatureClear' | 'signatureTypeInstead' | 'signatureDrawInstead' | 'signatureTypedLabel' | 'signatureEmpty' | 'signatureDrawn' | 'signatureTyped' | 'forecastExpected' | 'forecastActual' | 'forecastUntil' | 'forecastAbove' | 'forecastBelow' | 'forecastOnTrack' | 'forecastWeather' | 'forecastHour' | 'weatherSun' | 'weatherPartly' | 'weatherCloud' | 'weatherRain';
+export type LabsMessages = Record<LabsMessageKey, string>;
+export declare const LABS_MESSAGES: Record<'es-ES' | 'de-DE' | 'en-GB', LabsMessages>;
+export declare function labsMessagesFor(locale?: string, overrides?: Partial<Record<string, string>>): LabsMessages;
 ```
 
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection' | 'themeLabel' | 'themeLight' | 'themeDark' | 'themeSystem';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';

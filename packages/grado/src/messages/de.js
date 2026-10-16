@@ -146,11 +146,6 @@ export const de = {
   selectedCountOne: '1 ausgewählt',
   selectedCountMany: '{count} ausgewählt',
   clearSelection: 'Auswahl aufheben',
-  // ---------- Labs (0.6) ----------
-  themeLabel: 'Design',
-  themeLight: 'Hell',
-  themeDark: 'Dunkel',
-  themeSystem: 'System',
 }
 
 export default de

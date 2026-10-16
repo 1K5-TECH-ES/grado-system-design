@@ -52,3 +52,66 @@ test('ScrollArea, VisuallyHidden y ThemeToggle', async () => {
   // En el servidor no se sabe lo guardado: sale «Sistema».
   assert.match(await same('ThemeToggle', {}), /aria-label="Tema"[\s\S]*aria-checked="true"[^>]*>Sistema/)
 })
+
+// ---------- Energía y ventas (0.6) ----------
+const tariffs = [
+  { id: 'fija', name: 'Precio fijo', energy: 0.145, power: 0.09 },
+  { id: 'td', name: '2.0TD', energy: { punta: 0.21, llano: 0.14, valle: 0.09 }, power: { punta: 0.1, valle: 0.01 } },
+  { id: 'nocturna', name: 'Nocturna', energy: { punta: 0.25, llano: 0.16, valle: 0.07 }, power: 0.095, monthly: 2 },
+]
+const consumption = { punta: 900, llano: 1100, valle: 1500 }
+
+test('TariffComparison: la más barata marcada, cuánto más cuesta cada una y sin impuestos', async () => {
+  const html = await same('TariffComparison', { tariffs, consumption, power: 4.6, title: 'Tu consumo con cada tarifa' })
+  assert.match(
+    html,
+    /<tr data-cheapest="true"><th scope="row"><span class="k5-tariffs__name">Precio fijo<\/span><span class="k5-badge[^"]*"[^>]*>.*?Más barata/,
+  )
+  assert.match(html, /Sin impuestos · 3500\u00a0kWh/)
+  assert.match(html, /4,08\u00a0€ más al año/)
+  const taxed = await same('TariffComparison', {
+    tariffs,
+    consumption,
+    power: 4.6,
+    taxes: { electricityTax: 0.0511269632, vat: 0.21 },
+    breakdown: false,
+  })
+  assert.match(taxed, /Con impuestos/)
+  assert.doesNotMatch(taxed, />Energía</)
+})
+
+test('SignaturePad: vacía, dibujada y escrita, con campo oculto para el formulario', async () => {
+  const empty = await same('SignaturePad', { label: 'Firma del titular', required: true, name: 'firma' })
+  assert.match(empty, /role="img"/)
+  assert.match(empty, /class="k5-sr-only" id="[^"]+-state">Sin firmar</)
+  assert.match(empty, /<input type="hidden" name="firma" value=""/)
+  const strokes = [
+    [
+      [40, 120],
+      [80, 90],
+      [120, 130],
+    ],
+  ]
+  const drawn = await same('SignaturePad', { label: 'Firma', defaultValue: { strokes }, name: 'firma' })
+  assert.match(drawn, /<path d="M40 120 Q80 90 100 110 L120 130"/)
+  assert.match(drawn, />Firma dibujada</)
+  assert.match(drawn, /name="firma" value="data:image\/svg\+xml;charset=utf-8,%3Csvg/)
+  const typed = await same('SignaturePad', { label: 'Firma', defaultValue: { typed: 'Lucía Fernández' }, error: 'Firma la oferta' })
+  assert.match(typed, /value="Lucía Fernández"/)
+  assert.match(typed, /class="k5-field__error"[^>]*>Firma la oferta</)
+  assert.match(typed, />Dibujar la firma</)
+})
+
+test('SolarForecast: resumen, real hasta ahora, tiempo y tabla oculta', async () => {
+  const forecast = [0, 0, 0, 0, 0, 0, 0.2, 0.8, 1.6, 2.4, 3.1, 3.5, 3.6, 3.4, 2.9, 2.2, 1.4, 0.6, 0.1, 0, 0, 0, 0, 0]
+  const actual = [0, 0, 0, 0, 0, 0, 0.3, 0.9, 1.8, 2.6, 3.3, 3.8, 3.9]
+  const weather = forecast.map((_, i) => (i < 12 ? 'sun' : i < 16 ? 'partly' : 'cloud'))
+  const html = await same('SolarForecast', { forecast, actual, weather, title: 'Producción de hoy' })
+  assert.match(html, /Previsto <strong>25,8\u00a0kWh<\/strong>/)
+  assert.match(html, /Producido <strong>16,6\u00a0kWh<\/strong> hasta las 13:00/)
+  assert.match(html, /k5-forecast__status--above">9\u00a0% por encima de lo previsto/)
+  assert.match(html, /<th scope="row">12:00–13:00<\/th><td>3,6\u00a0kWh<\/td><td>3,9\u00a0kWh<\/td><td>Nubes y claros<\/td>/)
+  assert.match(html, /<th scope="row">13:00–14:00<\/th><td>3,4\u00a0kWh<\/td><td>—<\/td>/)
+  assert.equal((html.match(/k5-forecast__weather-slot"><svg/g) ?? []).length, 8)
+  await same('SolarForecast', { forecast, title: 'Mañana', interactive: false })
+})

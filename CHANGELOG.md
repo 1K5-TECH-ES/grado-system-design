@@ -4,7 +4,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 ## 0.6.0 · sin publicar
 
-0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`.
+0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`.
 
 ### Labs
 
@@ -15,7 +15,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - `ScrollArea`: zona con scroll propio, barra fina y nombre, que recibe el foco y se desplaza con las flechas.
 - `useHotkey()` y `hotkeyLabel()`: atajos como `'mod+k'` (⌘ en Mac, Ctrl en el resto) o `'?'`; los de una tecla no saltan mientras se escribe en un campo.
 - `VisuallyHidden`: texto solo para lectores de pantalla.
-- Textos nuevos en español, alemán e inglés: `themeLabel`, `themeLight`, `themeDark` y `themeSystem`.
+- `TariffComparison`, `tariffCost()` y `compareTariffs()`: lo que cuesta al año el mismo consumo con dos o tres tarifas de la 2.0TD (precio único o por periodo, potencia por periodo, cuota mensual), con la más barata marcada, lo que cuesta al mes y cuánto más cuesta cada una. Sin impuestos salvo que se pasen (`taxes: { electricityTax, vat }`): cambian con el tiempo y Grado no los inventa. Es una tabla, con la más barata dicha también con texto.
+- `SignaturePad`: firma de la oferta con el dedo, un lápiz o el ratón, o escribiendo el nombre (la alternativa para el teclado y los lectores de pantalla). La firma es `{ strokes }` o `{ typed }`; `signatureSvg()` y `signatureDataUrl()` la exportan como SVG, y con `name` viaja en un campo oculto del formulario. La página no se desplaza mientras se firma.
+- `SolarForecast` y `forecastSummary()`: producción solar prevista frente a la real, hora a hora (o por cuartos de hora), con el tiempo de cada franja. El resumen da el total previsto, lo producido hasta la última hora con dato y si va más de un 5 % por encima o por debajo. Se recorre con las flechas como los demás gráficos, con tabla oculta para lectores de pantalla.
+- Los textos de labs (los del tema, las tarifas, la firma y la previsión) van en `@1k5-tech-es/grado/labs` (`LABS_MESSAGES`, `labsMessagesFor()`), no en los mensajes principales: una app que no usa labs no los descarga. Se cambian con el mismo `messages` de `GradoProvider`.
 
 ### Calidad
 
