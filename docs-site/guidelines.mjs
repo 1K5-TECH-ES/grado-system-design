@@ -6,6 +6,7 @@ import { guidelines as graficosGuidelines } from './groups/graficos.docs.mjs'
 import { guidelines as entradasGuidelines } from './groups/entradas.docs.mjs'
 import { guidelines as superposicionesGuidelines } from './groups/superposiciones.docs.mjs'
 import { guidelines as energiaGuidelines } from './groups/energia.docs.mjs'
+import { guidelines as labsGuidelines } from './groups/labs.docs.mjs'
 export const guidelines = {
   button: {
     use: [
@@ -606,4 +607,5 @@ Object.assign(
   entradasGuidelines,
   superposicionesGuidelines,
   energiaGuidelines,
+  labsGuidelines,
 )

@@ -17,6 +17,10 @@ const LIMITS = {
   // Los adaptadores, con los componentes que usan; sin la librería de formularios.
   '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
   '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,
+  // Labs (0.6): todo junto (14 y 14,5 KB al crearlo), con SegmentedControl para ThemeToggle.
+  'labs.css': 1 * KB,
+  '@1k5-tech-es/grado-react/labs': 15.5 * KB,
+  '@1k5-tech-es/grado-vue/labs': 16 * KB,
 }
 // El paquete entero, como referencia: pasar de aquí avisa pero no falla.
 const WARNINGS = {
@@ -64,6 +68,9 @@ const rows = [
   { name: 'tokens.css', size: gzip(readFileSync(path('packages/grado/dist/tokens.css'))) },
   { name: '@1k5-tech-es/grado-react/react-hook-form', size: gzip(await bundle('packages/grado-react/dist/react-hook-form.js')) },
   { name: '@1k5-tech-es/grado-vue/vee-validate', size: gzip(await bundle('packages/grado-vue/dist/vee-validate.js')) },
+  { name: 'labs.css', size: gzip(readFileSync(path('packages/grado/dist/labs.css'))) },
+  { name: '@1k5-tech-es/grado-react/labs', size: gzip(await bundle('packages/grado-react/dist/labs.js')) },
+  { name: '@1k5-tech-es/grado-vue/labs', size: gzip(await bundle('packages/grado-vue/dist/labs.js')) },
 ].map((row) => ({ ...row, limit: LIMITS[row.name] }))
 for (const framework of ['react', 'vue'])
   for (const [label, { names, limit }] of Object.entries(IMPORTS))

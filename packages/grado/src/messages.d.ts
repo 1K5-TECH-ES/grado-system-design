@@ -137,6 +137,10 @@ export type MessageKey =
   | 'selectedCountOne'
   | 'selectedCountMany'
   | 'clearSelection'
+  | 'themeLabel'
+  | 'themeLight'
+  | 'themeDark'
+  | 'themeSystem'
 
 export type Messages = Record<MessageKey, string>
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB'

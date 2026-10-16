@@ -5,6 +5,7 @@ import { entries as graficosEntries } from './groups/graficos.docs.mjs'
 import { entries as entradasEntries } from './groups/entradas.docs.mjs'
 import { entries as superposicionesEntries } from './groups/superposiciones.docs.mjs'
 import { entries as energiaEntries } from './groups/energia.docs.mjs'
+import { entries as labsEntries } from './groups/labs.docs.mjs'
 
 const modalProps = [
   ['title / description', 'Título y descripción accesibles', 'title obligatorio'],
@@ -903,4 +904,5 @@ newComponents.push(
   ...entradasEntries,
   ...superposicionesEntries,
   ...energiaEntries,
+  ...labsEntries,
 )

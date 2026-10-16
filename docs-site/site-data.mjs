@@ -6,6 +6,8 @@ import * as G from '@1k5-tech-es/grado-react'
 import * as V from '@1k5-tech-es/grado-vue'
 import * as RF from '@1k5-tech-es/grado-react/react-hook-form'
 import * as VF from '@1k5-tech-es/grado-vue/vee-validate'
+import * as RL from '@1k5-tech-es/grado-react/labs'
+import * as VL from '@1k5-tech-es/grado-vue/labs'
 import { byCategory, components } from './catalog.mjs'
 import { guidelines } from './guidelines.mjs'
 import { slug } from './site/text.mjs'
@@ -40,8 +42,8 @@ function coverage(adoption) {
       id: c.id,
       name: c.name,
       // Form y FormField viven en los adaptadores de react-hook-form y VeeValidate.
-      react: names.every((name) => name in G || name in RF),
-      vue: names.every((name) => name in V || name in VF),
+      react: names.every((name) => name in G || name in RF || name in RL),
+      vue: names.every((name) => name in V || name in VF || name in VL),
       // Las llamadas pueden ocupar varias líneas (Prettier): C(\n  'Dialog', …), same('Sparkline', …), [\n  'SegmentedControl', …].
       parity: mentions(sources.parity, names, [(n) => `\\bRF?\\.${n}\\b`, (n) => `\\[\\s*'${n}'`, (n) => `\\b(?:same|pair)\\(\\s*'${n}'`]),
       browser: mentions(sources.browser, names, [(n) => `\\b(?:C|D|direct)\\(\\s*'${n}'`, (n) => `\\b[GF]\\.${n}\\b`]),

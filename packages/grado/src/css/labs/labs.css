@@ -1,0 +1,44 @@
+/* Labs: Amount, RelativeTime y ScrollArea. Fuera de la promesa de la 1.0.
+   Va aparte de grado.css (dist/labs.css): solo lo cargan las apps que usan labs. */
+
+/* Amount: cifras alineadas y sin partir la unidad. */
+.k5-amount {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.k5-amount--positive {
+  color: var(--k5-success-text);
+}
+.k5-amount--negative {
+  color: var(--k5-destructive-text);
+}
+
+.k5-relative-time {
+  white-space: nowrap;
+}
+
+/* ScrollArea: scroll propio con barra fina; se recorre con el teclado. */
+.k5-scroll-area {
+  max-height: var(--_height, none);
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--k5-muted-foreground) 45%, transparent) transparent;
+}
+.k5-scroll-area--horizontal {
+  overflow: auto hidden;
+}
+.k5-scroll-area--both {
+  overflow: auto;
+}
+.k5-scroll-area:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}
+
+@media print {
+  .k5-scroll-area {
+    max-height: none;
+    overflow: visible;
+  }
+}

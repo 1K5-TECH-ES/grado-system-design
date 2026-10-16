@@ -457,6 +457,17 @@ const { transform } = await import('esbuild')
 const minified = await transform(gradoCss, { loader: 'css', minify: true, target: ['chrome111', 'safari16.2', 'firefox113'] })
 write('grado.min.css', `/* ${pkg.name} ${pkg.version} · grado.min.css */\n${minified.code}`)
 
+// Labs (0.6): aparte de grado.css, para que solo lo descarguen las apps que usan labs.
+const labsCss = readdirSync(`${root}src/css/labs`)
+  .filter((f) => f.endsWith('.css'))
+  .sort()
+  .map((f) => readFileSync(`${root}src/css/labs/${f}`, 'utf8').trim())
+  .join('\n\n')
+write(
+  'labs.css',
+  banner('labs.css · componentes de labs, fuera de la promesa de la 1.0. Necesita tokens.css y grado.css') + '\n' + labsCss + '\n',
+)
+
 // Un archivo por componente. Todos necesitan tokens.css y css/base.css.
 rmSync(`${dist}css`, { recursive: true, force: true })
 mkdirSync(`${dist}css`, { recursive: true })

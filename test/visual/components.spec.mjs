@@ -26,10 +26,12 @@ async function openComponents(page, theme, mode) {
   expect(await page.evaluate(() => document.documentElement.dataset.k5Theme)).toBe(theme)
   // La vista previa que se captura sale de su sitio y va arriba a la izquierda, con un ancho
   // fijo: así la captura no depende de lo que haya encima en la página (una línea más en una
-  // guía movía todo una fracción de píxel y cambiaba el suavizado de todas las capturas).
+  // guía movía todo una fracción de píxel y cambiaba el suavizado de todas las capturas). La
+  // sombra pinta el fondo alrededor: lo que sobresale (una lista abierta) no deja ver la página.
   await page.addStyleTag({
     content: `[data-k5-shot] { position: fixed !important; inset: 0 auto auto 0 !important; width: 940px !important;
-      margin: 0 !important; z-index: 2147483000; background: var(--k5-background); }`,
+      margin: 0 !important; z-index: 2147483000; background: var(--k5-background);
+      box-shadow: 0 0 0 100vmax var(--k5-background) !important; }`,
   })
 }
 

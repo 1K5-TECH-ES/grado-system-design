@@ -306,10 +306,80 @@ export declare function batteryClass(options?: {
 }): string;
 ```
 
+## src/labs.d.ts
+
+```ts
+export interface EuroOptions {
+    locale?: string;
+    decimals?: number;
+    grouping?: 'always' | 'auto' | 'min2';
+    signed?: boolean;
+}
+export declare function formatEuro(value: number | null | undefined, options?: EuroOptions): string;
+export interface EnergyOptions {
+    locale?: string;
+    decimals?: number;
+    unit?: 'kWh' | 'MWh' | 'GWh';
+    scale?: boolean;
+    signed?: boolean;
+}
+export declare function formatEnergy(kwh: number | null | undefined, options?: EnergyOptions): string;
+export interface PowerOptions {
+    locale?: string;
+    decimals?: number;
+    unit?: 'kW' | 'MW' | 'GW';
+    scale?: boolean;
+    peak?: boolean;
+    signed?: boolean;
+}
+export declare function formatPower(kw: number | null | undefined, options?: PowerOptions): string;
+export type AmountUnit = 'eur' | 'kWh' | 'kW' | 'kWp' | 'percent' | 'number';
+export declare const AMOUNT_UNITS: AmountUnit[];
+export declare function formatAmount(value: number | null | undefined, options?: {
+    unit?: AmountUnit;
+    locale?: string;
+    decimals?: number;
+    scale?: boolean;
+    signed?: boolean;
+}): string;
+export type DateInput = Date | string | number;
+export declare function formatRelative(value: DateInput, options?: {
+    now?: DateInput;
+    locale?: string;
+    max?: number;
+}): string;
+export declare function formatDateTime(value: DateInput, options?: {
+    locale?: string;
+}): string;
+export declare function relativeRefresh(value: DateInput, now?: DateInput): number | null;
+export type ThemeMode = 'light' | 'dark' | 'system';
+export declare const THEME_MODES: ThemeMode[];
+export declare const THEME_STORAGE_KEY: string;
+export declare function readThemeMode(key?: string): ThemeMode;
+export declare function saveThemeMode(mode: ThemeMode, key?: string): void;
+export declare function resolveThemeMode(mode: ThemeMode, prefersDark: boolean): 'light' | 'dark';
+export declare function applyThemeMode(mode: ThemeMode, root?: HTMLElement): void;
+export declare function themeScript(key?: string): string;
+export interface Hotkey {
+    key: string;
+    mod: boolean;
+    ctrl: boolean;
+    meta: boolean;
+    alt: boolean;
+    shift: boolean;
+}
+export declare function parseHotkey(hotkey: string): Hotkey;
+export declare function matchesHotkey(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey' | 'shiftKey'>, hotkey: string | Hotkey): boolean;
+export declare function isTypingTarget(target: EventTarget | null): boolean;
+export declare function hotkeyLabel(hotkey: string, options?: {
+    mac?: boolean;
+}): string;
+```
+
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection' | 'themeLabel' | 'themeLight' | 'themeDark' | 'themeSystem';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';

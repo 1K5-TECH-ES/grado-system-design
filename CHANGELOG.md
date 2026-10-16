@@ -2,6 +2,26 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
+## 0.6.0 · sin publicar
+
+0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`.
+
+### Labs
+
+- Entradas nuevas `@1k5-tech-es/grado/labs`, `@1k5-tech-es/grado-react/labs` y `@1k5-tech-es/grado-vue/labs`, y su CSS en `@1k5-tech-es/grado/labs.css` (aparte de `grado.css`). Lo de labs queda fuera de la promesa de la 1.0: puede cambiar en una versión menor hasta que pase al paquete principal. En la web, una familia nueva, «Labs».
+- `Amount`, `formatEuro()`, `formatEnergy()` y `formatPower()`: importes, energía y potencia con el formato español, cifras alineadas y espacio duro antes de la unidad («1234,50 €», «7,2 kWh», «6,4 kWp»); con `scale`, MWh y MW; con `signed` y `colored`, variaciones en verde o rojo. `Amount` es un `<data>` con el número sin formato en `value`.
+- `RelativeTime` y `formatRelative()`: «hace 5 minutos», «ayer», «16 oct» pasada una semana; la fecha completa en `title` y `datetime`, y se actualiza sola.
+- `ThemeToggle`, `useTheme()` y `themeScript()`: Claro, Oscuro o Sistema, guardado en `localStorage` y aplicado con la clase `dark` en `<html>`; todos los controles de la página se enteran. `themeScript()` en el `<head>` evita el parpadeo al cargar. Con `apply: false` solo guarda la elección.
+- `ScrollArea`: zona con scroll propio, barra fina y nombre, que recibe el foco y se desplaza con las flechas.
+- `useHotkey()` y `hotkeyLabel()`: atajos como `'mod+k'` (⌘ en Mac, Ctrl en el resto) o `'?'`; los de una tecla no saltan mientras se escribe en un campo.
+- `VisuallyHidden`: texto solo para lectores de pantalla.
+- Textos nuevos en español, alemán e inglés: `themeLabel`, `themeLight`, `themeDark` y `themeSystem`.
+
+### Calidad
+
+- Informe de la API de labs (`api/grado-react-labs.api.md` y `api/grado-vue-labs.api.md`) y presupuesto de tamaño para labs.
+- Las capturas por componente pintan el fondo alrededor de la vista previa aislada: lo que sobresale (una lista abierta) o las esquinas redondeadas ya no dejan ver la página de debajo.
+
 ## 0.5.0 · 16 de octubre de 2026
 
 0.5, «Estabilidad»: las apps a producción, lo que prometemos probado y la API lista para congelarla en la 1.0.

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 import ts from 'typescript'
 import * as V from '@1k5-tech-es/grado-vue'
 import * as VF from '@1k5-tech-es/grado-vue/vee-validate'
+import * as VL from '@1k5-tech-es/grado-vue/labs'
 
 const root = new URL('../', import.meta.url)
 const path = (relative) => fileURLToPath(new URL(relative, root))
@@ -118,6 +119,9 @@ const reports = {
   'api/grado-react-react-hook-form.api.md': react('react-hook-form.d.ts', '@1k5-tech-es/grado-react/react-hook-form'),
   'api/grado-vue.api.md': vue(V, '@1k5-tech-es/grado-vue'),
   'api/grado-vue-vee-validate.api.md': vue(VF, '@1k5-tech-es/grado-vue/vee-validate'),
+  // Labs: fuera de la promesa de la 1.0, pero sus cambios también se ven en el diff.
+  'api/grado-react-labs.api.md': react('labs.d.ts', '@1k5-tech-es/grado-react/labs'),
+  'api/grado-vue-labs.api.md': vue(VL, '@1k5-tech-es/grado-vue/labs'),
 }
 
 if (process.argv[2] === 'check') {

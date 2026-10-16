@@ -23,8 +23,8 @@
     "test:visual:docker": "node scripts/visual-docker.mjs",
     "test:smoke": "npm run build && node scripts/smoke.mjs",
     "test:all": "npm run lint && npm test && npm run api:check && npm run size && npm run figma:check && npm run test:browser && npm run test:visual:docker && npm run test:smoke && npm run docs:build && npm run docs:check",
-    "lint": "eslint . && stylelint \"packages/grado/src/css/*.css\" \"docs-site/assets/*.css\" && prettier --check .",
-    "format": "prettier --write . && eslint . --fix && stylelint \"packages/grado/src/css/*.css\" \"docs-site/assets/*.css\" --fix",
+    "lint": "eslint . && stylelint \"packages/grado/src/css/*.css\" \"packages/grado/src/css/labs/*.css\" \"docs-site/assets/*.css\" && prettier --check .",
+    "format": "prettier --write . && eslint . --fix && stylelint \"packages/grado/src/css/*.css\" \"packages/grado/src/css/labs/*.css\" \"docs-site/assets/*.css\" --fix",
     "release:check": "node scripts/release.mjs check"
   },
   "devDependencies": {

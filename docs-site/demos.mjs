@@ -7,6 +7,7 @@ import { demos as graficosDemos } from './groups/graficos.demos.mjs'
 import { demos as entradasDemos } from './groups/entradas.demos.mjs'
 import { demos as superposicionesDemos } from './groups/superposiciones.demos.mjs'
 import { demos as energiaDemos } from './groups/energia.demos.mjs'
+import { demos as labsDemos } from './groups/labs.demos.mjs'
 
 export const choices = [
   { value: 'solar', label: 'Placas solares', description: 'Autoconsumo residencial' },
@@ -104,7 +105,16 @@ const trigger = (...children) => h('div', { className: 'live-stack live-stack--s
 const status = (text) => h('p', { className: 'demo-status', role: 'status' }, text)
 
 // Demos de 0.3, por grupo: cada una es su propio componente, con sus propios hooks.
-const groupDemos = Object.assign({}, maquetacionDemos, datosDemos, graficosDemos, entradasDemos, superposicionesDemos, energiaDemos)
+const groupDemos = Object.assign(
+  {},
+  maquetacionDemos,
+  datosDemos,
+  graficosDemos,
+  entradasDemos,
+  superposicionesDemos,
+  energiaDemos,
+  labsDemos,
+)
 
 export function LiveDemo({ id }) {
   if (id === 'form') return h(FormDemo)
