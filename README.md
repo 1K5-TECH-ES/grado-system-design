@@ -17,7 +17,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
-| 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo | En curso |
+| 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt | En curso |
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 
 ## Decisiones tomadas
@@ -39,6 +39,7 @@ npm test              # build + tests unitarios y de paridad React/Vue
 npm run test:browser  # teclado, foco y axe-core en Chrome, con React y con Vue
 npm run test:visual:docker  # una captura por componente en 2 temas × 2 modos, en la imagen de Playwright del CI
                             # (-- --update-snapshots para regenerarlas; npm run test:visual, sin Docker, falla por el suavizado de las letras)
+npm run test:smoke    # apps de prueba con Vite, Next y Nuxt: instalan los .tgz y compilan (necesita red)
 npm run lint          # ESLint, Stylelint y Prettier
 npm run format        # formatea y corrige lo que se pueda
 npm run test:all      # todo lo anterior más la web, como haría el CI
@@ -152,6 +153,7 @@ test/visual/             capturas de referencia: una por componente (de la web) 
 scripts/visual-docker.mjs  regresión visual dentro de la imagen de Playwright del CI
 test/migrate.test.mjs    codemod de migración
 test/usage.test.mjs      inventario de uso
+test/smoke/              apps de prueba (Vite + React, Next, Nuxt); scripts/smoke.mjs las instala y compila
 api/                     informe de la API pública (generado por npm run api; el CI lo compara)
 scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las secciones de 0.3)
 scripts/release.mjs      comprobaciones y notas de publicación

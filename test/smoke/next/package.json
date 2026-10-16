@@ -1,0 +1,13 @@
+{
+  "name": "grado-smoke-next",
+  "private": true,
+  "scripts": {
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "7.89.0"
+  }
+}

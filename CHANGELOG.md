@@ -17,6 +17,21 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - El CI prueba los tests y el navegador también con React 18.3, Vue 3.5.0 y Node 24, además de React 19, la última Vue y Node 22. Lo que dicen `peerDependencies` y `engines` queda comprobado en cada pull request.
 - `engines`: Node.js 22 o superior para `npx @1k5-tech-es/grado` y para compilar el repositorio. Node 20 dejó de tener soporte el 30 de abril de 2026.
 
+### Impresión y alto contraste
+
+- Al imprimir, el armazón (cabecera, barra lateral, aviso), los botones, la paginación, las barras de filtros y de acciones, los avisos y lo que flota no salen en papel. `AppShell` deja de medir lo que la ventana y de tener su propio scroll, así que se imprime todo el contenido, no solo lo visible. Las tablas repiten la cabecera en cada página y no parten filas; tarjetas, KPI, avisos y gráficos no se parten entre páginas; gráficos, estados y barras conservan su color.
+- Utilidades de impresión: `k5-print-hide` (no sale en papel), `k5-print-only` (solo sale en papel) y `k5-print-keep` (un botón que sí debe salir).
+- En papel no se aplica el modo oscuro: las páginas se imprimen con los colores claros. Los bloques oscuros de `tokens.css` van dentro de `@media not print`; no se repite ningún token.
+- Alto contraste (colores forzados de Windows): lo elegido en menús, listas, pestañas, navegación, paginación, controles segmentados y el calendario lleva el resaltado del sistema; hoy y el KPI elegido, un contorno; el interruptor, la pista con borde y el resaltado al encenderse; diálogos, popovers, menús y avisos, borde; las marcas de los gráficos y las barras conservan su color.
+
+### Calidad
+
+- Una captura de referencia por componente: la vista previa de cada una de las 81 fichas de la web, en los dos temas y los dos modos, más estados abiertos (tarjeta de `LineChart` y `PriceChart`, `Combobox` abierto). Las cuatro capturas de página entera del catálogo desaparecen; las del armazón se quedan. Si cambia un componente, falla solo su captura.
+- `npm run test:visual:docker`: la regresión visual en la misma imagen de Playwright que el CI, para comparar y regenerar capturas en local. `npm run test:all` la usa.
+- La página Estado cuenta un componente como «con captura» cuando existe su archivo: 81 de 81 (antes, buscando en el código del catálogo, decía 46).
+- Presupuesto de tamaño por import: lo que se lleva una app que importa `Button`, `Dialog`, `DataTable`, `AppShell`, `LineChart`, `toast`, `Combobox` o `PriceChart`, en React y en Vue, falla si crece. El paquete entero solo avisa: con `sideEffects: false`, ninguna app lo descarga entero.
+- Apps de prueba (`npm run test:smoke`, también en el CI): Vite + React, Next 16 con App Router y Nuxt 4 instalan Grado desde los `.tgz` y compilan, con los adaptadores de formularios.
+
 ### Corregido
 
 - React 18: en `CommandPalette`, un Enter justo después de escribir no elegía nada, porque la primera opción se marcaba un instante después. Ahora se marca en el mismo render que el filtro.
@@ -25,6 +40,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 ### Al actualizar desde 0.4.0
 
 - Si compilas Grado o usas `npx @1k5-tech-es/grado` con Node 20, pasa a Node 22.
+- Al imprimir ya no salen los botones ni el armazón. Si un botón tiene que salir en papel, añádele `k5-print-keep`. Si tu app tenía su propio CSS de impresión para quitar la barra lateral, ya no hace falta.
 
 ## 0.4.0 · 16 de octubre de 2026
 

@@ -1,6 +1,7 @@
-# Integración continua: lo mismo que `npm run test:all`, repartido en tres trabajos.
+# Integración continua: lo mismo que `npm run test:all`, repartido en cuatro trabajos.
 # - checks: lint, tests unitarios y de paridad, API pública, tamaño, navegador (teclado, foco y axe) y web.
 # - compat: tests y navegador con React 18, Vue 3.5.0 y Node 24, los mínimos y la otra LTS.
+# - smoke: apps de prueba con Vite, Next y Nuxt que instalan los .tgz y compilan (test/smoke/).
 # - visual: una captura por componente y las del armazón, dentro de la imagen oficial de
 #   Playwright, para que el renderizado sea siempre el mismo. Para regenerarlas en local con esa
 #   imagen: npm run test:visual:docker -- --update-snapshots. También se puede lanzar el workflow
@@ -82,6 +83,19 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+
+  # Apps de prueba: Vite + React, Next (App Router) y Nuxt instalan los .tgz y compilan.
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:smoke
 
   visual:
     runs-on: ubuntu-latest

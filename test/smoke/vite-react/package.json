@@ -1,0 +1,17 @@
+{
+  "name": "grado-smoke-vite-react",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "7.89.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.4"
+  }
+}
