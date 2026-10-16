@@ -1176,8 +1176,8 @@ kbd {
 }
 .style-tiles {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 }
 .radius-tiles {
   display: grid;
@@ -1249,6 +1249,18 @@ kbd {
 .style-tile--marca .style-tile__side::before {
   background: rgb(255 255 255 / 0.35);
 }
+/* Campo: los bordes y el texto se ven al sol. */
+.style-tile--campo .style-tile__thumb,
+.style-tile--campo .style-tile__side {
+  border-color: var(--k5-foreground);
+}
+.style-tile--campo .style-tile__thumb {
+  border-width: 2px;
+}
+.style-tile--campo .style-tile__main b:first-child {
+  height: 5px;
+  background: var(--k5-foreground);
+}
 .style-tile__main {
   grid-area: main;
   display: flex;
@@ -1281,6 +1293,17 @@ kbd {
 .style-tile__text span {
   color: var(--k5-muted-foreground);
   font-size: 11px;
+}
+.style-tile__text em {
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: var(--k5-radius-badge);
+  background: var(--k5-primary-subtle);
+  color: var(--k5-primary-text);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: var(--k5-weight-semibold);
+  white-space: nowrap;
 }
 .radius-tile {
   display: flex;
@@ -1529,9 +1552,13 @@ kbd {
 }
 .tp-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+}
+.tp-grid td strong,
+.tp-grid .k5-status {
+  white-space: nowrap;
 }
 .tp-grid .k5-card__title {
   font-size: var(--k5-text-body);
@@ -1550,14 +1577,6 @@ kbd {
   flex-direction: column;
   gap: 14px;
 }
-.tp-chart {
-  display: flex;
-  overflow: hidden;
-  gap: 3px;
-  height: 10px;
-  margin-top: 6px;
-  border-radius: 999px;
-}
 .tp-components {
   gap: 20px;
 }
@@ -1569,6 +1588,17 @@ kbd {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: end;
+}
+.tp-components__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.tp-components__footer .k5-progress {
+  flex: 1 1 200px;
+  max-width: 320px;
 }
 .tp-components__checks {
   display: flex;
@@ -1614,8 +1644,14 @@ kbd {
   color: var(--k5-muted-foreground);
   font-size: var(--k5-text-caption);
 }
+.contrast-panel__head .contrast-panel__target {
+  margin-left: auto;
+}
 .contrast-panel__head .k5-btn {
   margin-left: auto;
+}
+.contrast-panel__target + .k5-btn {
+  margin-left: 0;
 }
 .contrast-list {
   display: grid;

@@ -94,8 +94,25 @@ export const DEFAULTS = {
   base: 'consola',
   radius: 'r8',
   font: 'inter',
+  density: 'default',
   dark: true,
 }
+
+/** Las tres bases de Grado. «campo» pide 7 : 1 en todo el texto y va en su propio archivo. */
+export const BASES = [
+  { id: 'consola', name: 'Consola', description: 'Cabecera de color. Herramientas internas.', min: 4.5 },
+  { id: 'marca', name: 'Marca', description: 'Barra lateral de color. Lo que ve el cliente.', min: 4.5 },
+  { id: 'campo', name: 'Campo', description: 'Alto contraste y controles de 44 px. Técnicos al sol.', min: 7 },
+]
+export const baseById = (id) => BASES.find((base) => base.id === id) ?? BASES[0]
+
+/** Densidad de los controles: data-k5-density en <html>. «Normal» no escribe nada. */
+export const DENSITIES = [
+  { id: 'default', name: 'Normal', description: 'La altura de cada base. En pantallas táctiles, 44 px.' },
+  { id: 'compact', name: 'Compacta', description: 'Controles más bajos para tablas y paneles con muchos datos.' },
+  { id: 'comfortable', name: 'Cómoda', description: '44 px siempre, también con ratón. Para tablet y manos con guantes.' },
+]
+const DENSITY_FLAGS = { compact: 'COMPACT', comfortable: 'COMFORT' }
 
 /** "#5c068c", "5C068C" o " #5C068C " → "#5C068C"; cualquier otra cosa → null. */
 export function normalizeHex(input) {
@@ -251,23 +268,36 @@ export function withPrimary(config, primary) {
   return { ...config, primary, accent: (list.find((palette) => palette.id === current) ?? list[0]).accent }
 }
 
-function applyVariant(variant, { primary, accent, highlight }) {
+function applyVariant(variant, { primary, accent, highlight }, { accentMin = 4.5 } = {}) {
   const p = hsl(primary)
-  if (variant === 'S')
+  if (variant === 'S') {
+    // Más luz, pero sin entrar en la franja en la que ni el blanco ni el grafito llegan a 4,5 : 1.
+    const soft = (light) => fromHsl(p.h, p.s < 10 ? p.s : Math.max(20, p.s - 15), light)
+    let light = Math.min(58, p.l + 12)
+    while (light > p.l && ratio(soft(light), onColor(soft(light))) < 4.5) light -= 1
     return {
-      primary: fromHsl(p.h, p.s < 10 ? p.s : Math.max(20, p.s - 15), Math.min(58, p.l + 12)),
+      primary: soft(light),
       accent: tinted(accent, 0.65),
       highlight: tinted(highlight, 0.7),
     }
+  }
   if (variant === 'C')
-    return { primary: reach(primary, WHITE, 7), accent: reach(accent, WHITE, 4.5), highlight: reach(highlight, WHITE, 4.5) }
+    return { primary: reach(primary, WHITE, 7), accent: reach(accent, WHITE, accentMin), highlight: reach(highlight, WHITE, 4.5) }
   return { primary, accent, highlight }
 }
 
-/** Las paletas del principal con sus colores finales, ya con la variante aplicada. */
-export function buildPalettes(primary, accent, variant = 'F') {
+/**
+ * Las paletas del principal con sus colores finales, ya con la variante aplicada. Con la base
+ * «campo» siempre es «Alto contraste», y el acento también llega a 7 : 1.
+ */
+export function buildPalettes(primary, accent, variant = 'F', base = 'consola') {
+  const campo = base === 'campo'
   return palettesFor(primary, accent).map((palette) => {
-    const colors = applyVariant(variant, { primary, accent: palette.accent, highlight: palette.highlight })
+    const colors = applyVariant(
+      campo ? 'C' : variant,
+      { primary, accent: palette.accent, highlight: palette.highlight },
+      { accentMin: campo ? 7 : 4.5 },
+    )
     return { ...palette, colors: { ...colors, soft: tinted(colors.primary, 0.1) } }
   })
 }
@@ -282,6 +312,11 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
     ps = hsl(primary).s,
     ah = hsl(accent)
   const marca = base === 'marca'
+  // Campo: todo el texto a 7 : 1 y bordes que se ven al sol.
+  const campo = base === 'campo'
+  const min = baseById(base).min
+  // En campo, el texto sobre color es blanco o negro puro: el grafito no llega a 7 : 1 en oscuro.
+  const on = campo ? (bg) => (ratio(bg, WHITE) >= ratio(bg, '#000000') ? WHITE : '#000000') : onColor
   // Grises con el tono del principal; si el principal es casi gris, grises neutros.
   const k = clamp(ps / 40, 0, 1)
   const n = (sat, light) => fromHsl(h, sat * k, light)
@@ -289,20 +324,26 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
   const lightBg = marca ? n(33, 96.5) : WHITE
   const lightSecondary = marca ? tinted(primary, 0.1) : n(20, 95)
   const lightMuted = marca ? n(28, 94) : n(15, 96)
-  const onPrimary = onColor(primary)
+  const lightFg = campo ? '#111111' : GRAPHITE
+  const onPrimary = on(primary)
+  const lightBorder = campo ? reach(n(10, 60), lightBg, 3.5) : marca ? n(22, 90) : n(15, 90)
   const light = {
     background: lightBg,
+    ...(campo ? { foreground: lightFg, 'card-foreground': lightFg, 'popover-foreground': lightFg } : {}),
     primary,
     'primary-foreground': onPrimary,
-    'primary-text': textOnTint(primary, GRAPHITE, [lightBg, WHITE]),
+    'primary-text': textOnTint(primary, lightFg, [lightBg, WHITE], min),
+    // Escala tonal del principal, como la calcula Grado: tinte al 10 % y borde al 30 % sobre la tarjeta.
+    'primary-subtle': blend(WHITE, primary, 0.1),
+    'primary-border': blend(WHITE, primary, 0.3),
     secondary: lightSecondary,
     'secondary-foreground': reach(n(Math.min(92, ps), 20), lightSecondary, 7),
     muted: lightMuted,
-    'muted-foreground': reach(n(8, 40), lightMuted, 4.5),
+    'muted-foreground': reach(n(8, campo ? 30 : 40), lightMuted, min),
     accent,
-    'accent-foreground': onColor(accent),
-    border: marca ? n(22, 90) : n(15, 90),
-    input: marca ? n(22, 90) : n(15, 90),
+    'accent-foreground': on(accent),
+    border: lightBorder,
+    input: campo ? reach(n(10, 45), lightBg, 4.5) : lightBorder,
     ring: primary,
     header: primary,
     'header-foreground': onPrimary,
@@ -325,33 +366,47 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
           'sidebar-primary': primary,
           'sidebar-primary-foreground': onPrimary,
           'sidebar-accent': tinted(primary, 0.1),
-          'sidebar-accent-foreground': textOnTint(primary, GRAPHITE, [WHITE]),
-          'sidebar-border': n(15, 90),
+          'sidebar-accent-foreground': textOnTint(primary, lightFg, [WHITE], min),
+          'sidebar-border': lightBorder,
           'sidebar-ring': primary,
         }),
   }
 
-  const darkBg = marca ? n(38, 5) : n(25, 6)
-  const darkCard = marca ? n(30, 10) : n(25, 8)
-  const darkPrimary = n(clamp(ps, 40, 70), 60)
-  const darkAccent = fromHsl(ah.h, Math.min(60, ah.s), 45)
-  const darkFg = '#FAFAFA'
+  const darkBg = campo ? '#000000' : marca ? n(38, 5) : n(25, 6)
+  const darkCard = campo ? n(20, 5) : marca ? n(30, 10) : n(25, 8)
+  // Fuera de campo, el principal oscuro se aclara lo justo para que su texto llegue al mínimo
+  // (con el de serie sale #B86CE5 y texto grafito, como en Grado).
+  const darkTone = (light) => n(clamp(ps, 40, 70), light)
+  let darkLight = 60
+  while (!campo && darkLight < 85 && ratio(darkTone(darkLight), on(darkTone(darkLight))) < min) darkLight += 1
+  const darkPrimary = campo ? reach(darkTone(70), darkBg, 7) : darkTone(darkLight)
+  // El acento oscuro, igual: se aclara hasta que su texto llega al mínimo.
+  const accentTone = (light) => fromHsl(ah.h, Math.min(60, ah.s), light)
+  let accentLight = 45
+  while (!campo && accentLight < 85 && ratio(accentTone(accentLight), on(accentTone(accentLight))) < min) accentLight += 1
+  const darkAccent = campo ? reach(accentTone(55), darkBg, 7) : accentTone(accentLight)
+  const darkFg = campo ? WHITE : '#FAFAFA'
   const darkHeader = marca ? n(75, 15) : n(60, 18)
+  const darkMuted = n(15, campo ? 10 : 14)
+  const darkBorder = campo ? reach(n(10, 45), darkBg, 3.5) : n(15, 18)
   const dark = {
     background: darkBg,
+    ...(campo ? { foreground: darkFg, 'card-foreground': darkFg, 'popover-foreground': darkFg } : {}),
     card: darkCard,
     popover: darkCard,
     primary: darkPrimary,
-    'primary-foreground': onColor(darkPrimary),
-    'primary-text': textOnTint(darkPrimary, darkFg, [darkBg, darkCard]),
+    'primary-foreground': on(darkPrimary),
+    'primary-text': textOnTint(darkPrimary, darkFg, [darkBg, darkCard], min),
+    'primary-subtle': blend(darkCard, darkPrimary, 0.1),
+    'primary-border': blend(darkCard, darkPrimary, 0.3),
     secondary: n(15, 16),
     'secondary-foreground': darkFg,
-    muted: n(15, 14),
-    'muted-foreground': reach(n(8, 65), n(15, 14), 4.5),
+    muted: darkMuted,
+    'muted-foreground': reach(n(8, 65), darkMuted, min),
     accent: darkAccent,
-    'accent-foreground': onColor(darkAccent),
-    border: n(15, 18),
-    input: n(15, 18),
+    'accent-foreground': on(darkAccent),
+    border: darkBorder,
+    input: campo ? reach(n(10, 55), darkBg, 4.5) : darkBorder,
     ring: darkPrimary,
     header: darkHeader,
     'header-foreground': WHITE,
@@ -376,7 +431,7 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
           'sidebar-primary-foreground': onColor(darkPrimary),
           'sidebar-accent': blend(darkBg, darkPrimary, 0.12),
           'sidebar-accent-foreground': n(75, 82),
-          'sidebar-border': n(15, 18),
+          'sidebar-border': darkBorder,
           'sidebar-ring': darkPrimary,
         }),
   }
@@ -391,8 +446,8 @@ export function cssVariables(tokens, mode = 'light') {
 }
 
 /**
- * Código corto que guarda la configuración: GRADO-5C068C-2ED8C3-F-R8[-INTER][-M][-D], con el
- * principal, el acento y la variante. Con la fuente por defecto (Inter desde 0.6;
+ * Código corto que guarda la configuración: GRADO-5C068C-2ED8C3-F-R8[-BARLOW][-M|-K][-COMPACT|-COMFORT][-D],
+ * con el principal, el acento, la variante, la fuente, la base (M marca, K campo), la densidad y el oscuro. Con la fuente por defecto (Inter desde 0.6;
  * antes, Barlow) no se escribe.
  */
 export function encodeTheme(config) {
@@ -405,7 +460,8 @@ export function encodeTheme(config) {
     c.variant,
     c.radius.toUpperCase(),
     font === DEFAULTS.font ? null : font.toUpperCase(),
-    c.base === 'marca' ? 'M' : null,
+    c.base === 'marca' ? 'M' : c.base === 'campo' ? 'K' : null,
+    DENSITY_FLAGS[c.density] ?? null,
     c.dark ? 'D' : null,
   ]
     .filter(Boolean)
@@ -419,7 +475,11 @@ export function decodeTheme(code) {
     .match(/^GRADO-([0-9A-F]{6})-([0-9A-F]{6})-([FESC])-(R4|R8|R12)((?:-[A-Z0-9]+)*)$/)
   if (!m) return null
   const flags = m[5].split('-').filter(Boolean)
-  const fonts = flags.filter((flag) => flag !== 'M' && flag !== 'D')
+  const known = new Set(['M', 'K', 'D', ...Object.values(DENSITY_FLAGS)])
+  const fonts = flags.filter((flag) => !known.has(flag))
+  // Una sola base y una sola densidad: «-M-K» o «-COMPACT-COMFORT» no son un tema.
+  const densities = flags.filter((flag) => Object.values(DENSITY_FLAGS).includes(flag))
+  if (densities.length > 1 || (flags.includes('M') && flags.includes('K'))) return null
   const font = fonts.length ? FONTS.find((item) => item.id.toUpperCase() === fonts[0]) : fontById(DEFAULTS.font)
   if (!font || fonts.length > 1) return null
   // La antigua propuesta «Equilibrada» (E) ya no existe: esos códigos se abren con «Fiel».
@@ -429,7 +489,8 @@ export function decodeTheme(code) {
     variant: m[3] === 'E' ? 'F' : m[3],
     radius: m[4].toLowerCase(),
     font: font.id,
-    base: flags.includes('M') ? 'marca' : 'consola',
+    base: flags.includes('M') ? 'marca' : flags.includes('K') ? 'campo' : 'consola',
+    density: Object.keys(DENSITY_FLAGS).find((key) => flags.includes(DENSITY_FLAGS[key])) ?? 'default',
     dark: flags.includes('D'),
   }
 }
@@ -437,27 +498,43 @@ export function decodeTheme(code) {
 /** Todo lo que necesita la web para una configuración. */
 export function resolveTheme(config) {
   const c = { ...DEFAULTS, ...config }
-  const palettes = buildPalettes(c.primary, c.accent, c.variant)
+  const palettes = buildPalettes(c.primary, c.accent, c.variant, c.base)
   const palette = palettes.find((p) => p.accent === c.accent)
-  const variant = VARIANTS.find((v) => v.id === c.variant) ?? VARIANTS[0]
-  return { config: c, palettes, palette, variant, font: fontById(c.font), tokens: themeTokens(palette, c), code: encodeTheme(c) }
+  // Campo usa siempre «Alto contraste»: es lo que pide trabajar al sol.
+  const variant = VARIANTS.find((v) => v.id === (c.base === 'campo' ? 'C' : c.variant)) ?? VARIANTS[0]
+  return {
+    config: c,
+    palettes,
+    palette,
+    variant,
+    base: baseById(c.base),
+    density: DENSITIES.find((item) => item.id === c.density) ?? DENSITIES[0],
+    font: fontById(c.font),
+    tokens: themeTokens(palette, c),
+    code: encodeTheme(c),
+  }
 }
 
 /**
  * Combinaciones que revisa el panel de contraste, en claro y, si el tema lo incluye, en oscuro.
- * Texto: 4,5 : 1. Elementos gráficos (`ui`): 3 : 1, WCAG 1.4.11; si no llegan, es un aviso.
+ * Texto: 4,5 : 1, o 7 : 1 con la base «campo». Elementos gráficos (`ui`): 3 : 1, WCAG 1.4.11;
+ * si no llegan, es un aviso.
  */
 export function contrastChecks({ config, tokens }) {
+  const text = baseById(config.base).min
+  const campo = config.base === 'campo'
   const checks = []
   for (const mode of config.dark ? ['light', 'dark'] : ['light']) {
     const c = tokens[mode]
-    checks.push({ mode, label: 'Texto del botón principal', background: c.primary, foreground: c['primary-foreground'], min: 4.5 })
+    checks.push({ mode, label: 'Texto del botón principal', background: c.primary, foreground: c['primary-foreground'], min: text })
+    checks.push({ mode, label: 'Enlaces y texto de marca', background: c.background, foreground: c['primary-text'], min: text })
+    checks.push({ mode, label: 'Texto de marca sobre tinte', background: c['primary-subtle'], foreground: c['primary-text'], min: text })
+    checks.push({ mode, label: 'Texto secundario', background: c.muted, foreground: c['muted-foreground'], min: text })
     if (mode === 'light')
-      checks.push(
-        { mode, label: 'Enlaces y texto de marca', background: c.background, foreground: c['primary-text'], min: 4.5 },
-        { mode, label: 'Acento sobre el fondo', background: c.background, foreground: c.accent, min: 3, ui: true },
-      )
-    checks.push({ mode, label: 'Texto sobre el acento', background: c.accent, foreground: c['accent-foreground'], min: 4.5 })
+      checks.push({ mode, label: 'Acento sobre el fondo', background: c.background, foreground: c.accent, min: 3, ui: true })
+    checks.push({ mode, label: 'Texto sobre el acento', background: c.accent, foreground: c['accent-foreground'], min: text })
+    // Al sol, el borde de un campo tiene que verse (WCAG 1.4.11).
+    if (campo) checks.push({ mode, label: 'Borde de los campos', background: c.background, foreground: c.input, min: 3, ui: true })
   }
   return checks.map((check) => {
     const value = ratio(check.background, check.foreground)
@@ -477,7 +554,10 @@ export function contrastChecks({ config, tokens }) {
   })
 }
 
-const DARK_SELECTOR = '.dark,\n[data-theme="dark"],\n.dark [data-k5-theme],\n[data-theme="dark"] [data-k5-theme]'
+// Con data-k5-theme en el mismo <html> que .dark (Marca, Campo), tokens.css usa
+// .dark[data-k5-theme="marca"]: el tema necesita también esa forma para ganarle.
+const DARK_SELECTOR =
+  '.dark,\n[data-theme="dark"],\n.dark[data-k5-theme],\n[data-theme="dark"][data-k5-theme],\n.dark [data-k5-theme],\n[data-theme="dark"] [data-k5-theme]'
 
 /**
  * grado-tema.css: cada token como --k5-* (componentes de Grado) y con su alias sin
@@ -507,7 +587,8 @@ export function themeCss({ config, palette, variant, font, tokens, code }, { sty
       `  --k5-font-sans: ${tokens.font};`,
     ]),
   ]
-  if (config.dark) parts.push(block(DARK_SELECTOR, tokens.dark))
+  // Como en Grado, al imprimir no se aplica el oscuro: papel blanco y texto oscuro.
+  if (config.dark) parts.push(`@media not print {\n${block(DARK_SELECTOR, tokens.dark).replace(/^(?=.)/gm, '  ')}\n}`)
   // Tailwind 4 lee la fuente de --k5-font-sans. El preset de Tailwind 3 escribe la de marca en su
   // base (html): :root pesa más que html, así que la página usa la fuente del tema.
   if (styles === 'tailwind3')
@@ -517,43 +598,58 @@ export function themeCss({ config, palette, variant, font, tokens, code }, { sty
 
 /**
  * Pasos de instalación con el tema, según framework y estilos. Con bundler, Inter sale de
- * @1k5-tech-es/grado/fonts.css y las demás fuentes de Fontsource; en HTML, se enlazan a Google Fonts.
+ * @1k5-tech-es/grado/fonts.css y las demás fuentes de Fontsource; en HTML, Inter se copia del
+ * paquete y las demás se enlazan a Google Fonts. Campo añade su archivo (themes/campo.css) y,
+ * en HTML, los Web Components de @1k5-tech-es/grado-elements traen lo interactivo.
  */
 export function installSteps({ config, font }, { framework = 'react', styles = 'tailwind4' } = {}) {
+  const campo = config.base === 'campo'
   const fontPackage = font.package ? ` \\\n  ${font.package}` : ''
   const install =
-    framework === 'html' ? 'npm install @1k5-tech-es/grado' : `npm install @1k5-tech-es/grado @1k5-tech-es/grado-${framework}${fontPackage}`
-  const htmlTag = `<html lang="es"${config.base === 'marca' ? ' data-k5-theme="marca"' : ''}>`
+    framework === 'html'
+      ? 'npm install @1k5-tech-es/grado @1k5-tech-es/grado-elements'
+      : `npm install @1k5-tech-es/grado @1k5-tech-es/grado-${framework}${fontPackage}`
+  const attrs = [
+    config.base !== 'consola' ? ` data-k5-theme="${config.base}"` : '',
+    config.density && config.density !== 'default' ? ` data-k5-density="${config.density}"` : '',
+  ].join('')
+  const htmlTag = `<html lang="es"${attrs}>`
   const main = framework === 'vue' ? 'main.ts' : 'main.tsx'
   const fontImports = font.bundled
     ? "import '@1k5-tech-es/grado/fonts.css';\n"
     : font.package
       ? `${FONT_WEIGHTS.map((weight) => `import '${font.package}/${weight}.css';`).join('\n')}\n`
       : ''
-  let entry, fontEntry
+  let entry, fontEntry, elements
   if (framework === 'html') {
-    const fontLinks = font.href
-      ? `  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link rel="stylesheet" href="${font.href}">\n`
-      : ''
+    const fontLinks = font.bundled
+      ? '  <link rel="stylesheet" href="/grado/dist/fonts.css">\n'
+      : font.href
+        ? `  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link rel="stylesheet" href="${font.href}">\n`
+        : ''
     entry = {
-      label: 'index.html · copia tokens.css, grado.css y grado-tema.css a /grado',
-      code: `${htmlTag}\n<head>\n${fontLinks}  <link rel="stylesheet" href="/grado/tokens.css">\n  <link rel="stylesheet" href="/grado/grado.css">\n  <link rel="stylesheet" href="/grado/grado-tema.css">\n</head>`,
+      label: 'index.html · copia dist/ y assets/fonts/ de @1k5-tech-es/grado a /grado, y tu tema a /grado/grado-tema.css',
+      code: `${htmlTag}\n<head>\n${fontLinks}  <link rel="stylesheet" href="/grado/dist/tokens.css">\n${campo ? '  <link rel="stylesheet" href="/grado/dist/themes/campo.css">\n' : ''}  <link rel="stylesheet" href="/grado/dist/grado.min.css">\n  <link rel="stylesheet" href="/grado/grado-tema.css">\n</head>`,
+    }
+    elements = {
+      label: 'Componentes interactivos · copia dist/grado-elements.min.js de @1k5-tech-es/grado-elements',
+      code: `<script type="module" src="/grado/grado-elements.min.js"></script>\n\n<k5-combobox label="Provincia" name="provincia">\n  <option value="md">Madrid</option>\n</k5-combobox>`,
     }
   } else if (styles === 'css') {
     entry = {
       label: `Entrada de tu aplicación · ${main}`,
-      code: `${fontImports}import '@1k5-tech-es/grado/tokens.css';\nimport '@1k5-tech-es/grado/grado.css';\nimport './grado-tema.css';`,
+      code: `${fontImports}import '@1k5-tech-es/grado/tokens.css';\n${campo ? "import '@1k5-tech-es/grado/themes/campo.css';\n" : ''}import '@1k5-tech-es/grado/grado.css';\nimport './grado-tema.css';`,
     }
   } else {
     entry =
       styles === 'tailwind3'
         ? {
             label: 'CSS global · con el preset de Grado en tailwind.config.js',
-            code: "@import '@1k5-tech-es/grado/tokens-hsl.css';\n@import '@1k5-tech-es/grado/grado.css';\n@import './grado-tema.css';\n\n@tailwind base;\n@tailwind components;\n@tailwind utilities;",
+            code: `@import '@1k5-tech-es/grado/tokens-hsl.css';\n${campo ? "@import '@1k5-tech-es/grado/themes/campo-hsl.css';\n" : ''}@import '@1k5-tech-es/grado/grado.css';\n@import './grado-tema.css';\n\n@tailwind base;\n@tailwind components;\n@tailwind utilities;`,
           }
         : {
             label: 'CSS global',
-            code: "@import 'tailwindcss';\n@import '@1k5-tech-es/grado/tailwind.css';\n@import '@1k5-tech-es/grado/grado.css' layer(components);\n@import './grado-tema.css';",
+            code: `@import 'tailwindcss';\n@import '@1k5-tech-es/grado/tailwind.css';\n${campo ? "@import '@1k5-tech-es/grado/themes/campo.css';\n" : ''}@import '@1k5-tech-es/grado/grado.css' layer(components);\n@import './grado-tema.css';`,
           }
     // La fuente va en la entrada de JavaScript: así el bundler resuelve las rutas de sus archivos.
     if (fontImports) fontEntry = { label: `Entrada de tu aplicación · ${main} · fuente ${font.name}`, code: fontImports.trimEnd() }
@@ -565,7 +661,8 @@ export function installSteps({ config, font }, { framework = 'react', styles = '
     entry,
   ]
   if (fontEntry) steps.push(fontEntry)
-  if (framework !== 'html' && (config.base === 'marca' || config.dark))
+  if (elements) steps.push(elements)
+  if (framework !== 'html' && (attrs || config.dark))
     steps.push({ label: 'index.html', code: `${htmlTag}${config.dark ? '\n<!-- Modo oscuro: añade class="dark" a <html> -->' : ''}` })
   return steps
 }
