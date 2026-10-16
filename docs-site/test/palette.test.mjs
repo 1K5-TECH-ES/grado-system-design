@@ -17,6 +17,7 @@ import {
   normalizeHex,
   oklch,
   primaryContrast,
+  PRESETS,
   ratio,
   resolveTheme,
   themeCss,
@@ -148,15 +149,25 @@ test('el panel de contraste revisa el modo claro y, si el tema lo incluye, el os
     contrastChecks(resolveTheme(config))
       .filter((item) => !item.pass)
       .map((item) => `${item.mode} · ${item.label} · ${item.status}`)
-  assert.equal(contrastChecks(resolveTheme({ dark: true })).length, 6)
-  assert.equal(contrastChecks(resolveTheme({ dark: false })).length, 4)
+  // Botón, enlaces, texto de marca sobre tinte, secundario y texto sobre el acento; en claro, además, el acento sobre el fondo.
+  assert.equal(contrastChecks(resolveTheme({ dark: true })).length, 11)
+  assert.equal(contrastChecks(resolveTheme({ dark: false })).length, 6)
   // Con los colores de marca, la menta no llega a 3 : 1 sobre blanco (aviso) y el principal en oscuro se queda en 4,1 : 1.
   assert.deepEqual(failing({ dark: true }), ['light · Acento sobre el fondo · warning', 'dark · Texto del botón principal · fail'])
   assert.deepEqual(failing({ dark: true, variant: 'C' }), ['dark · Texto del botón principal · fail'])
 })
 
 test('el código de tema guarda y recupera la configuración', () => {
-  const config = { primary: '#1D4ED8', accent: '#F5B000', variant: 'S', radius: 'r12', font: 'inter', base: 'marca', dark: true }
+  const config = {
+    primary: '#1D4ED8',
+    accent: '#F5B000',
+    variant: 'S',
+    radius: 'r12',
+    font: 'inter',
+    base: 'marca',
+    density: 'default',
+    dark: true,
+  }
   const code = encodeTheme(config)
   assert.equal(code, 'GRADO-1D4ED8-F5B000-S-R12-M-D')
   assert.deepEqual(decodeTheme(code), config)
@@ -167,6 +178,7 @@ test('el código de tema guarda y recupera la configuración', () => {
     radius: 'r8',
     font: 'inter',
     base: 'consola',
+    density: 'default',
     dark: false,
   })
   // Los códigos con la antigua propuesta «Equilibrada» se abren con «Fiel».
@@ -184,7 +196,16 @@ test('el código de tema guarda y recupera la configuración', () => {
 
 test('el código de tema guarda la fuente, salvo la de Grado', () => {
   for (const font of FONTS) {
-    const config = { primary: '#1D4ED8', accent: '#F5B000', variant: 'C', radius: 'r4', font: font.id, base: 'consola', dark: false }
+    const config = {
+      primary: '#1D4ED8',
+      accent: '#F5B000',
+      variant: 'C',
+      radius: 'r4',
+      font: font.id,
+      base: 'consola',
+      density: 'default',
+      dark: false,
+    }
     const code = encodeTheme(config)
     assert.equal(code.includes(font.id.toUpperCase()), font.id !== 'inter', code)
     assert.deepEqual(decodeTheme(code), config)
@@ -217,7 +238,8 @@ test('el CSS del tema define cada token con y sin prefijo', () => {
   assert.match(css, /--k5-primary: #1D4ED8;\n {2}--primary: #1D4ED8;/)
   assert.match(css, /--k5-radius: 0\.5rem;/)
   assert.match(css, /Principal #1D4ED8 · Paleta «Personalizada», acento #F5B000 · Variante «Fiel»/)
-  assert.match(css, /\.dark,\n\[data-theme="dark"\]/)
+  // El oscuro gana también a .dark[data-k5-theme="marca"] de tokens.css, y no se imprime.
+  assert.match(css, /@media not print \{\n {2}\.dark,\n {2}\[data-theme="dark"\],\n {2}\.dark\[data-k5-theme\],/)
   assert.doesNotMatch(themeCss(resolveTheme({ dark: false })), /\.dark/)
   assert.match(themeCss(theme, { styles: 'tailwind3' }), /--k5-primary: #1D4ED8;\n {2}--primary: [\d.]+ [\d.]+% [\d.]+%;/)
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length)
@@ -239,8 +261,9 @@ test('los pasos de instalación usan los paquetes y los imports reales', () => {
   assert.match(react[2].code, /@import '\.\/grado-tema\.css';/)
   assert.match(react.at(-1).code, /data-k5-theme="marca"/)
   const html = installSteps(theme, { framework: 'html' })
-  assert.equal(html[0].code, 'npm install @1k5-tech-es/grado')
+  assert.equal(html[0].code, 'npm install @1k5-tech-es/grado @1k5-tech-es/grado-elements')
   assert.match(html[2].code, /grado-tema\.css/)
+  assert.match(html.at(-1).code, /<script type="module" src="\/grado\/grado-elements\.min\.js"><\/script>/)
   assert.equal(installSteps(resolveTheme({ font: 'sistema' }), { framework: 'react' }).length, 4)
   assert.equal(
     cliCommand('GRADO-5C068C-2ED8C3-F-R8', { framework: 'vue', styles: 'css' }),
@@ -261,15 +284,69 @@ test('los pasos de instalación cargan la fuente elegida', () => {
   assert.equal(css.length, 3)
   assert.match(css[2].code, /^import '@fontsource\/barlow\/400\.css';[\s\S]*import '\.\/grado-tema\.css';$/)
   const html = installSteps(barlow, { framework: 'html' })
-  assert.equal(html[0].code, 'npm install @1k5-tech-es/grado')
+  assert.equal(html[0].code, 'npm install @1k5-tech-es/grado @1k5-tech-es/grado-elements')
   assert.match(
     html[2].code,
-    /<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Barlow:wght@400;500;600;700&display=swap">\n {2}<link rel="stylesheet" href="\/grado\/tokens\.css">/,
+    /<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=Barlow:wght@400;500;600;700&display=swap">\n {2}<link rel="stylesheet" href="\/grado\/dist\/tokens\.css">/,
   )
+  // Inter viene en el paquete: en HTML se copia, sin Google Fonts.
+  const interHtml = installSteps(resolveTheme({ font: 'inter' }), { framework: 'html' })
+  assert.match(interHtml[2].code, /<link rel="stylesheet" href="\/grado\/dist\/fonts\.css">/)
+  assert.doesNotMatch(interHtml[2].code, /googleapis/)
   const inter = installSteps(resolveTheme({ font: 'inter', dark: false }), { framework: 'react', styles: 'tailwind4' })
   assert.doesNotMatch(inter[0].code, /fontsource/)
   assert.equal(inter.at(-1).code, "import '@1k5-tech-es/grado/fonts.css';")
   const system = resolveTheme({ font: 'sistema' })
   for (const framework of ['react', 'html'])
     for (const step of installSteps(system, { framework })) assert.doesNotMatch(step.code ?? '', /fontsource|fonts\.googleapis/)
+})
+
+test('el tema recalcula la escala tonal del principal: tinte, borde y texto', () => {
+  const theme = resolveTheme({ primary: '#1D4ED8', accent: '#F5B000', dark: true })
+  for (const mode of ['light', 'dark']) {
+    const c = theme.tokens[mode]
+    for (const name of ['primary-subtle', 'primary-border', 'primary-text']) assert.match(c[name], /^#[0-9A-F]{6}$/, `${mode} ${name}`)
+    assert.ok(ratio(c['primary-text'], c['primary-subtle']) >= 4.5, `${mode}: texto de marca sobre su tinte`)
+  }
+  // Sin recalcularlos, el tinte seguiría siendo el de la berenjena.
+  assert.notEqual(theme.tokens.light['primary-subtle'], resolveTheme({}).tokens.light['primary-subtle'])
+  assert.match(themeCss(theme), /--k5-primary-subtle: #[0-9A-F]{6};\n {2}--primary-subtle:/)
+})
+
+test('base Campo: todo el texto a 7 : 1 con cualquier color sugerido y cualquier paleta', () => {
+  for (const preset of PRESETS)
+    for (const palette of resolveTheme({ primary: preset.hex }).palettes) {
+      const theme = resolveTheme({ primary: preset.hex, accent: palette.accent, base: 'campo', dark: true })
+      assert.equal(theme.variant.id, 'C', 'Campo usa siempre Alto contraste')
+      const checks = contrastChecks(theme)
+      assert.ok(checks.some((check) => check.label === 'Borde de los campos'))
+      for (const check of checks) assert.ok(check.pass, `${preset.name} · ${palette.name} · ${check.mode} · ${check.label}: ${check.text}`)
+      for (const check of checks.filter((item) => !item.ui)) assert.equal(check.min, 7)
+    }
+})
+
+test('base Campo y densidad: en el código, en <html> y en la instalación', () => {
+  const config = {
+    primary: '#1D4ED8',
+    accent: '#F5B000',
+    variant: 'F',
+    radius: 'r8',
+    font: 'inter',
+    base: 'campo',
+    density: 'compact',
+    dark: true,
+  }
+  const code = encodeTheme(config)
+  assert.equal(code, 'GRADO-1D4ED8-F5B000-F-R8-K-COMPACT-D')
+  assert.deepEqual(decodeTheme(code), config)
+  assert.equal(decodeTheme('GRADO-1D4ED8-F5B000-F-R8-COMFORT').density, 'comfortable')
+  assert.equal(decodeTheme('GRADO-1D4ED8-F5B000-F-R8-COMPACT-COMFORT'), null, 'dos densidades')
+  assert.equal(decodeTheme('GRADO-1D4ED8-F5B000-F-R8-M-K'), null, 'dos bases')
+  const theme = resolveTheme(config)
+  const tailwind = installSteps(theme, { framework: 'react', styles: 'tailwind4' })
+  assert.match(tailwind[2].code, /@import '@1k5-tech-es\/grado\/themes\/campo\.css';\n@import '@1k5-tech-es\/grado\/grado\.css'/)
+  assert.match(tailwind.at(-1).code, /<html lang="es" data-k5-theme="campo" data-k5-density="compact">/)
+  assert.match(installSteps(theme, { framework: 'react', styles: 'tailwind3' })[2].code, /themes\/campo-hsl\.css/)
+  assert.match(installSteps(theme, { framework: 'html' })[2].code, /\/grado\/dist\/themes\/campo\.css/)
+  assert.doesNotMatch(installSteps(resolveTheme({}), { framework: 'react', styles: 'css' })[2].code, /campo/)
 })
