@@ -19,7 +19,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 | 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt. Fase 3: textos en alemán e inglés aparte, alias de tamaño obsoletos, política de versiones y filas virtuales en `DataTable` | Hecha |
-| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha: utilidades y componentes de energía en `labs`, tema «campo», Inter, núcleo común y Web Components |
+| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha |
 
 ## Decisiones tomadas
 
@@ -51,12 +51,12 @@ npm run figma:check   # compara design/figma-tokens.json (export de Tokens Studi
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
-npm run release:check -- 0.5.0  # versiones de los tres paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
+npm run release:check -- 0.6.0  # versiones de los cuatro paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
 ```
 
 ## Publicar una versión
 
-1. Sube la versión en los tres `package.json` (y la dependencia `@1k5-tech-es/grado` de React y Vue), `npm install --package-lock-only`, y escribe su sección en `CHANGELOG.md` con la fecha en el título.
+1. Sube la versión en los cuatro `package.json` (y la dependencia `@1k5-tech-es/grado` de React, Vue y Elements), `npm install --package-lock-only`, y escribe su sección en `CHANGELOG.md` con la fecha en el título.
 2. `npm run release:check -- X.Y.Z`. Si la API ha cambiado, `npm run api` y revisa el diff de `api/`.
 3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
 

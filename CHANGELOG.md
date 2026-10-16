@@ -1,8 +1,8 @@
 # Cambios
 
-Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
+Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
-## 0.6.0 · sin publicar
+## 0.6.0 · 16 de octubre de 2026
 
 0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter. Fase 4: un núcleo común para React y Vue, y Web Components para HTML sin framework.
 
@@ -42,6 +42,13 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - `SignaturePad`: firma de la oferta con el dedo, un lápiz o el ratón, o escribiendo el nombre (la alternativa para el teclado y los lectores de pantalla). La firma es `{ strokes }` o `{ typed }`; `signatureSvg()` y `signatureDataUrl()` la exportan como SVG, y con `name` viaja en un campo oculto del formulario. La página no se desplaza mientras se firma.
 - `SolarForecast` y `forecastSummary()`: producción solar prevista frente a la real, hora a hora (o por cuartos de hora), con el tiempo de cada franja. El resumen da el total previsto, lo producido hasta la última hora con dato y si va más de un 5 % por encima o por debajo. Se recorre con las flechas como los demás gráficos, con tabla oculta para lectores de pantalla.
 - Los textos de labs (los del tema, las tarifas, la firma y la previsión) van en `@1k5-tech-es/grado/labs` (`LABS_MESSAGES`, `labsMessagesFor()`), no en los mensajes principales: una app que no usa labs no los descarga. Se cambian con el mismo `messages` de `GradoProvider`.
+
+### Web: Personalizar
+
+- El configurador de temas se pone al día: base «Campo» (fija «Alto contraste» y comprueba 7 : 1), control de densidad, escala tonal del principal (`--k5-primary-subtle`, `-border`, `-text`) en el CSS del tema, y modo oscuro que gana también con `data-k5-theme` en `<html>`.
+- La instalación usa lo que hay ahora: Inter desde `fonts.css`, `themes/campo.css` con Campo, `data-k5-theme` y `data-k5-density` en `<html>`, y `grado-elements` en HTML sin framework.
+- El principal y el acento oscuros, y el principal «Suave», se aclaran solo hasta donde su texto llega a 4,5 : 1: el tema de serie ya no se queda en 4,1 : 1 en oscuro, y ningún color sugerido falla en ninguna paleta ni variante (lo comprueba un test).
+- Vista previa con indicadores de estado, tendencias en los KPI, progreso, `BarChart` y avisos con tinte.
 
 ### Calidad
 
