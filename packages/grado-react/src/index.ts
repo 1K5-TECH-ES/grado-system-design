@@ -84,4 +84,14 @@ export * from './group-superposiciones.js'
 export * from './group-maquetacion.js'
 // Componentes de 0.4.
 export { Toaster, toast, type ToasterProps } from './Toaster.js'
-export type { ToastAction, ToastItem, ToastOptions, ToastFunction, ToastPromiseMessages } from '@1k5-tech-es/grado/patterns'
+export { ErrorSummary, type ErrorSummaryProps } from './ErrorSummary.js'
+export { focusField } from '@1k5-tech-es/grado/patterns'
+export type {
+  ToastAction,
+  ToastItem,
+  ToastOptions,
+  ToastFunction,
+  ToastPromiseMessages,
+  ErrorSummaryItem,
+  FieldCheck,
+} from '@1k5-tech-es/grado/patterns'

@@ -15,6 +15,12 @@ export function useField() {
   return inject(FIELD_KEY, null)
 }
 
+/**
+ * true dentro de un FormField: el formulario decide los errores, así que los campos con
+ * validación propia (NifInput, IbanInput, PhoneInput, TimePicker) no pintan la suya. Uso interno.
+ */
+export const MANAGED_KEY: InjectionKey<boolean> = Symbol('k5-managed-field')
+
 export const Field = defineComponent({
   name: 'K5Field',
   props: {

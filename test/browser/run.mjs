@@ -8,9 +8,11 @@ import { chromium, expect } from '@playwright/test'
 import { createRequire } from 'node:module'
 import { check as maquetacionCheck } from './groups/maquetacion.check.mjs'
 import { check as datosCheck } from './groups/datos.check.mjs'
-import { check as graficosCheck } from './groups/graficos.check.mjs'
+import { check as graficosCheck, checkInteractive as graficosInteractiveCheck } from './groups/graficos.check.mjs'
 import { check as entradasCheck } from './groups/entradas.check.mjs'
 import { check as superposicionesCheck } from './groups/superposiciones.check.mjs'
+import { check as formulariosCheck } from './groups/formularios.check.mjs'
+import { check as tablasCheck } from './groups/tablas.check.mjs'
 
 // Análisis de accesibilidad: axe-core con las reglas de WCAG 2.2 A y AA.
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8')
@@ -288,8 +290,17 @@ try {
     // GradoProvider: la paginación en alemán.
     await expect(page.locator('#german [aria-label="Nächste Seite"]')).toBeVisible()
 
-    // Componentes de 0.3, por grupo.
-    for (const check of [maquetacionCheck, datosCheck, graficosCheck, entradasCheck, superposicionesCheck])
+    // Componentes de 0.3 y 0.4, por grupo.
+    for (const check of [
+      maquetacionCheck,
+      datosCheck,
+      graficosCheck,
+      entradasCheck,
+      superposicionesCheck,
+      formulariosCheck,
+      tablasCheck,
+      graficosInteractiveCheck,
+    ])
       await check(page, { expect, framework })
     expect(errors).toEqual([])
     // Accesibilidad en los dos temas y los dos modos, más una pasada con listas y la paleta abiertas.

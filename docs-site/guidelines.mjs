@@ -270,6 +270,37 @@ export const guidelines = {
       'Escape cierra y devuelve el foco al botón. Tab sale del menú.',
     ],
   },
+  form: {
+    use: [
+      'Úsalo en cualquier formulario que se envía: ofertas, altas de cliente, datos de facturación.',
+      'Pon ErrorSummary al principio y required en los campos obligatorios.',
+      'Para los errores que devuelve el servidor, usa errors (React) o initial-errors (Vue).',
+    ],
+    avoid: [
+      'No metas un Field dentro de FormField: FormField ya lleva el suyo.',
+      'Para un buscador o un filtro que no se envía, usa los controles sueltos.',
+      'No repitas en validate lo que ya comprueban NifInput, IbanInput, PhoneInput o TimePicker.',
+    ],
+    a11y: [
+      'Cada error se enlaza con aria-describedby y marca el control con aria-invalid.',
+      'Al enviar con errores, el foco va al primer campo y ErrorSummary se anuncia con role="alert".',
+      'Cada enlace del resumen lleva a su campo y le da el foco.',
+    ],
+  },
+  'error-summary': {
+    use: [
+      'Úsalo al principio de un formulario largo, para ver de un vistazo qué falta.',
+      'Pon en label el nombre del campo: el mensaje solo no siempre se entiende fuera de su sitio.',
+    ],
+    avoid: [
+      'Con react-hook-form o VeeValidate usa el de su adaptador, que se rellena solo.',
+      'No lo enseñes antes de que se intente enviar.',
+    ],
+    a11y: [
+      'Se anuncia con role="alert" al aparecer.',
+      'Cada enlace lleva al control por su id y le da el foco; si es un grupo, a su primer control.',
+    ],
+  },
   toaster: {
     use: [
       "Úsalo para confirmar acciones desde cualquier parte de la app: toast.success('Oferta enviada').",
@@ -438,7 +469,7 @@ export const guidelines = {
       'Usa loading, error y emptyLabel para los estados de respuesta.',
     ],
     avoid: [
-      'Si el servidor pagina los datos, usa Table y Pagination. DataTable pagina en el cliente.',
+      'Con cientos de filas o más no las cargues todas: usa manual y pide cada página al servidor.',
       'Para pocas filas sin interacción usa Table.',
     ],
     a11y: [
@@ -557,7 +588,7 @@ export const guidelines = {
       'Para un único dato con su variación usa Kpi.',
     ],
     a11y: [
-      'El dibujo lleva aria-hidden. Los datos se leen en una tabla oculta.',
+      'Se recorre con las flechas, Inicio y Fin, y cada dato se anuncia. Los datos están además en una tabla oculta.',
       'title nombra esa tabla y categoryLabel da cabecera a la columna de categorías.',
       'Con varias series aparece la leyenda. No la desactives con legend.',
     ],

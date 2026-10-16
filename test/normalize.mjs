@@ -17,5 +17,5 @@ export function normalize(html) {
         .sort()
       return `<${tag}${list.length ? ` ${list.join(' ')}` : ''}>`
     })
-    .replace(/(k5-(?:group-)?)(?:_R_[A-Za-z0-9]*_|v-[0-9-]+)/g, '$1AUTO')
+    .replace(/(k5-[a-z-]*?)(?:_R_[A-Za-z0-9]*_|v-\d+(?:-\d+)*)/g, '$1AUTO')
 }

@@ -111,3 +111,54 @@ export async function check(page, { expect }) {
   await expect(kpis.nth(1).locator('.k5-kpi__trend')).toHaveClass(/k5-sparkline--danger/)
   expect(await vertices(kpis.nth(1).locator('.k5-sparkline__line'))).toEqual([5])
 }
+
+// Gráficos interactivos (0.4): tarjeta al pasar el ratón y recorrido con flechas, anunciado en voz.
+export async function checkInteractive(page, { expect }) {
+  const chart = page.locator('#graficos-lineas .k5-chart').first()
+  const body = chart.locator('.k5-chart__body')
+  const plot = chart.locator('.k5-chart__plot')
+  const days = await chart.locator('.k5-chart__category').allTextContents()
+  const tooltip = plot.locator('.k5-chart__tooltip')
+  const spoken = body.locator('[aria-live=polite]')
+
+  await expect(body).toHaveAttribute('role', 'group')
+  await expect(body).toHaveAccessibleName('Producción y consumo')
+  await expect(body).toHaveAccessibleDescription('Usa las flechas para recorrer los datos.')
+
+  // Ratón: sobre el primer día sale su tarjeta con las dos series, el cursor y los puntos del día.
+  await plot.scrollIntoViewIfNeeded()
+  const box = await plot.boundingBox()
+  await page.mouse.move(box.x + box.width * 0.05, box.y + box.height / 2)
+  await expect(tooltip.locator('.k5-chart__tooltip-title')).toHaveText(days[0])
+  await expect(tooltip.locator('.k5-chart__tooltip-row')).toHaveCount(2)
+  await expect(tooltip).toHaveClass(/k5-chart__tooltip--after/)
+  await expect(plot.locator('.k5-chart__crosshair')).toHaveCount(1)
+  await expect(plot.locator('.k5-chart__point--active')).toHaveCount(2)
+  await expect(spoken).toHaveText('')
+  await page.mouse.move(box.x + box.width * 0.95, box.y + box.height / 2)
+  await expect(tooltip.locator('.k5-chart__tooltip-title')).toHaveText(days.at(-1))
+  await expect(tooltip).toHaveClass(/k5-chart__tooltip--before/)
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height + 200)
+  await expect(tooltip).toHaveCount(0)
+
+  // Teclado: la primera flecha entra por el principio; Fin va al último; se anuncia cada dato.
+  await body.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(tooltip.locator('.k5-chart__tooltip-title')).toHaveText(days[0])
+  await expect(spoken).toContainText(`${days[0]}: Producción`)
+  await page.keyboard.press('End')
+  await page.keyboard.press('ArrowLeft')
+  await expect(spoken).toContainText(`${days.at(-2)}:`)
+  await expect(plot.locator('.k5-chart__column[data-active]')).toHaveCount(1)
+  await page.keyboard.press('Escape')
+  await expect(tooltip).toHaveCount(0)
+
+  // BarChart: el grupo activo se resalta y la tarjeta lleva una fila por serie apilada.
+  const bars = page.locator('#chart .k5-chart')
+  await bars.locator('.k5-chart__body').focus()
+  await page.keyboard.press('Home')
+  await expect(bars.locator('.k5-chart__group[data-active]')).toHaveCount(1)
+  await expect(bars.locator('.k5-chart__tooltip-row')).toHaveText(['Autoconsumo210 kWh', 'Excedentes85 kWh'])
+  await page.keyboard.press('Tab')
+  await expect(bars.locator('.k5-chart__tooltip')).toHaveCount(0)
+}

@@ -931,3 +931,137 @@ export function createToastStore() {
 export function visibleToasts(items, max = 3) {
   return items.slice(0, Math.max(1, Math.floor(max)))
 }
+
+// ---------- Formularios (0.4) ----------
+
+/** ¿Vacío para un campo obligatorio? '', solo espacios, null, [], false (casilla sin marcar) o un periodo sin fechas. */
+export function isEmptyValue(value) {
+  if (value == null || value === false) return true
+  if (typeof value === 'string') return !value.trim()
+  if (Array.isArray(value)) return value.length === 0
+  if (typeof value === 'object' && 'start' in value && 'end' in value) return !value.start && !value.end
+  return false
+}
+
+/** Título de ErrorSummary: «Revisa 2 campos antes de continuar». */
+export function errorSummaryTitle(count, texts) {
+  const messages = textsOr(texts)
+  return count === 1 ? messages.errorSummaryOne : formatMessage(messages.errorSummaryMany, { count })
+}
+
+/** id de un campo de formulario a partir de su nombre: «titular.nif» → «k5-form-1-titular-nif». */
+export function fieldId(prefix, name) {
+  return `${prefix}-${String(name).replace(/[^a-zA-Z0-9_-]+/g, '-')}`
+}
+
+/**
+ * Valida un valor con las comprobaciones de FormField, en orden, y devuelve el primer error o ''.
+ * Primero obligatorio, luego el error de formato del propio campo (NIF, IBAN, teléfono, hora) y
+ * luego las comprobaciones propias, que devuelven true (vale), el texto del error o false (no vale,
+ * con un texto genérico), como en react-hook-form. Pueden ser async.
+ */
+export async function checkValue(value, values, { required = false, formatError = '', checks = [], messages } = {}) {
+  const texts = textsOr(messages)
+  if (required && isEmptyValue(value)) return texts.fieldRequired
+  if (formatError) return formatError
+  for (const check of [checks].flat()) {
+    if (!check) continue
+    const result = await check(value, values)
+    if (typeof result === 'string' && result) return result
+    if (result === false) return texts.fieldInvalid
+  }
+  return ''
+}
+
+const FIELD_CONTROLS =
+  'input:not([type=hidden]):not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), [tabindex]:not([tabindex="-1"])'
+
+/**
+ * Enfoca el control de un error de ErrorSummary. Si el id no es de un control (un RadioGroup o
+ * un Calendar no lo usan), busca el campo por data-k5-field y enfoca su primer control.
+ */
+export function focusField(id, doc = document) {
+  const target = doc.getElementById(id) ?? doc.querySelector(`[data-k5-field="${CSS.escape(id)}"]`)
+  const control = target?.matches(FIELD_CONTROLS) ? target : target?.querySelector(FIELD_CONTROLS)
+  if (!control) return false
+  control.focus()
+  control.scrollIntoView?.({ block: 'center' })
+  return true
+}
+
+// ---------- Tablas con datos del servidor (0.4) ----------
+
+/** Columnas que se ven: todas menos las ocultas. Las que no se pueden ocultar (hideable: false) siempre. */
+export function visibleColumns(columns, hidden = []) {
+  return columns.filter((column) => column.hideable === false || !hidden.includes(column.key))
+}
+
+/**
+ * Filas a CSV para Excel en el idioma activo: en es-ES y de-DE, «;» entre columnas y coma decimal.
+ * Usa csvValue de cada columna si la tiene; si no, el valor del campo. Las celdas de texto que
+ * empiezan por = + - @ llevan un apóstrofo delante, para que Excel no las ejecute como fórmula.
+ */
+export function toCsv(rows, columns, { locale = DEFAULT_LOCALE, separator } = {}) {
+  const decimal = numberFormat(locale, { useGrouping: false }).format(1.5).charAt(1)
+  const sep = separator ?? (decimal === ',' ? ';' : ',')
+  const cell = (value) => {
+    let text
+    if (value == null) text = ''
+    else if (typeof value === 'number')
+      text = Number.isFinite(value) ? numberFormat(locale, { useGrouping: false, maximumFractionDigits: 20 }).format(value) : ''
+    else if (value instanceof Date) text = value.toISOString()
+    else {
+      text = String(value)
+      if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`
+    }
+    return /["\r\n]/.test(text) || text.includes(sep) ? `"${text.replace(/"/g, '""')}"` : text
+  }
+  const lines = [columns.map((column) => cell(column.header))]
+  for (const row of rows) lines.push(columns.map((column) => cell(column.csvValue ? column.csvValue(row) : row[column.key])))
+  return `\uFEFF${lines.map((line) => line.join(sep)).join('\r\n')}\r\n`
+}
+
+/** Descarga un CSV hecho con toCsv(): downloadCsv('instalaciones.csv', csv). */
+export function downloadCsv(filename, csv, doc = document) {
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
+  const link = Object.assign(doc.createElement('a'), { href: url, download: filename })
+  doc.body.append(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url))
+}
+
+// ---------- Gráficos interactivos (0.4) ----------
+
+/** Dato bajo el puntero: cada dato ocupa una franja igual del ancho del gráfico. */
+export function chartSlotAt(offset, width, count) {
+  if (!count || !(width > 0)) return null
+  return Math.min(count - 1, Math.max(0, Math.floor((offset / width) * count)))
+}
+
+/**
+ * Dato al que lleva una tecla: flechas izquierda y derecha (sin dar la vuelta), Inicio y Fin.
+ * La primera flecha entra por el principio (derecha) o por el final (izquierda). undefined si la tecla no es suya.
+ */
+export function chartKeyMove(key, current, count) {
+  if (!count) return undefined
+  const last = count - 1
+  if (key === 'Home') return 0
+  if (key === 'End') return last
+  if (key === 'ArrowRight') return current == null ? 0 : Math.min(last, current + 1)
+  if (key === 'ArrowLeft') return current == null ? last : Math.max(0, current - 1)
+  return undefined
+}
+
+/**
+ * Lado de la guía vertical en el que va la tarjeta del dato (x en % del ancho): a la derecha
+ * en la mitad izquierda y a la izquierda en la otra, para no tapar los puntos ni salirse.
+ */
+export function tooltipAlign(x) {
+  return x > 55 ? 'before' : 'after'
+}
+
+/** Posición horizontal (en %) del centro del dato i de count. */
+export function slotCenter(index, count) {
+  return round2(((index + 0.5) / Math.max(1, count)) * 100)
+}

@@ -105,6 +105,7 @@ emits: update:open
   decimals: Number  // con valor por defecto
   description: String
   height: Number | String
+  interactive: Boolean  // con valor por defecto
   legend: Boolean  // con valor por defecto
   locale: String
   series: Array  // obligatoria
@@ -162,6 +163,7 @@ emits: dismiss
   decimals: Number  // con valor por defecto
   description: String
   height: Number | String
+  interactive: Boolean  // con valor por defecto
   legend: Boolean  // con valor por defecto
   locale: String
   series: Array  // obligatoria
@@ -337,11 +339,16 @@ function
 
 ```ts
   caption: String  // obligatoria
+  columnPicker: Boolean
   columns: Array  // obligatoria
+  defaultHiddenColumns: Array  // con valor por defecto
   defaultSort: Object  // con valor por defecto
   emptyLabel: String
   error: String
+  hiddenColumns: Array  // con valor por defecto
   loading: Boolean
+  manual: Boolean
+  maxHeight: Number | String
   page: Number
   pageSize: Number  // con valor por defecto
   rowKey: String | Function  // obligatoria
@@ -349,9 +356,10 @@ function
   selectable: Boolean
   selectedKeys: Array  // con valor por defecto
   sort: Object  // con valor por defecto
+  totalRows: Number
 ```
 
-emits: update:page, update:selectedKeys, update:sort
+emits: update:hiddenColumns, update:page, update:selectedKeys, update:sort
 
 ## DatePicker
 
@@ -478,6 +486,13 @@ function
 
 function
 
+## ErrorSummary
+
+```ts
+  errors: Array  // obligatoria
+  title: String
+```
+
 ## Field
 
 ```ts
@@ -529,6 +544,10 @@ emits: clear, removeFilter, update:query
 ```
 
 emits: remove
+
+## focusField
+
+function
 
 ## formatMessage
 
@@ -658,6 +677,7 @@ emits: update:modelValue
   decimals: Number  // con valor por defecto
   description: String
   height: Number | String
+  interactive: Boolean  // con valor por defecto
   legend: Boolean  // con valor por defecto
   locale: String
   series: Array  // obligatoria

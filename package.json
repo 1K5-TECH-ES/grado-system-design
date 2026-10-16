@@ -39,6 +39,7 @@
     "prettier": "3.9.9",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-hook-form": "^7.89.0",
     "react-router-dom": "^7.18.4",
     "stylelint": "17.15.0",
     "stylelint-config-standard": "40.0.0",
@@ -46,6 +47,7 @@
     "tailwindcss3": "npm:tailwindcss@3.4.17",
     "typescript": "^6.0.3",
     "typescript-eslint": "8.71.0",
+    "vee-validate": "^4.15.1",
     "vue": "^3.5.42"
   },
   "engines": {

@@ -1,0 +1,46 @@
+/* Formulario: campos con el hueco de la escala y el resumen de errores al principio. */
+.k5-form {
+  display: grid;
+  gap: var(--k5-space-5);
+}
+
+/* Resumen de errores: tinte rojo sin borde. Cada error es un enlace que lleva al campo. */
+.k5-error-summary {
+  display: grid;
+  gap: var(--k5-space-2);
+  padding: var(--k5-space-4);
+  border-radius: var(--k5-radius);
+  background: var(--k5-destructive-subtle);
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-body);
+  outline: none;
+}
+.k5-error-summary:focus-visible {
+  box-shadow: 0 0 0 2px var(--k5-ring);
+}
+.k5-error-summary__title {
+  margin: 0;
+  color: var(--k5-destructive-text);
+  font-size: var(--k5-text-body);
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-error-summary__list {
+  display: grid;
+  gap: var(--k5-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.k5-error-summary__link {
+  color: var(--k5-foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.k5-error-summary__link:hover {
+  color: var(--k5-destructive-text);
+}
+.k5-error-summary__link:focus-visible {
+  border-radius: var(--k5-radius-xs);
+  outline: 2px solid var(--k5-ring);
+  outline-offset: 2px;
+}

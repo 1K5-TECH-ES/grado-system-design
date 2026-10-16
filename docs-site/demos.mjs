@@ -1,5 +1,6 @@
 import { createElement as h, useEffect, useRef, useState } from 'react'
 import * as G from '@1k5-tech-es/grado-react'
+import * as RF from '@1k5-tech-es/grado-react/react-hook-form'
 import { demos as maquetacionDemos } from './groups/maquetacion.demos.mjs'
 import { demos as datosDemos } from './groups/datos.demos.mjs'
 import { demos as graficosDemos } from './groups/graficos.demos.mjs'
@@ -105,7 +106,22 @@ const status = (text) => h('p', { className: 'demo-status', role: 'status' }, te
 const groupDemos = Object.assign({}, maquetacionDemos, datosDemos, graficosDemos, entradasDemos, superposicionesDemos)
 
 export function LiveDemo({ id }) {
+  if (id === 'form') return h(FormDemo)
   return groupDemos[id] ? h(groupDemos[id]) : h(CoreDemo, { id })
+}
+
+// Formulario con react-hook-form: envía vacío para ver el resumen de errores.
+function FormDemo() {
+  const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp'
+  return h(
+    RF.Form,
+    { defaultValues: { titular: '', nif: '', kwp: null }, onSubmit: () => G.toast.success('Oferta enviada'), className: 'live-stack' },
+    h(RF.ErrorSummary),
+    h(RF.FormField, { name: 'titular', label: 'Titular', required: true }, h(G.Input)),
+    h(RF.FormField, { name: 'nif', label: 'NIF del titular', hint: 'DNI, NIE o CIF', required: true }, h(G.NifInput)),
+    h(RF.FormField, { name: 'kwp', label: 'Potencia', validate: maxKwp }, h(G.NumberInput, { step: 0.1, suffix: 'kWp' })),
+    h('div', null, h(G.Button, { type: 'submit' }, 'Enviar oferta')),
+  )
 }
 
 function CoreDemo({ id }) {
@@ -212,6 +228,23 @@ function CoreDemo({ id }) {
         { open, onOpenChange: setOpen, title: 'Cambios guardados', tone: 'success', duration: 5000 },
         'La instalación se ha actualizado.',
       ),
+    )
+  if (id === 'error-summary')
+    return h(
+      'div',
+      { className: 'live-stack' },
+      h(G.ErrorSummary, {
+        errors: [
+          { id: 'demo-nif', label: 'NIF del titular', message: 'La letra del DNI no coincide.' },
+          { id: 'demo-iban', label: 'IBAN', message: 'Faltan 4 dígitos.' },
+        ],
+      }),
+      h(
+        G.Field,
+        { id: 'demo-nif', label: 'NIF del titular', error: 'La letra del DNI no coincide.' },
+        h(G.Input, { defaultValue: '12345678A' }),
+      ),
+      h(G.Field, { id: 'demo-iban', label: 'IBAN', error: 'Faltan 4 dígitos.' }, h(G.Input, { defaultValue: 'ES91 2100 0418 4502 0005' })),
     )
   if (id === 'toaster')
     return row(

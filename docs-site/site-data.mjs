@@ -4,6 +4,8 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import * as G from '@1k5-tech-es/grado-react'
 import * as V from '@1k5-tech-es/grado-vue'
+import * as RF from '@1k5-tech-es/grado-react/react-hook-form'
+import * as VF from '@1k5-tech-es/grado-vue/vee-validate'
 import { byCategory, components } from './catalog.mjs'
 import { guidelines } from './guidelines.mjs'
 import { slug } from './site/text.mjs'
@@ -38,10 +40,11 @@ function coverage(adoption) {
     return {
       id: c.id,
       name: c.name,
-      react: names.every((name) => name in G),
-      vue: names.every((name) => name in V),
-      parity: mentions(sources.parity, names, [(n) => `R\\.${n}\\b`, (n) => `\\['${n}'`]),
-      browser: mentions(sources.browser, names, [(n) => `C\\('${n}'`, (n) => `G\\.${n}\\b`]),
+      // Form y FormField viven en los adaptadores de react-hook-form y VeeValidate.
+      react: names.every((name) => name in G || name in RF),
+      vue: names.every((name) => name in V || name in VF),
+      parity: mentions(sources.parity, names, [(n) => `\\bRF?\\.${n}\\b`, (n) => `\\['${n}'`]),
+      browser: mentions(sources.browser, names, [(n) => `C\\('${n}'`, (n) => `\\b[GF]\\.${n}\\b`]),
       visual: mentions(sources.visual, names, [(n) => `G\\.${n}\\b`]),
       guide: Boolean(guidelines[c.id]),
       figma: adoption.figma?.[c.id] ?? '',

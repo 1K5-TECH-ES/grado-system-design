@@ -94,6 +94,7 @@ export const cases = [
   ['Alert', { title: 'Aviso' }, 'div.k5-alert'],
   ['Toast', { title: 'Guardado', open: true, duration: 0, onOpenChange: () => {} }, 'div.k5-toast'],
   ['Toaster', {}, 'section.k5-toaster'],
+  ['ErrorSummary', { errors: [{ id: 'nif', message: 'Falta el NIF' }] }, 'div.k5-error-summary[role=alert]'],
   ['AppShell', { mainId: 'refs-main' }, 'div'],
   ['AppLogo', {}, 'svg.k5-logo'],
   ['AppSearch', {}, 'button.k5-app-search'],

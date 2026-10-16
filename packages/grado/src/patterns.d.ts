@@ -319,3 +319,46 @@ export interface ToastStore {
 }
 export declare function createToastStore(): ToastStore
 export declare function visibleToasts(items: readonly ToastItem[], max?: number): ToastItem[]
+
+// ---------- Formularios (0.4) ----------
+/** Comprobación de FormField: true (o nada) si el valor vale; si no, el texto del error o false. */
+// any por defecto: una comprobación como (kwp: number) => … tiene que poder pasarse sin tipos de más.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FieldCheck<V = any, T = any> = (
+  value: V,
+  values: T,
+) => string | boolean | null | undefined | Promise<string | boolean | null | undefined>
+export declare function isEmptyValue(value: unknown): boolean
+export declare function errorSummaryTitle(count: number, messages?: Messages): string
+export declare function fieldId(prefix: string, name: string): string
+export declare function checkValue<V, T>(
+  value: V,
+  values: T,
+  options?: { required?: boolean; formatError?: string; checks?: FieldCheck<V, T> | FieldCheck<V, T>[]; messages?: Messages },
+): Promise<string>
+export interface ErrorSummaryItem {
+  /** id del control: el enlace lo enfoca. */
+  id: string
+  message: string
+  /** Nombre del campo, delante del mensaje: «NIF del titular: …». */
+  label?: string
+}
+export declare function focusField(id: string, doc?: Document): boolean
+
+// ---------- Tablas con datos del servidor (0.4) ----------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface CsvColumn<T = any> {
+  key: string
+  header: string
+  /** Lo que va en el CSV si no es el valor del campo: un número sin unidad, una fecha ISO… */
+  csvValue?: (row: T) => string | number | null | undefined
+}
+export declare function visibleColumns<C extends { key: string; hideable?: boolean }>(columns: C[], hidden?: string[]): C[]
+export declare function toCsv<T>(rows: T[], columns: CsvColumn<T>[], options?: { locale?: string; separator?: string }): string
+export declare function downloadCsv(filename: string, csv: string, doc?: Document): void
+
+// ---------- Gráficos interactivos (0.4) ----------
+export declare function chartSlotAt(offset: number, width: number, count: number): number | null
+export declare function chartKeyMove(key: string, current: number | null, count: number): number | undefined
+export declare function tooltipAlign(x: number): 'before' | 'after'
+export declare function slotCenter(index: number, count: number): number

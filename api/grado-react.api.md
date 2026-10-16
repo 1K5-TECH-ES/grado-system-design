@@ -2,7 +2,7 @@
 
 Generado por `npm run api`. Si cambia sin querer, alguien ha cambiado la API pública.
 
-Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyNode, EnergyNodeName, EnergyNodeState, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
+Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyNode, EnergyNodeName, EnergyNodeState, ErrorSummaryItem, ErrorSummaryProps, FieldCheck, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
 
 ## Accordion
 
@@ -136,6 +136,7 @@ ref: HTMLElement
   decimals?: number
   description?: ReactNode
   height?: string | number
+  interactive?: boolean
   legend?: boolean
   locale?: string
   series: ChartSeries[]
@@ -207,6 +208,7 @@ ref: HTMLElement
   decimals?: number
   description?: ReactNode
   height?: string | number
+  interactive?: boolean
   legend?: boolean
   locale?: string
   series: ChartSeries[]
@@ -419,11 +421,17 @@ ref: HTMLDivElement
 ```ts
   caption: string
   className?: string
+  columnPicker?: boolean
   columns: DataColumn<T>[]
+  defaultHiddenColumns?: string[]
   defaultSort?: SortState | null
   emptyLabel?: string
   error?: string
+  hiddenColumns?: string[]
   loading?: boolean
+  manual?: boolean
+  maxHeight?: string | number
+  onHiddenColumnsChange?: ((keys: string[]) => void)
   onPageChange?: ((page: number) => void)
   onSelectionChange?: ((keys: string[]) => void)
   onSortChange?: ((sort: SortState) => void)
@@ -435,6 +443,7 @@ ref: HTMLDivElement
   selectable?: boolean
   selectedKeys?: string[]
   sort?: SortState | null
+  totalRows?: number
 ```
 
 ## DatePicker
@@ -593,9 +602,19 @@ ref: HTMLElement
 (node: EnergyNodeName, flow?: EnergyFlowDirection) => string
 ```
 
-## Field
+## ErrorSummary
 
 ref: HTMLDivElement
+
+```ts
+  className?: string
+  errors: ErrorSummaryItem[]
+  title?: string
+```
+
+## Field
+
+ref: HTMLDivElement · admite además los atributos HTML de ese elemento
 
 ```ts
   children: ReactNode
@@ -650,6 +669,12 @@ ref: HTMLSpanElement
   className?: string
   label: string
   onRemove?: (() => void)
+```
+
+## focusField
+
+```ts
+(id: string, doc?: Document) => boolean
 ```
 
 ## formatMessage
@@ -794,6 +819,7 @@ ref: HTMLElement
   decimals?: number
   description?: ReactNode
   height?: string | number
+  interactive?: boolean
   legend?: boolean
   locale?: string
   series: ChartSeries[]

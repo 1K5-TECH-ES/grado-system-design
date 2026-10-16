@@ -37,7 +37,7 @@ export declare const brand: Record<BrandName, BrandColor>;
 export declare const palette: Record<PaletteName, string>;
 export type SpaceToken = "1" | "2" | "3" | "4" | "5" | "6" | "8" | "10" | "12" | "16" | "0-5" | "1-5" | "2-5" | "3-5";
 export type MotionToken = "duration-fast" | "duration-base" | "duration-slow" | "duration-slower" | "ease-standard" | "ease-out" | "ease-emphasized";
-export type LayerToken = "overlay" | "drawer" | "dropdown" | "tooltip" | "toast" | "skip-link";
+export type LayerToken = "sticky" | "overlay" | "drawer" | "dropdown" | "tooltip" | "toast" | "skip-link";
 export type BreakpointToken = "sm" | "md";
 export type IconToken = "sm" | "md" | "lg";
 export type ContainerToken = "sm" | "md" | "lg";
@@ -303,7 +303,7 @@ export declare function headingClass(options?: {
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';
@@ -619,4 +619,38 @@ export interface ToastStore {
 }
 export declare function createToastStore(): ToastStore;
 export declare function visibleToasts(items: readonly ToastItem[], max?: number): ToastItem[];
+export type FieldCheck<V = any, T = any> = (value: V, values: T) => string | boolean | null | undefined | Promise<string | boolean | null | undefined>;
+export declare function isEmptyValue(value: unknown): boolean;
+export declare function errorSummaryTitle(count: number, messages?: Messages): string;
+export declare function fieldId(prefix: string, name: string): string;
+export declare function checkValue<V, T>(value: V, values: T, options?: {
+    required?: boolean;
+    formatError?: string;
+    checks?: FieldCheck<V, T> | FieldCheck<V, T>[];
+    messages?: Messages;
+}): Promise<string>;
+export interface ErrorSummaryItem {
+    id: string;
+    message: string;
+    label?: string;
+}
+export declare function focusField(id: string, doc?: Document): boolean;
+export interface CsvColumn<T = any> {
+    key: string;
+    header: string;
+    csvValue?: (row: T) => string | number | null | undefined;
+}
+export declare function visibleColumns<C extends {
+    key: string;
+    hideable?: boolean;
+}>(columns: C[], hidden?: string[]): C[];
+export declare function toCsv<T>(rows: T[], columns: CsvColumn<T>[], options?: {
+    locale?: string;
+    separator?: string;
+}): string;
+export declare function downloadCsv(filename: string, csv: string, doc?: Document): void;
+export declare function chartSlotAt(offset: number, width: number, count: number): number | null;
+export declare function chartKeyMove(key: string, current: number | null, count: number): number | undefined;
+export declare function tooltipAlign(x: number): 'before' | 'after';
+export declare function slotCenter(index: number, count: number): number;
 ```

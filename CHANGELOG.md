@@ -4,16 +4,37 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 ## 0.4.0 · sin publicar
 
-Primera fase de 0.4, «Adopción»: lo que necesita una app para pasar a Grado sin trabajo a mano. Las APIs de 0.3.0 siguen igual.
+0.4, «Adopción»: lo que necesita una app para pasar a Grado sin trabajo a mano. Las APIs de 0.3.0 siguen igual.
 
-### Componentes
+### Formularios
+
+- `@1k5-tech-es/grado-react/react-hook-form` y `@1k5-tech-es/grado-vue/vee-validate`: `Form`, `FormField` y `ErrorSummary` sobre react-hook-form o VeeValidate, que son dependencias opcionales: solo las cargan estos imports. `FormField` pone etiqueta, ayuda y error, y conecta su control según el tipo (value, checked o v-model) con id, ref y aria-invalid. `required` da el asterisco y «Este campo es obligatorio»; `validate` admite una o varias comprobaciones `(valor, valores) => true | texto | false`, también async. Se valida al enviar y, después, en cada cambio; el foco va al primer campo con error.
+- `NifInput`, `IbanInput`, `PhoneInput` y `TimePicker` dentro de un `FormField` pasan su error de formato al formulario y no lo pintan dos veces.
+- `ErrorSummary`: la lista de errores con un enlace a cada campo, anunciada con `role="alert"`. El de los adaptadores se rellena solo y aparece al enviar; el del paquete principal recibe `errors`.
+- React: `Form` acepta `errors` para los errores del servidor. Vue: `initial-errors`, que ahora se ven desde el primer render.
+- `isEmptyValue`, `checkValue`, `fieldId`, `errorSummaryTitle` y `focusField` en `@1k5-tech-es/grado/patterns`.
+- `Field` acepta los atributos HTML de su `<div>` (`onBlur`, `data-*`…).
+
+### Tablas con datos del servidor
+
+- `DataTable`: con `manual`, `rows` es la página que llega del servidor y la tabla solo avisa al cambiar de página o de orden; `totalRows` da el total para la paginación, que sigue a la vista mientras carga.
+- `DataTable`: `hiddenColumns` (React: `onHiddenColumnsChange` · Vue: `v-model:hidden-columns`) y `columnPicker`, un botón «Columnas» para elegir las que se ven. Las columnas con `hideable: false` no se pueden ocultar.
+- `DataTable`: `maxHeight` le da su propio scroll con la cabecera fija. Token nuevo `--k5-z-sticky` (10).
+- `toCsv(rows, columns)` y `downloadCsv()` en `@1k5-tech-es/grado/patterns`: CSV para Excel con «;» y coma decimal en español, y apóstrofo delante de las celdas que empiezan por `=`, `+`, `-` o `@` para que no se ejecuten como fórmula. `csvValue` en una columna cambia lo que se exporta.
+
+### Gráficos interactivos
+
+- `LineChart`, `AreaChart` y `BarChart`: al pasar el ratón, una tarjeta con el valor de cada serie, una guía vertical y el dato resaltado. Con el teclado, el gráfico recibe el foco y las flechas, Inicio y Fin recorren los datos; cada dato se anuncia. `interactive={false}` los deja como antes, con el `title` nativo en cada columna.
+
+
+### Componentes y avisos
 
 - Todos los componentes de `@1k5-tech-es/grado-react` pasan `ref`, también con React 18. En los campos va al `<input>` que recibe el foco, también en `Combobox`, `MultiSelect`, `TimePicker` y `AddressInput`; en el resto, al elemento que recibe las props HTML o, si no las admite, al raíz. Así funcionan `register()` de react-hook-form, el foco en el primer error y los paneles anclados. Un test en el navegador comprueba el elemento de cada componente.
 - `toast()` y `Toaster`: avisos desde cualquier parte de la app, con cola. `toast.success`, `warning`, `error` e `info`; `action` para «Deshacer»; `toast.promise`, que pasa de «Guardando…» al resultado en el mismo aviso; y `toast.dismiss`. Se ven como mucho `max` avisos a la vez (3) y los demás esperan su turno, así que no se pierde ninguno. La región «Notificaciones» está siempre en la página y `toast.error` se anuncia con `role="alert"`.
 - `createToastStore()` y `visibleToasts()` en `@1k5-tech-es/grado/patterns`: la cola que usan React y Vue.
 - Vue: `Toast` acepta `role`, como en React. Antes el atributo acababa en el contenedor y no en el aviso.
 - Tipos nuevos en React: `CardSectionProps`, `CardDescriptionProps` y `AppLogoProps`.
-- Texto nuevo `notifications` en español, alemán e inglés.
+- Textos nuevos en español, alemán e inglés: `notifications`, `fieldRequired`, `fieldInvalid`, `errorSummaryOne`, `errorSummaryMany`, `columns` y `chartHint`.
 
 ### Migración
 
@@ -31,10 +52,16 @@ Primera fase de 0.4, «Adopción»: lo que necesita una app para pasar a Grado s
 - Presupuesto de tamaño (`npm run size`): CSS, tokens y cada paquete entero, minificados y con gzip. El CI falla si algo pasa de su límite y deja la tabla en el resumen del trabajo.
 - El workflow de publicación genera la web y los `.tgz` antes de publicar los paquetes: si algo falla, no se publica nada a medias.
 
+### Corregido
+
+- Vue: `BarChart` sin `height` y `DataTable` escribían un `style` vacío; ahora el HTML es igual que en React.
+
 ### Al actualizar desde 0.3.0
 
 - No hay que cambiar nada. Si una app tenía su propia cola de avisos, puede pasar a `toast()` y `Toaster`.
 - Vue: si pasabas `role` a `Toast`, ahora llega al aviso y no al contenedor.
+- Los gráficos reciben el foco con Tab (un punto de Tab por gráfico) y ya no tienen `title` nativo en cada columna. Para el comportamiento anterior, `interactive={false}`.
+- Una tabla que paginaba en el servidor con `Table` y `Pagination` puede pasar a `DataTable` con `manual`.
 
 ## 0.3.0 · 15 de octubre de 2026
 

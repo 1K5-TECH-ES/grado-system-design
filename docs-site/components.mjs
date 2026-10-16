@@ -39,6 +39,10 @@ const tableCols = `[
     render: (row) => row.potencia.toLocaleString('es-ES') + ' kWp' },
 ]`
 const openState = 'const [open, setOpen] = useState(false);'
+const summaryErrors = list(
+  "{ id: 'nif', label: 'NIF del titular', message: 'La letra del DNI no coincide.' }",
+  "{ id: 'iban', label: 'IBAN', message: 'Faltan 4 dígitos.' }",
+)
 
 export const newComponents = [
   entry(
@@ -243,6 +247,78 @@ export const newComponents = [
       ['tone', 'info · success · warning · danger', 'info'],
     ],
     'El temporizador se pausa con el puntero o el foco dentro. Muestra un Toast activo por posición; para varios avisos seguidos, usa toast() y Toaster.',
+  ),
+  entry(
+    'form',
+    'Form, FormField',
+    'Formularios',
+    'Formularios con react-hook-form o VeeValidate: cada campo con su etiqueta, su error y su validación, y un resumen de errores al enviar.',
+    `import { Button, Input, NifInput, NumberInput, toast } from '@1k5-tech-es/grado-react';
+import { ErrorSummary, Form, FormField } from '@1k5-tech-es/grado-react/react-hook-form';
+
+const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
+
+export default function Ejemplo() {
+  return (
+    <Form defaultValues={{ titular: '', nif: '', kwp: null }} onSubmit={() => toast.success('Oferta enviada')}>
+      <ErrorSummary />
+      <FormField name="titular" label="Titular" required>
+        <Input />
+      </FormField>
+      <FormField name="nif" label="NIF del titular" hint="DNI, NIE o CIF" required>
+        <NifInput />
+      </FormField>
+      <FormField name="kwp" label="Potencia" validate={maxKwp}>
+        <NumberInput step={0.1} suffix="kWp" />
+      </FormField>
+      <Button type="submit">Enviar oferta</Button>
+    </Form>
+  );
+}`,
+    `<script setup>
+import { Button, Input, NifInput, NumberInput, toast } from '@1k5-tech-es/grado-vue';
+import { ErrorSummary, Form, FormField } from '@1k5-tech-es/grado-vue/vee-validate';
+
+const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
+</script>
+
+<template>
+  <Form :initial-values="{ titular: '', nif: '', kwp: null }" @submit="toast.success('Oferta enviada')">
+    <ErrorSummary />
+    <FormField name="titular" label="Titular" required>
+      <Input />
+    </FormField>
+    <FormField name="nif" label="NIF del titular" hint="DNI, NIE o CIF" required>
+      <NifInput />
+    </FormField>
+    <FormField name="kwp" label="Potencia" :validate="maxKwp">
+      <NumberInput :step="0.1" suffix="kWp" />
+    </FormField>
+    <Button type="submit">Enviar oferta</Button>
+  </Form>
+</template>`,
+    [
+      ['Form', 'React: defaultValues, mode y errors (del servidor), o form={useForm()} · Vue: initial-values e initial-errors', '—'],
+      ['onSubmit / @submit', 'Recibe los valores, solo si todo vale. onInvalid / @invalid, si hay errores', '—'],
+      ['FormField: name, label, hint', 'Nombre del campo en los valores, etiqueta y ayuda', 'name obligatorio'],
+      ['required', 'Asterisco, aria-required y «Este campo es obligatorio» si está vacío', 'false'],
+      ['validate', '(valor, valores) => true, el texto del error o false. Una o varias; pueden ser async', '—'],
+      ['ErrorSummary', 'Lista de errores con un enlace a cada campo. Aparece al enviar con errores', 'title'],
+    ],
+    'react-hook-form y vee-validate son dependencias opcionales: solo las cargan estos imports. FormField conecta su control (value, checked o v-model, según el tipo) y le pone id, ref y aria-invalid. NifInput, IbanInput, PhoneInput y TimePicker validan su formato solos. Se valida al enviar y, después, en cada cambio; el foco va al primer campo con error.',
+  ),
+  entry(
+    'error-summary',
+    'ErrorSummary',
+    'Formularios',
+    'La lista de errores de un formulario, con un enlace a cada campo.',
+    react('ErrorSummary', `<ErrorSummary errors={errors} />`, `const errors = ${summaryErrors};`),
+    vue('ErrorSummary', `<ErrorSummary :errors="errors" />`, `const errors = ${summaryErrors};`),
+    [
+      ['errors', 'id del control, message y label (opcional), en el orden de los campos', 'Obligatorio'],
+      ['title', 'Título del resumen', '«Revisa 2 campos antes de continuar»'],
+    ],
+    'Sin errores no pinta nada. Con react-hook-form o VeeValidate usa el ErrorSummary de su adaptador, que se rellena solo; este sirve para cualquier otra validación.',
   ),
   entry(
     'toaster',
@@ -579,13 +655,24 @@ function receive(incoming) {
     ),
     [
       ['rows / columns / rowKey / caption', 'Datos, columnas, clave estable y nombre accesible', 'Obligatorios'],
-      ['columns', 'key, header, sortable, numeric (alinea a la derecha con cifras tabulares), render, sortValue', '—'],
+      ['columns', 'key, header, sortable, numeric (alinea a la derecha con cifras tabulares), render, sortValue, hideable, csvValue', '—'],
       ['selectedKeys', 'React: onSelectionChange · Vue: v-model:selected-keys', '[]'],
       ['page / sort', 'Estado controlado opcional y eventos de cambio', '1 / sin orden'],
+      [
+        'manual / totalRows',
+        'Datos del servidor: rows es la página pedida y DataTable solo avisa con los eventos de página y orden',
+        'false / rows.length',
+      ],
+      [
+        'hiddenColumns / columnPicker',
+        'Columnas ocultas (React: onHiddenColumnsChange · Vue: v-model:hidden-columns) y botón «Columnas»',
+        '[] / false',
+      ],
+      ['maxHeight', 'Alto máximo: scroll propio y cabecera fija', '—'],
       ['loading / error / emptyLabel', 'Estados de respuesta', 'false / —'],
       ['Acciones y celdas', 'React: rowActions / render · Vue: slots actions / cell-{key}', '—'],
     ],
-    'Ordena y pagina los rows recibidos en el cliente. Filtra antes de pasarlos. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual; conserva la selección en otras páginas.',
+    'Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual; conserva la selección en otras páginas.',
   ),
   entry(
     'accordion',
@@ -797,6 +884,7 @@ function receive(incoming) {
       ['unit / decimals', 'Unidad y decimales de los valores', '— / 1'],
       ['title / description / categoryLabel', 'Textos del gráfico y de la tabla accesible', '—'],
       ['height / legend', 'Alto de las barras / leyenda', '15rem / con más de una serie'],
+      ['interactive', 'Tarjeta con los valores al pasar el ratón y flechas para recorrer los datos', 'true'],
     ],
     'La escala se redondea sola (0, 100, 200, 300). Los colores salen de chart-1 … chart-5 y siguen el tema y el modo oscuro. El dibujo está oculto a lectores de pantalla: leen la tabla con los mismos datos.',
   ),

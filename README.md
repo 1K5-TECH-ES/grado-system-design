@@ -17,7 +17,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
-| 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`), `DataTable` con datos del servidor y gráficos interactivos. Fase 3: gráficos de energía, iconos y Figma | Fase 1 hecha |
+| 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: gráficos de energía, iconos y Figma | Fases 1 y 2 hechas |
 
 ## Decisiones tomadas
 

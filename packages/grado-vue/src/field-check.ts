@@ -1,13 +1,16 @@
-import { ref, watch } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { caretAfter } from '@1k5-tech-es/grado/patterns'
+import { MANAGED_KEY } from './Field.js'
 
 /**
  * Validación de los campos con formato (TimePicker, PhoneInput, NifInput, IbanInput). Uso interno.
  * El mensaje se muestra después de salir del campo, o desde el principio si ya traía un valor.
  * notify recibe siempre el error real, se vea o no, para bloquear el envío.
+ * Dentro de un FormField no se pinta: el error lo enseña el Field con el resto de la validación.
  */
 export function useCheck(error: () => string, startTouched: boolean, notify: (message: string) => void) {
   const touched = ref(startTouched)
+  const managed = inject(MANAGED_KEY, false)
   let last = ''
   watch(
     error,
@@ -19,7 +22,7 @@ export function useCheck(error: () => string, startTouched: boolean, notify: (me
     { immediate: true },
   )
   return {
-    message: () => (touched.value ? error() : ''),
+    message: () => (touched.value && !managed ? error() : ''),
     touch: () => {
       touched.value = true
     },

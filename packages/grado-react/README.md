@@ -101,6 +101,31 @@ import { Ticket, Users } from 'lucide-react'
 
 Además, los componentes interactivos (`Dialog`, `Tabs`, `Combobox`, `DataTable`…) están documentados con ejemplos en la web de Grado.
 
+## Formularios
+
+Con react-hook-form (instálalo en tu app: es una dependencia opcional), desde su propia entrada:
+
+```tsx
+import { Input, NifInput, NumberInput, Button } from '@1k5-tech-es/grado-react'
+import { ErrorSummary, Form, FormField } from '@1k5-tech-es/grado-react/react-hook-form'
+
+<Form defaultValues={{ titular: '', nif: '', kwp: null }} onSubmit={guardar}>
+  <ErrorSummary />
+  <FormField name="titular" label="Titular" required>
+    <Input />
+  </FormField>
+  <FormField name="nif" label="NIF del titular" required>
+    <NifInput />
+  </FormField>
+  <FormField name="kwp" label="Potencia" validate={(kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp'}>
+    <NumberInput step={0.1} suffix="kWp" />
+  </FormField>
+  <Button type="submit">Guardar</Button>
+</Form>
+```
+
+`FormField` conecta su control (value, checked o `onValueChange`, según el tipo) y le pone id, ref y aria-invalid. Para usar `watch` o `reset`, crea el formulario con `useForm()` y pásalo como `form`. Los errores del servidor van en `errors`.
+
 ## Avisos
 
 Pon un `Toaster` una vez, junto a `AppShell`, y lanza los avisos desde cualquier sitio, también fuera de un componente:

@@ -81,6 +81,28 @@ En `Input`, `Textarea`, `Select`, `Switch` y `Table`, `class` y los atributos va
 
 En `Input`, `v-model` devuelve siempre texto. Para cifras usa `NumberInput`, que entiende «8,4» y devuelve 8.4.
 
+## Formularios
+
+Con VeeValidate (instálalo en tu app: es una dependencia opcional), desde su propia entrada:
+
+```vue
+<script setup>
+import { Button, Input, NifInput } from '@1k5-tech-es/grado-vue'
+import { ErrorSummary, Form, FormField } from '@1k5-tech-es/grado-vue/vee-validate'
+</script>
+
+<template>
+  <Form :initial-values="{ titular: '', nif: '' }" @submit="guardar">
+    <ErrorSummary />
+    <FormField name="titular" label="Titular" required><Input /></FormField>
+    <FormField name="nif" label="NIF del titular" required><NifInput /></FormField>
+    <Button type="submit">Guardar</Button>
+  </Form>
+</template>
+```
+
+`FormField` conecta con `v-model` el control de su slot. Los errores del servidor van en `initial-errors`.
+
 ## Avisos
 
 Pon un `<Toaster />` una vez, junto a `AppShell`, y lanza los avisos desde cualquier sitio, también fuera de un componente:

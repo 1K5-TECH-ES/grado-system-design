@@ -78,6 +78,7 @@ export const entries = [
       ['data / categoryKey', 'Filas y campo con el nombre de cada punto', 'Obligatorios'],
       ['series', 'key, label, tone (1–5: chart-1 … chart-5)', 'Obligatorio'],
       ['area', 'Rellena bajo cada línea (AreaChart: true)', 'false'],
+      ['interactive', 'Tarjeta con los valores al pasar el ratón y flechas para recorrer los datos', 'true'],
       ['unit / decimals', 'Unidad y decimales de los valores', '— / 1'],
       ['title / description / categoryLabel', 'Textos del gráfico y de la tabla accesible', '—'],
       ['height / legend', 'Alto de la zona de líneas / leyenda', '15rem / con más de una serie'],
@@ -184,7 +185,7 @@ export const guidelines = {
       'Evita más de tres o cuatro series: se cruzan y no se leen. Con área, mejor una o dos.',
     ],
     a11y: [
-      'El dibujo está oculto a los lectores de pantalla; leen una tabla con los mismos datos.',
+      'Se recorre con las flechas, Inicio y Fin, y cada dato se anuncia. Los datos están además en una tabla oculta.',
       'Da un categoryLabel («Día») para la cabecera de la tabla.',
       'Las series se distinguen por color y leyenda; con dos series, elige tonos de luminosidad distinta.',
     ],

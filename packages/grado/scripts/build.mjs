@@ -399,6 +399,7 @@ const COMPONENT_CSS = [
   'button',
   'badge',
   'field',
+  'form',
   'switch',
   'card',
   'table',

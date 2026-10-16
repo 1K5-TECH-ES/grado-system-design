@@ -2,6 +2,7 @@
 import { forwardRef, type CSSProperties, type ForwardedRef, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { areaPath, chartPoints, formatNumber, linePath, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
+import { useChartInteraction } from './chart-interaction.js'
 import { useGrado } from './Locale.js'
 
 export interface LineChartProps<T extends object> {
@@ -24,6 +25,8 @@ export interface LineChartProps<T extends object> {
   locale?: string
   /** Leyenda debajo. Por defecto, solo con más de una serie. */
   legend?: boolean
+  /** Tarjeta con los valores al pasar el ratón y flechas para recorrer los datos. Por defecto, true. */
+  interactive?: boolean
   className?: string
 }
 
@@ -52,6 +55,7 @@ export const LineChart = forwardRef(function LineChart<T extends object>(
     decimals = 1,
     locale: localeProp,
     legend,
+    interactive = true,
     className,
   }: LineChartProps<T>,
   ref: ForwardedRef<HTMLElement>,
@@ -70,24 +74,43 @@ export const LineChart = forwardRef(function LineChart<T extends object>(
       scale.max,
     ),
   }))
+  const chart = useChartInteraction({
+    count: data.length,
+    interactive,
+    hasTitle: title != null,
+    messages: m,
+    row: (i) => ({
+      title: category(data[i]),
+      values: lines.map(({ s, tone }) => ({
+        key: s.key,
+        label: s.label,
+        text: withUnit(numberOf(data[i], s.key)),
+        swatch: `k5-chart__swatch k5-chart__swatch--line k5-chart__series--${tone}`,
+      })),
+    }),
+  })
   const style = height == null ? undefined : ({ '--_plot': typeof height === 'number' ? `${height}px` : height } as CSSProperties)
   return (
     <figure ref={ref} className={cx('k5-chart', 'k5-chart--line', className)} style={style}>
       {title != null || description != null ? (
         <figcaption className="k5-chart__header">
-          {title != null ? <span className="k5-chart__title">{title}</span> : null}
+          {title != null ? (
+            <span className="k5-chart__title" id={chart.titleId}>
+              {title}
+            </span>
+          ) : null}
           {description != null ? <span className="k5-chart__description">{description}</span> : null}
         </figcaption>
       ) : null}
-      <div className="k5-chart__body" aria-hidden="true">
-        <div className="k5-chart__axis">
+      <div className="k5-chart__body" {...chart.body}>
+        <div className="k5-chart__axis" {...chart.part}>
           {scale.ticks.map((tick) => (
             <span key={tick} className="k5-chart__tick" style={{ bottom: percent(tick, scale.max) }}>
               {format(tick)}
             </span>
           ))}
         </div>
-        <div className="k5-chart__plot">
+        <div className={cx('k5-chart__plot', chart.active != null && 'k5-chart__plot--active')} {...chart.part} {...chart.plot}>
           {scale.ticks.slice(1).map((tick) => (
             <span key={tick} className="k5-chart__gridline" style={{ bottom: percent(tick, scale.max) }} />
           ))}
@@ -96,7 +119,12 @@ export const LineChart = forwardRef(function LineChart<T extends object>(
               <span
                 key={i}
                 className="k5-chart__column"
-                title={[category(row), ...series.map((s) => `${s.label}: ${withUnit(numberOf(row, s.key))}`)].join(' · ')}
+                title={
+                  interactive
+                    ? undefined
+                    : [category(row), ...series.map((s) => `${s.label}: ${withUnit(numberOf(row, s.key))}`)].join(' · ')
+                }
+                data-active={i === chart.active || undefined}
               />
             ))}
           </div>
@@ -117,14 +145,28 @@ export const LineChart = forwardRef(function LineChart<T extends object>(
               />
             ) : null,
           )}
+          {chart.active != null ? (
+            <>
+              <span className="k5-chart__crosshair" style={{ left: `${lines[0]?.points[chart.active]?.x ?? 0}%` }} />
+              {lines.map(({ s, tone, points }) => (
+                <span
+                  key={s.key}
+                  className={`k5-chart__point k5-chart__point--active k5-chart__series--${tone}`}
+                  style={{ left: `${points[chart.active!].x}%`, top: `${points[chart.active!].y}%` }}
+                />
+              ))}
+            </>
+          ) : null}
+          {chart.tooltip}
         </div>
-        <div className="k5-chart__categories">
+        <div className="k5-chart__categories" {...chart.part}>
           {data.map((row, i) => (
             <span key={i} className="k5-chart__category">
               {category(row)}
             </span>
           ))}
         </div>
+        {chart.speech}
       </div>
       {(legend ?? series.length > 1) ? (
         <ul className="k5-chart__legend">

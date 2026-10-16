@@ -1,14 +1,17 @@
 'use client'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { caretAfter } from '@1k5-tech-es/grado/patterns'
+import { ManagedFieldContext } from './Field.js'
 
 /**
  * Validación de los campos con formato (TimePicker, PhoneInput, NifInput, IbanInput). Uso interno.
  * El mensaje se muestra después de salir del campo, o desde el principio si ya traía un valor.
  * onErrorChange recibe siempre el error real, se vea o no, para bloquear el envío.
+ * Dentro de un FormField no se pinta: el error lo enseña el Field con el resto de la validación.
  */
 export function useCheck(error: string, startTouched: boolean, onErrorChange?: (message: string) => void) {
   const [touched, setTouched] = useState(startTouched)
+  const managed = useContext(ManagedFieldContext)
   const last = useRef('')
   const notify = useRef(onErrorChange)
   useEffect(() => {
@@ -19,7 +22,7 @@ export function useCheck(error: string, startTouched: boolean, onErrorChange?: (
     last.current = error
     notify.current?.(error)
   }, [error])
-  return { message: touched ? error : '', touch: () => setTouched(true) }
+  return { message: touched && !managed ? error : '', touch: () => setTouched(true) }
 }
 
 /**

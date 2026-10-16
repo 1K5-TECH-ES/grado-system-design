@@ -46,6 +46,20 @@ const SCENARIOS = {
     decimals: 0,
   }),
   'gráfico de líneas sin área aunque sea AreaChart': same('AreaChart', { data: week.slice(0, 2), categoryKey: 'dia', series, area: false }),
+  'gráfico de líneas sin interacción': same('LineChart', {
+    data: week.slice(0, 3),
+    categoryKey: 'dia',
+    series,
+    unit: 'kWh',
+    interactive: false,
+  }),
+  'gráfico de barras sin interacción y con título': same('BarChart', {
+    title: 'Semanas',
+    data: week.slice(0, 2),
+    categoryKey: 'dia',
+    series,
+    interactive: false,
+  }),
   'donut con segmentos y centro': same('Donut', {
     label: 'Energía producida',
     segments: [
@@ -119,7 +133,12 @@ test('el gráfico de líneas dibuja un punto por día, marca el último y lleva 
   for (const d of lines) assert.equal(d.split(/[ML]/).filter((p) => p.trim()).length, 7)
   assert.equal([...out.matchAll(/k5-chart__point /g)].length, 2)
   assert.equal([...out.matchAll(/class="k5-chart__column"/g)].length, 7)
-  assert.match(out, /title="Lun · Producción: 31,2 kWh · Consumo: 18,4 kWh"/)
+  // Interactivo por defecto: grupo con foco y pista para el teclado, sin el title nativo de cada columna.
+  const body = out.match(/<div[^>]*class="k5-chart__body"[^>]*>/)[0]
+  for (const attribute of [/role="group"/, /tabindex="0"/, /aria-labelledby="[^"]+-title"/, /aria-describedby="[^"]+-hint"/])
+    assert.match(body, attribute)
+  assert.doesNotMatch(out, /title="Lun/)
+  assert.match(out, /Usa las flechas para recorrer los datos\./)
   assert.match(out, /<th scope="row">Lun<\/th><td>31,2 kWh<\/td><td>18,4 kWh<\/td>/)
   assert.match(out, /<th scope="col">Día<\/th>/)
   assert.match(out, /k5-chart__swatch--line/)
@@ -129,6 +148,11 @@ test('el gráfico de líneas dibuja un punto por día, marca el último y lleva 
   assert.match(area, /k5-chart__series--2/)
   assert.doesNotMatch(area, /k5-chart__legend/)
   assert.doesNotMatch(html['gráfico de líneas sin área aunque sea AreaChart'], /k5-chart__area/)
+  // Sin interacción, el cuerpo vuelve a ser una imagen oculta con title nativo en cada columna.
+  const still = html['gráfico de líneas sin interacción']
+  assert.match(still, /<div aria-hidden="true" class="k5-chart__body">/)
+  assert.doesNotMatch(still, /tabindex|aria-live/)
+  assert.match(still, /title="Lun · Producción: /)
 })
 
 test('el donut resume los porcentajes en su nombre y los detalla en una lista oculta', () => {

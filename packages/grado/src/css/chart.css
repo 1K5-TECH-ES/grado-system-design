@@ -225,3 +225,72 @@
   border-radius: var(--k5-radius-full);
   background: currentColor;
 }
+
+/* Interactivo (0.4): el cuerpo recibe el foco, el dato activo se resalta y una tarjeta da sus valores. */
+.k5-chart__body[tabindex] {
+  border-radius: var(--k5-radius-xs);
+  outline: none;
+}
+.k5-chart__body[tabindex]:focus-visible {
+  box-shadow: 0 0 0 2px var(--k5-ring);
+}
+.k5-chart__plot--active .k5-chart__bar {
+  opacity: 0.55;
+}
+.k5-chart__plot--active .k5-chart__group[data-active] .k5-chart__bar {
+  opacity: 1;
+}
+.k5-chart__group[data-active],
+.k5-chart__column[data-active] {
+  background: color-mix(in srgb, var(--k5-muted) 70%, transparent);
+}
+.k5-chart__crosshair {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid color-mix(in srgb, var(--k5-muted-foreground) 50%, transparent);
+  pointer-events: none;
+}
+.k5-chart__point--active {
+  width: var(--k5-space-2-5);
+  height: var(--k5-space-2-5);
+  box-shadow: 0 0 0 2px var(--k5-card);
+}
+.k5-chart__tooltip {
+  position: absolute;
+  top: var(--k5-space-1);
+  display: grid;
+  gap: var(--k5-space-1);
+  min-width: 8rem;
+  padding: var(--k5-space-2) var(--k5-space-2-5);
+  border-radius: var(--k5-radius);
+  background: var(--k5-popover);
+  color: var(--k5-popover-foreground);
+  box-shadow: var(--k5-shadow-popover);
+  font-size: var(--k5-text-small);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.k5-chart__tooltip--after {
+  transform: translateX(var(--k5-space-3));
+}
+.k5-chart__tooltip--before {
+  transform: translateX(calc(-100% - var(--k5-space-3)));
+}
+.k5-chart__tooltip-title {
+  font-weight: var(--k5-weight-semibold);
+}
+.k5-chart__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-1-5);
+  color: var(--k5-muted-foreground);
+}
+.k5-chart__tooltip-value {
+  margin-left: auto;
+  padding-left: var(--k5-space-3);
+  color: var(--k5-popover-foreground);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-medium);
+}

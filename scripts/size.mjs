@@ -13,6 +13,9 @@ const LIMITS = {
   'tokens.css': 4 * KB,
   '@1k5-tech-es/grado-react': 46 * KB,
   '@1k5-tech-es/grado-vue': 48 * KB,
+  // Los adaptadores, con los componentes que usan; sin la librería de formularios.
+  '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
+  '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,
 }
 
 const path = (relative) => fileURLToPath(new URL(`../${relative}`, import.meta.url))
@@ -26,7 +29,7 @@ async function bundle(entry) {
     minify: true,
     write: false,
     format: 'esm',
-    external: ['react', 'react-dom', 'react/jsx-runtime', 'vue'],
+    external: ['react', 'react-dom', 'react/jsx-runtime', 'vue', 'react-hook-form', 'vee-validate'],
     logLevel: 'silent',
   })
   return result.outputFiles[0].contents
@@ -37,6 +40,8 @@ const sizes = {
   'tokens.css': gzip(readFileSync(path('packages/grado/dist/tokens.css'))),
   '@1k5-tech-es/grado-react': gzip(await bundle('packages/grado-react/dist/index.js')),
   '@1k5-tech-es/grado-vue': gzip(await bundle('packages/grado-vue/dist/index.js')),
+  '@1k5-tech-es/grado-react/react-hook-form': gzip(await bundle('packages/grado-react/dist/react-hook-form.js')),
+  '@1k5-tech-es/grado-vue/vee-validate': gzip(await bundle('packages/grado-vue/dist/vee-validate.js')),
 }
 
 const kb = (bytes) => `${(bytes / KB).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} KB`

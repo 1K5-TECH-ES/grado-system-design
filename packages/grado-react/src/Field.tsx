@@ -4,6 +4,7 @@ import {
   forwardRef,
   useContext,
   useId,
+  type HTMLAttributes,
   type InputHTMLAttributes,
   type ReactNode,
   type SelectHTMLAttributes,
@@ -25,9 +26,15 @@ export function useField() {
   return useContext(FieldContext)
 }
 
+/**
+ * true dentro de un FormField: el formulario decide los errores, así que los campos con
+ * validación propia (NifInput, IbanInput, PhoneInput, TimePicker) no pintan la suya. Uso interno.
+ */
+export const ManagedFieldContext = createContext(false)
+
 const present = (node: ReactNode) => node != null && node !== false && node !== ''
 
-export interface FieldProps {
+export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'children'> {
   label?: ReactNode
   hint?: ReactNode
   /** Si hay error, el control se marca con aria-invalid. */
@@ -40,7 +47,7 @@ export interface FieldProps {
 }
 
 export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
-  { label, hint, error, required = false, id, className, children },
+  { label, hint, error, required = false, id, className, children, ...rest },
   ref,
 ) {
   const auto = useId()
@@ -50,7 +57,7 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
   const value = { id: controlId, describedBy: cx(hintId, errorId) || undefined, invalid: Boolean(errorId), required }
   return (
     <FieldContext.Provider value={value}>
-      <div ref={ref} className={cx('k5-field', className)}>
+      <div ref={ref} {...rest} className={cx('k5-field', className)}>
         {present(label) ? (
           <label className="k5-field__label" htmlFor={controlId}>
             {label}

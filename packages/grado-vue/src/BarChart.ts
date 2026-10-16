@@ -1,6 +1,7 @@
 import { computed, defineComponent, h, type PropType } from 'vue'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { formatNumber, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
+import { useChartInteraction } from './chart-interaction.js'
 import { useGrado } from './Locale.js'
 
 const percent = (value: number, max: number) => `${Math.round((Math.max(0, value) / max) * 10000) / 100}%`
@@ -30,9 +31,12 @@ export const BarChart = defineComponent({
     decimals: { type: Number, default: 1 },
     locale: String,
     legend: { type: Boolean, default: undefined },
+    /** Tarjeta con los valores al pasar el ratón y flechas para recorrer los datos. Por defecto, true. */
+    interactive: { type: Boolean, default: true },
   },
   setup(props) {
     const t = useGrado()
+    const interaction = useChartInteraction()
     const locale = computed(() => props.locale ?? t.value.locale)
     return () => {
       const m = t.value.messages
@@ -47,22 +51,37 @@ export const BarChart = defineComponent({
       const category = (row: Record<string, unknown>) => String(row[props.categoryKey] ?? '')
       const style = props.height == null ? undefined : { '--_plot': typeof props.height === 'number' ? `${props.height}px` : props.height }
       const showLegend = props.legend ?? props.series.length > 1
-      return h('figure', { class: 'k5-chart', style }, [
+      const chart = interaction({
+        count: props.data.length,
+        interactive: props.interactive,
+        hasTitle: props.title != null,
+        messages: m,
+        row: (i) => ({
+          title: category(props.data[i]),
+          values: props.series.map((s, j) => ({
+            key: s.key,
+            label: s.label,
+            text: withUnit(numberOf(props.data[i], s.key)),
+            swatch: `k5-chart__swatch k5-chart__bar--${tone(s, j)}`,
+          })),
+        }),
+      })
+      return h('figure', style ? { class: 'k5-chart', style } : { class: 'k5-chart' }, [
         props.title != null || props.description != null
           ? h('figcaption', { class: 'k5-chart__header' }, [
-              props.title != null ? h('span', { class: 'k5-chart__title' }, props.title) : null,
+              props.title != null ? h('span', { class: 'k5-chart__title', id: chart.titleId }, props.title) : null,
               props.description != null ? h('span', { class: 'k5-chart__description' }, props.description) : null,
             ])
           : null,
-        h('div', { class: 'k5-chart__body', 'aria-hidden': 'true' }, [
+        h('div', { class: 'k5-chart__body', ...chart.body }, [
           h(
             'div',
-            { class: 'k5-chart__axis' },
+            { class: 'k5-chart__axis', ...chart.part },
             scale.ticks.map((tick) =>
               h('span', { key: tick, class: 'k5-chart__tick', style: { bottom: percent(tick, scale.max) } }, format(tick)),
             ),
           ),
-          h('div', { class: 'k5-chart__plot' }, [
+          h('div', { class: cx('k5-chart__plot', chart.active != null && 'k5-chart__plot--active'), ...chart.part, ...chart.plot }, [
             ...scale.ticks
               .slice(1)
               .map((tick) => h('span', { key: tick, class: 'k5-chart__gridline', style: { bottom: percent(tick, scale.max) } })),
@@ -70,7 +89,7 @@ export const BarChart = defineComponent({
               'div',
               { class: 'k5-chart__groups' },
               props.data.map((row, i) =>
-                h('div', { key: i, class: 'k5-chart__group' }, [
+                h('div', { key: i, class: 'k5-chart__group', 'data-active': i === chart.active ? true : undefined }, [
                   h(
                     'div',
                     { class: cx('k5-chart__bars', props.stacked && 'k5-chart__bars--stacked') },
@@ -79,19 +98,21 @@ export const BarChart = defineComponent({
                         key: s.key,
                         class: `k5-chart__bar k5-chart__bar--${tone(s, j)}`,
                         style: { height: percent(numberOf(row, s.key), scale.max) },
-                        title: `${category(row)} · ${s.label}: ${withUnit(numberOf(row, s.key))}`,
+                        title: props.interactive ? undefined : `${category(row)} · ${s.label}: ${withUnit(numberOf(row, s.key))}`,
                       }),
                     ),
                   ),
                 ]),
               ),
             ),
+            chart.tooltip,
           ]),
           h(
             'div',
-            { class: 'k5-chart__categories' },
+            { class: 'k5-chart__categories', ...chart.part },
             props.data.map((row, i) => h('span', { key: i, class: 'k5-chart__category' }, category(row))),
           ),
+          ...chart.speech,
         ]),
         showLegend
           ? h(

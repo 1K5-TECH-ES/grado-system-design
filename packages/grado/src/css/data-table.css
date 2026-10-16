@@ -74,3 +74,35 @@ th[aria-sort] .k5-data-table__sort {
   padding-top: var(--k5-space-3-5);
   padding-bottom: var(--k5-space-3-5);
 }
+
+/* Barra sobre la tabla: selección a la izquierda y el selector de columnas a la derecha. */
+.k5-data-table__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--k5-space-3);
+}
+.k5-data-table__toolbar > .k5-popover {
+  margin-left: auto;
+}
+.k5-data-table__columns {
+  display: grid;
+  gap: var(--k5-space-2);
+  min-width: 12rem;
+}
+
+/* maxHeight: la tabla tiene su propio scroll y la cabecera se queda arriba. */
+.k5-data-table--scroll {
+  --_height: 32rem;
+}
+.k5-data-table--scroll .k5-table-wrap {
+  max-height: var(--_height);
+  overflow: auto;
+}
+.k5-data-table--scroll .k5-table thead th {
+  position: sticky;
+  z-index: var(--k5-z-sticky);
+  top: 0;
+  background: var(--k5-card);
+}

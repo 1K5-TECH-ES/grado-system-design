@@ -6,6 +6,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync } from 
 import { fileURLToPath } from 'node:url'
 import ts from 'typescript'
 import * as V from '@1k5-tech-es/grado-vue'
+import * as VF from '@1k5-tech-es/grado-vue/vee-validate'
 
 const root = new URL('../', import.meta.url)
 const path = (relative) => fileURLToPath(new URL(relative, root))
@@ -29,8 +30,8 @@ function core() {
 }
 
 // ---------- @1k5-tech-es/grado-react: props propias y elemento de la ref ----------
-function react() {
-  const entry = path('packages/grado-react/dist/index.d.ts')
+function react(file, name) {
+  const entry = path(`packages/grado-react/dist/${file}`)
   const program = ts.createProgram([entry], {
     strict: true,
     skipLibCheck: true,
@@ -79,14 +80,14 @@ function react() {
       `## ${symbol.name}\n\nref: ${element}${inherited ? ' · admite además los atributos HTML de ese elemento' : ''}\n\n\`\`\`ts\n${rows.length ? rows.join('\n') : '  (sin props propias)'}\n\`\`\`\n`,
     )
   }
-  return `${header('@1k5-tech-es/grado-react')}\nTipos exportados: ${types.join(', ')}\n\n${lines.join('\n')}`
+  return `${header(name)}\nTipos exportados: ${types.join(', ')}\n\n${lines.join('\n')}`
 }
 
 // ---------- @1k5-tech-es/grado-vue: props, emits y lo demás, leídos de los componentes ----------
-function vue() {
+function vue(module, name) {
   const typeName = (type) => (type == null ? 'any' : Array.isArray(type) ? type.map(typeName).join(' | ') : (type.name ?? String(type)))
   const lines = []
-  for (const [name, value] of Object.entries(V).sort(([a], [b]) => a.localeCompare(b))) {
+  for (const [name, value] of Object.entries(module).sort(([a], [b]) => a.localeCompare(b))) {
     const component = value && typeof value === 'object' && 'setup' in value ? value : null
     if (!component) {
       lines.push(`## ${name}\n\n${Array.isArray(value) ? 'array' : typeof value}\n`)
@@ -104,10 +105,16 @@ function vue() {
       `## ${name}\n\n\`\`\`ts\n${props.length ? props.join('\n') : '  (sin props)'}\n\`\`\`\n${emits.length ? `\nemits: ${emits.join(', ')}\n` : ''}`,
     )
   }
-  return `${header('@1k5-tech-es/grado-vue')}\n${lines.join('\n')}`
+  return `${header(name)}\n${lines.join('\n')}`
 }
 
-const reports = { 'api/grado.api.md': core(), 'api/grado-react.api.md': react(), 'api/grado-vue.api.md': vue() }
+const reports = {
+  'api/grado.api.md': core(),
+  'api/grado-react.api.md': react('index.d.ts', '@1k5-tech-es/grado-react'),
+  'api/grado-react-react-hook-form.api.md': react('react-hook-form.d.ts', '@1k5-tech-es/grado-react/react-hook-form'),
+  'api/grado-vue.api.md': vue(V, '@1k5-tech-es/grado-vue'),
+  'api/grado-vue-vee-validate.api.md': vue(VF, '@1k5-tech-es/grado-vue/vee-validate'),
+}
 
 if (process.argv[2] === 'check') {
   const stale = Object.entries(reports).filter(([file, text]) => !existsSync(path(file)) || readFileSync(path(file), 'utf8') !== text)
