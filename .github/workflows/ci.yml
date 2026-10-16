@@ -85,6 +85,7 @@ jobs:
       - run: npm run test:browser
 
   # Apps de prueba: Vite + React, Next (App Router) y Nuxt instalan los .tgz y compilan.
+  # Node 24: el npm 10 de Node 22 no sabe instalar Nuxt 4.6 («reading 'edgesOut'»), con o sin Grado.
   smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -92,7 +93,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run test:smoke
