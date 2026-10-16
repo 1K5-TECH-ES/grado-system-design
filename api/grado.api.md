@@ -13,7 +13,7 @@ export default preset;
 ## dist/tokens.d.ts
 
 ```ts
-export type ThemeName = "consola" | "marca";
+export type ThemeName = "consola" | "marca" | "campo";
 export type ThemeMode = 'light' | 'dark';
 export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
 export type ShadowToken = "raised" | "overlay" | "popover";

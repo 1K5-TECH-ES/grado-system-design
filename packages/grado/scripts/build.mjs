@@ -109,7 +109,8 @@ function themeBlock(theme, mode, format) {
 
 function tokensCss(format) {
   const parts = [globalBlock()]
-  const order = [BASE_THEME, ...Object.keys(tokens.themes).filter((t) => t !== BASE_THEME)]
+  // Los temas con file (campo) van en dist/themes/: así tokens.css no crece para todos.
+  const order = [BASE_THEME, ...Object.keys(tokens.themes).filter((t) => t !== BASE_THEME && !tokens.themes[t].file)]
   for (const theme of order) for (const mode of MODES) parts.push(themeBlock(theme, mode, format))
   parts.push(densityBlock())
   parts.push(reducedMotionBlock())
@@ -362,6 +363,23 @@ const write = (file, content) => writeFileSync(dist + file, content)
 const css = banner('tokens.css · para Tailwind 4, shadcn v4 y CSS normal') + '\n' + tokensCss('hex')
 write('tokens.css', css)
 write('tokens-hsl.css', banner('tokens-hsl.css · para Tailwind 3 y shadcn-vue: hsl(var(--primary))') + '\n' + tokensCss('hsl'))
+
+// Temas en su propio archivo: se cargan después de tokens.css (o tokens-hsl.css) y se activan
+// con data-k5-theme en <html> o en un contenedor.
+rmSync(`${dist}themes`, { recursive: true, force: true })
+for (const [name, theme] of Object.entries(tokens.themes)) {
+  if (!theme.file) continue
+  mkdirSync(`${dist}themes`, { recursive: true })
+  for (const [suffix, format, after] of [
+    ['', 'hex', 'tokens.css'],
+    ['-hsl', 'hsl', 'tokens-hsl.css'],
+  ])
+    write(
+      `themes/${name}${suffix}.css`,
+      // La densidad se repite al final: un data-k5-density puesto a mano sigue mandando sobre el tema.
+      `${banner(`themes/${name}${suffix}.css · tema «${name}». Cárgalo después de ${after} y pon data-k5-theme="${name}"`)}\n${MODES.map((mode) => themeBlock(name, mode, format)).join('\n')}\n${densityBlock()}`,
+    )
+}
 write('tailwind.css', tailwind4Css())
 
 const preset = JSON.stringify(tailwind3Preset(), null, 2)

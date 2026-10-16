@@ -194,12 +194,17 @@ export default function Home() {
     ),
     h(
       Section,
-      { id: 'temas', title: 'Temas', description: 'Los dos comparten tokens y componentes. Aplica uno para ver toda la web con él.' },
+      { id: 'temas', title: 'Temas', description: 'Los tres comparten tokens y componentes. Aplica uno para ver toda la web con él.' },
       h(
         G.Grid,
-        { columns: 2 },
+        { columns: 3 },
         h(ThemeCard, { theme: 'consola', title: 'Consola', text: 'Cabecera berenjena y barra lateral clara. Para herramientas internas.' }),
         h(ThemeCard, { theme: 'marca', title: 'Marca', text: 'Barra lateral berenjena y fondo lila. Para lo que ve el cliente.' }),
+        h(ThemeCard, {
+          theme: 'campo',
+          title: 'Campo',
+          text: 'Alto contraste (7 : 1) y controles de 44 px. Para técnicos con la tablet al sol.',
+        }),
       ),
     ),
     h(

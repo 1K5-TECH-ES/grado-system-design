@@ -1,5 +1,5 @@
 // Una captura por componente: la vista previa real de cada ficha de /componentes en la web,
-// en los dos temas y los dos modos. Si cambia un componente, falla solo su captura y
+// en los tres temas y los dos modos. Si cambia un componente, falla solo su captura y
 // Playwright deja la diferencia en test-results/. La web la sirve playwright.config.mjs.
 // Para regenerar: npm run test:visual:docker -- --update-snapshots (misma imagen que el CI).
 import { test, expect } from '@playwright/test'
@@ -44,7 +44,7 @@ async function isolate(page, id) {
   return page.locator(`#${id} .demo-preview`)
 }
 
-for (const theme of ['consola', 'marca']) {
+for (const theme of ['consola', 'marca', 'campo']) {
   for (const mode of ['light', 'dark']) {
     test(`componentes · ${theme} · ${mode}`, async ({ page }) => {
       test.setTimeout(240_000)

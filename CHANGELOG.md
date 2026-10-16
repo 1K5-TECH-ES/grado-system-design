@@ -4,7 +4,14 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 ## 0.6.0 · sin publicar
 
-0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`.
+0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter.
+
+### Tema «campo»
+
+- Tema nuevo de alto contraste para el trabajo de campo, para técnicos con la tablet al sol: todo el texto llega a 7 : 1 (AAA) en claro y en oscuro, también el de los avisos sobre fondo tintado; bordes y campos que se ven (el borde llega a 4 : 1 sobre el fondo); controles de 44 px (36 y 52 en los tamaños pequeño y grande). Hereda de Consola.
+- Va en su propio archivo para que no lo descargue quien no lo usa: `import '@1k5-tech-es/grado/themes/campo.css'` (o `themes/campo-hsl.css` con Tailwind 3) después de los tokens, y `data-k5-theme="campo"` en `<html>` o en una zona. Un `data-k5-density` puesto a mano sigue mandando.
+- `minContrast` en un tema de `tokens.json` sube el contraste mínimo que comprueban los tests y el del texto sobre tintes. Tokens Studio y el formato W3C traen también «Campo · claro» y «Campo · oscuro».
+- En la web, «Campo» en el selector de tema, en Inicio y en Instalación; axe y las capturas por componente lo prueban en claro y oscuro.
 
 ### Fuente
 

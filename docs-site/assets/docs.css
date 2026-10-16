@@ -368,6 +368,16 @@ kbd {
 .docs-theme__mini--marca {
   background: #f7f3f9;
 }
+/* Campo: fondo blanco, bordes oscuros y texto negro. */
+.docs-theme__mini--campo::after {
+  border: 2px solid #6e6474;
+}
+.docs-theme__mini--campo b {
+  border-right: 2px solid #6e6474;
+}
+.docs-theme__mini--campo em {
+  background: #111;
+}
 .docs-theme__mini--marca i {
   width: 26%;
   height: 100%;

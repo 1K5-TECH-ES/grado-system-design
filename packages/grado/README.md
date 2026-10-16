@@ -132,8 +132,9 @@ Pon la clase `dark` o el atributo `data-theme="dark"` en `<html>`. Es lo que ya 
 |---|---|---|
 | `consola` | Por defecto | Herramientas internas. Es 1komma5es_help con los colores oficiales. |
 | `marca` | `data-k5-theme="marca"` en `<html>` o en cualquier contenedor | Lo que ve el cliente: portal, widget, ofertas. Barra lateral berenjena, fondo lila claro, radios y controles más grandes, anillo menta en la sección activa (`--sidebar-primary`). |
+| `campo` | `data-k5-theme="campo"`, y cargar `@1k5-tech-es/grado/themes/campo.css` (o `campo-hsl.css` con Tailwind 3) después de los tokens | Trabajo de campo, con la tablet al sol: todo el texto a 7 : 1, bordes que se ven y controles de 44 px. Hereda de Consola. |
 
-Los dos temas tienen exactamente los mismos tokens, así que una pantalla funciona igual en los dos.
+Los tres temas tienen exactamente los mismos tokens, así que una pantalla funciona igual en todos.
 
 ## Tokens
 

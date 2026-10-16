@@ -172,6 +172,7 @@ createApp(App).use(Grado, { locale: 'de-DE', messages: de }).mount('#app');`
 const themeOptions = [
   ['Consola', 'Herramientas internas', 'sin atributo'],
   ['Marca', 'Lo que ve el cliente', 'data-k5-theme="marca"'],
+  ['Campo', 'Técnicos al sol: 7 : 1 y controles de 44 px. Carga además @1k5-tech-es/grado/themes/campo.css', 'data-k5-theme="campo"'],
 ]
 const migration = [
   ['Empieza por los tokens', 'Reemplaza las variables equivalentes y revisa los colores escritos directamente.'],
@@ -446,7 +447,7 @@ export default function Installation() {
             G.Card,
             { variant: 'plain', className: 'docs-option' },
             h(G.Text, { weight: 'semibold' }, 'Tu tema'),
-            h(G.Text, { size: 'small', tone: 'muted' }, 'Tus colores sobre cualquiera de los dos'),
+            h(G.Text, { size: 'small', tone: 'muted' }, 'Tus colores sobre cualquiera de ellos'),
             h(TextLink, { to: '/personalizar' }, 'Crear en Personalizar'),
           ),
         ),

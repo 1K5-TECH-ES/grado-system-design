@@ -60,6 +60,7 @@
     },
     "./tokens.css": "./dist/tokens.css",
     "./tokens-hsl.css": "./dist/tokens-hsl.css",
+    "./themes/*": "./dist/themes/*",
     "./tailwind.css": "./dist/tailwind.css",
     "./grado.css": "./dist/grado.css",
     "./grado.min.css": "./dist/grado.min.css",

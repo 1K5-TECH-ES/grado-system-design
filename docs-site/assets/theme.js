@@ -14,5 +14,5 @@
   mode = params.get('modo') || mode
   theme = params.get('tema') || theme
   document.documentElement.classList.toggle('dark', mode === 'dark')
-  document.documentElement.dataset.k5Theme = theme === 'consola' ? 'consola' : 'marca'
+  document.documentElement.dataset.k5Theme = ['consola', 'campo'].includes(theme) ? theme : 'marca'
 })()
