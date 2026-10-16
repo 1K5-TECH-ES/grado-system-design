@@ -113,8 +113,17 @@ function vue(module, name) {
   return `${header(name)}\n${lines.join('\n')}`
 }
 
+// ---------- @1k5-tech-es/grado-elements: su .d.ts, sin comentarios ----------
+function elements() {
+  const printer = ts.createPrinter({ removeComments: true })
+  const file = 'packages/grado-elements/src/index.d.ts'
+  const source = ts.createSourceFile(file, readFileSync(path(file), 'utf8'), ts.ScriptTarget.Latest, true)
+  return `${header('@1k5-tech-es/grado-elements')}\n\`\`\`ts\n${printer.printFile(source).trim()}\n\`\`\`\n`
+}
+
 const reports = {
   'api/grado.api.md': core(),
+  'api/grado-elements.api.md': elements(),
   'api/grado-react.api.md': react('index.d.ts', '@1k5-tech-es/grado-react'),
   'api/grado-react-react-hook-form.api.md': react('react-hook-form.d.ts', '@1k5-tech-es/grado-react/react-hook-form'),
   'api/grado-vue.api.md': vue(V, '@1k5-tech-es/grado-vue'),

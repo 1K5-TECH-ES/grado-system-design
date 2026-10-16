@@ -4,7 +4,18 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 
 ## 0.6.0 · sin publicar
 
-0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter.
+0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter. Fase 4: un núcleo común para React y Vue, y Web Components para HTML sin framework.
+
+### Web Components
+
+- Paquete nuevo, `@1k5-tech-es/grado-elements`, para HTML sin framework (PHP, Twig, páginas estáticas): `k5-combobox`, `k5-dialog`, `k5-tabs`, `k5-menu` y `k5-toaster` con `toast()`. Generan el mismo HTML que los componentes de React (un test lo compara), con el mismo teclado y los mismos textos, en el DOM normal: `grado.css` y los estilos de la app se aplican igual.
+- `k5-combobox` con `name` envía su valor con el formulario; `k5-dialog` se abre con un botón `data-k5-open="id"` sin escribir JavaScript; `k5-menu` avisa con `k5-select`; `toast()` usa la misma cola que en React y Vue.
+- `dist/grado-elements.min.js` lo trae todo en un archivo (12,6 KB con gzip) para cargarlo con `<script type="module">` sin bundler; con bundler, `import '@1k5-tech-es/grado-elements'`.
+- Probados en el navegador con teclado, formulario, avisos y axe en los tres temas y los dos modos, y con una app de prueba HTML + Vite que los instala desde el `.tgz`. Se publica junto a los otros tres paquetes, con el mismo número de versión.
+
+### Núcleo común
+
+- `@1k5-tech-es/grado/core`: el estado y el teclado de `Combobox`, `Calendar` y `DataTable`, que React y Vue tenían cada uno por su cuenta, en funciones sin framework (`comboboxReduce`, `calendarView`, `tableView`…). React, Vue y `grado-elements` las usan igual, así que se comportan igual y se prueban una vez. Ningún componente cambia de API ni de HTML.
 
 ### Tema «campo»
 

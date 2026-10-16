@@ -385,6 +385,21 @@ export default function Installation() {
                   'En HTML sin bundler, copia las carpetas `dist/` y `assets/fonts/` del paquete base a tu carpeta pública, con esa misma estructura, y carga `dist/fonts.css`, `dist/tokens.css` y `dist/grado.min.css`, en ese orden, con `<link rel="stylesheet">`.',
                 ),
                 h(CodeBlock, { code: '<button class="k5-btn k5-btn--primary">Guardar cambios</button>', label: 'HTML' }),
+                P(
+                  'Para lo interactivo sin framework (PHP, Twig, páginas estáticas), `@1k5-tech-es/grado-elements` trae Web Components con el mismo HTML, teclado y textos que los de React y Vue: `k5-combobox`, `k5-dialog`, `k5-tabs`, `k5-menu` y `k5-toaster` con `toast()`. Copia `grado-elements.min.js` (lo trae todo) y cárgalo como módulo.',
+                ),
+                h(CodeBlock, {
+                  code: `<script type="module" src="/vendor/grado-elements.min.js"></script>
+
+<k5-combobox label="Provincia" name="provincia">
+  <option value="md">Madrid</option>
+  <option value="vlc">Valencia</option>
+</k5-combobox>
+
+<button data-k5-open="nota">Nueva nota</button>
+<k5-dialog id="nota" label="Nueva nota">…</k5-dialog>`,
+                  label: 'HTML · Web Components',
+                }),
               ),
             },
           ],

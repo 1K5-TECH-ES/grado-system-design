@@ -19,7 +19,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 | 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt. Fase 3: textos en alemán e inglés aparte, alias de tamaño obsoletos, política de versiones y filas virtuales en `DataTable` | Hecha |
-| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Fases 1 (utilidades en `labs`), 2 (comparador de tarifas, firma y previsión solar) y 3 (tema «campo» e Inter) hechas |
+| 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha: utilidades y componentes de energía en `labs`, tema «campo», Inter, núcleo común y Web Components |
 
 ## Decisiones tomadas
 
@@ -145,6 +145,7 @@ eslint.config.mjs        ESLint; .stylelintrc.json y .prettierrc.json para CSS y
 playwright.config.mjs    regresión visual (test/visual/)
 packages/grado-react/    componentes React (tsc)
 packages/grado-vue/      componentes Vue (tsc, sin .vue); en los dos, un archivo por componente
+packages/grado-elements/ Web Components para HTML sin framework (k5-combobox, k5-dialog, k5-tabs, k5-menu, k5-toaster)
                          y group-*.ts reúne los de 0.3 por grupo
 test/parity.test.mjs     React y Vue generan el mismo HTML (y parity-<grupo>.test.mjs para los de 0.3)
 test/patterns-*.test.mjs lógica compartida: validación de NIF, IBAN y teléfono, gráficos, horas…
@@ -168,6 +169,7 @@ packages/grado/
   src/css/               un archivo CSS por componente; el build los une en dist/grado.css
   src/classes.js         props → clases k5-*, compartido por React y Vue
   src/patterns.js        comportamiento compartido: búsqueda, números, fechas, escalas, cola de avisos
+  src/core.js            núcleo común: estado y teclado de Combobox, Calendar y DataTable para React, Vue y grado-elements
   src/messages.js        textos en es-ES, de-DE y en-GB
   src/migrate.js         reglas del codemod; bin/grado.mjs tiene las órdenes «migrate» y «usage»
   src/usage.js           inventario de uso de una app
