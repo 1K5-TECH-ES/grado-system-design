@@ -1,7 +1,7 @@
 // Ayudas para publicar una versión. Sin dependencias.
-//   node scripts/release.mjs check 0.3.0   comprueba que los tres paquetes y sus dependencias internas
-//                                          están en esa versión y que el CHANGELOG tiene su sección
-//   node scripts/release.mjs notes 0.3.0   imprime las notas de esa versión sacadas de CHANGELOG.md
+//   node scripts/release.mjs check 0.4.0   comprueba que los tres paquetes y sus dependencias internas
+//                                          están en esa versión y que el CHANGELOG tiene su sección, con fecha
+//   node scripts/release.mjs notes 0.4.0   imprime las notas de esa versión sacadas de CHANGELOG.md
 import { readFileSync } from 'node:fs'
 
 const root = new URL('../', import.meta.url)
@@ -10,7 +10,7 @@ const PACKAGES = ['grado', 'grado-react', 'grado-vue']
 const [command, version] = process.argv.slice(2)
 
 if (!/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version ?? '')) {
-  console.error('Uso: node scripts/release.mjs check|notes <versión>, p. ej. 0.3.0')
+  console.error('Uso: node scripts/release.mjs check|notes <versión>, p. ej. 0.4.0')
   process.exit(1)
 }
 
@@ -34,7 +34,11 @@ if (command === 'check') {
     const internal = pkg.dependencies?.['@1k5-tech-es/grado']
     if (internal && internal !== `^${version}`) problems.push(`${pkg.name} depende de @1k5-tech-es/grado ${internal}`)
   }
-  if (!changelogSection(read('CHANGELOG.md'), version)) problems.push(`CHANGELOG.md no tiene la sección ${version}`)
+  const changelog = read('CHANGELOG.md')
+  if (!changelogSection(changelog, version)) problems.push(`CHANGELOG.md no tiene la sección ${version}`)
+  // La web y la release enseñan el título tal cual: «sin publicar» se quedaría para siempre (pasó con 0.3.0).
+  const heading = changelog.split('\n').find((line) => line.startsWith(`## ${version} `))
+  if (heading && /sin publicar/i.test(heading)) problems.push(`el título de ${version} en CHANGELOG.md dice «sin publicar»: pon la fecha`)
   if (problems.length) {
     console.error(`No se puede publicar ${version}:\n- ${problems.join('\n- ')}`)
     process.exit(1)
