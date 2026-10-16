@@ -4,8 +4,8 @@
     {
       "app": "Sales Coach",
       "estado": "migrando",
-      "version": "0.1.0",
-      "detalle": "Vue 3.5 y Tailwind 3. Rama feat/grado sin commit: solo el armazón (App.vue) usa Grado",
+      "version": "0.4.0",
+      "detalle": "Vue 3.5 y Tailwind 3. Rama feat/grado con 0.4.0 desde los .tgz de la release: de momento solo el armazón (App.vue) usa Grado",
       "componentes": {
         "Button": 2,
         "AppLogo": 1,
