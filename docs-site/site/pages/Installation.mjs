@@ -205,7 +205,7 @@ export default function Installation() {
         Step,
         { id: 'requisitos', number: 1, title: 'Prepara tu proyecto' },
         P(
-          'Utiliza React 18 o superior, o Vue 3.5 o superior. Para compilar el repositorio de Grado necesitas Node.js 20 o superior. Tailwind es opcional.',
+          'Utiliza React 18 o superior, o Vue 3.5 o superior. El comando npx @1k5-tech-es/grado y la compilación del repositorio necesitan Node.js 22 o superior. Tailwind es opcional.',
         ),
         P('Para instalar los paquetes necesitas una cuenta de GitHub con acceso a la organización `1K5-TECH-ES`.'),
         P(
@@ -272,6 +272,9 @@ export default function Installation() {
                 P('Instala siempre el paquete base y el del framework en la misma versión.'),
                 P(
                   'Los cambios mecánicos los hace el codemod: imports, dependencias, alias y clases retiradas. `npx @1k5-tech-es/grado migrate --dry` enseña lo que cambiaría; sin `--dry` lo escribe. Lo que pide una decisión, como un `variant="danger"` que debería ser `destructive`, lo avisa con archivo y línea.',
+                ),
+                P(
+                  '`npx @1k5-tech-es/grado usage` cuenta qué componentes, props, clases y tokens de Grado usa tu aplicación, sin cambiar nada. Pásalo antes y después de actualizar para ver qué partes de la app tocan los cambios de esa versión.',
                 ),
               ),
             },

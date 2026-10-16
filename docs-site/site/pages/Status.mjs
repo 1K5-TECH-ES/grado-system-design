@@ -13,6 +13,19 @@ const columns = [
 const adoptionTone = { migrando: 'info', adoptada: 'success', pendiente: 'neutral' }
 const adoptionLabel = { migrando: 'Migrando', adoptada: 'Adoptada', pendiente: 'Pendiente' }
 
+// «6 · Button, AppShell, Nav…» con la fecha del inventario. Sin inventario, «—».
+function componentList(app) {
+  const names = Object.keys(app.componentes ?? {})
+  if (!names.length) return '—'
+  const shown = names.slice(0, 4).join(', ') + (names.length > 4 ? '…' : '')
+  return h(
+    G.Stack,
+    { gap: '1' },
+    h('span', null, `${names.length} · ${shown}`),
+    app.inventario ? h(G.Text, { size: 'caption', tone: 'muted' }, `Inventario del ${app.inventario}`) : null,
+  )
+}
+
 const Yes = ({ ok }) => (ok ? h(G.Status, { tone: 'success' }, 'Sí') : h(G.Status, { tone: 'neutral' }, 'No'))
 
 export default function Status() {
@@ -75,7 +88,7 @@ export default function Status() {
       {
         id: 'adopcion',
         title: 'Adopción por aplicación',
-        description: `Se mantiene a mano en \`docs-site/adoption.json\`. Versión actual de Grado: ${version}.`,
+        description: `Sale de \`docs-site/adoption.json\`. \`npx @1k5-tech-es/grado usage --adoption …\` cuenta los componentes de cada app; el estado se mantiene a mano. Versión actual de Grado: ${version}.`,
       },
       h(
         G.Table,
@@ -89,6 +102,7 @@ export default function Status() {
             h('th', { scope: 'col' }, 'Aplicación'),
             h('th', { scope: 'col' }, 'Estado'),
             h('th', { scope: 'col' }, 'Versión'),
+            h('th', { scope: 'col' }, 'Componentes'),
             h('th', { scope: 'col' }, 'Detalle'),
           ),
         ),
@@ -102,6 +116,7 @@ export default function Status() {
               h('th', { scope: 'row' }, app.app),
               h('td', null, h(G.Badge, { tone: adoptionTone[app.estado] ?? 'neutral' }, adoptionLabel[app.estado] ?? app.estado)),
               h('td', null, app.version ? h('code', null, app.version) : '—'),
+              h('td', null, componentList(app)),
               h('td', null, app.detalle || '—'),
             ),
           ),

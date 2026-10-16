@@ -35,7 +35,6 @@ export const CommandPalette = forwardRef<HTMLDialogElement, CommandPaletteProps>
   const { messages: m } = useGrado()
   const [visible, setVisible] = useValue(open, defaultOpen, onOpenChange)
   const [query, setQuery] = useState('')
-  const [active, setActive] = useState(0)
   const dialog = useRef<HTMLDialogElement>(null)
   const input = useRef<HTMLInputElement>(null)
   useImperativeHandle(ref, () => dialog.current as HTMLDialogElement, [])
@@ -45,6 +44,16 @@ export const CommandPalette = forwardRef<HTMLDialogElement, CommandPaletteProps>
     const items: CommandItem[] = filtered.flatMap((group) => group.items)
     return { filtered, items, enabled: items.map((item, i) => (item.disabled ? -1 : i)).filter((i) => i >= 0) }
   }, [groups, query])
+  const [active, setActive] = useState(() => enabled[0] ?? -1)
+  // Al cambiar la búsqueda o al abrir, la primera opción activa; al mover el ratón, no. Se ajusta
+  // durante el render y no en un efecto: con React 18 el efecto llegaba tarde y un Enter justo
+  // después de teclear no elegía nada.
+  const resetKey = `${visible}|${query}`
+  const [activeFor, setActiveFor] = useState(resetKey)
+  if (activeFor !== resetKey) {
+    setActiveFor(resetKey)
+    setActive(enabled[0] ?? -1)
+  }
   const name = label ?? m.commandPalette
 
   // El atajo lee el estado actual sin volver a registrar el listener en cada render.
@@ -76,11 +85,6 @@ export const CommandPalette = forwardRef<HTMLDialogElement, CommandPaletteProps>
     }
   }, [visible])
 
-  useEffect(() => {
-    setActive(enabled[0] ?? -1)
-    // Solo al cambiar la búsqueda o al abrir: no al mover el ratón.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, visible])
   useEffect(() => {
     if (visible && active >= 0) document.getElementById(`${id}-option-${active}`)?.scrollIntoView({ block: 'nearest' })
   }, [active, visible, id])

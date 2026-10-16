@@ -2,6 +2,30 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
+## 0.5.0 · sin publicar
+
+0.5, «Estabilidad»: las apps a producción, lo que prometemos probado y la API lista para congelarla en la 1.0.
+
+### Inventario de uso
+
+- `npx @1k5-tech-es/grado usage` cuenta qué usa una app de Grado: cada componente con sus props y los valores literales más frecuentes, funciones como `toast()` o `cx()`, clases `k5-…` escritas a mano y tokens `--k5-…`. Lee React (JSX, alias e `import * as`) y Vue (PascalCase, kebab-case, `:prop`, `v-model:prop`, `@evento`), y también plantillas PHP, Twig o Handlebars, que solo usan clases. No cambia nada de la app.
+- `--adoption <ruta>` guarda en `adoption.json` la versión de Grado de la app, sus componentes y la fecha del inventario; el estado y el detalle siguen a mano. `--app` le da nombre y `--json` saca el inventario completo.
+- La página Estado enseña los componentes que usa cada app y la fecha de su inventario.
+
+### Compatibilidad
+
+- El CI prueba los tests y el navegador también con React 18.3, Vue 3.5.0 y Node 24, además de React 19, la última Vue y Node 22. Lo que dicen `peerDependencies` y `engines` queda comprobado en cada pull request.
+- `engines`: Node.js 22 o superior para `npx @1k5-tech-es/grado` y para compilar el repositorio. Node 20 dejó de tener soporte el 30 de abril de 2026.
+
+### Corregido
+
+- React 18: en `CommandPalette`, un Enter justo después de escribir no elegía nada, porque la primera opción se marcaba un instante después. Ahora se marca en el mismo render que el filtro.
+- Vue: el paquete compila con los tipos de Vue 3.5.0, que declaran `useId()` como `string | undefined`.
+
+### Al actualizar desde 0.4.0
+
+- Si compilas Grado o usas `npx @1k5-tech-es/grado` con Node 20, pasa a Node 22.
+
 ## 0.4.0 · 16 de octubre de 2026
 
 0.4, «Adopción»: lo que necesita una app para pasar a Grado sin trabajo a mano. Las APIs de 0.3.0 siguen igual.

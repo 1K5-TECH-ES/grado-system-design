@@ -1,5 +1,6 @@
-# Integración continua: lo mismo que `npm run test:all`, repartido en dos trabajos.
+# Integración continua: lo mismo que `npm run test:all`, repartido en tres trabajos.
 # - checks: lint, tests unitarios y de paridad, API pública, tamaño, navegador (teclado, foco y axe) y web.
+# - compat: tests y navegador con React 18, Vue 3.5.0 y Node 24, los mínimos y la otra LTS.
 # - visual: capturas del catálogo dentro de la imagen oficial de Playwright, para que el
 #   renderizado sea siempre el mismo. Para regenerarlas, lanza el workflow a mano con
 #   «update-snapshots» y descarga el artefacto «capturas» en test/visual/__screenshots__/.
@@ -47,6 +48,39 @@ jobs:
           name: web
           path: docs-site/dist/
           retention-days: 7
+
+  # Compatibilidad: lo que prometen peerDependencies y engines, probado en el CI.
+  # React 18.3 y Vue 3.5.0 son los mínimos: se instalan encima del lockfile sin guardarlos.
+  # Node 22 ya lo prueba «checks»; aquí va también la otra LTS.
+  compat:
+    name: compat · ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: React 18
+            node: 22
+            install: react@18.3.1 react-dom@18.3.1
+          - name: Vue 3.5.0
+            node: 22
+            install: vue@3.5.0
+          - name: Node 24
+            node: 24
+            install: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - if: ${{ matrix.install != '' }}
+        run: npm install --no-save ${{ matrix.install }}
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
 
   visual:
     runs-on: ubuntu-latest

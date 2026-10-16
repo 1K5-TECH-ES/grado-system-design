@@ -30,6 +30,7 @@
     "src/messages.d.ts",
     "src/intl.js",
     "src/migrate.js",
+    "src/usage.js",
     "bin"
   ],
   "exports": {
@@ -76,7 +77,7 @@
     "prepack": "node scripts/build.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "esbuild": "^0.28.2"

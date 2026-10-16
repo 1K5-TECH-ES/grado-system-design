@@ -33,9 +33,10 @@ export const Field = defineComponent({
     id: String,
   },
   setup(props, { slots }) {
-    const auto = useId()
+    // Vue 3.5.0 tipa useId() como string | undefined; dentro de setup() siempre hay id.
+    const auto = (useId() ?? '').replace(/[^a-zA-Z0-9_-]/g, '')
     const ids = computed(() => {
-      const id = props.id ?? `k5-${auto.replace(/[^a-zA-Z0-9_-]/g, '')}`
+      const id = props.id ?? `k5-${auto}`
       return { id, hint: props.hint ? `${id}-hint` : undefined, error: props.error ? `${id}-error` : undefined }
     })
     provide(

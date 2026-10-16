@@ -1,11 +1,45 @@
 {
-  "nota": "Qué versión de Grado usa cada app. Actualízalo al migrar o al subir de versión; la página Estado de la web lo muestra.",
+  "nota": "Qué versión de Grado usa cada app. «npx @1k5-tech-es/grado usage --app <nombre> --adoption <ruta a este archivo>» rellena versión, componentes y fecha del inventario; estado y detalle se mantienen a mano. La página Estado de la web lo muestra.",
   "apps": [
-    { "app": "Sales Coach", "estado": "migrando", "version": "0.1.0", "detalle": "Rama feat/grado" },
-    { "app": "Memorias", "estado": "pendiente", "version": null, "detalle": "Siguiente en el orden de migración" },
-    { "app": "Kompilot", "estado": "pendiente", "version": null, "detalle": "" },
-    { "app": "Radar-Link", "estado": "pendiente", "version": null, "detalle": "" },
-    { "app": "OfferTool", "estado": "pendiente", "version": null, "detalle": "" }
+    {
+      "app": "Sales Coach",
+      "estado": "migrando",
+      "version": "0.1.0",
+      "detalle": "Vue 3.5 y Tailwind 3. Rama feat/grado sin commit: solo el armazón (App.vue) usa Grado",
+      "componentes": {
+        "Button": 2,
+        "AppLogo": 1,
+        "AppShell": 1,
+        "Avatar": 1,
+        "Nav": 1,
+        "NavItem": 1
+      },
+      "inventario": "2026-10-16"
+    },
+    {
+      "app": "Memorias",
+      "estado": "pendiente",
+      "version": null,
+      "detalle": "generador-memorias-nest: React 19, Tailwind 4 y Vite. Siguiente en el orden de migración"
+    },
+    {
+      "app": "Kompilot",
+      "estado": "pendiente",
+      "version": null,
+      "detalle": "React 19, react-hook-form y Tailwind 4"
+    },
+    {
+      "app": "Radar-Link",
+      "estado": "pendiente",
+      "version": null,
+      "detalle": "React Native con Expo y NativeWind: no puede usar grado-react (DOM). Solo tokens"
+    },
+    {
+      "app": "OfferTool",
+      "estado": "pendiente",
+      "version": null,
+      "detalle": "PHP: solo grado.css hasta que haya Web Components"
+    }
   ],
   "figma": {}
 }

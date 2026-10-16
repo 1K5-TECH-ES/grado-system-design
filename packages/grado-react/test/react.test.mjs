@@ -12,8 +12,11 @@ test('todos los componentes reenvían ref (react-hook-form y los popovers la nec
 })
 
 test('un Input fuera de Field no inventa atributos', () => {
+  // React 18 y 19 escriben los atributos en distinto orden.
   const html = renderToStaticMarkup(r(G.Input, { name: 'q' }))
-  assert.equal(html, '<input class="k5-input" name="q"/>')
+  const attrs = [...html.matchAll(/([\w-]+)="([^"]*)"/g)].map(([, name, value]) => `${name}=${value}`).sort()
+  assert.match(html, /^<input [^>]*\/>$/)
+  assert.deepEqual(attrs, ['class=k5-input', 'name=q'])
 })
 
 test('aria-describedby propio se suma al del Field', () => {

@@ -12,11 +12,12 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 2. Componentes base | `grado.css` (botón, badge, campo, interruptor, tarjeta, tabla, KPI, cabecera, estado vacío, spinner) y paquetes `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue` con la misma API | Hecha |
 | 2b. Armazón | `AppShell`, `Nav`, `NavItem`, `NavGroup`, `AppSearch`, `AppLogo` y `Avatar`. Consola y Marca, barra lateral plegable y cajón en móvil | Hecha |
 | 2c. Componentes interactivos | Diálogos, panel lateral, menú, tooltip, casillas, combobox, avisos, pestañas, paginación, fechas, subida de archivos, pasos, historial, filtros, acordeón, migas y `DataTable`. Misma línea visual que 1komma5es_help: iconos de Lucide, menús con resaltado menta, diálogos con cabecera y pie | Hecha |
-| 3. Migración | Sales Coach, Memorias, Kompilot, Radar-Link y OfferTool, en ese orden | Sales Coach en la rama `feat/grado` |
+| 3. Migración | Sales Coach, Memorias, Kompilot, Radar-Link y OfferTool, en ese orden. Radar-Link es React Native y OfferTool, PHP: solo pueden usar tokens y CSS | Sales Coach en la rama `feat/grado` (0.1.0) |
 | 4. Documentación web | Introducción, instalación, componentes, ejemplos React/Vue y paquetes descargables | Lista para publicar en vuestro hosting |
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
+| 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo | En curso |
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 
 ## Decisiones tomadas
@@ -90,6 +91,10 @@ Diseño trabaja con el plugin Tokens Studio. Para llevar los tokens a Figma, imp
 
 `npx @1k5-tech-es/grado migrate` en la carpeta de la app hace los cambios mecánicos desde 0.1, 0.2 o 0.3 (imports, dependencias, alias, clases retiradas, `.npmrc`) y avisa con archivo y línea de lo que pide una decisión. `--dry` enseña los cambios sin escribir nada.
 
+### Saber qué usa cada app
+
+`npx @1k5-tech-es/grado usage` en la carpeta de la app cuenta qué componentes de Grado usa, con qué props y valores, y qué funciones (`toast()`…), clases `k5-…` y tokens `--k5-…` aparecen en el código y en las plantillas (también PHP o Twig). No cambia nada de la app. Con `--app "Sales Coach" --adoption ../grado-system-design/docs-site/adoption.json` guarda la versión y los componentes en la página Estado; `--json` da el inventario completo. Sirve para decidir qué se puede cambiar o retirar antes de la 1.0.
+
 ## Cómo cambiar un token
 
 1. Edita `packages/grado/src/tokens.json`.
@@ -144,6 +149,7 @@ test/i18n.test.mjs       idiomas: mismas claves y mismo HTML en React y Vue
 test/browser/            teclado, foco y axe-core en Chrome; groups/ tiene la parte de cada grupo de 0.3
 test/visual/             capturas de referencia del catálogo
 test/migrate.test.mjs    codemod de migración
+test/usage.test.mjs      inventario de uso
 api/                     informe de la API pública (generado por npm run api; el CI lo compara)
 scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las secciones de 0.3)
 scripts/release.mjs      comprobaciones y notas de publicación
@@ -158,7 +164,8 @@ packages/grado/
   src/classes.js         props → clases k5-*, compartido por React y Vue
   src/patterns.js        comportamiento compartido: búsqueda, números, fechas, escalas, cola de avisos
   src/messages.js        textos en es-ES, de-DE y en-GB
-  src/migrate.js         reglas del codemod; bin/grado.mjs es la orden «migrate»
+  src/migrate.js         reglas del codemod; bin/grado.mjs tiene las órdenes «migrate» y «usage»
+  src/usage.js           inventario de uso de una app
   scripts/build.mjs      genera dist/ (sin dependencias)
   scripts/contrast.mjs   informe de contraste
   scripts/lib/           color, carga de tokens, vista previa

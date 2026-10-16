@@ -4,7 +4,7 @@ Aplicación React en español con introducción, configurador de temas, instalac
 
 ## Generar
 
-Desde la raíz del repositorio, con Node.js 20 o superior:
+Desde la raíz del repositorio, con Node.js 22 o superior:
 
 ```bash
 npm ci

@@ -52,7 +52,7 @@ test('formulario con errores: mismo HTML en react-hook-form y VeeValidate', asyn
     react,
     /aria-invalid="true"[^>]*aria-describedby="k5-form-[^"]*-nif-error"|aria-describedby="k5-form-[^"]*-nif-error"[^>]*aria-invalid/,
   )
-  assert.match(react, /noValidate/)
+  assert.match(react, /novalidate/i, 'React 19 escribe noValidate y React 18, novalidate')
   // Antes de enviar no hay resumen.
   assert.doesNotMatch(react, /k5-error-summary/)
   assert.equal(same(react), same(await vue(vueForm)))

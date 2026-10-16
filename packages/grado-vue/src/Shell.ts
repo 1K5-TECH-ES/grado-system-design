@@ -7,7 +7,6 @@ import {
   onBeforeUnmount,
   provide,
   ref,
-  useId,
   watch,
   type Component,
   type ComputedRef,
@@ -17,10 +16,10 @@ import {
 } from 'vue'
 import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass } from '@1k5-tech-es/grado/classes'
 import { pathIcon } from './PathIcon.js'
+import { autoId } from './helpers.js'
 import { useGrado } from './Locale.js'
 
 const SHELL_KEY: InjectionKey<ComputedRef<{ collapsed: boolean }>> = Symbol('k5-shell')
-const autoId = (prefix: string, id: string) => `${prefix}-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`
 const iconProp = [Object, Function] as PropType<Component>
 
 export const AppLogo = defineComponent({
@@ -217,7 +216,7 @@ export const NavGroup = defineComponent({
   setup(props, { emit, slots }) {
     const shell = inject(SHELL_KEY, null)
     const inner = ref(props.defaultOpen)
-    const id = autoId('k5-group', useId())
+    const id = autoId('k5-group')
     const isOpen = computed(() => props.open ?? inner.value)
     const toggle = () => {
       if (props.open === undefined) inner.value = !isOpen.value

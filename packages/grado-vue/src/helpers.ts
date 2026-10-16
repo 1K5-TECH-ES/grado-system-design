@@ -12,8 +12,11 @@ export function model<T>(read: () => T | undefined, initial: T, change: (value: 
   ] as const
 }
 
-/** id estable con prefijo k5-. Llámalo dentro de setup(). */
-export const autoId = (prefix: string) => `${prefix}-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
+/**
+ * id estable con prefijo k5-. Llámalo dentro de setup(). Vue 3.5.0 tipa useId() como
+ * string | undefined (undefined solo fuera de setup); desde 3.5.1, string.
+ */
+export const autoId = (prefix: string) => `${prefix}-${(useId() ?? '').replace(/[^a-zA-Z0-9_-]/g, '')}`
 
 /** Booleano que distingue «no pasado» (undefined) de false. */
 export const booleanOptional = { type: Boolean, default: undefined }
