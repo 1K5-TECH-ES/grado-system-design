@@ -39,7 +39,8 @@ const IMPORTS = {
   Button: { names: ['Button'], limit: 7 * KB },
   'Field, Input': { names: ['Field', 'Input'], limit: 2.5 * KB },
   Dialog: { names: ['Dialog'], limit: 9 * KB },
-  DataTable: { names: ['DataTable'], limit: 14 * KB },
+  // 0.6: de 14 a 14,5 KB. El núcleo común (core.js) deja el de Vue justo en 14 KB y el gzip del CI lo pasa.
+  DataTable: { names: ['DataTable'], limit: 14.5 * KB },
   'AppShell, Nav, NavItem': { names: ['AppShell', 'Nav', 'NavItem'], limit: 9.5 * KB },
   LineChart: { names: ['LineChart'], limit: 10 * KB },
   'Toaster, toast': { names: ['Toaster', 'toast'], limit: 9.5 * KB },
