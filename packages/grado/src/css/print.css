@@ -1,0 +1,77 @@
+/* Impresión: una oferta, una memoria o un listado salen en papel sin el armazón, sin los
+   controles y con todo el contenido, no solo lo que cabía en pantalla. El modo oscuro vuelve a
+   los colores claros (tokens.css). Utilidades: k5-print-hide quita algo al imprimir,
+   k5-print-only lo enseña solo en papel y k5-print-keep conserva un botón o un control. */
+.k5-print-only {
+  display: none;
+}
+
+@media print {
+  .k5-print-only {
+    display: revert;
+  }
+  .k5-print-hide,
+  .k5-app__header,
+  .k5-app__sidebar,
+  .k5-app__backdrop,
+  .k5-app__skip,
+  .k5-app__banner,
+  .k5-btn:not(.k5-print-keep),
+  .k5-copy__button,
+  .k5-pagination,
+  .k5-filter-bar,
+  .k5-action-bar,
+  .k5-data-table__toolbar,
+  .k5-data-table__check,
+  .k5-data-table__selection,
+  .k5-toaster,
+  .k5-tooltip,
+  .k5-popover__content,
+  .k5-command {
+    display: none !important;
+  }
+
+  /* El armazón deja de medir lo que la ventana y de tener su propio scroll. */
+  .k5-app {
+    display: block;
+    height: auto;
+  }
+  .k5-app__main {
+    overflow: visible;
+  }
+
+  /* Tablas enteras, con la cabecera repetida en cada página y sin filas partidas. */
+  .k5-table-wrap,
+  .k5-data-table--scroll .k5-table-wrap {
+    max-height: none;
+    overflow: visible;
+  }
+  .k5-data-table--scroll .k5-table thead th {
+    position: static;
+  }
+  .k5-table thead {
+    display: table-header-group;
+  }
+  .k5-table tr,
+  .k5-card,
+  .k5-kpi,
+  .k5-alert,
+  .k5-chart,
+  .k5-dl {
+    break-inside: avoid;
+  }
+
+  /* Gráficos, estados y barras conservan su color: sin él no se leen. */
+  .k5-chart,
+  .k5-status__dot,
+  .k5-badge,
+  .k5-meter,
+  .k5-progress,
+  .k5-heatmap,
+  .k5-battery,
+  .k5-donut,
+  .k5-sparkline,
+  .k5-energy {
+    print-color-adjust: exact;
+  }
+}

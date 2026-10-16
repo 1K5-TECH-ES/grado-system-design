@@ -99,7 +99,9 @@ function themeBlock(theme, mode, format) {
     ...shadcn,
   ]
   const label = `${theme} · ${mode === 'light' ? 'claro' : 'oscuro'}`
-  return `/* ${label} */\n${selectors(theme, mode).join(',\n')} {\n${body.join('\n')}\n}\n`
+  const css = `/* ${label} */\n${selectors(theme, mode).join(',\n')} {\n${body.join('\n')}\n}\n`
+  // Al imprimir no se aplica el modo oscuro: papel blanco y texto oscuro, sin gastar tóner.
+  return mode === 'dark' ? `@media not print {\n${css.replace(/^(?=.)/gm, '  ')}}\n` : css
 }
 
 function tokensCss(format) {
@@ -391,6 +393,7 @@ function GROUP_CSS() {
     ...['search-input', 'password-input', 'slider', 'time-picker', 'phone-input', 'code-input', 'address-input'], // Campos especiales
     ...['popover', 'banner', 'action-bar', 'icon-button', 'toggle-group', 'context-menu'], // Superposiciones y acciones
     ...['battery', 'price-chart', 'heatmap'], // Energía (0.4)
+    ...['print', 'forced-colors'], // Impresión y alto contraste (0.5): al final, para ganar a lo anterior
   ]
 }
 

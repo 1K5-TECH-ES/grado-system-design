@@ -357,8 +357,44 @@ try {
     await axe(mobile, `${framework} · armazón móvil`)
     expect(errors).toEqual([])
     await mobile.close()
+
+    // Impresión: sin armazón, con todo el contenido (no solo lo que cabe en la ventana) y el
+    // modo oscuro en colores claros.
+    const media = await browser.newPage({ viewport: { width: 1100, height: 600 } })
+    await media.goto(`${base}/?framework=${framework}&shell=1`)
+    const background = () => media.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--k5-background').trim())
+    const light = await background()
+    await media.evaluate(() => {
+      document.documentElement.classList.add('dark')
+      const long = document.createElement('div')
+      long.style.height = '3000px'
+      document.querySelector('.k5-app__main').append(long)
+    })
+    expect(await background()).not.toBe(light)
+    await media.emulateMedia({ media: 'print' })
+    await expect(media.locator('.k5-app__sidebar')).toBeHidden()
+    await expect(media.locator('.k5-app__header')).toBeHidden()
+    expect(await media.evaluate(() => getComputedStyle(document.querySelector('.k5-app__main')).overflowY)).toBe('visible')
+    expect(await media.evaluate(() => document.querySelector('.k5-app').getBoundingClientRect().height)).toBeGreaterThan(3000)
+    expect(await background()).toBe(light)
+    await media.close()
+
+    // Alto contraste: lo elegido lleva el resaltado del sistema, no un fondo que desaparece.
+    const forced = await browser.newPage({ viewport: { width: 1100, height: 900 }, reducedMotion: 'reduce' })
+    await forced.goto(`${base}/?framework=${framework}`)
+    await forced.emulateMedia({ forcedColors: 'active' })
+    const [tab, highlight] = await forced.evaluate(() => {
+      const probe = document.body.appendChild(document.createElement('span'))
+      probe.style.cssText = 'forced-color-adjust: none; background: highlight'
+      return [
+        getComputedStyle(document.querySelector('#tabs .k5-tabs__tab[aria-selected="true"]')).backgroundColor,
+        getComputedStyle(probe).backgroundColor,
+      ]
+    })
+    expect(tab).toBe(highlight)
+    await forced.close()
     console.log(
-      `✓ ${framework}: modal, foco, teclado, filtros, archivos, fechas, temporizadores, tabla, componentes nuevos, idioma, armazón móvil y axe (2 temas × 2 modos)`,
+      `✓ ${framework}: modal, foco, teclado, filtros, archivos, fechas, temporizadores, tabla, componentes nuevos, idioma, armazón móvil, impresión, alto contraste y axe (2 temas × 2 modos)`,
     )
   }
   // ref: cada componente de React la pasa al elemento que toca.

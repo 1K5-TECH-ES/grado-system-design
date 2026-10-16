@@ -1,0 +1,78 @@
+/* Alto contraste (colores forzados de Windows y similares): el sistema pone sus colores en
+   fondos, textos y bordes y quita las sombras. Lo que solo se distinguía por el fondo o por una
+   sombra pierde la señal, así que aquí lleva el resaltado del sistema (highlight) o un borde.
+   Los focos usan outline, que se mantiene. */
+@media (forced-colors: active) {
+  /* Lo elegido o activo en listas, menús, pestañas y navegación. */
+  .k5-menu__item:focus,
+  .k5-combobox__option[data-active='true'],
+  .k5-command__item[data-active='true'],
+  .k5-segmented__option[aria-checked='true'],
+  .k5-toggle-group__item[aria-pressed='true'],
+  .k5-tabs__tab[aria-selected='true'],
+  .k5-pagination button[aria-current='page'],
+  .k5-nav-item[data-active='true'],
+  .k5-nav-item[aria-current='page'],
+  .k5-calendar__grid td[data-endpoint='true'] .k5-calendar__day {
+    forced-color-adjust: none;
+    background: highlight;
+    color: highlighttext;
+  }
+  .k5-calendar__grid td[data-in-range='true'] {
+    border-block: 1px solid highlight;
+  }
+  /* Hoy y el KPI elegido se marcaban con sombra o con una línea de fondo. */
+  .k5-calendar__day[aria-current='date'] {
+    outline: 1px solid canvastext;
+    outline-offset: -2px;
+  }
+  .k5-kpi[aria-pressed='true'] {
+    outline: 2px solid highlight;
+  }
+
+  /* Interruptor: pista con borde y bola del color del texto; encendido, resaltado. */
+  .k5-switch {
+    border-color: canvastext;
+  }
+  .k5-switch::after {
+    forced-color-adjust: none;
+    background: canvastext;
+    box-shadow: none;
+  }
+  .k5-switch:checked {
+    forced-color-adjust: none;
+    border-color: highlight;
+    background: highlight;
+  }
+  .k5-switch:checked::after {
+    background: highlighttext;
+  }
+
+  /* Marcas de datos: sin color de fondo serían invisibles. Conservan el suyo. */
+  .k5-status__dot,
+  .k5-chart__bar,
+  .k5-chart__swatch,
+  .k5-heatmap__cell,
+  .k5-meter__fill,
+  .k5-meter__segment--on,
+  .k5-progress__bar,
+  .k5-battery__fill,
+  .k5-donut__segment {
+    forced-color-adjust: none;
+  }
+  .k5-meter,
+  .k5-progress,
+  .k5-battery {
+    outline: 1px solid canvastext;
+  }
+
+  /* Lo que flota se separaba con sombra: ahora con borde. */
+  .k5-dialog,
+  .k5-popover__content,
+  .k5-tooltip__content,
+  .k5-toast,
+  .k5-menu,
+  .k5-combobox__list {
+    border: 1px solid canvastext;
+  }
+}
