@@ -23,6 +23,9 @@
 }
 
 .k5-dialog {
+  /* El centrado del <dialog> modal viene del margin: auto del navegador, y el preflight de
+     Tailwind 4 pone margin: 0 a todo: sin esto los diálogos se pegan arriba a la izquierda. */
+  margin: auto;
   width: min(32rem, calc(100vw - 2rem));
   max-width: none;
   max-height: min(85dvh, calc(100dvh - 2rem));
