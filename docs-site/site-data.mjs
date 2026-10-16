@@ -1,7 +1,7 @@
 // Datos que la web calcula al generarse, en Node: cobertura de cada componente (leyendo los
 // tests), adopción por aplicación y el registro de cambios. El build los pasa a la aplicación
 // como el módulo «virtual:site-data»; los tests los calculan igual.
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import * as G from '@1k5-tech-es/grado-react'
 import * as V from '@1k5-tech-es/grado-vue'
 import * as RF from '@1k5-tech-es/grado-react/react-hook-form'
@@ -17,8 +17,8 @@ const filesIn = (dir, pattern) =>
     .filter((file) => pattern.test(file))
     .map((file) => `${dir}${file}`)
 
-// Se calcula leyendo los tests, así que no se queda desactualizado.
-// Los componentes de 0.3 tienen sus tests y su parte del catálogo en archivos por grupo.
+// Se calcula leyendo los tests y las capturas guardadas, así que no se queda desactualizado.
+// Los componentes de 0.3 tienen sus tests en archivos por grupo.
 function coverage(adoption) {
   const sources = {
     parity: [
@@ -30,7 +30,6 @@ function coverage(adoption) {
       .map(read)
       .join('\n'),
     browser: ['test/browser/fixture.mjs', ...filesIn('test/browser/groups/', /\.fixture\.mjs$/)].map(read).join('\n'),
-    visual: ['scripts/catalog.mjs', ...filesIn('scripts/catalog/', /\.mjs$/)].map(read).join('\n'),
   }
   const exportNames = (c) => c.name.split(/[^A-Za-z]+/).filter((word) => /^[A-Z]/.test(word))
   const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -46,7 +45,8 @@ function coverage(adoption) {
       // Las llamadas pueden ocupar varias líneas (Prettier): C(\n  'Dialog', …), same('Sparkline', …), [\n  'SegmentedControl', …].
       parity: mentions(sources.parity, names, [(n) => `\\bRF?\\.${n}\\b`, (n) => `\\[\\s*'${n}'`, (n) => `\\b(?:same|pair)\\(\\s*'${n}'`]),
       browser: mentions(sources.browser, names, [(n) => `\\b(?:C|D|direct)\\(\\s*'${n}'`, (n) => `\\b[GF]\\.${n}\\b`]),
-      visual: mentions(sources.visual, names, [(n) => `G\\.${n}\\b`]),
+      // Cada componente tiene su captura en test/visual/components.spec.mjs: cuenta si el archivo existe.
+      visual: existsSync(new URL(`test/visual/__screenshots__/componentes/${c.id}-consola-light-linux.png`, root)),
       guide: Boolean(guidelines[c.id]),
       figma: adoption.figma?.[c.id] ?? '',
     }

@@ -52,7 +52,7 @@ export default function Status() {
         id: 'cobertura',
         title: 'Cobertura por componente',
         description:
-          '**Mismo HTML**: React y Vue generan el mismo marcado (tests de paridad). **Navegador**: teclado, foco y axe-core en 2 temas × 2 modos. **Captura**: aparece en las capturas de regresión visual. **Figma**: enlace al componente en la librería de diseño, cuando exista.',
+          '**Mismo HTML**: React y Vue generan el mismo marcado (tests de paridad). **Navegador**: teclado, foco y axe-core en 2 temas × 2 modos. **Captura**: tiene su propia captura de referencia en 2 temas × 2 modos (regresión visual). **Figma**: enlace al componente en la librería de diseño, cuando exista.',
       },
       h(
         G.Table,

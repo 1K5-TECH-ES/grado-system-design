@@ -1,6 +1,7 @@
-// Si una captura cambia sin querer, el test falla y Playwright deja la diferencia en
-// test-results/. Si el cambio es querido, regenera con --update-snapshots y revisa las
-// imágenes nuevas en el pull request.
+// El armazón de aplicación (catalog/app.html) en escritorio, plegado y móvil. Los componentes
+// tienen cada uno su captura en components.spec.mjs. Si una captura cambia sin querer, el test
+// falla y Playwright deja la diferencia en test-results/. Si el cambio es querido, regenera con
+// npm run test:visual:docker -- --update-snapshots y revisa las imágenes nuevas en el pull request.
 import { test, expect } from '@playwright/test'
 import { fileURLToPath } from 'node:url'
 
@@ -11,15 +12,6 @@ async function open(page, url) {
   await page.evaluate(() => document.fonts.ready)
   // Barlow tiene que haberse cargado: si no, la captura saldría con la fuente de respaldo.
   expect(await page.evaluate(() => document.fonts.check('600 14px Barlow'))).toBe(true)
-}
-
-for (const theme of ['consola', 'marca']) {
-  for (const mode of ['light', 'dark']) {
-    test(`componentes · ${theme} · ${mode}`, async ({ page }) => {
-      await open(page, catalog('index.html', `tema=${theme}&modo=${mode}`))
-      await expect(page).toHaveScreenshot(`componentes-${theme}-${mode}.png`, { fullPage: true })
-    })
-  }
 }
 
 test('armazón · consola · escritorio', async ({ page }) => {

@@ -1,9 +1,10 @@
 # Integración continua: lo mismo que `npm run test:all`, repartido en tres trabajos.
 # - checks: lint, tests unitarios y de paridad, API pública, tamaño, navegador (teclado, foco y axe) y web.
 # - compat: tests y navegador con React 18, Vue 3.5.0 y Node 24, los mínimos y la otra LTS.
-# - visual: capturas del catálogo dentro de la imagen oficial de Playwright, para que el
-#   renderizado sea siempre el mismo. Para regenerarlas, lanza el workflow a mano con
-#   «update-snapshots» y descarga el artefacto «capturas» en test/visual/__screenshots__/.
+# - visual: una captura por componente y las del armazón, dentro de la imagen oficial de
+#   Playwright, para que el renderizado sea siempre el mismo. Para regenerarlas en local con esa
+#   imagen: npm run test:visual:docker -- --update-snapshots. También se puede lanzar el workflow
+#   a mano con «update-snapshots» y descargar el artefacto «capturas» en test/visual/__screenshots__/.
 name: CI
 
 on:
@@ -93,7 +94,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run catalog
+      # La web (una captura por componente sale de /componentes) y el catálogo (el armazón).
+      - run: npm run build && node scripts/docs.mjs && node scripts/catalog.mjs
       - name: Capturas
         run: npx playwright test ${{ inputs.update-snapshots && '--update-snapshots' || '' }}
         env:

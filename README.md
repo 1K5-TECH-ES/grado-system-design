@@ -37,7 +37,8 @@ npm install           # dependencias de desarrollo
 npm run build         # genera dist/ de los tres paquetes
 npm test              # build + tests unitarios y de paridad React/Vue
 npm run test:browser  # teclado, foco y axe-core en Chrome, con React y con Vue
-npm run test:visual   # capturas del catálogo en 2 temas × 2 modos (--update-snapshots para regenerarlas)
+npm run test:visual:docker  # una captura por componente en 2 temas × 2 modos, en la imagen de Playwright del CI
+                            # (-- --update-snapshots para regenerarlas; npm run test:visual, sin Docker, falla por el suavizado de las letras)
 npm run lint          # ESLint, Stylelint y Prettier
 npm run format        # formatea y corrige lo que se pueda
 npm run test:all      # todo lo anterior más la web, como haría el CI
@@ -147,7 +148,8 @@ test/parity.test.mjs     React y Vue generan el mismo HTML (y parity-<grupo>.tes
 test/patterns-*.test.mjs lógica compartida: validación de NIF, IBAN y teléfono, gráficos, horas…
 test/i18n.test.mjs       idiomas: mismas claves y mismo HTML en React y Vue
 test/browser/            teclado, foco y axe-core en Chrome; groups/ tiene la parte de cada grupo de 0.3
-test/visual/             capturas de referencia del catálogo
+test/visual/             capturas de referencia: una por componente (de la web) y el armazón del catálogo
+scripts/visual-docker.mjs  regresión visual dentro de la imagen de Playwright del CI
 test/migrate.test.mjs    codemod de migración
 test/usage.test.mjs      inventario de uso
 api/                     informe de la API pública (generado por npm run api; el CI lo compara)
