@@ -505,11 +505,11 @@ export declare function relativeRefresh(value: DateInput, now?: DateInput): numb
 export type ThemeMode = 'light' | 'dark' | 'system';
 export declare const THEME_MODES: ThemeMode[];
 export declare const THEME_STORAGE_KEY: string;
-export declare function readThemeMode(key?: string): ThemeMode;
-export declare function saveThemeMode(mode: ThemeMode, key?: string): void;
+export declare function readThemeMode(key?: string, defaultMode?: ThemeMode): ThemeMode;
+export declare function saveThemeMode(mode: ThemeMode, key?: string, defaultMode?: ThemeMode): void;
 export declare function resolveThemeMode(mode: ThemeMode, prefersDark: boolean): 'light' | 'dark';
 export declare function applyThemeMode(mode: ThemeMode, root?: HTMLElement): void;
-export declare function themeScript(key?: string): string;
+export declare function themeScript(key?: string, defaultMode?: ThemeMode): string;
 export interface Hotkey {
     key: string;
     mod: boolean;

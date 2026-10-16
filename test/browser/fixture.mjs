@@ -209,6 +209,22 @@ function renderUI(framework, state, update) {
       ),
     ),
     section(
+      'editor',
+      button('Abrir editor', () => update({ editor: true })),
+      C(
+        'Dialog',
+        {
+          title: 'Plano de cubierta',
+          open: state.editor,
+          onOpenChange: set('editor'),
+          fullscreen: true,
+          header: false,
+          closeOnEscape: false,
+        },
+        button('Listo', () => update({ editor: false })),
+      ),
+    ),
+    section(
       'drawer',
       button('Abrir panel', () => update({ drawer: true })),
       C('Drawer', { title: 'Ficha', open: state.drawer, onOpenChange: set('drawer') }, 'Contenido de la ficha'),

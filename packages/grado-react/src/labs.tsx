@@ -138,6 +138,8 @@ export interface ThemeOptions {
   storageKey?: string
   /** Pone o quita la clase dark en <html>. false: solo guarda y devuelve la elección (una vista previa, un ajuste que se aplica en otro sitio). */
   apply?: boolean
+  /** El modo sin nada guardado. Por defecto «system»; «light» para una app que es clara salvo que se elija otra cosa. */
+  defaultMode?: ThemeMode
 }
 
 /**
@@ -145,13 +147,13 @@ export interface ThemeOptions {
  * Todos los useTheme con la misma clave se enteran del cambio. Para que no parpadee al cargar,
  * pon themeScript() en un <script> del <head>.
  */
-export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true }: ThemeOptions = {}) {
-  const [mode, setState] = useState<ThemeMode>('system')
+export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true, defaultMode = 'system' }: ThemeOptions = {}) {
+  const [mode, setState] = useState<ThemeMode>(defaultMode)
   const [prefersDark, setPrefersDark] = useState(false)
   useEffect(() => {
     const media = matchMedia('(prefers-color-scheme: dark)')
     const sync = () => {
-      const next = readThemeMode(storageKey)
+      const next = readThemeMode(storageKey, defaultMode)
       setState(next)
       setPrefersDark(media.matches)
       if (apply) applyThemeMode(next)
@@ -165,16 +167,16 @@ export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true }: Theme
       window.removeEventListener(THEME_EVENT, sync)
       window.removeEventListener('storage', sync)
     }
-  }, [storageKey, apply])
+  }, [storageKey, apply, defaultMode])
   const setMode = useCallback(
     (next: ThemeMode) => {
-      saveThemeMode(next, storageKey)
+      saveThemeMode(next, storageKey, defaultMode)
       // Aplica aunque no haya almacenamiento (modo privado): los demás se enteran por el evento.
       if (apply) applyThemeMode(next)
       setState(next)
       window.dispatchEvent(new Event(THEME_EVENT))
     },
-    [storageKey, apply],
+    [storageKey, apply, defaultMode],
   )
   return { mode, setMode, resolved: resolveThemeMode(mode, prefersDark) }
 }
@@ -185,9 +187,9 @@ export interface ThemeToggleProps extends ThemeOptions {
 }
 
 /** Claro, Oscuro o Sistema, con useTheme. */
-export function ThemeToggle({ size = 'sm', storageKey, apply, className }: ThemeToggleProps) {
+export function ThemeToggle({ size = 'sm', storageKey, apply, defaultMode, className }: ThemeToggleProps) {
   const m = useLabsMessages()
-  const { mode, setMode } = useTheme({ storageKey, apply })
+  const { mode, setMode } = useTheme({ storageKey, apply, defaultMode })
   return (
     <SegmentedControl
       className={className}

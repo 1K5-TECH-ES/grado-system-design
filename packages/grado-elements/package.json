@@ -1,6 +1,6 @@
 {
   "name": "@1k5-tech-es/grado-elements",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Web Components del sistema de diseño Grado de 1KOMMA5° España, para HTML sin framework.",
   "license": "UNLICENSED",
   "repository": {
@@ -34,6 +34,6 @@
     "prepack": "node scripts/build.mjs"
   },
   "dependencies": {
-    "@1k5-tech-es/grado": "^0.6.0"
+    "@1k5-tech-es/grado": "^0.7.0"
   }
 }

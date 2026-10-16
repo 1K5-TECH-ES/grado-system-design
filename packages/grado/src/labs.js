@@ -149,19 +149,23 @@ export function relativeRefresh(value, now = Date.now()) {
 export const THEME_MODES = ['light', 'dark', 'system']
 export const THEME_STORAGE_KEY = 'k5-mode'
 
-/** Lo guardado, si es válido; si no, 'system'. Sin almacenamiento (modo privado), 'system'. */
-export function readThemeMode(key = THEME_STORAGE_KEY) {
+/**
+ * Lo guardado, si es válido; si no, defaultMode ('system' salvo que la app diga otra cosa).
+ * Sin almacenamiento (modo privado), defaultMode.
+ */
+export function readThemeMode(key = THEME_STORAGE_KEY, defaultMode = 'system') {
   try {
     const value = localStorage.getItem(key)
-    return THEME_MODES.includes(value) ? value : 'system'
+    return THEME_MODES.includes(value) ? value : defaultMode
   } catch {
-    return 'system'
+    return defaultMode
   }
 }
 
-export function saveThemeMode(mode, key = THEME_STORAGE_KEY) {
+/** Guarda la elección. La del modo por defecto no se guarda: si la app lo cambia, se nota. */
+export function saveThemeMode(mode, key = THEME_STORAGE_KEY, defaultMode = 'system') {
   try {
-    if (mode === 'system') localStorage.removeItem(key)
+    if (mode === defaultMode) localStorage.removeItem(key)
     else localStorage.setItem(key, mode)
   } catch {
     // Sin almacenamiento la elección dura hasta recargar.
@@ -181,8 +185,8 @@ export function applyThemeMode(mode, root = document.documentElement) {
  * Script para el <head>, antes del CSS: aplica el tema guardado antes de pintar, sin parpadeo.
  * <script>{themeScript()}</script> en React (dangerouslySetInnerHTML) o tal cual en el HTML.
  */
-export function themeScript(key = THEME_STORAGE_KEY) {
-  return `(function(){try{var m=localStorage.getItem(${JSON.stringify(key)});var d=m==='dark'||(m!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}})()`
+export function themeScript(key = THEME_STORAGE_KEY, defaultMode = 'system') {
+  return `(function(){try{var m=localStorage.getItem(${JSON.stringify(key)});if(m!=='light'&&m!=='dark'&&m!=='system')m=${JSON.stringify(defaultMode)};var d=m==='dark'||(m==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}})()`
 }
 
 // ---------- Atajos de teclado ----------

@@ -156,7 +156,7 @@ ref: HTMLElement
 ## themeScript
 
 ```ts
-(key?: string) => string
+(key?: string, defaultMode?: ThemeMode) => string
 ```
 
 ## ThemeToggle
@@ -166,6 +166,7 @@ ref: sin ref
 ```ts
   apply?: boolean
   className?: string
+  defaultMode?: ThemeMode
   size?: Size
   storageKey?: string
 ```
@@ -179,7 +180,7 @@ ref: sin ref
 ## useTheme
 
 ```ts
-({ storageKey, apply }?: ThemeOptions) => { mode: ThemeMode; setMode: (next: ThemeMode) => void; resolved: "dark" | "light"; }
+({ storageKey, apply, defaultMode }?: ThemeOptions) => { mode: ThemeMode; setMode: (next: ThemeMode) => void; resolved: "dark" | "light"; }
 ```
 
 ## VisuallyHidden

@@ -72,16 +72,18 @@ ref: HTMLDivElement
 
 ## AlertDialog
 
-ref: HTMLDialogElement
+ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
 
 ```ts
   children?: ReactNode
-  className?: string
   closeLabel?: string
+  closeOnEscape?: boolean
   closeOnOutside?: boolean
   defaultOpen?: boolean
   description?: ReactNode
   footer?: ReactNode
+  fullscreen?: boolean
+  header?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   title: ReactNode
@@ -504,16 +506,18 @@ ref: HTMLDListElement · admite además los atributos HTML de ese elemento
 
 ## Dialog
 
-ref: HTMLDialogElement
+ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
 
 ```ts
   children?: ReactNode
-  className?: string
   closeLabel?: string
+  closeOnEscape?: boolean
   closeOnOutside?: boolean
   defaultOpen?: boolean
   description?: ReactNode
   footer?: ReactNode
+  fullscreen?: boolean
+  header?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   title: ReactNode
@@ -547,16 +551,18 @@ ref: HTMLDivElement
 
 ## Drawer
 
-ref: HTMLDialogElement
+ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
 
 ```ts
   children?: ReactNode
-  className?: string
   closeLabel?: string
+  closeOnEscape?: boolean
   closeOnOutside?: boolean
   defaultOpen?: boolean
   description?: ReactNode
   footer?: ReactNode
+  fullscreen?: boolean
+  header?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"
@@ -1272,16 +1278,18 @@ ref: HTMLDivElement · admite además los atributos HTML de ese elemento
 
 ## Sheet
 
-ref: HTMLDialogElement
+ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
 
 ```ts
   children?: ReactNode
-  className?: string
   closeLabel?: string
+  closeOnEscape?: boolean
   closeOnOutside?: boolean
   defaultOpen?: boolean
   description?: ReactNode
   footer?: ReactNode
+  fullscreen?: boolean
+  header?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"
@@ -1566,7 +1574,8 @@ ref: HTMLSpanElement
   children?: ReactNode
   className?: string
   content: ReactNode
-  label: string
+  label?: string
+  trigger?: ReactElement<unknown, string | React.JSXElementConstructor<any>>
 ```
 
 ## useField

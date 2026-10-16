@@ -15,6 +15,8 @@ import {
   relativeRefresh,
   resolveThemeMode,
   themeScript,
+  readThemeMode,
+  saveThemeMode,
 } from '@1k5-tech-es/grado/labs'
 
 const NBSP = ' '
@@ -74,20 +76,46 @@ test('tema: la elección y la preferencia del sistema; el script del <head> func
   assert.equal(resolveThemeMode('light', true), 'light')
   assert.equal(resolveThemeMode('system', true), 'dark')
   assert.equal(resolveThemeMode('system', false), 'light')
-  const run = (stored, prefersDark) => {
+  const run = (stored, prefersDark, defaultMode) => {
     const classes = new Set()
     const env = {
       localStorage: { getItem: () => stored },
       matchMedia: () => ({ matches: prefersDark }),
       document: { documentElement: { classList: { toggle: (name, on) => (on ? classes.add(name) : classes.delete(name)) } } },
     }
-    new Function(...Object.keys(env), themeScript('k5-mode'))(...Object.values(env))
+    new Function(...Object.keys(env), themeScript('k5-mode', defaultMode))(...Object.values(env))
     return classes.has('dark')
   }
   assert.equal(run('dark', false), true)
   assert.equal(run('light', true), false)
   assert.equal(run(null, true), true)
   assert.equal(run(null, false), false)
+  // Una app clara por defecto: sin nada guardado no sigue al sistema; con «system» guardado, sí.
+  assert.equal(run(null, true, 'light'), false)
+  assert.equal(run('system', true, 'light'), true)
+  assert.equal(run('basura', true, 'light'), false)
+})
+
+test('tema: el modo por defecto no se guarda y es lo que se lee sin nada guardado', () => {
+  const store = new Map()
+  globalThis.localStorage = {
+    getItem: (k) => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => store.set(k, v),
+    removeItem: (k) => store.delete(k),
+  }
+  try {
+    assert.equal(readThemeMode('t'), 'system')
+    assert.equal(readThemeMode('t', 'light'), 'light')
+    saveThemeMode('system', 't', 'light')
+    assert.equal(store.get('t'), 'system')
+    assert.equal(readThemeMode('t', 'light'), 'system')
+    saveThemeMode('light', 't', 'light')
+    assert.equal(store.has('t'), false)
+    saveThemeMode('system', 't')
+    assert.equal(store.has('t'), false)
+  } finally {
+    delete globalThis.localStorage
+  }
 })
 
 test('atajos: parse, coincidencia, campos de texto y etiqueta', () => {

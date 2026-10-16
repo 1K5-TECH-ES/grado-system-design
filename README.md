@@ -12,7 +12,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 2. Componentes base | `grado.css` (botón, badge, campo, interruptor, tarjeta, tabla, KPI, cabecera, estado vacío, spinner) y paquetes `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue` con la misma API | Hecha |
 | 2b. Armazón | `AppShell`, `Nav`, `NavItem`, `NavGroup`, `AppSearch`, `AppLogo` y `Avatar`. Consola y Marca, barra lateral plegable y cajón en móvil | Hecha |
 | 2c. Componentes interactivos | Diálogos, panel lateral, menú, tooltip, casillas, combobox, avisos, pestañas, paginación, fechas, subida de archivos, pasos, historial, filtros, acordeón, migas y `DataTable`. Misma línea visual que 1komma5es_help: iconos de Lucide, menús con resaltado menta, diálogos con cabecera y pie | Hecha |
-| 3. Migración | Sales Coach, Memorias, Kompilot, Radar-Link y OfferTool, en ese orden. Radar-Link es React Native y OfferTool, PHP: solo pueden usar tokens y CSS | Sales Coach en la rama `feat/grado` con 0.5.0 |
+| 3. Migración | Sales Coach, Memorias, Kompilot, Radar-Link y OfferTool, en ese orden. Radar-Link es React Native y OfferTool, PHP: solo pueden usar tokens y CSS | Sales Coach en la rama `feat/grado` con 0.5.0; Memorias, con 0.7.0 instalado desde GitHub Packages |
 | 4. Documentación web | Introducción, instalación, componentes, ejemplos React/Vue y paquetes descargables | Lista para publicar en vuestro hosting |
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
@@ -20,6 +20,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha |
 | 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt. Fase 3: textos en alemán e inglés aparte, alias de tamaño obsoletos, política de versiones y filas virtuales en `DataTable` | Hecha |
 | 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha |
+| 11. Memorias (0.7.0) | Lo que pidió pasar Memorias a Grado: diálogos centrados con Tailwind 4, `Dialog` a pantalla completa y sin cabecera, `Tooltip` sobre cualquier control, cabeceras de fila en `Table` y modo por defecto en `useTheme` | Hecha |
 
 ## Decisiones tomadas
 
@@ -51,7 +52,7 @@ npm run figma:check   # compara design/figma-tokens.json (export de Tokens Studi
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
-npm run release:check -- 0.6.0  # versiones de los cuatro paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
+npm run release:check -- 0.7.0  # versiones de los cuatro paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
 ```
 
 ## Publicar una versión

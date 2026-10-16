@@ -198,6 +198,8 @@ for (const [name, props] of fixtures) {
 
 // Mismo HTML en React y en Vue. Los ids automáticos de cada framework se igualan.
 const sameHtml = [
+  ['Dialog', { title: 'Editar', description: 'Ficha del cliente' }],
+  ['Dialog', { title: 'Plano de cubierta', description: 'Editor', fullscreen: true, header: false, closeOnEscape: false }],
   ['Alert', { title: 'Aviso' }],
   ['Alert', { title: 'Aviso', tone: 'danger' }],
   ['Pagination', { total: 128, defaultPage: 6 }],
@@ -318,3 +320,28 @@ for (const [name, props] of sameHtml) {
     assert.equal(vue, react)
   })
 }
+
+test('Tooltip con trigger: acompaña al control dado, sin botón de información, igual en React y Vue', async () => {
+  const react = sameIds(
+    renderToStaticMarkup(r(R.Tooltip, { content: 'Ctrl + Mayús + U', trigger: r(R.Button, { variant: 'secondary' }, 'Unifilar') })),
+  )
+  const vue = sameIds(
+    await renderToString(
+      createSSRApp({
+        render: () =>
+          h(V.Tooltip, { content: 'Ctrl + Mayús + U' }, { trigger: () => h(V.Button, { variant: 'secondary' }, () => 'Unifilar') }),
+      }),
+    ),
+  )
+  assert.equal(vue, react)
+  assert.match(react, /^<span class="k5-tooltip"><button[^>]*class="k5-btn k5-btn--secondary[^"]*"[^>]*>Unifilar<\/button><\/span>$/)
+})
+
+test('Dialog sin cabecera: el título sigue nombrando el diálogo y no hay botón de cierre', () => {
+  const html = renderToStaticMarkup(r(R.Dialog, { title: 'Plano de cubierta', header: false, fullscreen: true }, 'lienzo'))
+  assert.match(html, /class="k5-dialog k5-dialog--fullscreen k5-dialog--headless"/)
+  assert.match(html, /<h2 class="k5-sr-only" id="([^"]+)">Plano de cubierta<\/h2>/)
+  assert.doesNotMatch(html, /k5-close/)
+  const id = /aria-labelledby="([^"]+)"/.exec(html)[1]
+  assert.ok(html.includes(`id="${id}"`))
+})

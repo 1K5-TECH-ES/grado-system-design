@@ -18,6 +18,9 @@ function makeModal(name: string, kind = 'dialog') {
       defaultOpen: Boolean,
       closeLabel: String,
       closeOnOutside: { type: Boolean, default: true },
+      closeOnEscape: { type: Boolean, default: true },
+      fullscreen: Boolean,
+      header: { type: Boolean, default: true },
       side: { type: String as PropType<'left' | 'right'>, default: 'right' },
     },
     emits: ['update:open'],
@@ -53,6 +56,11 @@ function makeModal(name: string, kind = 'dialog') {
         ),
       )
       onBeforeUnmount(close)
+      // Sin cabecera, el título y la descripción siguen nombrando el diálogo para lectores de pantalla.
+      const headless = () => [
+        h('h2', { class: 'k5-sr-only', id: `${id}-title` }, slots.title?.() ?? props.title),
+        props.description ? h('p', { class: 'k5-sr-only', id: `${id}-description` }, props.description) : null,
+      ]
       return () =>
         h(
           'dialog',
@@ -65,12 +73,14 @@ function makeModal(name: string, kind = 'dialog') {
             class: cx(
               'k5-dialog',
               kind === 'alert' && 'k5-dialog--alert',
+              props.fullscreen && 'k5-dialog--fullscreen',
+              !props.header && 'k5-dialog--headless',
               kind === 'drawer' && 'k5-drawer',
               kind === 'drawer' && props.side === 'left' && 'k5-drawer--left',
             ),
             onCancel: (event: Event) => {
               event.preventDefault()
-              setVisible(false)
+              if (props.closeOnEscape) setVisible(false)
             },
             onClick: (event: MouseEvent) => {
               if (event.target === event.currentTarget && props.closeOnOutside && kind !== 'alert') {
@@ -81,22 +91,25 @@ function makeModal(name: string, kind = 'dialog') {
             },
           }),
           [
-            h('div', { class: 'k5-dialog__header' }, [
-              h('div', { class: 'k5-dialog__heading' }, [
-                h('h2', { class: 'k5-dialog__title', id: `${id}-title` }, slots.title?.() ?? props.title),
-                props.description ? h('p', { class: 'k5-dialog__description', id: `${id}-description` }, props.description) : null,
-              ]),
-              h(
-                'button',
-                {
-                  type: 'button',
-                  class: 'k5-close',
-                  'aria-label': props.closeLabel ?? t.value.messages.close,
-                  onClick: () => setVisible(false),
-                },
-                [closeIcon()],
-              ),
-            ]),
+            ...(props.header ? [] : headless()),
+            props.header
+              ? h('div', { class: 'k5-dialog__header' }, [
+                  h('div', { class: 'k5-dialog__heading' }, [
+                    h('h2', { class: 'k5-dialog__title', id: `${id}-title` }, slots.title?.() ?? props.title),
+                    props.description ? h('p', { class: 'k5-dialog__description', id: `${id}-description` }, props.description) : null,
+                  ]),
+                  h(
+                    'button',
+                    {
+                      type: 'button',
+                      class: 'k5-close',
+                      'aria-label': props.closeLabel ?? t.value.messages.close,
+                      onClick: () => setVisible(false),
+                    },
+                    [closeIcon()],
+                  ),
+                ])
+              : null,
             slots.default ? h('div', { class: 'k5-dialog__body' }, slots.default()) : null,
             slots.footer ? h('div', { class: 'k5-dialog__footer' }, slots.footer()) : null,
           ],

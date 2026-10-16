@@ -1,5 +1,5 @@
 'use client'
-import { forwardRef, useEffect, useImperativeHandle, useRef, type ReactNode } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, type DialogHTMLAttributes, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { lockScroll } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -8,7 +8,7 @@ import { useAutoId, useValue } from './hooks.js'
 
 const closeIcon = <PathIcon paths={ICON_PATHS.x} />
 
-export interface DialogProps {
+export interface DialogProps extends Omit<DialogHTMLAttributes<HTMLDialogElement>, 'title' | 'open' | 'children'> {
   title: ReactNode
   description?: ReactNode
   children?: ReactNode
@@ -18,7 +18,12 @@ export interface DialogProps {
   onOpenChange?: (open: boolean) => void
   closeLabel?: string
   closeOnOutside?: boolean
-  className?: string
+  /** false: Escape no cierra; la app lo usa para lo suyo (cancelar una acción en curso). */
+  closeOnEscape?: boolean
+  /** Ocupa la ventana menos un margen de 1 rem: editores, visores de planos. */
+  fullscreen?: boolean
+  /** false: sin cabecera ni botón de cierre. El título sigue nombrando el diálogo para lectores de pantalla y el cuerpo va sin márgenes. */
+  header?: boolean
 }
 const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; side?: 'left' | 'right' }>(function Modal(
   {
@@ -31,9 +36,13 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
     onOpenChange,
     closeLabel,
     closeOnOutside = true,
+    closeOnEscape = true,
+    fullscreen = false,
+    header = true,
     className,
     alert = false,
     side,
+    ...rest
   },
   forwarded,
 ) {
@@ -56,17 +65,28 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
   }, [visible])
   return (
     <dialog
+      {...rest}
       ref={ref}
       role={alert ? 'alertdialog' : undefined}
       aria-modal="true"
       aria-labelledby={`${id}-title`}
       aria-describedby={description ? `${id}-description` : undefined}
-      className={cx('k5-dialog', alert && 'k5-dialog--alert', side && 'k5-drawer', side === 'left' && 'k5-drawer--left', className)}
+      className={cx(
+        'k5-dialog',
+        alert && 'k5-dialog--alert',
+        fullscreen && 'k5-dialog--fullscreen',
+        !header && 'k5-dialog--headless',
+        side && 'k5-drawer',
+        side === 'left' && 'k5-drawer--left',
+        className,
+      )}
       onCancel={(event) => {
+        rest.onCancel?.(event)
         event.preventDefault()
-        setVisible(false)
+        if (closeOnEscape) setVisible(false)
       }}
       onClick={(event) => {
+        rest.onClick?.(event)
         if (event.target === event.currentTarget && closeOnOutside && !alert) {
           const rect = event.currentTarget.getBoundingClientRect()
           if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)
@@ -74,21 +94,34 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
         }
       }}
     >
-      <div className="k5-dialog__header">
-        <div className="k5-dialog__heading">
-          <h2 className="k5-dialog__title" id={`${id}-title`}>
+      {header ? (
+        <div className="k5-dialog__header">
+          <div className="k5-dialog__heading">
+            <h2 className="k5-dialog__title" id={`${id}-title`}>
+              {title}
+            </h2>
+            {description && (
+              <p className="k5-dialog__description" id={`${id}-description`}>
+                {description}
+              </p>
+            )}
+          </div>
+          <button type="button" className="k5-close" aria-label={closeLabel ?? m.close} onClick={() => setVisible(false)}>
+            {closeIcon}
+          </button>
+        </div>
+      ) : (
+        <>
+          <h2 className="k5-sr-only" id={`${id}-title`}>
             {title}
           </h2>
           {description && (
-            <p className="k5-dialog__description" id={`${id}-description`}>
+            <p className="k5-sr-only" id={`${id}-description`}>
               {description}
             </p>
           )}
-        </div>
-        <button type="button" className="k5-close" aria-label={closeLabel ?? m.close} onClick={() => setVisible(false)}>
-          {closeIcon}
-        </button>
-      </div>
+        </>
+      )}
       {children != null && children !== false && <div className="k5-dialog__body">{children}</div>}
       {footer && <div className="k5-dialog__footer">{footer}</div>}
     </dialog>

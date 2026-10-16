@@ -62,9 +62,12 @@ emits: dismiss
 
 ```ts
   closeLabel: String
+  closeOnEscape: Boolean  // con valor por defecto
   closeOnOutside: Boolean  // con valor por defecto
   defaultOpen: Boolean
   description: String
+  fullscreen: Boolean
+  header: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -412,9 +415,12 @@ string
 
 ```ts
   closeLabel: String
+  closeOnEscape: Boolean  // con valor por defecto
   closeOnOutside: Boolean  // con valor por defecto
   defaultOpen: Boolean
   description: String
+  fullscreen: Boolean
+  header: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -447,9 +453,12 @@ function
 
 ```ts
   closeLabel: String
+  closeOnEscape: Boolean  // con valor por defecto
   closeOnOutside: Boolean  // con valor por defecto
   defaultOpen: Boolean
   description: String
+  fullscreen: Boolean
+  header: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -1072,9 +1081,12 @@ emits: update:modelValue
 
 ```ts
   closeLabel: String
+  closeOnEscape: Boolean  // con valor por defecto
   closeOnOutside: Boolean  // con valor por defecto
   defaultOpen: Boolean
   description: String
+  fullscreen: Boolean
+  header: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -1313,8 +1325,8 @@ emits: update:modelValue
 ## Tooltip
 
 ```ts
-  content: String  // obligatoria
-  label: String  // obligatoria
+  content: String
+  label: String
 ```
 
 ## useField

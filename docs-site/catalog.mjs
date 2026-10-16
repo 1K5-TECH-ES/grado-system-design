@@ -311,6 +311,7 @@ import { Table, Badge } from '@1k5-tech-es/grado-vue';
       ['compact', 'boolean', 'false'],
       ['plain', 'Sin caja, para una tabla que ya está dentro de una tarjeta', 'false'],
       ['k5-num', 'Clase: columna numérica en th y td (alineada a la derecha, cifras tabulares)', '—'],
+      ['<th scope="row">', 'Cabecera de fila en el cuerpo: se pinta como una celda, con el nombre en negrita', '—'],
     ],
     note: 'El componente aporta estructura y estilos. La ordenación, paginación y selección de filas pertenecen a tu aplicación. Para el estado de cada fila, Status (punto y texto) es más discreto que Badge.',
   },

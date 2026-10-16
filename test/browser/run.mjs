@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:http'
 import { build } from 'esbuild'
 import { chromium, expect } from '@playwright/test'
+import assert from 'node:assert/strict'
 import { createRequire } from 'node:module'
 import { check as maquetacionCheck } from './groups/maquetacion.check.mjs'
 import { check as datosCheck } from './groups/datos.check.mjs'
@@ -107,6 +108,25 @@ try {
     await page.locator('#drawer > button').click()
     await expect(page.locator('#drawer dialog')).toBeVisible()
     await page.locator('#drawer .k5-close').click()
+    // Pantalla completa sin cabecera: Escape no la cierra (la app lo usa), el botón de la app sí.
+    await page.locator('#editor > button').click()
+    await expect(page.locator('#editor dialog')).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.locator('#editor dialog')).toBeVisible()
+    // Se mide al acabar la animación de entrada (escala).
+    await page.waitForFunction(() => document.querySelector('#editor dialog').getAnimations().length === 0)
+    const editor = await page.locator('#editor dialog').boundingBox()
+    assert.ok(Math.abs(editor.x - 16) < 2 && Math.abs(editor.width - (1100 - 32)) < 2, `${framework}: editor a pantalla completa`)
+    await page.locator('#editor dialog button').click()
+    await expect(page.locator('#editor dialog')).not.toBeVisible()
+    // Con el preflight de Tailwind 4 (margin: 0 en todo), el diálogo sigue centrado.
+    const reset = await page.addStyleTag({ content: '*, ::before, ::after { margin: 0 }' })
+    await page.locator('#dialog > button').click()
+    await page.waitForFunction(() => document.querySelector('#dialog dialog').getAnimations().length === 0)
+    const box = await page.locator('#dialog dialog').boundingBox()
+    assert.ok(Math.abs(box.x + box.width / 2 - 550) < 2, `${framework}: diálogo centrado con margin: 0`)
+    await page.keyboard.press('Escape')
+    await reset.evaluate((node) => node.remove())
     await page.locator('#tabs [role=tab]').first().focus()
     await page.keyboard.press('ArrowRight')
     await expect(page.locator('#tabs [role=tab]').last()).toHaveAttribute('aria-selected', 'true')

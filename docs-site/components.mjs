@@ -12,6 +12,10 @@ const modalProps = [
   ['open', 'React: onOpenChange · Vue: v-model:open', 'false'],
   ['footer', 'Contenido React / slot Vue', '—'],
   ['closeOnOutside', 'Cerrar al pulsar fuera; AlertDialog lo desactiva', 'true'],
+  ['closeOnEscape', 'false: Escape no cierra y la app lo usa para lo suyo (cancelar una acción)', 'true'],
+  ['fullscreen', 'La ventana menos 1 rem por lado: editores, visores de planos', 'false'],
+  ['header', 'false: sin cabecera ni aspa; el título nombra el diálogo solo para lectores y el cuerpo va sin márgenes', 'true'],
+  ['Atributos', 'React: onKeyDown, onPaste, style… van al <dialog> · Vue: attrs', '—'],
 ]
 const items = list(
   "{ value: 'resumen', label: 'Resumen', content: 'Datos de la instalación' }",
@@ -388,13 +392,26 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
     'tooltip',
     'Tooltip',
     'Respuesta',
-    'Una explicación breve para un botón de ayuda, accesible con teclado.',
-    react('Tooltip', `<Tooltip label="Ayuda de potencia" content="Potencia máxima de los módulos" />`),
-    vue('Tooltip', `<Tooltip label="Ayuda de potencia" content="Potencia máxima de los módulos" />`),
+    'Una explicación breve para un botón de ayuda, o para cualquier control (el atajo de un botón), accesible con teclado.',
+    react(
+      'Tooltip',
+      `<>
+  <Tooltip label="Ayuda de potencia" content="Potencia máxima de los módulos" />
+  <Tooltip content="Ctrl + Mayús + U" trigger={<Button variant="secondary">Unifilar</Button>} />
+</>`,
+    ),
+    vue(
+      'Tooltip',
+      `<Tooltip label="Ayuda de potencia" content="Potencia máxima de los módulos" />
+<Tooltip content="Ctrl + Mayús + U">
+  <template #trigger><Button variant="secondary">Unifilar</Button></template>
+</Tooltip>`,
+    ),
     [
-      ['label', 'Nombre accesible del botón', 'Obligatorio'],
-      ['content', 'Texto de ayuda; no controles interactivos', 'Obligatorio'],
-      ['children / slot', 'Contenido visual del botón', 'Icono de información'],
+      ['label', 'Nombre accesible del botón de información', 'Obligatorio sin trigger'],
+      ['content', 'Texto de ayuda (Vue: también slot content); no controles interactivos', 'Obligatorio'],
+      ['children / slot', 'Contenido visual del botón de información', 'Icono de información'],
+      ['trigger', 'React: el control / Vue: slot trigger. Lo acompaña en lugar del botón de información y recibe aria-describedby', '—'],
     ],
     'Se abre con puntero o foco. Escape lo descarta. Evita colocar el disparador dentro de contenedores que recorten el contenido.',
   ),

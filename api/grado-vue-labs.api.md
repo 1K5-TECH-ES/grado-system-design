@@ -123,6 +123,7 @@ function
 
 ```ts
   apply: Boolean  // con valor por defecto
+  defaultMode: String  // con valor por defecto
   size: String  // con valor por defecto
   storageKey: String
 ```

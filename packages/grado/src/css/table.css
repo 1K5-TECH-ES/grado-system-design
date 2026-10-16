@@ -37,10 +37,23 @@
   border-top: 1px solid var(--k5-border);
   vertical-align: middle;
 }
-.k5-table tbody tr:first-child td {
+/* La cabecera de fila (<th scope="row">) es una celda más, con el nombre en negrita. */
+.k5-table tbody th,
+.k5-table tfoot th {
+  border-top: 1px solid var(--k5-border);
+  border-bottom: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: var(--k5-weight-semibold);
+  vertical-align: middle;
+  white-space: normal;
+}
+.k5-table tbody tr:first-child td,
+.k5-table tbody tr:first-child th {
   border-top: 0;
 }
-.k5-table tbody tr:hover td {
+.k5-table tbody tr:hover td,
+.k5-table tbody tr:hover th {
   background: color-mix(in srgb, var(--k5-muted) 50%, transparent);
 }
 .k5-table .k5-num {

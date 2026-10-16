@@ -2,6 +2,35 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
+## 0.7.0 · 16 de octubre de 2026
+
+0.7, lo que hizo falta para pasar Memorias (React 19 + Tailwind 4) a Grado instalado desde GitHub Packages, sin componentes de shadcn.
+
+### Arreglos
+
+- Diálogos centrados con Tailwind 4: el preflight pone `margin: 0` en todo, y el `<dialog>` modal solo se centra con el `margin: auto` del navegador. `Dialog`, `AlertDialog` y `CommandPalette` se abrían pegados arriba a la izquierda en las apps con Tailwind 4. Ahora `.k5-dialog` lo pone él. Un test del navegador lo comprueba con el preflight puesto.
+- `Table`: una cabecera de fila en el cuerpo (`<th scope="row">`) se pintaba como la cabecera de la tabla, en gris y pequeña. Ahora es una celda más, con el nombre en negrita, y entra en el resaltado de la fila.
+
+### Dialog
+
+- `fullscreen`: ocupa la ventana menos 1 rem por cada lado, para editores y visores de planos.
+- `header={false}`: sin cabecera ni botón de cierre. El título y la descripción siguen nombrando el diálogo para lectores de pantalla, y el cuerpo va sin márgenes, como lienzo para la app.
+- `closeOnEscape={false}`: Escape no cierra, y la app puede usarlo para lo suyo (cancelar el comando en curso de un editor).
+- React pasa los demás atributos al `<dialog>` (`onKeyDown`, `onPaste`, `style`, `data-*`…), como ya hacía Vue. Valen también para `AlertDialog` y `Drawer`.
+
+### Tooltip
+
+- `trigger` (React) y el slot `trigger` (Vue): el tooltip acompaña a cualquier control (un `Button`, un `IconButton`, un enlace) en lugar de pintar su botón de información, y le pone `aria-describedby` mientras se ve. Sirve para el atajo de teclado de un botón. En Vue, `content` puede ser también un slot. `label` solo hace falta sin `trigger`.
+
+### Labs
+
+- `useTheme`, `ThemeToggle` y `themeScript()` aceptan `defaultMode`: el modo sin nada guardado. Por defecto sigue siendo `system`; con `'light'`, la app es clara salvo que se elija otra cosa, y elegir «Sistema» se guarda. `readThemeMode()` y `saveThemeMode()` reciben el mismo valor.
+
+### Al actualizar desde 0.6.0
+
+- Nada que cambiar. Si tu app con Tailwind 4 corregía el centrado de los diálogos con CSS propio, ya puedes quitarlo.
+- Una tabla con `<th scope="row">` en el cuerpo cambia de aspecto: el nombre deja de ir en gris y pequeño.
+
 ## 0.6.0 · 16 de octubre de 2026
 
 0.6, «Ampliación». Fase 1: utilidades que las apps escribían cada una a su manera, en `labs`. Fase 2: componentes de energía y ventas, también en `labs`. Fase 3: el tema de alto contraste «campo» y la fuente Inter. Fase 4: un núcleo común para React y Vue, y Web Components para HTML sin framework.

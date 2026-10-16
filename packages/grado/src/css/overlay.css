@@ -116,6 +116,20 @@
   margin-top: var(--k5-space-6);
 }
 
+/* Pantalla completa: la ventana menos 1 rem por cada lado (editores, visores de planos). */
+.k5-dialog--fullscreen {
+  width: calc(100vw - 2rem);
+  height: calc(100dvh - 2rem);
+  max-height: none;
+}
+
+/* Sin cabecera: el cuerpo es un lienzo para la app, sin márgenes y referencia de lo que
+   coloque encima con position: absolute. */
+.k5-dialog--headless .k5-dialog__body {
+  position: relative;
+  padding: 0;
+}
+
 /* Panel lateral: ocupa el alto de la ventana y el pie queda abajo. */
 .k5-drawer {
   position: fixed;

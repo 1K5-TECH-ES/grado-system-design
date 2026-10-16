@@ -134,6 +134,8 @@ export interface ThemeOptions {
   storageKey?: string
   /** Pone o quita la clase dark en <html>. false: solo guarda y devuelve la elección. */
   apply?: boolean
+  /** El modo sin nada guardado. Por defecto «system»; «light» para una app que es clara salvo que se elija otra cosa. */
+  defaultMode?: ThemeMode
 }
 
 /**
@@ -141,12 +143,12 @@ export interface ThemeOptions {
  * Todos los useTheme con la misma clave se enteran del cambio. Para que no parpadee al cargar,
  * pon themeScript() en un <script> del <head>. Llámalo dentro de setup().
  */
-export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true }: ThemeOptions = {}) {
-  const mode = ref<ThemeMode>('system')
+export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true, defaultMode = 'system' }: ThemeOptions = {}) {
+  const mode = ref<ThemeMode>(defaultMode)
   const prefersDark = ref(false)
   let media: MediaQueryList | undefined
   const sync = () => {
-    mode.value = readThemeMode(storageKey)
+    mode.value = readThemeMode(storageKey, defaultMode)
     prefersDark.value = media?.matches ?? false
     if (apply) applyThemeMode(mode.value)
   }
@@ -163,7 +165,7 @@ export function useTheme({ storageKey = THEME_STORAGE_KEY, apply = true }: Theme
     window.removeEventListener('storage', sync)
   })
   const setMode = (next: ThemeMode) => {
-    saveThemeMode(next, storageKey)
+    saveThemeMode(next, storageKey, defaultMode)
     // Aplica aunque no haya almacenamiento (modo privado): los demás se enteran por el evento.
     if (apply) applyThemeMode(next)
     mode.value = next
@@ -181,10 +183,12 @@ export const ThemeToggle = defineComponent({
     storageKey: String,
     /** Pone o quita la clase dark en <html>. false: solo guarda la elección. */
     apply: { type: Boolean, default: true },
+    /** El modo sin nada guardado. Por defecto «system». */
+    defaultMode: { type: String as PropType<ThemeMode>, default: 'system' },
   },
   setup(props) {
     const t = useGrado()
-    const { mode, setMode } = useTheme({ storageKey: props.storageKey, apply: props.apply })
+    const { mode, setMode } = useTheme({ storageKey: props.storageKey, apply: props.apply, defaultMode: props.defaultMode })
     return () => {
       const m = labsMessages(t.value)
       return h(SegmentedControl, {
