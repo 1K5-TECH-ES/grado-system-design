@@ -14,7 +14,7 @@
   display: grid;
   gap: var(--k5-space-1-5);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-date-range > .k5-field__error {
   margin-top: var(--k5-space-1-5);

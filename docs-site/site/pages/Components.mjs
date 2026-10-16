@@ -1,5 +1,4 @@
-import { createElement as h, useEffect, useState } from 'react'
-import { flushSync } from 'react-dom'
+import { createElement as h, useEffect, useLayoutEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useLocation } from 'react-router-dom'
 import * as G from '@1k5-tech-es/grado-react'
@@ -13,22 +12,42 @@ import { FrameworkCode, FrameworkSwitch, Page, TextLink } from '../ui.mjs'
 
 // AppShell dentro de una vista previa: su <main> y el id de su barra lateral chocarían con los
 // de la web. Se pinta como HTML estático, con el <main> convertido en <div>.
+// Avisa cuando React ya ha escrito su contenido en el DOM.
+function Committed({ onCommit, children }) {
+  useLayoutEffect(onCommit)
+  return children
+}
+
 function StaticPreview({ node }) {
   const [html, setHtml] = useState('')
   useEffect(() => {
-    // Se pinta en un nodo suelto con el React DOM que ya usa la web y se copia el resultado.
+    // Se pinta en un nodo suelto con el React DOM que ya usa la web y se copia el resultado
+    // cuando React lo ha escrito. flushSync dentro de un efecto no pinta nada en React 19: la
+    // vista previa se quedaba en el esqueleto.
     const element = document.createElement('div')
     const root = createRoot(element, { identifierPrefix: 'preview-' })
-    flushSync(() => root.render(node))
-    setHtml(
-      element.innerHTML
-        .replace(/<main\b/g, '<div')
-        .replace(/<\/main>/g, '</div>')
-        .replace(/"k5-app-sidebar"/g, '"demo-app-sidebar"'),
-    )
-    root.unmount()
+    let done = false
+    const copy = () => {
+      if (done) return
+      done = true
+      setHtml(
+        element.innerHTML
+          .replace(/<main\b/g, '<div')
+          .replace(/<\/main>/g, '</div>')
+          .replace(/"k5-app-sidebar"/g, '"demo-app-sidebar"'),
+      )
+      // No se puede desmontar mientras React confirma este mismo árbol.
+      setTimeout(() => root.unmount())
+    }
+    root.render(h(Committed, { onCommit: copy }, node))
+    return () => {
+      if (!done) {
+        done = true
+        setTimeout(() => root.unmount())
+      }
+    }
   }, [node])
-  return html ? h('div', { dangerouslySetInnerHTML: { __html: html } }) : h(G.Skeleton, { height: '18rem' })
+  return html ? h('div', { className: 'demo-static', dangerouslySetInnerHTML: { __html: html } }) : h(G.Skeleton, { height: '18rem' })
 }
 
 const staticPreviews = new Set(['app-shell'])

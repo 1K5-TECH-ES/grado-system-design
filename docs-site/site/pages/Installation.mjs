@@ -153,19 +153,21 @@ const potencia = ref('8,4');
   </form>
 </template>`
 const localeReact = `import { GradoProvider } from '@1k5-tech-es/grado-react';
+import de from '@1k5-tech-es/grado/messages/de';
 
 export default function Raiz() {
   return (
-    <GradoProvider locale="de-DE">
+    <GradoProvider locale="de-DE" messages={de}>
       <App />
     </GradoProvider>
   );
 }`
 const localeVue = `import { createApp } from 'vue';
 import { Grado } from '@1k5-tech-es/grado-vue';
+import de from '@1k5-tech-es/grado/messages/de';
 import App from './App.vue';
 
-createApp(App).use(Grado, { locale: 'de-DE' }).mount('#app');`
+createApp(App).use(Grado, { locale: 'de-DE', messages: de }).mount('#app');`
 
 const themeOptions = [
   ['Consola', 'Herramientas internas', 'sin atributo'],
@@ -500,7 +502,7 @@ export default function Installation() {
         ),
         h(FrameworkCode, { react: localeReact, vue: localeVue, reactLabel: 'React · raíz de la aplicación', vueLabel: 'Vue · main.ts' }),
         P(
-          "Idiomas incluidos: `es-ES`, `de-DE` y `en-GB`. Con `messages` cambias textos sueltos, por ejemplo `{ noResults: 'Sin coincidencias' }`. Las props de cada componente, como `closeLabel`, siguen teniendo prioridad.",
+          "El español viene de serie. Los textos en alemán (`de-DE`) e inglés (`en-GB`) se importan de `@1k5-tech-es/grado/messages/de` y `/en` y se pasan en `messages`: así una app en español no los descarga. Hasta la 1.0 siguen incluidos, pero en desarrollo Grado avisa si pides otro idioma sin pasar sus textos. Con `messages` también cambias textos sueltos, por ejemplo `{ noResults: 'Sin coincidencias' }`. Las props de cada componente, como `closeLabel`, siguen teniendo prioridad.",
         ),
       ),
       h(

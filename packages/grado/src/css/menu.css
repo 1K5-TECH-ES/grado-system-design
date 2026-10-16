@@ -127,7 +127,7 @@
 .k5-combobox__empty {
   padding: var(--k5-space-3) var(--k5-space-2);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   text-align: center;
 }
 
@@ -145,7 +145,7 @@
   background: var(--k5-popover);
   color: var(--k5-popover-foreground);
   box-shadow: var(--k5-shadow-popover);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-regular);
   line-height: 1.45;
   transform: translateX(-50%);

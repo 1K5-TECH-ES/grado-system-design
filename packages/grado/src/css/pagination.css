@@ -6,7 +6,7 @@
   justify-content: space-between;
   gap: var(--k5-space-3) var(--k5-space-4);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-variant-numeric: tabular-nums;
 }
 .k5-pagination__controls {
@@ -26,7 +26,7 @@
   background: var(--k5-card);
   color: var(--k5-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   cursor: pointer;
   transition:

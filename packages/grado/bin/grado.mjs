@@ -5,7 +5,7 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, join, relative, resolve } from 'node:path'
 import { migratePackageJson, migrateSource, npmrcWithRegistry, olderThan, RULES, WARNINGS } from '../src/migrate.js'
-import { componentCounts, gradoPackages, mergeUsage, propSummary, usageOf, withAdoption } from '../src/usage.js'
+import { componentCounts, DEPRECATED, gradoPackages, mergeUsage, propSummary, usageOf, withAdoption } from '../src/usage.js'
 
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
 const current = version.split('.').slice(0, 2).join('.')
@@ -193,6 +193,11 @@ function usage() {
       )
     const tokens = Object.keys(total.tokens).length
     if (tokens) console.log(`  Tokens --k5-…: ${tokens} distintos, ${Object.values(total.tokens).reduce((a, b) => a + b, 0)} usos`)
+    const deprecated = Object.entries(total.deprecated)
+    if (deprecated.length) {
+      console.log(`\nSe retira en 1.0 (npx @1k5-tech-es/grado migrate cambia los tokens; text-2xs, a mano):`)
+      for (const [name, n] of deprecated) console.log(`! ${name} ${n} → ${DEPRECATED[name]}`)
+    }
     console.log(`\n${names.length} componente${names.length === 1 ? '' : 's'} de Grado en uso`)
   }
 

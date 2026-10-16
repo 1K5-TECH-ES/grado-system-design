@@ -45,7 +45,7 @@
 }
 .k5-choice__description {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-regular);
   line-height: 1.4;
 }
@@ -61,7 +61,7 @@
   margin-bottom: var(--k5-space-2-5);
   padding: 0;
   color: var(--k5-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
 }
 .k5-radio-group__options {

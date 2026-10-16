@@ -41,7 +41,7 @@
 .k5-card__description {
   margin: 0;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-card__content {
   padding: var(--k5-space-4);

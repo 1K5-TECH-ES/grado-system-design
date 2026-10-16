@@ -34,7 +34,7 @@
   width: 2.25rem;
   padding: 0 0 var(--k5-space-1);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   text-align: center;
 }

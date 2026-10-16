@@ -161,11 +161,14 @@ Sin configurar nada, los textos de los componentes están en español. Para otro
 
 ```tsx
 import { GradoProvider } from '@1k5-tech-es/grado-react'
+import de from '@1k5-tech-es/grado/messages/de'
 
-<GradoProvider locale="de-DE" messages={{ noResults: 'Nichts gefunden' }}>
+<GradoProvider locale="de-DE" messages={de}>
   <App />
 </GradoProvider>
 ```
+
+Los textos en alemán e inglés se importan aparte (`@1k5-tech-es/grado/messages/de` y `/en`). Hasta la 1.0 siguen incluidos, pero en desarrollo Grado avisa si pides `de-DE` o `en-GB` sin pasarlos. Para cambiar textos sueltos: `messages={{ ...de, noResults: 'Nichts gefunden' }}`.
 
 Las props de cada componente (`closeLabel`, `emptyLabel`…) siguen teniendo prioridad. `useGrado()` devuelve el idioma y los textos activos.
 

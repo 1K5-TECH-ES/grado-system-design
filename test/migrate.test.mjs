@@ -155,3 +155,18 @@ test('la orden migrate cambia un proyecto de 0.1 y no toca node_modules', () => 
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test('text-2xs: se avisa con su línea desde cualquier versión, sin cambiarlo', () => {
+  const source = '<p className="k5-num">1</p>\n<p className="text-2xs md:text-2xs">2</p>\n<p className="text-2xsx" />'
+  for (const from of ['0.1', '0.4']) {
+    const { text, warnings } = migrateSource(source, { path: 'a.tsx', from })
+    assert.equal(text, source)
+    assert.deepEqual(
+      warnings.filter((w) => w.rule === 'text2xs'),
+      [
+        { rule: 'text2xs', line: 2 },
+        { rule: 'text2xs', line: 2 },
+      ],
+    )
+  }
+})

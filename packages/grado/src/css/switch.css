@@ -68,6 +68,6 @@
 }
 .k5-switch-field__description {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   line-height: 1.4;
 }

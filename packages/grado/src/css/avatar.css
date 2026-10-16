@@ -11,7 +11,7 @@
   border-radius: 50%;
   background: var(--k5-mint);
   color: var(--k5-graphite);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-semibold);
   line-height: 1;
   user-select: none;

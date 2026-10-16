@@ -7,6 +7,16 @@ const IMPORT_NAMESPACE = /import\s+\*\s+as\s+([\w$]+)\s+from\s*["'](@1k5(?:-tech
 const CLASS = /(?<![\w$-])k5-[a-z][a-z0-9_-]*/g
 const TOKEN = /--k5-[a-z][a-z0-9-]*/g
 const GRADO_PACKAGE = /^@1k5(?:-tech-es)?\/grado(?:-react|-vue)?$/
+const TAILWIND_2XS = /(?<![\w-])text-2xs(?![\w-])/g
+
+/** Lo que se retira en 1.0 y lo que lo sustituye. */
+export const DEPRECATED = {
+  '--k5-text-badge': '--k5-text-caption',
+  '--k5-text-label': '--k5-text-caption',
+  '--k5-text-nav': '--k5-text-small',
+  '--k5-text-section': '--k5-text-heading',
+  'text-2xs': 'text-caption',
+}
 
 const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const kebab = (name) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -130,9 +140,14 @@ export function propOf({ name, value, quoted, expression }) {
  * Devuelve { components, functions, classes, tokens }, con usos y props por componente.
  */
 export function usageOf(text, { path = '' } = {}) {
-  const result = { components: {}, functions: {}, classes: {}, tokens: {} }
+  const result = { components: {}, functions: {}, classes: {}, tokens: {}, deprecated: {} }
   const styles = /\.(css|scss|sass|less)$/.test(path)
-  for (const [token] of text.matchAll(TOKEN)) bump(result.tokens, token)
+  for (const [token] of text.matchAll(TOKEN)) {
+    bump(result.tokens, token)
+    if (DEPRECATED[token]) bump(result.deprecated, token)
+  }
+  // Clase de Tailwind del preset de Grado, también con @apply y con prefijos (md:text-2xs).
+  for (const match of text.matchAll(TAILWIND_2XS)) bump(result.deprecated, match[0])
   if (!styles) {
     for (const [cls] of text.matchAll(CLASS)) bump(result.classes, cls)
   } else {
@@ -189,7 +204,7 @@ export function usageOf(text, { path = '' } = {}) {
 
 /** Junta el inventario de varios archivos. files cuenta en cuántos archivos aparece cada componente. */
 export function mergeUsage(list) {
-  const total = { components: {}, functions: {}, classes: {}, tokens: {} }
+  const total = { components: {}, functions: {}, classes: {}, tokens: {}, deprecated: {} }
   for (const usage of list) {
     for (const [name, { uses, props }] of Object.entries(usage.components)) {
       const entry = (total.components[name] ??= { uses: 0, files: 0, props: {} })
@@ -201,7 +216,8 @@ export function mergeUsage(list) {
         for (const [value, n] of Object.entries(values)) bump(stats.values, value, n)
       }
     }
-    for (const key of ['functions', 'classes', 'tokens']) for (const [name, n] of Object.entries(usage[key])) bump(total[key], name, n)
+    for (const key of ['functions', 'classes', 'tokens', 'deprecated'])
+      for (const [name, n] of Object.entries(usage[key] ?? {})) bump(total[key], name, n)
   }
   return total
 }

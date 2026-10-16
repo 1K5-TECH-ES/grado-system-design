@@ -43,7 +43,7 @@ button.k5-kpi:focus-visible {
 .k5-kpi__label {
   overflow: hidden;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -79,7 +79,7 @@ button.k5-kpi:focus-visible {
   gap: var(--k5-space-0-5) var(--k5-space-1-5);
   min-height: 1.25rem;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-kpi__change {
   display: inline-flex;

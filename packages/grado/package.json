@@ -28,7 +28,9 @@
     "src/patterns.d.ts",
     "src/messages.js",
     "src/messages.d.ts",
+    "src/messages",
     "src/intl.js",
+    "src/dev.js",
     "src/migrate.js",
     "src/usage.js",
     "bin"
@@ -41,6 +43,14 @@
     "./messages": {
       "types": "./src/messages.d.ts",
       "default": "./src/messages.js"
+    },
+    "./messages/de": {
+      "types": "./src/messages/de.d.ts",
+      "default": "./src/messages/de.js"
+    },
+    "./messages/en": {
+      "types": "./src/messages/en.d.ts",
+      "default": "./src/messages/en.js"
     },
     "./tokens.css": "./dist/tokens.css",
     "./tokens-hsl.css": "./dist/tokens-hsl.css",

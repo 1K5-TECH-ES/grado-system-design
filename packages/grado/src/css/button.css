@@ -12,7 +12,7 @@
   background: transparent;
   color: var(--k5-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   line-height: 1;
   white-space: nowrap;

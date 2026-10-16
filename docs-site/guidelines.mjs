@@ -16,6 +16,7 @@ export const guidelines = {
     ],
     avoid: [
       'Para ir a otra página usa un enlace con buttonClass() en lugar de Button.',
+      'No uses destructive en el botón que abre la confirmación: ese es danger («Eliminar»), y destructive el que la confirma dentro del AlertDialog («Eliminar ticket»).',
       'Evita textos genéricos como «Aceptar». Nombra la acción, por ejemplo «Enviar oferta».',
       'No lo desactives para señalar errores. Deja enviar y muestra el error en Field.',
     ],

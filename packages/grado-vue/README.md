@@ -133,8 +133,9 @@ Sin configurar nada, los textos están en español. Para toda la app:
 
 ```ts
 import { Grado } from '@1k5-tech-es/grado-vue'
+import de from '@1k5-tech-es/grado/messages/de'
 
-createApp(App).use(Grado, { locale: 'de-DE' }).mount('#app')
+createApp(App).use(Grado, { locale: 'de-DE', messages: de }).mount('#app')
 ```
 
-Para una parte de la página, `<GradoProvider locale="en-GB">`. Las props de cada componente siguen teniendo prioridad. `useGrado()` devuelve el idioma y los textos activos dentro de `setup()`.
+Los textos en alemán e inglés se importan aparte (`@1k5-tech-es/grado/messages/de` y `/en`). Hasta la 1.0 siguen incluidos, pero en desarrollo Grado avisa si pides `de-DE` o `en-GB` sin pasarlos. Para una parte de la página, `<GradoProvider locale="en-GB" :messages="en">`. Las props de cada componente siguen teniendo prioridad. `useGrado()` devuelve el idioma y los textos activos dentro de `setup()`.

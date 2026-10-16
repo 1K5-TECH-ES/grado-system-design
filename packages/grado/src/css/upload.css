@@ -39,12 +39,12 @@
 .k5-upload__hint {
   margin: 0;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-upload__error {
   margin: 0;
   color: var(--k5-destructive-text);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-upload__error > p {
   margin: 0;

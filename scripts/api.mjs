@@ -19,6 +19,10 @@ function core() {
     ...readdirSync(path('packages/grado/src'))
       .filter((file) => file.endsWith('.d.ts'))
       .map((file) => `packages/grado/src/${file}`),
+    // Textos de cada idioma: @1k5-tech-es/grado/messages/de, /en…
+    ...readdirSync(path('packages/grado/src/messages'))
+      .filter((file) => file.endsWith('.d.ts'))
+      .map((file) => `packages/grado/src/messages/${file}`),
     'packages/grado/dist/tokens.d.ts',
     'packages/grado/dist/tailwind-preset.d.ts',
   ].sort()

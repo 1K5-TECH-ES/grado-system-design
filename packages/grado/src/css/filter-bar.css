@@ -31,7 +31,7 @@
   border-radius: var(--k5-radius-badge);
   background: color-mix(in srgb, var(--k5-primary) 6%, var(--k5-card));
   color: var(--k5-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   line-height: 1.25rem;
 }

@@ -51,7 +51,7 @@
   background: var(--k5-muted);
   color: var(--k5-muted-foreground);
   font-family: var(--k5-font-sans);
-  font-size: var(--k5-text-badge);
+  font-size: var(--k5-text-caption);
   line-height: 1.25rem;
 }
 .k5-command__list {
@@ -69,7 +69,7 @@
   margin: 0;
   padding: var(--k5-space-1-5) var(--k5-space-2) var(--k5-space-1);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-badge);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -100,7 +100,7 @@
 }
 .k5-command__description {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   white-space: nowrap;
 }
 .k5-command__item[data-active='true'] .k5-command__description {

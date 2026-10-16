@@ -39,5 +39,5 @@
   height: 1.25rem;
 }
 .k5-empty--compact .k5-empty__description {
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }

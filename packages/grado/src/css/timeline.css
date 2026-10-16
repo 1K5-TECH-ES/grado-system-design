@@ -48,7 +48,7 @@
   display: block;
   margin-top: var(--k5-space-0-5);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-timeline__date {
   font-variant-numeric: tabular-nums;

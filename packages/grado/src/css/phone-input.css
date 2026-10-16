@@ -26,7 +26,7 @@
     no-repeat right var(--k5-space-2) center / 0.875rem;
   color: var(--k5-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   appearance: none;

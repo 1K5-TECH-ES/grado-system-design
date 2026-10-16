@@ -120,7 +120,7 @@ Con bundler, impórtalo una vez junto a los tokens. Sin bundler, copia `dist/` y
 
 ## Idiomas
 
-`@1k5-tech-es/grado/messages` tiene los textos de los componentes en `es-ES` (por defecto), `de-DE` y `en-GB`, más `messagesFor(locale, overrides)` y `formatMessage()`. Los componentes los leen de `GradoProvider` (React) o del plugin `Grado` (Vue).
+`@1k5-tech-es/grado/messages` tiene los textos de los componentes en `es-ES` (por defecto), más `messagesFor(locale, overrides)` y `formatMessage()`. Los de `de-DE` y `en-GB` están en `@1k5-tech-es/grado/messages/de` y `/en`: se pasan en `messages`. Hasta la 1.0 también vienen de serie. Los componentes los leen de `GradoProvider` (React) o del plugin `Grado` (Vue).
 
 ## Modo oscuro
 

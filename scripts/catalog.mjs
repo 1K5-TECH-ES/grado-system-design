@@ -405,12 +405,12 @@ body { margin: 0; background: var(--k5-background); color: var(--k5-foreground);
 .seg button[aria-pressed="true"] { background: color-mix(in srgb, currentColor 20%, transparent); opacity: 1; }
 main.cat { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
 .cat-sec { margin-top: 40px; display: grid; gap: 14px; }
-.cat-head h2 { margin: 0; font-size: var(--k5-text-section); letter-spacing: -0.015em; }
-.cat-head p { margin: 2px 0 0; color: var(--k5-muted-foreground); font-size: var(--k5-text-label); }
+.cat-head h2 { margin: 0; font-size: var(--k5-text-heading); letter-spacing: -0.015em; }
+.cat-head p { margin: 2px 0 0; color: var(--k5-muted-foreground); font-size: var(--k5-text-caption); }
 .cat-row { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; }
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; align-items: start; }
 .cat-stack { display: grid; gap: 6px; justify-items: start; }
-.cat-label { color: var(--k5-muted-foreground); font-size: var(--k5-text-label); }
+.cat-label { color: var(--k5-muted-foreground); font-size: var(--k5-text-caption); }
 .cat-big { font-size: var(--k5-text-title); font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 ${extraCss}
 </style>
@@ -556,7 +556,7 @@ const appPage = page(
   `
 .cat-page { max-width: 1100px; margin: 0 auto; padding: 28px 24px 48px; }
 .cat-gap { height: 20px; }
-.cat-id { color: var(--k5-muted-foreground); font-family: var(--k5-font-mono); font-size: var(--k5-text-label); }
+.cat-id { color: var(--k5-muted-foreground); font-family: var(--k5-font-mono); font-size: var(--k5-text-caption); }
 .cat-shell-toggles { display: inline-flex; margin-right: 8px; }
 .cat-shell-toggles .bar-controls { margin: 0; }
 @media (max-width: 1023px) { .cat-shell-toggles { display: none; } }

@@ -33,7 +33,10 @@ function globalBlock() {
     lines.push(`  --k5-${name}: ${toHex(entry.color)};${note}`)
   }
   lines.push('', '  /* Tipografía: Barlow (fonts.css) con la fuente del sistema de respaldo */')
-  for (const [name, value] of Object.entries(tokens.typography)) lines.push(`  --k5-${name}: ${value};`)
+  // Los alias de 0.3 (text-badge…) se retiran en 1.0: el comentario dice cuál usar.
+  const aliases = tokens.raw.typography.aliases ?? {}
+  for (const [name, value] of Object.entries(tokens.typography))
+    lines.push(`  --k5-${name}: ${value};${aliases[name] ? ` /* obsoleto, se retira en 1.0: usa --k5-text-${aliases[name]} */` : ''}`)
   lines.push('', '  /* Espaciado: escala de 4 px */')
   for (const [name, value] of Object.entries(tokens.space)) lines.push(`  --k5-space-${name}: ${value};`)
   lines.push('', '  /* Movimiento */')
@@ -127,6 +130,7 @@ function tailwind4Css() {
     '',
     '  --font-sans: var(--k5-font-sans);',
     '  --font-mono: var(--k5-font-mono);',
+    '  /* text-2xs: obsoleto, se retira en 1.0. Usa text-caption. */',
     '  --text-2xs: var(--k5-text-badge);',
     '  --text-2xs--line-height: 1rem;',
     ...typeSteps().flatMap((step) => [
@@ -212,6 +216,7 @@ function tailwind3Preset() {
         boxShadow: { raised: 'var(--shadow-raised)', overlay: 'var(--shadow-overlay)', popover: 'var(--shadow-popover)' },
         fontFamily: { sans: stack(tokens.typography['font-sans']), mono: stack(tokens.typography['font-mono']) },
         fontSize: {
+          // Obsoleto, se retira en 1.0: usa text-caption.
           '2xs': [tokens.typography['text-badge'], { lineHeight: '1rem' }],
           ...Object.fromEntries(typeSteps().map((step) => [step, [`var(--k5-text-${step})`, { lineHeight: `var(--k5-leading-${step})` }]])),
         },

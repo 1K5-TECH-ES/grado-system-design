@@ -1,5 +1,6 @@
 // Idiomas: los textos de los componentes salen de @1k5-tech-es/grado/messages y se cambian con
 // GradoProvider (React) o con el plugin y GradoProvider (Vue). Las props mandan.
+import { execFileSync } from 'node:child_process'
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createElement as r } from 'react'
@@ -91,4 +92,41 @@ test('un proveedor dentro de otro hereda el idioma y suma textos', () => {
 
 test('sin proveedor, todo sigue en español', () => {
   assert.match(renderToStaticMarkup(r(R.Pagination, { total: 30 })), /Página siguiente/)
+})
+
+// Desde 1.0 solo el español viene de serie: de y en se importan aparte. En 0.5 avisa.
+test('textos de alemán e inglés en su propio módulo, iguales que los de serie', async () => {
+  const { MESSAGES: all } = await import('@1k5-tech-es/grado/messages')
+  const { default: de } = await import('@1k5-tech-es/grado/messages/de')
+  const { en } = await import('@1k5-tech-es/grado/messages/en')
+  assert.deepEqual(de, all['de-DE'])
+  assert.deepEqual(en, all['en-GB'])
+})
+
+test('avisa una vez si se pide alemán o inglés sin pasar sus textos, y nunca en producción', () => {
+  const script = () => `
+    const warnings = []
+    console.warn = (message) => warnings.push(message)
+    const { messagesFor } = await import('@1k5-tech-es/grado/messages')
+    const { de } = await import('@1k5-tech-es/grado/messages/de')
+    messagesFor('es-ES')
+    messagesFor('de-DE', de)
+    const before = warnings.length
+    messagesFor('de-DE')
+    messagesFor('de-AT', { close: 'Zu' })
+    messagesFor('en-GB')
+    console.log(JSON.stringify({ before, warnings }))`
+  const run = (env) =>
+    JSON.parse(
+      execFileSync('node', ['--input-type=module', '-e', script()], {
+        encoding: 'utf8',
+        env: { ...process.env, NODE_ENV: env },
+      }),
+    )
+  const dev = run('development')
+  assert.equal(dev.before, 0, 'con los textos completos no avisa')
+  assert.equal(dev.warnings.length, 2, 'una vez por idioma')
+  assert.match(dev.warnings[0], /\[Grado\] Grado 1\.0 solo incluirá los textos en español/)
+  assert.match(dev.warnings[0], /import de from '@1k5-tech-es\/grado\/messages\/de'/)
+  assert.deepEqual(run('production').warnings, [])
 })

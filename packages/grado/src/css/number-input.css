@@ -50,7 +50,7 @@
 }
 .k5-number--sm .k5-number__input {
   padding: 0 var(--k5-space-2);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-number__input::placeholder {
   color: var(--k5-muted-foreground);
@@ -65,7 +65,7 @@
   flex-shrink: 0;
   padding: 0 var(--k5-space-2-5);
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   white-space: nowrap;
 }
 .k5-number__affix--prefix {

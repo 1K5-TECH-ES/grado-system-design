@@ -318,6 +318,22 @@ export declare function messagesFor(locale?: string, overrides?: Partial<Message
 export declare function formatMessage(template: string, values?: Record<string, string | number | null | undefined>): string;
 ```
 
+## src/messages/de.d.ts
+
+```ts
+import type { Messages } from '../messages.js';
+export declare const de: Messages;
+export default de;
+```
+
+## src/messages/en.d.ts
+
+```ts
+import type { Messages } from '../messages.js';
+export declare const en: Messages;
+export default en;
+```
+
 ## src/patterns.d.ts
 
 ```ts

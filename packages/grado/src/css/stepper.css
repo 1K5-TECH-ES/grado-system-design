@@ -60,7 +60,7 @@ button.k5-stepper__control:hover:not(:disabled) {
   border: 1px solid var(--k5-border);
   border-radius: 50%;
   background: var(--k5-card);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
@@ -75,7 +75,7 @@ button.k5-stepper__control:hover:not(:disabled) {
 }
 .k5-stepper__description {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-regular);
 }
 .k5-stepper__item[data-complete='true'] .k5-stepper__number {

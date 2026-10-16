@@ -9,7 +9,7 @@
 }
 .k5-field__label {
   color: var(--k5-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
 }
 .k5-field__required {
@@ -19,7 +19,7 @@
 .k5-field__hint,
 .k5-field__error {
   margin: 0;
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-field__hint {
   color: var(--k5-muted-foreground);
@@ -52,7 +52,7 @@
 .k5-input--sm {
   --_h: var(--k5-control-h-sm);
   padding: 0 var(--k5-space-2-5);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-input--lg {
   --_h: var(--k5-control-h-lg);
@@ -154,6 +154,6 @@
 .k5-input-wrap__affix {
   flex-shrink: 0;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   white-space: nowrap;
 }

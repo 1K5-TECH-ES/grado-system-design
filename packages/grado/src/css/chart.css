@@ -18,7 +18,7 @@
 }
 .k5-chart__description {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-chart__body {
   display: grid;
@@ -36,7 +36,7 @@
   position: absolute;
   right: 0;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-badge);
+  font-size: var(--k5-text-caption);
   font-variant-numeric: tabular-nums;
   line-height: 1;
   white-space: nowrap;
@@ -123,7 +123,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-badge);
+  font-size: var(--k5-text-caption);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,7 +135,7 @@
   margin: 0;
   padding: 0;
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
   list-style: none;
 }
 .k5-chart__legend li {

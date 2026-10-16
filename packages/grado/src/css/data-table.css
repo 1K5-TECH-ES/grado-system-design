@@ -7,7 +7,7 @@
 }
 .k5-data-table__selection {
   color: var(--k5-muted-foreground);
-  font-size: var(--k5-text-label);
+  font-size: var(--k5-text-caption);
 }
 .k5-data-table__sort {
   display: inline-flex;

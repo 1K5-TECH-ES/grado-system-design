@@ -155,7 +155,7 @@
   border-radius: 4px;
   background: color-mix(in srgb, currentColor 8%, transparent);
   font-family: var(--k5-font-mono);
-  font-size: var(--k5-text-badge);
+  font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
 }
 

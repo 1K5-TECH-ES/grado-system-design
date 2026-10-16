@@ -86,15 +86,23 @@ const otherScales = [
 const versions = [
   [
     'Versión semántica',
-    'Los tres paquetes comparten número. Hasta la 1.0, una versión menor (0.3, 0.4…) puede cambiar el aspecto o una API; cada cambio así aparece en «Al actualizar» del registro de cambios. Desde la 1.0, solo una versión mayor puede romper algo.',
+    'Los tres paquetes comparten número. Hasta la 1.0, una versión menor (0.4, 0.5…) puede cambiar el aspecto o una API; cada cambio así aparece en «Al actualizar» del registro de cambios. Desde la 1.0, solo una versión mayor puede romper algo.',
   ],
   [
-    'Deprecación',
-    'Lo que se va a retirar (una prop, un token, un componente) sigue funcionando al menos una versión menor más, aparece como «Obsoleto» en el registro de cambios con su sustituto y se retira en la siguiente versión mayor. Los alias tipográficos antiguos se mantienen hasta la 2.0.',
+    'Qué rompe',
+    'Quitar o renombrar un componente, una prop, un evento, un valor de una prop, una clase `k5-…` o un token `--k5-…`; cambiar el tipo o el valor por defecto de una prop; cambiar el HTML que la documentación da por bueno (roles, ids, atributos `data-`). No rompe: componentes, props y tokens nuevos, arreglos de accesibilidad y retoques de estilo dentro de los cuatro principios. El informe de la API (`api/`) enseña en cada pull request cualquier cambio de props.',
+  ],
+  [
+    'Obsoleto',
+    'Lo que se va a retirar sigue funcionando al menos una versión menor más y se retira en la siguiente versión mayor. Se avisa de cuatro formas: «Obsoleto» en el registro de cambios con su sustituto, un aviso en la consola en desarrollo cuando se puede detectar desde JavaScript, un comentario en el CSS generado y la lista de `npx @1k5-tech-es/grado usage`. Si se puede cambiar sin decidir nada, lo hace `npx @1k5-tech-es/grado migrate`.',
+  ],
+  [
+    'Lo que se retira en 1.0',
+    'Los alias tipográficos de 0.3 (`--k5-text-badge`, `-label`, `-nav` y `-section`, y `text-2xs` en Tailwind): usa `caption`, `small` y `heading`. Los textos en alemán e inglés dejan de venir de serie: impórtalos de `@1k5-tech-es/grado/messages/de` o `/en` y pásalos en `messages`.',
   ],
   [
     'Publicación',
-    'Cada etiqueta vX.Y.Z publica los paquetes en el registro privado y crea una release con las notas del registro de cambios. El CI ejecuta lint, tests, navegador, capturas y la web en cada pull request.',
+    'Cada etiqueta vX.Y.Z publica los paquetes en el registro privado y crea una release con las notas del registro de cambios. El CI ejecuta lint, tests, navegador (también con React 18 y Vue 3.5.0), capturas de cada componente, apps de prueba con Vite, Next y Nuxt y la web en cada pull request.',
   ],
 ]
 

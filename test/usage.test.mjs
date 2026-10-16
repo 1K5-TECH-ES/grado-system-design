@@ -204,3 +204,13 @@ test('CLI: sin orden o con una desconocida enseña la ayuda', () => {
   assert.match(help, /grado usage/)
   assert.throws(() => execFileSync('node', [bin, 'otra'], { encoding: 'utf8', stdio: 'pipe' }))
 })
+
+test('lo que se retira en 1.0: alias de tamaño y text-2xs', () => {
+  const css = usageOf('.a { font-size: var(--k5-text-badge) } .b { @apply text-2xs md:text-2xs; } .c { font: var(--k5-text-caption) }', {
+    path: 'a.css',
+  })
+  assert.deepEqual(css.deprecated, { '--k5-text-badge': 1, 'text-2xs': 2 })
+  const jsx = usageOf('<p className="text-2xs text-muted-foreground">x</p><p className="text-2xsx" />', { path: 'a.tsx' })
+  assert.deepEqual(jsx.deprecated, { 'text-2xs': 1 })
+  assert.deepEqual(mergeUsage([css, jsx]).deprecated, { '--k5-text-badge': 1, 'text-2xs': 3 })
+})
