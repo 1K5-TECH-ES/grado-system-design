@@ -270,12 +270,17 @@ export function withPrimary(config, primary) {
 
 function applyVariant(variant, { primary, accent, highlight }, { accentMin = 4.5 } = {}) {
   const p = hsl(primary)
-  if (variant === 'S')
+  if (variant === 'S') {
+    // Más luz, pero sin entrar en la franja en la que ni el blanco ni el grafito llegan a 4,5 : 1.
+    const soft = (light) => fromHsl(p.h, p.s < 10 ? p.s : Math.max(20, p.s - 15), light)
+    let light = Math.min(58, p.l + 12)
+    while (light > p.l && ratio(soft(light), onColor(soft(light))) < 4.5) light -= 1
     return {
-      primary: fromHsl(p.h, p.s < 10 ? p.s : Math.max(20, p.s - 15), Math.min(58, p.l + 12)),
+      primary: soft(light),
       accent: tinted(accent, 0.65),
       highlight: tinted(highlight, 0.7),
     }
+  }
   if (variant === 'C')
     return { primary: reach(primary, WHITE, 7), accent: reach(accent, WHITE, accentMin), highlight: reach(highlight, WHITE, 4.5) }
   return { primary, accent, highlight }
@@ -369,8 +374,17 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
 
   const darkBg = campo ? '#000000' : marca ? n(38, 5) : n(25, 6)
   const darkCard = campo ? n(20, 5) : marca ? n(30, 10) : n(25, 8)
-  const darkPrimary = campo ? reach(n(clamp(ps, 40, 70), 70), darkBg, 7) : n(clamp(ps, 40, 70), 60)
-  const darkAccent = campo ? reach(fromHsl(ah.h, Math.min(60, ah.s), 55), darkBg, 7) : fromHsl(ah.h, Math.min(60, ah.s), 45)
+  // Fuera de campo, el principal oscuro se aclara lo justo para que su texto llegue al mínimo
+  // (con el de serie sale #B86CE5 y texto grafito, como en Grado).
+  const darkTone = (light) => n(clamp(ps, 40, 70), light)
+  let darkLight = 60
+  while (!campo && darkLight < 85 && ratio(darkTone(darkLight), on(darkTone(darkLight))) < min) darkLight += 1
+  const darkPrimary = campo ? reach(darkTone(70), darkBg, 7) : darkTone(darkLight)
+  // El acento oscuro, igual: se aclara hasta que su texto llega al mínimo.
+  const accentTone = (light) => fromHsl(ah.h, Math.min(60, ah.s), light)
+  let accentLight = 45
+  while (!campo && accentLight < 85 && ratio(accentTone(accentLight), on(accentTone(accentLight))) < min) accentLight += 1
+  const darkAccent = campo ? reach(accentTone(55), darkBg, 7) : accentTone(accentLight)
   const darkFg = campo ? WHITE : '#FAFAFA'
   const darkHeader = marca ? n(75, 15) : n(60, 18)
   const darkMuted = n(15, campo ? 10 : 14)

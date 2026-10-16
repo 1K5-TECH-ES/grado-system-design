@@ -152,9 +152,14 @@ test('el panel de contraste revisa el modo claro y, si el tema lo incluye, el os
   // Botón, enlaces, texto de marca sobre tinte, secundario y texto sobre el acento; en claro, además, el acento sobre el fondo.
   assert.equal(contrastChecks(resolveTheme({ dark: true })).length, 11)
   assert.equal(contrastChecks(resolveTheme({ dark: false })).length, 6)
-  // Con los colores de marca, la menta no llega a 3 : 1 sobre blanco (aviso) y el principal en oscuro se queda en 4,1 : 1.
-  assert.deepEqual(failing({ dark: true }), ['light · Acento sobre el fondo · warning', 'dark · Texto del botón principal · fail'])
-  assert.deepEqual(failing({ dark: true, variant: 'C' }), ['dark · Texto del botón principal · fail'])
+  // Con los colores de marca, la menta no llega a 3 : 1 sobre blanco: es un aviso. Con «Alto contraste», todo cumple.
+  assert.deepEqual(failing({ dark: true }), ['light · Acento sobre el fondo · warning'])
+  assert.deepEqual(failing({ dark: true, variant: 'C' }), [])
+  // Un principal propio que no llega con ningún texto encima: el panel lo marca como fallo.
+  const coral = resolveTheme({ primary: '#E5484D' })
+  assert.deepEqual(failing({ primary: '#E5484D', accent: coral.palettes[0].accent, dark: true }), [
+    'light · Texto del botón principal · fail',
+  ])
 })
 
 test('el código de tema guarda y recupera la configuración', () => {
@@ -323,6 +328,20 @@ test('base Campo: todo el texto a 7 : 1 con cualquier color sugerido y cualquier
       for (const check of checks) assert.ok(check.pass, `${preset.name} · ${palette.name} · ${check.mode} · ${check.label}: ${check.text}`)
       for (const check of checks.filter((item) => !item.ui)) assert.equal(check.min, 7)
     }
+})
+
+test('Consola y Marca: todo el texto a 4,5 : 1 con cualquier color sugerido, paleta y variante, también en oscuro', () => {
+  // El principal y el acento oscuros, y el principal «Suave», se aclaran solo hasta donde su texto llega.
+  const brand = resolveTheme({ dark: true })
+  assert.equal(brand.tokens.dark['primary-foreground'], '#222222', 'el principal oscuro de serie lleva texto grafito, como en Grado')
+  for (const preset of PRESETS)
+    for (const base of ['consola', 'marca'])
+      for (const variant of ['F', 'S', 'C'])
+        for (const palette of resolveTheme({ primary: preset.hex, variant, base }).palettes) {
+          const theme = resolveTheme({ primary: preset.hex, accent: palette.accent, variant, base, dark: true })
+          for (const check of contrastChecks(theme).filter((item) => !item.ui))
+            assert.ok(check.pass, `${preset.name} · ${base} · ${variant} · ${palette.name} · ${check.mode} · ${check.label}: ${check.text}`)
+        }
 })
 
 test('base Campo y densidad: en el código, en <html> y en la instalación', () => {

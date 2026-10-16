@@ -10,8 +10,16 @@ const notes = [
     '`grado-tema.css` redefine las variables semánticas. Se importa después de Grado y puede retirarse sin modificar la librería.',
   ],
   [
+    'Escala tonal recalculada',
+    'Los tintes, bordes y textos de color (`--k5-primary-subtle`, `-border`, `-text`) salen de tu principal: los badges y avisos de marca siguen llegando al contraste.',
+  ],
+  [
     'Contraste comprobado',
-    'El panel revisa las combinaciones que más se ven, en claro y en oscuro. Revisa también estados y gráficos dentro de tu producto.',
+    'El panel revisa las combinaciones que más se ven, en claro y en oscuro: 4,5 : 1 en Consola y Marca, 7 : 1 en Campo. Revisa también estados y gráficos dentro de tu producto.',
+  ],
+  [
+    'Base y densidad',
+    'La base fija la disposición (Consola, Marca o Campo) y la densidad, la altura de los controles. Las dos van como atributos en `<html>`, y la instalación te dice cuáles.',
   ],
 ]
 

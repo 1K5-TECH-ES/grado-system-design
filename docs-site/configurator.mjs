@@ -3,12 +3,14 @@
 // de la vista previa, las muestras de color y las miniaturas de estilo son de la web.
 import { createElement as h, useEffect, useId, useMemo, useRef, useState } from 'react'
 import * as G from '@1k5-tech-es/grado-react'
-import { themes } from '@1k5-tech-es/grado/tokens'
+import { density as DENSITY_SIZES, themes } from '@1k5-tech-es/grado/tokens'
 import { GradoLogo } from './brand.mjs'
 import { CodeBlock, TextLink } from './site/ui.mjs'
 import {
+  BASES,
   BRAND,
   DEFAULTS,
+  DENSITIES,
   FONTS,
   PRESETS,
   VARIANTS,
@@ -90,12 +92,17 @@ export function loadFonts(fonts) {
 }
 
 /**
- * Variables de la vista previa: todos los colores de la base de Grado para ese modo y, encima,
- * los del tema. Así la vista previa clara no hereda tarjetas ni textos del modo oscuro de la página.
+ * Variables de la vista previa: todos los colores de la base de Grado para ese modo, las alturas
+ * de control de la base (Campo: 44 px) o de la densidad y, encima, los colores del tema. Así la
+ * vista previa clara no hereda tarjetas ni textos del modo oscuro de la página, y Campo se ve
+ * aunque la web no cargue themes/campo.css.
  */
 function previewVariables(theme, mode) {
   const out = {}
-  for (const [name, value] of Object.entries(themes[theme.config.base]?.[mode]?.color ?? {})) out[`--k5-${name}`] = value
+  const base = themes[theme.config.base]?.[mode] ?? {}
+  for (const [name, value] of Object.entries(base.color ?? {})) out[`--k5-${name}`] = value
+  for (const [name, value] of Object.entries(base.size ?? {})) if (name.startsWith('control-h')) out[`--k5-${name}`] = value
+  for (const [name, value] of Object.entries(DENSITY_SIZES[theme.density.id] ?? {})) out[`--k5-${name}`] = value
   return { ...out, ...cssVariables(theme.tokens, mode) }
 }
 
@@ -226,12 +233,12 @@ function PaletteCard({ item, checked, onSelect }) {
 }
 
 /** Base del tema: una miniatura de la disposición, con el color principal del tema. */
-function BaseTile({ base, label, description, selected, primary, onSelect }) {
+function BaseTile({ base, selected, primary, onSelect }) {
   return h(
     'button',
     {
       type: 'button',
-      className: `style-tile style-tile--${base}`,
+      className: `style-tile style-tile--${base.id}`,
       'aria-pressed': selected,
       onClick: onSelect,
       style: { '--tile-primary': primary },
@@ -243,7 +250,12 @@ function BaseTile({ base, label, description, selected, primary, onSelect }) {
       h('i', { className: 'style-tile__side' }),
       h('i', { className: 'style-tile__main' }, h('b'), h('b')),
     ),
-    h('span', { className: 'style-tile__text' }, h('strong', null, label), h('span', null, description)),
+    h(
+      'span',
+      { className: 'style-tile__text' },
+      h('strong', null, base.name, base.min > 4.5 && h('em', null, '7 : 1')),
+      h('span', null, base.description),
+    ),
   )
 }
 
@@ -278,6 +290,12 @@ const installations = [
   ['Nave Ruiz', 'Sevilla', '42,0', 'En obra', 'brand'],
   ['Ático Soler', 'Madrid', '5,2', 'Pendiente', 'neutral'],
 ]
+const production = [
+  { mes: 'Jun', auto: 610, bateria: 240, red: 180 },
+  { mes: 'Jul', auto: 680, bateria: 260, red: 210 },
+  { mes: 'Ago', auto: 650, bateria: 250, red: 190 },
+  { mes: 'Sep', auto: 520, bateria: 210, red: 150 },
+]
 
 function PreviewPanel() {
   return h(
@@ -292,9 +310,9 @@ function PreviewPanel() {
     h(
       G.KpiGroup,
       null,
-      h(G.Kpi, { label: 'Activas', value: '128', change: 10, previous: '116' }),
+      h(G.Kpi, { label: 'Activas', value: '128', change: 10, previous: '116', trend: [96, 104, 101, 110, 116, 128] }),
       h(G.Kpi, { label: 'Potencia', value: '1.042', hint: 'kWp instalados' }),
-      h(G.Kpi, { label: 'Incidencias', value: '3', change: -25, better: 'lower', previous: '4' }),
+      h(G.Kpi, { label: 'Incidencias', value: '3', change: -25, better: 'lower', previous: '4', trend: [6, 5, 7, 4, 4, 3] }),
     ),
     h(
       'div',
@@ -306,17 +324,7 @@ function PreviewPanel() {
         h(
           G.Table,
           { compact: true },
-          h(
-            'thead',
-            null,
-            h(
-              'tr',
-              null,
-              h('th', null, 'Cliente'),
-              h('th', { className: 'k5-num' }, h('span', { className: 'k5-unit' }, 'kWp')),
-              h('th', null, 'Estado'),
-            ),
-          ),
+          h('thead', null, h('tr', null, h('th', null, 'Cliente'), h('th', { className: 'k5-num' }, 'kWp'), h('th', null, 'Estado'))),
           h(
             'tbody',
             null,
@@ -326,7 +334,7 @@ function PreviewPanel() {
                 { key: name },
                 h('td', null, h('strong', null, name), h('br'), h('span', { className: 'tp-muted' }, city)),
                 h('td', { className: 'k5-num' }, kwp),
-                h('td', null, h(G.Badge, { tone }, status)),
+                h('td', null, h(G.Status, { tone }, status)),
               ),
             ),
           ),
@@ -340,20 +348,32 @@ function PreviewPanel() {
           { className: 'tp-form' },
           h(G.Field, { label: 'Potencia instalada' }, h(G.Input, { defaultValue: '8,4', suffix: 'kWp', inputMode: 'decimal' })),
           h(G.Switch, { label: 'Incluir batería', defaultChecked: true }),
-          h(
-            'div',
-            null,
-            h('span', { className: 'tp-muted' }, 'Producción por origen'),
-            h(
-              'div',
-              { className: 'tp-chart', 'aria-hidden': 'true' },
-              ['chart-1', 'chart-2', 'chart-3'].map((name, i) =>
-                h('i', { key: name, style: { flex: 5 - i, background: `var(--k5-${name})` } }),
-              ),
-            ),
-          ),
+          h(G.Progress, { label: 'Obra completada', value: 68, showValue: true }),
           h(G.Button, { block: true }, 'Guardar cambios'),
         ),
+      ),
+    ),
+    h(
+      G.Card,
+      null,
+      h(
+        G.CardContent,
+        null,
+        h(G.BarChart, {
+          title: 'Energía por origen',
+          description: 'kWh al mes · datos de ejemplo',
+          categoryKey: 'mes',
+          categoryLabel: 'Mes',
+          unit: 'kWh',
+          stacked: true,
+          height: 150,
+          data: production,
+          series: [
+            { key: 'auto', label: 'Autoconsumo' },
+            { key: 'bateria', label: 'Batería' },
+            { key: 'red', label: 'Excedentes' },
+          ],
+        }),
       ),
     ),
   )
@@ -379,6 +399,13 @@ function PreviewComponents() {
       h(G.Badge, { tone: 'neutral' }, 'Pendiente'),
       h(G.Badge, { tone: 'warning' }, 'Revisar'),
       h(G.Badge, { tone: 'highlight' }, 'Nuevo'),
+      h(G.Tag, { onRemove: () => {} }, 'Valencia'),
+      h(G.Status, { tone: 'brand', pulse: true }, 'En curso'),
+    ),
+    h(
+      G.Alert,
+      { tone: 'info', title: 'Visita técnica el martes', role: 'none' },
+      'El texto de color sobre su tinte usa la escala tonal del tema: llega al contraste mínimo.',
     ),
     h(
       'div',
@@ -404,7 +431,12 @@ function PreviewComponents() {
         { value: 'historial', label: 'Historial', content: h('p', { className: 'tp-muted' }, 'Sin cambios.') },
       ],
     }),
-    h(G.Pagination, { total: 48, pageSize: 10, defaultPage: 2, label: 'Paginación de ejemplo' }),
+    h(
+      'div',
+      { className: 'tp-components__footer' },
+      h(G.Progress, { label: 'Documentación', value: 3, max: 5, steps: 5, showValue: true }),
+      h(G.Pagination, { total: 48, pageSize: 10, defaultPage: 2, label: 'Paginación de ejemplo' }),
+    ),
   )
 }
 
@@ -422,8 +454,9 @@ function ThemePreview({ theme, mode, scene }) {
   return h(
     'div',
     {
-      className: `theme-preview${marca ? ' theme-preview--marca' : ''}${mode === 'dark' ? ' dark' : ''}`,
+      className: `theme-preview theme-preview--${theme.base.id}${mode === 'dark' ? ' dark' : ''}`,
       'data-k5-theme': theme.config.base,
+      'data-k5-density': theme.density.id === 'default' ? undefined : theme.density.id,
       style: previewVariables(theme, mode),
     },
     h(
@@ -459,6 +492,11 @@ function ContrastPanel({ theme, onFix }) {
       { className: 'contrast-panel__head' },
       h('h3', { id: 'cfg-contraste' }, 'Contraste'),
       h('span', null, summary),
+      h(
+        'span',
+        { className: 'contrast-panel__target' },
+        `Texto a ${String(theme.base.min).replace('.', ',')} : 1${theme.base.min > 4.5 ? ` · lo pide ${theme.base.name}` : ''}`,
+      ),
       onFix && warnings + fails > 0 && h(G.Button, { variant: 'secondary', size: 'sm', onClick: onFix }, 'Probar «Alto contraste»'),
     ),
     h(
@@ -565,7 +603,8 @@ export function Configurator() {
 
   // «Alto contraste» solo se sugiere si arregla algo: no toca, por ejemplo, el principal en oscuro.
   const problems = (value) => contrastChecks(value).filter((item) => !item.pass).length
-  const fixable = config.variant !== 'C' && problems(resolveTheme({ ...config, variant: 'C' })) < problems(theme)
+  const campo = config.base === 'campo'
+  const fixable = !campo && config.variant !== 'C' && problems(resolveTheme({ ...config, variant: 'C' })) < problems(theme)
   // Sin modo oscuro en el tema, la vista previa solo puede ser clara.
   const mode = config.dark ? view : 'light'
   const modes = mode === 'both' ? ['light', 'dark'] : [mode]
@@ -573,7 +612,14 @@ export function Configurator() {
   const lines = css.trimEnd().split('\n').length
   const steps = installSteps(theme, { framework, styles })
   const [install, file, ...imports] = steps
-  const baseName = config.base === 'marca' ? 'Marca' : 'Consola'
+  const preview = [
+    theme.palette.name,
+    theme.variant.name,
+    theme.base.name,
+    `esquinas ${RADIUS_NAMES[config.radius]}`,
+    theme.font.name,
+    theme.density.id !== 'default' && `densidad ${theme.density.name.toLowerCase()}`,
+  ]
 
   return h(
     'div',
@@ -653,10 +699,14 @@ export function Configurator() {
             h(Segmented, {
               label: 'Variante',
               value: theme.variant.id,
-              options: VARIANTS.map((item) => [item.id, item.name]),
+              options: VARIANTS.map((item) => [item.id, item.name, campo && item.id !== 'C']),
               onChange: (variant) => update({ variant }),
             }),
-            h('p', { className: 'field-note' }, theme.variant.description),
+            h(
+              'p',
+              { className: 'field-note' },
+              campo ? 'Campo usa siempre «Alto contraste»: todo el texto a 7 : 1, también el acento.' : theme.variant.description,
+            ),
           ),
         ),
 
@@ -673,23 +723,29 @@ export function Configurator() {
               h(
                 'div',
                 { className: 'style-tiles', role: 'group', 'aria-labelledby': 'cfg-base' },
-                h(BaseTile, {
-                  base: 'consola',
-                  label: 'Consola',
-                  description: 'Cabecera de color. Herramientas internas.',
-                  selected: config.base === 'consola',
-                  primary: theme.tokens.light.primary,
-                  onSelect: () => update({ base: 'consola' }),
-                }),
-                h(BaseTile, {
-                  base: 'marca',
-                  label: 'Marca',
-                  description: 'Barra lateral de color. Lo que ve el cliente.',
-                  selected: config.base === 'marca',
-                  primary: theme.tokens.light.primary,
-                  onSelect: () => update({ base: 'marca', radius: config.radius === 'r8' ? 'r12' : config.radius }),
-                }),
+                BASES.map((base) =>
+                  h(BaseTile, {
+                    key: base.id,
+                    base,
+                    selected: config.base === base.id,
+                    primary: theme.tokens.light.primary,
+                    // Marca pide esquinas redondas; si se dejaron las de serie, se cambian con ella.
+                    onSelect: () =>
+                      update({ base: base.id, radius: base.id === 'marca' && config.radius === 'r8' ? 'r12' : config.radius }),
+                  }),
+                ),
               ),
+            ),
+            h(
+              'div',
+              { className: 'style-field' },
+              h(Segmented, {
+                label: 'Densidad',
+                value: theme.density.id,
+                options: DENSITIES.map((item) => [item.id, item.name]),
+                onChange: (density) => update({ density }),
+              }),
+              h('p', { className: 'field-note' }, theme.density.description),
             ),
             h(
               'div',
@@ -736,16 +792,7 @@ export function Configurator() {
         h(
           'div',
           { className: 'canvas-bar' },
-          h(
-            'div',
-            null,
-            h('h2', { id: 'cfg-vista' }, 'Vista previa'),
-            h(
-              'p',
-              null,
-              `${theme.palette.name} · ${theme.variant.name} · ${baseName} · esquinas ${RADIUS_NAMES[config.radius]} · ${theme.font.name}`,
-            ),
-          ),
+          h('div', null, h('h2', { id: 'cfg-vista' }, 'Vista previa'), h('p', null, preview.filter(Boolean).join(' · '))),
           h(
             'div',
             { className: 'canvas-bar__controls' },
