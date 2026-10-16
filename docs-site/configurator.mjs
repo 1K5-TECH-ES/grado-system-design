@@ -348,7 +348,7 @@ function PreviewPanel() {
           { className: 'tp-form' },
           h(G.Field, { label: 'Potencia instalada' }, h(G.Input, { defaultValue: '8,4', suffix: 'kWp', inputMode: 'decimal' })),
           h(G.Switch, { label: 'Incluir batería', defaultChecked: true }),
-          h(G.Progress, { label: 'Obra completada', value: 68, showValue: true }),
+          h(G.Progress, { label: 'Obra completada', value: 68, showLabel: true, showValue: true }),
           h(G.Button, { block: true }, 'Guardar cambios'),
         ),
       ),
@@ -434,7 +434,7 @@ function PreviewComponents() {
     h(
       'div',
       { className: 'tp-components__footer' },
-      h(G.Progress, { label: 'Documentación', value: 3, max: 5, steps: 5, showValue: true }),
+      h(G.Progress, { label: 'Documentación', value: 3, max: 5, steps: 5, showLabel: true, showValue: true }),
       h(G.Pagination, { total: 48, pageSize: 10, defaultPage: 2, label: 'Paginación de ejemplo' }),
     ),
   )

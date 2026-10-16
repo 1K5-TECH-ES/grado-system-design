@@ -1552,9 +1552,13 @@ kbd {
 }
 .tp-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+}
+.tp-grid td strong,
+.tp-grid .k5-status {
+  white-space: nowrap;
 }
 .tp-grid .k5-card__title {
   font-size: var(--k5-text-body);
