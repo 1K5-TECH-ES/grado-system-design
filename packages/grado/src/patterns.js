@@ -1,5 +1,6 @@
 /** Comportamiento compartido por React y Vue, sin depender de ninguno de los dos. */
 import { DEFAULT_LOCALE, MESSAGES, formatMessage } from './messages.js'
+import { collator, dateTimeFormat, numberFormat } from './intl.js'
 
 const ES = MESSAGES[DEFAULT_LOCALE]
 // Acepta solo un objeto de textos: así selectionLabel funciona también en array.map().
@@ -12,9 +13,21 @@ export function normalizeSearch(value) {
     .trim()
 }
 
+// Texto normalizado de cada opción, para no repetirlo en cada tecla. Si la opción cambia
+// de objeto (otro array de opciones) se calcula de nuevo; si no, se reutiliza.
+const searchTexts = new WeakMap()
+function searchText(item, text) {
+  const saved = searchTexts.get(item)
+  if (saved?.text === text) return saved.normalized
+  const normalized = normalizeSearch(text)
+  searchTexts.set(item, { text, normalized })
+  return normalized
+}
+
 export function filterOptions(options, query) {
   const needle = normalizeSearch(query)
-  return options.filter((option) => normalizeSearch(`${option.label} ${option.keywords ?? ''}`).includes(needle))
+  if (!needle) return options
+  return options.filter((option) => searchText(option, `${option.label} ${option.keywords ?? ''}`).includes(needle))
 }
 
 export function pageCount(total, pageSize) {
@@ -37,12 +50,12 @@ export function compareValues(a, b) {
   if (a == null) return b == null ? 0 : 1
   if (b == null) return -1
   if (typeof a === 'number' && typeof b === 'number') return a - b
-  return String(a).localeCompare(String(b), 'es', { numeric: true, sensitivity: 'base' })
+  return collator('es', { numeric: true, sensitivity: 'base' }).compare(String(a), String(b))
 }
 
 export function fileError(file, accept = '', maxSize, { messages = ES, locale = DEFAULT_LOCALE } = {}) {
   if (maxSize != null && file.size > maxSize) {
-    const size = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(Math.round((maxSize / 1024 / 1024) * 10) / 10)
+    const size = numberFormat(locale, { maximumFractionDigits: 1 }).format(Math.round((maxSize / 1024 / 1024) * 10) / 10)
     return formatMessage(messages.uploadTooBig, { name: file.name, size })
   }
   const rules = accept
@@ -153,7 +166,7 @@ export function selectionLabel(count, texts) {
 // ---------- Números (NumberInput) ----------
 
 function separators(locale) {
-  const parts = new Intl.NumberFormat(locale).formatToParts(12345.6)
+  const parts = numberFormat(locale).formatToParts(12345.6)
   return { group: parts.find((p) => p.type === 'group')?.value ?? '', decimal: parts.find((p) => p.type === 'decimal')?.value ?? '.' }
 }
 
@@ -188,7 +201,7 @@ export function decimalsOf(step) {
 
 export function formatNumber(value, locale = DEFAULT_LOCALE, decimals = 2) {
   if (value == null || Number.isNaN(value)) return ''
-  return new Intl.NumberFormat(locale, { maximumFractionDigits: decimals }).format(value)
+  return numberFormat(locale, { maximumFractionDigits: decimals }).format(value)
 }
 
 export function clampNumber(value, min, max) {
@@ -269,8 +282,8 @@ export function monthWeeks(month, weekStartsOn = 1) {
 
 /** Nombres de los días de la semana, empezando por `weekStartsOn`. */
 export function weekdayNames(locale = DEFAULT_LOCALE, weekStartsOn = 1) {
-  const short = new Intl.DateTimeFormat(locale, { weekday: 'narrow', timeZone: 'UTC' })
-  const long = new Intl.DateTimeFormat(locale, { weekday: 'long', timeZone: 'UTC' })
+  const short = dateTimeFormat(locale, { weekday: 'narrow', timeZone: 'UTC' })
+  const long = dateTimeFormat(locale, { weekday: 'long', timeZone: 'UTC' })
   // 2026-01-04 es domingo.
   return Array.from({ length: 7 }, (_, i) => {
     const date = utc(addDays('2026-01-04', (weekStartsOn + i) % 7))
@@ -278,13 +291,11 @@ export function weekdayNames(locale = DEFAULT_LOCALE, weekStartsOn = 1) {
   })
 }
 export function monthTitle(month, locale = DEFAULT_LOCALE) {
-  const text = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(utc(`${month}-01`))
+  const text = dateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(utc(`${month}-01`))
   return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1)
 }
 export function dateLabel(iso, locale = DEFAULT_LOCALE) {
-  return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
-    utc(iso),
-  )
+  return dateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(utc(iso))
 }
 
 /** Siguiente valor de un rango al elegir `iso`: primero el inicio, después el final. */
@@ -313,11 +324,12 @@ export function niceScale(max, count = 4) {
 /** Filtra los grupos por texto (sin tildes) y quita los que se quedan vacíos. */
 export function filterGroups(groups, query) {
   const needle = normalizeSearch(query)
+  if (!needle) return groups.filter((group) => group.items.length > 0)
   return groups
     .map((group) => ({
       ...group,
       items: group.items.filter((item) =>
-        normalizeSearch(`${item.label} ${item.description ?? ''} ${item.keywords ?? ''}`).includes(needle),
+        searchText(item, `${item.label} ${item.description ?? ''} ${item.keywords ?? ''}`).includes(needle),
       ),
     }))
     .filter((group) => group.items.length > 0)
@@ -332,7 +344,7 @@ export function isShortcut(event, key) {
 /** 0.64 → «64 %» (es-ES y de-DE con espacio fino, en-GB «64%»). */
 export function formatPercent(ratio, locale = DEFAULT_LOCALE, decimals = 0) {
   if (ratio == null || Number.isNaN(ratio)) return ''
-  return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: decimals }).format(ratio)
+  return numberFormat(locale, { style: 'percent', maximumFractionDigits: decimals }).format(ratio)
 }
 
 /**

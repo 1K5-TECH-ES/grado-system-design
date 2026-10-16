@@ -37,6 +37,12 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 - `AppShell`: nueva prop `banner` (slot `#banner` en Vue) para un Banner bajo la cabecera.
 - Textos nuevos en español, alemán e inglés para todos los componentes nuevos.
 
+### Rendimiento
+
+- Los formateadores de números y fechas (`Intl`) se crean una vez y se reutilizan. 100 `Calendar` se montan 2,5 veces más rápido y un `LineChart` de 2000 puntos, 3,5 veces. También ganan `DatePicker`, `BarChart`, `Donut`, `Meter`, `Slider`, `NumberInput`, `EnergyFlow` y `Kpi`.
+- `DataTable` ordena las columnas de texto 7 veces más rápido: de 210 a 30 ms con 10 000 filas.
+- `Combobox`, `MultiSelect` y `CommandPalette` no repiten la búsqueda al mover el ratón o las flechas, y guardan el texto ya normalizado de cada opción. Con 8000 opciones, abrir la lista tarda la mitad y el resaltado, menos de la mitad.
+
 ### Calidad y distribución
 
 - CI en GitHub Actions: lint, tests, navegador, web y capturas en cada pull request. Las capturas se hacen dentro de la imagen de Playwright y se pueden regenerar lanzando el workflow a mano.

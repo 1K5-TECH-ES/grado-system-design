@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterGroups, isShortcut, lockScroll, nextIndex, type CommandGroup, type CommandItem } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -48,9 +48,11 @@ export function CommandPalette({
   const dialog = useRef<HTMLDialogElement>(null)
   const input = useRef<HTMLInputElement>(null)
   const id = useAutoId('k5-command')
-  const filtered = filterGroups(groups, query)
-  const items: CommandItem[] = filtered.flatMap((group) => group.items)
-  const enabled = items.map((item, i) => (item.disabled ? -1 : i)).filter((i) => i >= 0)
+  const { filtered, items, enabled } = useMemo(() => {
+    const filtered = filterGroups(groups, query)
+    const items: CommandItem[] = filtered.flatMap((group) => group.items)
+    return { filtered, items, enabled: items.map((item, i) => (item.disabled ? -1 : i)).filter((i) => i >= 0) }
+  }, [groups, query])
   const name = label ?? m.commandPalette
 
   // El atajo lee el estado actual sin volver a registrar el listener en cada render.

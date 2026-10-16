@@ -1,6 +1,8 @@
 // Traduce props a clases de grado.css. Lo usan @1k5-tech-es/grado-react y @1k5-tech-es/grado-vue,
 // y cualquier otra tecnología puede usarlo igual. Cambiar aquí cambia las dos.
 
+import { numberFormat } from './intl.js'
+
 export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'destructive', 'link']
 export const SIZES = ['sm', 'md', 'lg']
 export const BADGE_TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'danger', 'highlight']
@@ -75,7 +77,7 @@ export function kpiTrend(change, better = 'higher') {
 
 /** "5,9 %" en español. */
 export function formatChange(change, locale = 'es-ES') {
-  const n = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(Math.abs(change))
+  const n = numberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(Math.abs(change))
   return `${n} %`
 }
 

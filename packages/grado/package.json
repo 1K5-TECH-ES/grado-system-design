@@ -24,7 +24,8 @@
     "src/patterns.js",
     "src/patterns.d.ts",
     "src/messages.js",
-    "src/messages.d.ts"
+    "src/messages.d.ts",
+    "src/intl.js"
   ],
   "exports": {
     "./patterns": {

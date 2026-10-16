@@ -39,6 +39,25 @@ test('búsqueda sin tildes, paginación acotada y orden numérico', () => {
   assert.ok(compareValues('2', '10') < 0)
   assert.ok(compareValues(null, 'a') > 0)
 })
+test('la búsqueda reutiliza el texto normalizado pero ve los cambios de etiqueta', () => {
+  const options = [
+    { value: '1', label: 'Ávila' },
+    { value: '2', label: 'Cádiz', keywords: 'andalucía' },
+  ]
+  assert.equal(filterOptions(options, '  '), options)
+  assert.deepEqual(
+    filterOptions(options, 'andalucia').map((x) => x.value),
+    ['2'],
+  )
+  options[0].label = 'León'
+  assert.deepEqual(
+    filterOptions(options, 'leon').map((x) => x.value),
+    ['1'],
+  )
+  assert.deepEqual(filterOptions(options, 'avila'), [])
+  assert.ok(compareValues('Cliente 2', 'Cliente 10') < 0)
+  assert.equal(compareValues('ángel', 'Angel'), 0)
+})
 test('valida extensiones, MIME, límites y fechas sin modificar el dato', () => {
   assert.equal(fileError({ name: 'Memoria.PDF', type: '', size: 20 }, '.pdf', 100), '')
   assert.equal(fileError({ name: 'foto.png', type: 'image/png', size: 20 }, 'image/*'), '')

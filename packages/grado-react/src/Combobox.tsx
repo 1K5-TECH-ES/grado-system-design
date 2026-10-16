@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
@@ -50,7 +50,7 @@ export function Combobox({
     listId = `${controlId}-list`
   const input = useRef<HTMLInputElement>(null),
     root = useRef<HTMLDivElement>(null)
-  const filtered = filterOptions(options, query),
+  const filtered = useMemo(() => filterOptions(options, query), [options, query]),
     chosen = options.find((option) => option.value === selected)
   const activeOption = filtered[active]
   useEffect(() => {

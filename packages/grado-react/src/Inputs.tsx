@@ -1,5 +1,5 @@
 'use client'
-import { forwardRef, useEffect, useRef, useState, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react'
 import { cx, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import {
@@ -309,7 +309,7 @@ export function MultiSelect({
   const controlId = useAutoId('k5-multi', id ?? field?.id)
   const listId = `${controlId}-list`
   const input = useRef<HTMLInputElement>(null)
-  const filtered = filterOptions(options, query)
+  const filtered = useMemo(() => filterOptions(options, query), [options, query])
   const chosen = selected.map((v) => options.find((option) => option.value === v) ?? { value: v, label: v })
   const activeOption = filtered[active]
   useEffect(() => {
