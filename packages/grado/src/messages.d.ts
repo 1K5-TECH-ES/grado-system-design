@@ -1,6 +1,7 @@
 export type MessageKey =
   | 'close'
   | 'dismiss'
+  | 'notifications'
   | 'loading'
   | 'loadingEllipsis'
   | 'loadingData'

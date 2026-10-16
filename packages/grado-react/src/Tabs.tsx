@@ -1,5 +1,5 @@
 'use client'
-import { type ReactNode } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { moveFocus } from '@1k5-tech-es/grado/patterns'
 import { useAutoId, useValue } from './hooks.js'
@@ -19,12 +19,15 @@ export interface TabsProps {
   variant?: 'line' | 'pill'
   className?: string
 }
-export function Tabs({ items, label, value, defaultValue, onValueChange, variant = 'line', className }: TabsProps) {
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
+  { items, label, value, defaultValue, onValueChange, variant = 'line', className },
+  ref,
+) {
   const [selected, select] = useValue(value, defaultValue ?? items.find((item) => !item.disabled)?.value ?? '', onValueChange),
     id = useAutoId('k5-tabs')
   const current = items.some((item) => item.value === selected && !item.disabled) ? selected : items.find((item) => !item.disabled)?.value
   return (
-    <div className={cx('k5-tabs', variant === 'pill' && 'k5-tabs--pill', className)}>
+    <div ref={ref} className={cx('k5-tabs', variant === 'pill' && 'k5-tabs--pill', className)}>
       <div
         className="k5-tabs__list"
         role="tablist"
@@ -64,4 +67,4 @@ export function Tabs({ items, label, value, defaultValue, onValueChange, variant
       ))}
     </div>
   )
-}
+})

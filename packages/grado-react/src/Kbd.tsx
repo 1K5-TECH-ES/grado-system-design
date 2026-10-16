@@ -1,4 +1,4 @@
-import { Fragment, type HTMLAttributes } from 'react'
+import { forwardRef, Fragment, type HTMLAttributes } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 
 export interface KbdProps extends HTMLAttributes<HTMLElement> {
@@ -7,9 +7,9 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** Una tecla o un atajo de teclado. */
-export function Kbd({ keys, className, children, ...rest }: KbdProps) {
+export const Kbd = forwardRef<HTMLElement, KbdProps>(function Kbd({ keys, className, children, ...rest }, ref) {
   return (
-    <kbd {...rest} className={cx('k5-kbd', className)}>
+    <kbd ref={ref} {...rest} className={cx('k5-kbd', className)}>
       {keys ? (
         keys.map((key, index) => (
           <Fragment key={`${key}-${index}`}>
@@ -22,4 +22,4 @@ export function Kbd({ keys, className, children, ...rest }: KbdProps) {
       )}
     </kbd>
   )
-}
+})

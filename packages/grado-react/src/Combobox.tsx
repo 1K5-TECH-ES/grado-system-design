@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
@@ -23,22 +23,25 @@ export interface ComboboxProps {
   id?: string
   className?: string
 }
-export function Combobox({
-  options,
-  value,
-  defaultValue = '',
-  onValueChange,
-  onQueryChange,
-  label,
-  placeholder: placeholderProp,
-  disabled,
-  required,
-  loading,
-  emptyLabel,
-  name,
-  id,
-  className,
-}: ComboboxProps) {
+export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
+  {
+    options,
+    value,
+    defaultValue = '',
+    onValueChange,
+    onQueryChange,
+    label,
+    placeholder: placeholderProp,
+    disabled,
+    required,
+    loading,
+    emptyLabel,
+    name,
+    id,
+    className,
+  },
+  ref,
+) {
   const { messages: m } = useGrado(),
     placeholder = placeholderProp ?? m.searchPlaceholder
   const [selected, select] = useValue(value, defaultValue, onValueChange),
@@ -50,6 +53,7 @@ export function Combobox({
     listId = `${controlId}-list`
   const input = useRef<HTMLInputElement>(null),
     root = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
   const filtered = useMemo(() => filterOptions(options, query), [options, query]),
     chosen = options.find((option) => option.value === selected)
   const activeOption = filtered[active]
@@ -169,4 +173,4 @@ export function Combobox({
       )}
     </div>
   )
-}
+})

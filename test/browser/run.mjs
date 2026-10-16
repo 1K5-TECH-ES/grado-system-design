@@ -142,6 +142,29 @@ try {
     await expect(page.locator('.k5-toast')).toBeVisible()
     await page.mouse.move(1050, 0)
     await expect(page.locator('.k5-toast')).toHaveCount(0, { timeout: 1500 })
+    // toast(): tres a la vez, el cuarto espera; la acción se ejecuta y cierra el aviso.
+    const toasts = page.locator('.k5-toaster .k5-toast')
+    await page.locator('#toaster button').filter({ hasText: 'Avisar' }).click()
+    await expect(toasts).toHaveCount(3)
+    await expect(page.locator('.k5-toaster')).not.toContainText('Instalación programada')
+    await expect(page.locator('.k5-toaster [role=alert]')).toContainText('No se ha podido guardar')
+    // axe mide el contraste: espera a que termine la entrada animada de los avisos.
+    await page.waitForFunction(() =>
+      document
+        .getAnimations()
+        .filter((animation) => animation.effect?.target?.closest?.('.k5-toaster'))
+        .every((animation) => animation.playState !== 'running'),
+    )
+    await axe(page, `${framework} · Toaster con avisos`)
+    await page.locator('.k5-toaster button').filter({ hasText: 'Deshacer' }).click()
+    await expect(page.locator('#toaster output')).toHaveText('true')
+    await expect(toasts).toHaveCount(3)
+    await expect(page.locator('.k5-toaster')).toContainText('Instalación programada')
+    await toasts.first().locator('.k5-close').focus()
+    await page.keyboard.press('Escape')
+    await expect(toasts).toHaveCount(2)
+    await page.locator('#toaster button').filter({ hasText: 'Cerrar avisos' }).click()
+    await expect(toasts).toHaveCount(0)
     await page.locator('#pagination [aria-label="Página siguiente"]').click()
     await expect(page.locator('#pagination [aria-current=page]')).toHaveText('2')
     await page.locator('#range input').first().fill('2026-11-01')
@@ -325,6 +348,16 @@ try {
       `✓ ${framework}: modal, foco, teclado, filtros, archivos, fechas, temporizadores, tabla, componentes nuevos, idioma, armazón móvil y axe (2 temas × 2 modos)`,
     )
   }
+  // ref: cada componente de React la pasa al elemento que toca.
+  const refs = await browser.newPage()
+  await refs.goto(`${base}/?refs=1`)
+  await refs.waitForFunction(() => window.refResults)
+  const { missing, results } = await refs.evaluate(() => window.refResults)
+  expect(missing, 'componentes sin caso en test/browser/refs.fixture.mjs').toEqual([])
+  const { cases } = await import('./refs.fixture.mjs')
+  expect(results).toEqual(cases.map(([name, , selector]) => `${name}: ${selector}`))
+  await refs.close()
+  console.log(`✓ react: ${results.length} componentes pasan ref al elemento esperado`)
 } finally {
   await browser.close()
   await new Promise((done) => server.close(done))

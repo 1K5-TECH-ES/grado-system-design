@@ -1,5 +1,5 @@
 'use client'
-import type { ReactNode } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { cx, donutClass, type Size } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { donutSlices, formatNumber, formatPercent, type DonutSegment } from '@1k5-tech-es/grado/patterns'
@@ -33,21 +33,24 @@ export interface DonutProps {
  * Proporción de un total en un anillo. Es una imagen con un nombre que resume los
  * porcentajes; los valores van además en una lista oculta para lectores de pantalla.
  */
-export function Donut({
-  segments,
-  value = 0,
-  max = 100,
-  label,
-  tone,
-  centerValue,
-  centerLabel,
-  size,
-  legend,
-  unit,
-  decimals = 1,
-  locale: localeProp,
-  className,
-}: DonutProps) {
+export const Donut = forwardRef<HTMLDivElement, DonutProps>(function Donut(
+  {
+    segments,
+    value = 0,
+    max = 100,
+    label,
+    tone,
+    centerValue,
+    centerLabel,
+    size,
+    legend,
+    unit,
+    decimals = 1,
+    locale: localeProp,
+    className,
+  },
+  ref,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const locale = localeProp ?? contextLocale
   const single = segments == null
@@ -69,7 +72,7 @@ export function Donut({
   const gap = slices.filter((s) => s.length > 0).length > 1 ? 1 : 0
   const center = centerValue ?? (single ? pct(0) : null)
   return (
-    <div className={cx(donutClass({ size }), className)}>
+    <div ref={ref} className={cx(donutClass({ size }), className)}>
       <div className="k5-donut__chart" role="img" aria-label={summary}>
         <svg className="k5-donut__svg" viewBox="0 0 42 42" focusable="false" aria-hidden="true">
           <circle className="k5-donut__track" cx="21" cy="21" r="16" pathLength="100" />
@@ -114,4 +117,4 @@ export function Donut({
       </ul>
     </div>
   )
-}
+})

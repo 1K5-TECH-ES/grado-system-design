@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { forwardRef, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { fileError, type UploadItem } from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
@@ -24,20 +24,23 @@ export interface FileUploadProps {
   onReject?: (errors: string[]) => void
   className?: string
 }
-export function FileUpload({
-  label: labelProp,
-  hint: hintProp,
-  accept,
-  maxSize,
-  multiple = false,
-  disabled,
-  files = [],
-  onFilesChange,
-  onRemove,
-  onRetry,
-  onReject,
-  className,
-}: FileUploadProps) {
+export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function FileUpload(
+  {
+    label: labelProp,
+    hint: hintProp,
+    accept,
+    maxSize,
+    multiple = false,
+    disabled,
+    files = [],
+    onFilesChange,
+    onRemove,
+    onRetry,
+    onReject,
+    className,
+  },
+  ref,
+) {
   const input = useRef<HTMLInputElement>(null),
     [errors, setErrors] = useState<string[]>([]),
     [dragging, setDragging] = useState(false)
@@ -61,7 +64,7 @@ export function FileUpload({
     if (valid.length) onFilesChange?.(valid)
   }
   return (
-    <div className={cx('k5-upload', className)}>
+    <div ref={ref} className={cx('k5-upload', className)}>
       <div
         className="k5-upload__zone"
         data-dragging={dragging}
@@ -161,4 +164,4 @@ export function FileUpload({
       )}
     </div>
   )
-}
+})

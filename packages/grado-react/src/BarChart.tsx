@@ -1,5 +1,5 @@
 'use client'
-import type { CSSProperties, ReactNode } from 'react'
+import { forwardRef, type CSSProperties, type ForwardedRef, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { formatNumber, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
@@ -37,21 +37,25 @@ const numberOf = (row: object, key: string) => {
  * Barras agrupadas o apiladas con los colores del tema. El dibujo es decorativo para los
  * lectores de pantalla: los datos van en una tabla oculta con los mismos valores.
  */
-export function BarChart<T extends object>({
-  data,
-  categoryKey,
-  series,
-  stacked = false,
-  unit,
-  title,
-  description,
-  categoryLabel,
-  height,
-  decimals = 1,
-  locale: localeProp,
-  legend,
-  className,
-}: BarChartProps<T>) {
+// forwardRef pierde el parámetro de tipo: el cast del final lo recupera.
+export const BarChart = forwardRef(function BarChart<T extends object>(
+  {
+    data,
+    categoryKey,
+    series,
+    stacked = false,
+    unit,
+    title,
+    description,
+    categoryLabel,
+    height,
+    decimals = 1,
+    locale: localeProp,
+    legend,
+    className,
+  }: BarChartProps<T>,
+  ref: ForwardedRef<HTMLElement>,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const locale = localeProp ?? contextLocale
   const totals = data.map((row) => {
@@ -65,7 +69,7 @@ export function BarChart<T extends object>({
   const category = (row: T) => String((row as Record<string, unknown>)[categoryKey] ?? '')
   const style = height == null ? undefined : ({ '--_plot': typeof height === 'number' ? `${height}px` : height } as CSSProperties)
   return (
-    <figure className={cx('k5-chart', className)} style={style}>
+    <figure ref={ref} className={cx('k5-chart', className)} style={style}>
       {title != null || description != null ? (
         <figcaption className="k5-chart__header">
           {title != null ? <span className="k5-chart__title">{title}</span> : null}
@@ -144,4 +148,4 @@ export function BarChart<T extends object>({
       </table>
     </figure>
   )
-}
+}) as unknown as <T extends object>(props: BarChartProps<T> & { ref?: Ref<HTMLElement> }) => ReactElement | null

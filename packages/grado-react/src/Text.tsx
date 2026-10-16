@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes } from 'react'
+import { forwardRef, type ElementType, type HTMLAttributes } from 'react'
 import {
   cx,
   headingClass,
@@ -26,9 +26,12 @@ export interface TextProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** Párrafo o texto en línea con un paso de la escala tipográfica. */
-export function Text({ as: Tag = 'p', size, tone, weight, truncate, numeric, className, ...rest }: TextProps) {
-  return <Tag {...rest} className={cx(textClass({ size, tone, weight, truncate, numeric }), className)} />
-}
+export const Text = forwardRef<HTMLElement, TextProps>(function Text(
+  { as: Tag = 'p', size, tone, weight, truncate, numeric, className, ...rest },
+  ref,
+) {
+  return <Tag ref={ref} {...rest} className={cx(textClass({ size, tone, weight, truncate, numeric }), className)} />
+})
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   /** Nivel en el esquema del documento: h1 … h6. */
@@ -40,7 +43,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
 }
 
 /** Título de sección. El título de la página va en PageHeader. */
-export function Heading({ level, size, as, className, ...rest }: HeadingProps) {
+export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(function Heading({ level, size, as, className, ...rest }, ref) {
   const Tag: ElementType = as ?? `h${headingLevel(level)}`
-  return <Tag {...rest} className={cx(headingClass({ level, size }), className)} />
-}
+  return <Tag ref={ref} {...rest} className={cx(headingClass({ level, size }), className)} />
+})

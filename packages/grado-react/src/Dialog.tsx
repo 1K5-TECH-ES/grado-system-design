@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { lockScroll } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -20,23 +20,27 @@ export interface DialogProps {
   closeOnOutside?: boolean
   className?: string
 }
-function Modal({
-  title,
-  description,
-  children,
-  footer,
-  open,
-  defaultOpen = false,
-  onOpenChange,
-  closeLabel,
-  closeOnOutside = true,
-  className,
-  alert = false,
-  side,
-}: DialogProps & { alert?: boolean; side?: 'left' | 'right' }) {
+const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; side?: 'left' | 'right' }>(function Modal(
+  {
+    title,
+    description,
+    children,
+    footer,
+    open,
+    defaultOpen = false,
+    onOpenChange,
+    closeLabel,
+    closeOnOutside = true,
+    className,
+    alert = false,
+    side,
+  },
+  forwarded,
+) {
   const { messages: m } = useGrado()
   const [visible, setVisible] = useValue(open, defaultOpen, onOpenChange)
   const ref = useRef<HTMLDialogElement>(null)
+  useImperativeHandle(forwarded, () => ref.current as HTMLDialogElement, [])
   const id = useAutoId('k5-dialog')
   useEffect(() => {
     const dialog = ref.current
@@ -89,17 +93,17 @@ function Modal({
       {footer && <div className="k5-dialog__footer">{footer}</div>}
     </dialog>
   )
-}
-export function Dialog(props: DialogProps) {
-  return <Modal {...props} />
-}
-export function AlertDialog(props: DialogProps) {
-  return <Modal {...props} alert />
-}
+})
+export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(function Dialog(props, ref) {
+  return <Modal {...props} ref={ref} />
+})
+export const AlertDialog = forwardRef<HTMLDialogElement, DialogProps>(function AlertDialog(props, ref) {
+  return <Modal {...props} ref={ref} alert />
+})
 export interface DrawerProps extends DialogProps {
   side?: 'left' | 'right'
 }
-export function Drawer({ side = 'right', ...props }: DrawerProps) {
-  return <Modal {...props} side={side} />
-}
+export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer({ side = 'right', ...props }, ref) {
+  return <Modal {...props} ref={ref} side={side} />
+})
 export const Sheet = Drawer

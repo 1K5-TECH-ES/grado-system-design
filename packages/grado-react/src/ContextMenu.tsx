@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
@@ -23,7 +23,10 @@ export interface ContextMenuProps {
 const wantsMenu = (event: { key: string; shiftKey: boolean }) => event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')
 
 /** Menú contextual sobre una zona, con el mismo teclado y aspecto que DropdownMenu. */
-export function ContextMenu({ items, onAction, label, disabled = false, children, className }: ContextMenuProps) {
+export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function ContextMenu(
+  { items, onAction, label, disabled = false, children, className },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [point, setPoint] = useState<Point | null>(null)
   const [at, setAt] = useState<Point | null>(null)
@@ -31,6 +34,7 @@ export function ContextMenu({ items, onAction, label, disabled = false, children
     menu = useRef<HTMLDivElement>(null),
     back = useRef<HTMLElement | null>(null),
     byKeyboard = useRef(0)
+  useImperativeHandle(ref, () => zone.current as HTMLDivElement, [])
   const id = useAutoId('k5-context-menu')
   const open = point !== null
   const show = (next: Point) => {
@@ -144,4 +148,4 @@ export function ContextMenu({ items, onAction, label, disabled = false, children
       )}
     </div>
   )
-}
+})

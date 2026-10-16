@@ -1,6 +1,7 @@
 'use client'
 import {
   createContext,
+  forwardRef,
   useContext,
   useEffect,
   useId,
@@ -9,9 +10,12 @@ import {
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
   type ElementType,
+  type ForwardedRef,
   type HTMLAttributes,
   type MouseEvent,
+  type ReactElement,
   type ReactNode,
+  type Ref,
 } from 'react'
 import { ICON_PATHS, LOGO, SIDEBAR_ID, appShellClass, cx } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
@@ -23,16 +27,21 @@ const ShellContext = createContext({ collapsed: false })
 const present = (node: ReactNode) => node != null && node !== false && node !== ''
 const autoId = (prefix: string, id: string) => `${prefix}-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`
 
-export function AppLogo({ label = '1KOMMA5°', className }: { label?: string; className?: string }) {
+export interface AppLogoProps {
+  label?: string
+  className?: string
+}
+
+export const AppLogo = forwardRef<SVGSVGElement, AppLogoProps>(function AppLogo({ label = '1KOMMA5°', className }, ref) {
   return (
-    <svg className={cx('k5-logo', className)} viewBox={LOGO.viewBox} role="img" aria-label={label}>
+    <svg ref={ref} className={cx('k5-logo', className)} viewBox={LOGO.viewBox} role="img" aria-label={label}>
       {LOGO.letters.map((d) => (
         <path key={d} fill="currentColor" d={d} />
       ))}
       <path className="k5-logo__ring" d={LOGO.ring} />
     </svg>
   )
-}
+})
 
 export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
   /** Nombre de la app junto al logo: «Sales Coach». */
@@ -57,22 +66,25 @@ export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
   menuLabel?: string
 }
 
-export function AppShell({
-  product,
-  brand,
-  search,
-  actions,
-  banner,
-  sidebar,
-  sidebarFooter,
-  collapsed = false,
-  mainId = 'contenido',
-  skipLabel,
-  menuLabel,
-  className,
-  children,
-  ...rest
-}: AppShellProps) {
+export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppShell(
+  {
+    product,
+    brand,
+    search,
+    actions,
+    banner,
+    sidebar,
+    sidebarFooter,
+    collapsed = false,
+    mainId = 'contenido',
+    skipLabel,
+    menuLabel,
+    className,
+    children,
+    ...rest
+  },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [navOpen, setNavOpen] = useState(false)
   const menuRef = useRef<HTMLButtonElement>(null)
@@ -105,7 +117,7 @@ export function AppShell({
 
   return (
     <ShellContext.Provider value={{ collapsed }}>
-      <div {...rest} className={cx(appShellClass({ collapsed, navOpen }), className)}>
+      <div ref={ref} {...rest} className={cx(appShellClass({ collapsed, navOpen }), className)}>
         <a className="k5-app__skip" href={`#${mainId}`}>
           {skipLabel ?? m.skipToContent}
         </a>
@@ -142,7 +154,7 @@ export function AppShell({
       </div>
     </ShellContext.Provider>
   )
-}
+})
 
 export interface AppSearchProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Texto del botón y nombre accesible: «Buscar clientes o tickets». */
@@ -152,40 +164,43 @@ export interface AppSearchProps extends ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 /** Botón que abre la búsqueda o la paleta de comandos de la app. */
-export function AppSearch({ label: labelProp, shortcut, className, ...rest }: AppSearchProps) {
+export const AppSearch = forwardRef<HTMLButtonElement, AppSearchProps>(function AppSearch(
+  { label: labelProp, shortcut, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const label = labelProp ?? m.search
   return (
-    <button type="button" aria-label={label} {...rest} className={cx('k5-app-search', className)}>
+    <button ref={ref} type="button" aria-label={label} {...rest} className={cx('k5-app-search', className)}>
       <PathIcon paths={ICON_PATHS.search} />
       <span className="k5-app-search__label">{label}</span>
       {shortcut ? <kbd className="k5-app-search__kbd">{shortcut}</kbd> : null}
     </button>
   )
-}
+})
 
 export interface NavProps extends HTMLAttributes<HTMLElement> {
   /** Nombre para lectores de pantalla. */
   label?: string
 }
 
-export function Nav({ label, className, ...rest }: NavProps) {
+export const Nav = forwardRef<HTMLElement, NavProps>(function Nav({ label, className, ...rest }, ref) {
   const { messages: m } = useGrado()
-  return <nav {...rest} aria-label={label ?? m.mainNavigation} className={cx('k5-nav', className)} />
-}
+  return <nav ref={ref} {...rest} aria-label={label ?? m.mainNavigation} className={cx('k5-nav', className)} />
+})
 
 export interface NavSectionProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: ReactNode
 }
 
-export function NavSection({ title, className, children, ...rest }: NavSectionProps) {
+export const NavSection = forwardRef<HTMLDivElement, NavSectionProps>(function NavSection({ title, className, children, ...rest }, ref) {
   return (
-    <div {...rest} className={cx('k5-nav__section', className)}>
+    <div ref={ref} {...rest} className={cx('k5-nav__section', className)}>
       {present(title) ? <p className="k5-nav__title">{title}</p> : null}
       {children}
     </div>
   )
-}
+})
 
 interface NavItemOwnProps<C extends ElementType> {
   /** Componente del enlace: NavLink o Link de react-router. Por defecto <a>. */
@@ -202,11 +217,16 @@ interface NavItemOwnProps<C extends ElementType> {
 export type NavItemProps<C extends ElementType = 'a'> = NavItemOwnProps<C> &
   Omit<ComponentPropsWithoutRef<C>, keyof NavItemOwnProps<C> | 'children'>
 
-export function NavItem<C extends ElementType = 'a'>({ as, label, icon: Icon, badge, active, className, ...rest }: NavItemProps<C>) {
+// forwardRef no admite componentes polimórficos: el cast del final recupera el parámetro C.
+export const NavItem = forwardRef(function NavItem(
+  { as, label, icon: Icon, badge, active, className, ...rest }: NavItemProps,
+  ref: ForwardedRef<HTMLAnchorElement>,
+) {
   const { collapsed } = useContext(ShellContext)
   const Tag: ElementType = as ?? 'a'
   return (
     <Tag
+      ref={ref}
       {...rest}
       {...(active ? { 'aria-current': 'page' } : {})}
       {...(collapsed ? { title: label } : {})}
@@ -217,7 +237,7 @@ export function NavItem<C extends ElementType = 'a'>({ as, label, icon: Icon, ba
       {present(badge) ? <span className="k5-nav-item__badge">{badge}</span> : null}
     </Tag>
   )
-}
+}) as unknown as <C extends ElementType = 'a'>(props: NavItemProps<C> & { ref?: Ref<HTMLAnchorElement> }) => ReactElement | null
 
 export interface NavGroupProps {
   label: string
@@ -234,17 +254,10 @@ export interface NavGroupProps {
   children?: ReactNode
 }
 
-export function NavGroup({
-  label,
-  icon: Icon,
-  badge,
-  active,
-  defaultOpen = false,
-  open: openProp,
-  onOpenChange,
-  className,
-  children,
-}: NavGroupProps) {
+export const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
+  { label, icon: Icon, badge, active, defaultOpen = false, open: openProp, onOpenChange, className, children },
+  ref,
+) {
   const { collapsed } = useContext(ShellContext)
   const [inner, setInner] = useState(defaultOpen)
   const open = openProp ?? inner
@@ -254,7 +267,7 @@ export function NavGroup({
     onOpenChange?.(!open)
   }
   return (
-    <div className={cx('k5-nav-group', className)}>
+    <div ref={ref} className={cx('k5-nav-group', className)}>
       <button
         type="button"
         className="k5-nav-item"
@@ -274,4 +287,4 @@ export function NavGroup({
       </div>
     </div>
   )
-}
+})

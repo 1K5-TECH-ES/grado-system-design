@@ -15,6 +15,9 @@
   "sideEffects": [
     "*.css"
   ],
+  "bin": {
+    "grado": "./bin/grado.mjs"
+  },
   "files": [
     "dist",
     "assets",
@@ -25,7 +28,9 @@
     "src/patterns.d.ts",
     "src/messages.js",
     "src/messages.d.ts",
-    "src/intl.js"
+    "src/intl.js",
+    "src/migrate.js",
+    "bin"
   ],
   "exports": {
     "./patterns": {

@@ -1,0 +1,622 @@
+# API de @1k5-tech-es/grado
+
+Generado por `npm run api`. Si cambia sin querer, alguien ha cambiado la API pública.
+
+## dist/tailwind-preset.d.ts
+
+```ts
+import type { Config } from 'tailwindcss';
+declare const preset: Partial<Config>;
+export default preset;
+```
+
+## dist/tokens.d.ts
+
+```ts
+export type ThemeName = "consola" | "marca";
+export type ThemeMode = 'light' | 'dark';
+export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
+export type ShadowToken = "raised" | "overlay" | "popover";
+export type SizeToken = "radius" | "control-h-sm" | "control-h" | "control-h-lg" | "radius-panel" | "radius-badge" | "radius-xs" | "radius-sm" | "radius-md" | "radius-lg" | "radius-full";
+export type PaletteName = "aubergine" | "aubergine-75" | "aubergine-50" | "aubergine-25" | "aubergine-10" | "mint" | "mint-75" | "mint-50" | "mint-25" | "mint-10" | "fuchsia" | "fuchsia-75" | "fuchsia-50" | "fuchsia-25" | "fuchsia-10" | "graphite" | "graphite-75" | "graphite-50" | "graphite-25" | "graphite-10" | "white" | "black";
+export type BrandName = "aubergine" | "mint" | "fuchsia";
+export interface BrandColor {
+    hex: string;
+    rgb: string;
+    cmyk: string;
+    pantone: string;
+    oracal: string;
+    usage: string;
+}
+export interface ThemeValues {
+    color: Record<ColorToken, string>;
+    shadow: Record<ShadowToken, string>;
+    size: Record<SizeToken, string>;
+}
+export declare const brand: Record<BrandName, BrandColor>;
+export declare const palette: Record<PaletteName, string>;
+export type SpaceToken = "1" | "2" | "3" | "4" | "5" | "6" | "8" | "10" | "12" | "16" | "0-5" | "1-5" | "2-5" | "3-5";
+export type MotionToken = "duration-fast" | "duration-base" | "duration-slow" | "duration-slower" | "ease-standard" | "ease-out" | "ease-emphasized";
+export type LayerToken = "overlay" | "drawer" | "dropdown" | "tooltip" | "toast" | "skip-link";
+export type BreakpointToken = "sm" | "md";
+export type IconToken = "sm" | "md" | "lg";
+export type ContainerToken = "sm" | "md" | "lg";
+export type DensityName = "compact" | "comfortable";
+export declare const typography: Record<string, string>;
+export declare const space: Record<SpaceToken, string>;
+export declare const motion: Record<MotionToken, string>;
+export declare const z: Record<LayerToken, number>;
+export declare const breakpoint: Record<BreakpointToken, string>;
+export declare const icon: Record<IconToken, string>;
+export declare const container: Record<ContainerToken, string>;
+export declare const border: Record<string, string>;
+export declare const opacity: Record<string, number>;
+export declare const density: Record<DensityName, Partial<Record<SizeToken, string>>>;
+export declare const themes: Record<ThemeName, Record<ThemeMode, ThemeValues>>;
+declare const tokens: {
+    brand: typeof brand;
+    palette: typeof palette;
+    typography: typeof typography;
+    space: typeof space;
+    motion: typeof motion;
+    z: typeof z;
+    breakpoint: typeof breakpoint;
+    icon: typeof icon;
+    container: typeof container;
+    border: typeof border;
+    opacity: typeof opacity;
+    density: typeof density;
+    themes: typeof themes;
+};
+export default tokens;
+```
+
+## src/classes.d.ts
+
+```ts
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'destructive' | 'link';
+export type Size = 'sm' | 'md' | 'lg';
+export type BadgeTone = 'neutral' | 'brand' | 'info' | 'success' | 'warning' | 'danger' | 'highlight';
+export type CardVariant = 'panel' | 'alert' | 'plain';
+export type ControlKind = 'input' | 'select' | 'textarea';
+export type KpiBetter = 'higher' | 'lower' | 'neutral';
+export type KpiTone = 'default' | 'danger';
+export type TrendDirection = 'up' | 'down' | 'flat';
+export interface KpiTrend {
+    tone: 'good' | 'bad' | 'flat';
+    direction: TrendDirection;
+}
+export declare const BUTTON_VARIANTS: readonly ButtonVariant[];
+export declare const SIZES: readonly Size[];
+export declare const BADGE_TONES: readonly BadgeTone[];
+export declare const CARD_VARIANTS: readonly CardVariant[];
+export declare function cx(...parts: unknown[]): string;
+export declare function buttonClass(options?: {
+    variant?: ButtonVariant;
+    size?: Size;
+    iconOnly?: boolean;
+    block?: boolean;
+}): string;
+export declare function badgeClass(options?: {
+    tone?: BadgeTone;
+}): string;
+export declare function controlClass(kind?: ControlKind, options?: {
+    size?: Size;
+}): string;
+export declare function inputWrapClass(options?: {
+    size?: Size;
+}): string;
+export declare function cardClass(options?: {
+    variant?: CardVariant;
+}): string;
+export declare function tableClass(options?: {
+    compact?: boolean;
+}): string;
+export declare function tableWrapClass(options?: {
+    plain?: boolean;
+}): string;
+export declare function spinnerClass(options?: {
+    size?: Size;
+}): string;
+export declare function emptyClass(options?: {
+    compact?: boolean;
+}): string;
+export declare function kpiClass(options?: {
+    tone?: KpiTone;
+}): string;
+export declare function kpiTrend(change: number | null | undefined, better?: KpiBetter): KpiTrend | null;
+export declare function formatChange(change: number, locale?: string): string;
+export declare const TREND_LABELS: Record<TrendDirection, string>;
+export declare const ARROW_PATHS: Record<TrendDirection, string[]>;
+export declare const ICON_ATTRS: Record<string, string>;
+export type AvatarStatus = 'online' | 'away' | 'busy';
+export declare const SIDEBAR_ID: string;
+export declare const AVATAR_STATUSES: readonly AvatarStatus[];
+export declare function appShellClass(options?: {
+    collapsed?: boolean;
+    navOpen?: boolean;
+}): string;
+export declare function avatarClass(options?: {
+    size?: Size;
+}): string;
+export declare function initials(name?: string): string;
+export declare const LOGO: {
+    viewBox: string;
+    letters: string[];
+    ring: string;
+};
+export type IconName = 'search' | 'menu' | 'chevronRight' | 'chevronLeft' | 'chevronDown' | 'chevronsUpDown' | 'arrowUp' | 'arrowDown' | 'x' | 'check' | 'info' | 'circleCheck' | 'circleAlert' | 'triangleAlert' | 'upload' | 'file' | 'minus' | 'plus';
+export declare const ICON_PATHS: Record<IconName, string[]>;
+export declare const STATUS_ICONS: Record<'info' | 'success' | 'warning' | 'danger', IconName>;
+export declare const AVATAR_STATUS_LABELS: Record<AvatarStatus, string>;
+export type RowStatusTone = 'neutral' | 'brand' | 'info' | 'success' | 'warning' | 'danger';
+export type ProgressTone = 'brand' | 'success' | 'warning' | 'danger';
+export type SmallSize = 'sm' | 'md';
+export type DescriptionLayout = 'columns' | 'stacked';
+export type LinkTone = 'default' | 'muted';
+export type LinkUnderline = 'hover' | 'always';
+export type SeparatorOrientation = 'horizontal' | 'vertical';
+export declare const STATUS_TONES: readonly RowStatusTone[];
+export declare const PROGRESS_TONES: readonly ProgressTone[];
+export declare const DESCRIPTION_LAYOUTS: readonly DescriptionLayout[];
+export declare const LINK_TONES: readonly LinkTone[];
+export declare const LINK_UNDERLINES: readonly LinkUnderline[];
+export declare function statusClass(options?: {
+    tone?: RowStatusTone;
+    pulse?: boolean;
+}): string;
+export declare function progressClass(options?: {
+    tone?: ProgressTone;
+    size?: SmallSize;
+    indeterminate?: boolean;
+    steps?: boolean;
+}): string;
+export declare function descriptionListClass(options?: {
+    layout?: DescriptionLayout;
+}): string;
+export declare function copyButtonClass(options?: {
+    size?: Size;
+    iconOnly?: boolean;
+    copied?: boolean;
+}): string;
+export declare function tagClass(options?: {
+    size?: SmallSize;
+    disabled?: boolean;
+}): string;
+export declare function avatarGroupClass(options?: {
+    size?: Size;
+}): string;
+export declare function separatorClass(options?: {
+    orientation?: SeparatorOrientation;
+    label?: boolean;
+}): string;
+export declare function linkClass(options?: {
+    tone?: LinkTone;
+    underline?: LinkUnderline;
+}): string;
+export declare const DATA_ICON_PATHS: Record<'copy' | 'externalLink', string[]>;
+export type SparklineTone = 'brand' | 'success' | 'danger' | 'neutral';
+export type MeterVariant = 'bar' | 'segments';
+export type MeterLevelName = 'good' | 'fair' | 'poor' | 'neutral';
+export type EnergyNodeName = 'solar' | 'home' | 'battery' | 'grid';
+export type EnergyFlowDirection = 'in' | 'out' | 'none';
+export declare const SPARKLINE_TONES: readonly SparklineTone[];
+export declare const METER_VARIANTS: readonly MeterVariant[];
+export declare const METER_LEVELS: readonly MeterLevelName[];
+export declare const ENERGY_POSITIONS: Record<EnergyNodeName, 'top' | 'right' | 'bottom' | 'left'>;
+export declare const ENERGY_ICONS: Record<EnergyNodeName | 'hub' | 'arrow', string[]>;
+export declare function sparklineClass(options?: {
+    tone?: SparklineTone;
+}): string;
+export declare function kpiSparklineTone(trend: KpiTrend | null | undefined): SparklineTone;
+export declare function donutClass(options?: {
+    size?: Size;
+}): string;
+export declare function meterClass(options?: {
+    variant?: MeterVariant;
+    level?: MeterLevelName;
+}): string;
+export declare function energyLineClass(node: EnergyNodeName, flow?: EnergyFlowDirection): string;
+export declare function energyNodeClass(node: EnergyNodeName, flow?: EnergyFlowDirection): string;
+export declare const FIELD_ICON_PATHS: Record<'eye' | 'eyeOff' | 'clock' | 'mapPin', string[]>;
+export type BannerTone = 'info' | 'success' | 'warning' | 'danger' | 'brand';
+export type IconButtonVariant = 'ghost' | 'secondary' | 'primary';
+export type PopoverAlign = 'start' | 'center' | 'end';
+export type PopoverSide = 'bottom' | 'top';
+export declare const BANNER_TONES: BannerTone[];
+export declare const ICON_BUTTON_VARIANTS: IconButtonVariant[];
+export declare const POPOVER_ALIGNS: PopoverAlign[];
+export declare function bannerClass(options?: {
+    tone?: BannerTone;
+}): string;
+export declare function iconButtonClass(options?: {
+    variant?: IconButtonVariant;
+    size?: Size;
+}): string;
+export declare function popoverClass(options?: {
+    align?: PopoverAlign;
+    side?: PopoverSide;
+}): string;
+export declare function actionBarClass(options?: {
+    inline?: boolean;
+}): string;
+export declare function toggleGroupClass(options?: {
+    size?: Size;
+    iconOnly?: boolean;
+}): string;
+export type SpaceStep = '0-5' | '1' | '1-5' | '2' | '2-5' | '3' | '3-5' | '4' | '5' | '6' | '8' | '10' | '12' | '16';
+export type StackDirection = 'column' | 'row';
+export type StackAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+export type StackJustify = 'start' | 'center' | 'end' | 'between';
+export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 'auto';
+export type GridMinItemWidth = 'sm' | 'md' | 'lg';
+export type ContainerSize = 'sm' | 'md' | 'lg';
+export type TextSize = 'caption' | 'small' | 'body' | 'lead';
+export type TextTone = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type TextWeight = 'regular' | 'medium' | 'semibold';
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+export type HeadingSize = 'lead' | 'heading' | 'title' | 'display';
+export declare const SPACE_STEPS: readonly SpaceStep[];
+export declare const STACK_DIRECTIONS: readonly StackDirection[];
+export declare const STACK_ALIGNS: readonly StackAlign[];
+export declare const STACK_JUSTIFIES: readonly StackJustify[];
+export declare const GRID_COLUMNS: readonly GridColumns[];
+export declare const GRID_MIN_WIDTHS: readonly GridMinItemWidth[];
+export declare const CONTAINER_SIZES: readonly ContainerSize[];
+export declare const TEXT_SIZES: readonly TextSize[];
+export declare const TEXT_TONES: readonly TextTone[];
+export declare const TEXT_WEIGHTS: readonly TextWeight[];
+export declare const HEADING_LEVELS: readonly HeadingLevel[];
+export declare const HEADING_SIZES: readonly HeadingSize[];
+export declare function gapClass(gap?: SpaceStep | number): string;
+export declare function stackClass(options?: {
+    direction?: StackDirection;
+    gap?: SpaceStep | number;
+    align?: StackAlign;
+    justify?: StackJustify;
+    wrap?: boolean;
+}): string;
+export declare function gridClass(options?: {
+    columns?: GridColumns;
+    gap?: SpaceStep | number;
+    minItemWidth?: GridMinItemWidth;
+}): string;
+export declare function containerClass(options?: {
+    size?: ContainerSize;
+    padded?: boolean;
+}): string;
+export declare function textClass(options?: {
+    size?: TextSize;
+    tone?: TextTone;
+    weight?: TextWeight;
+    truncate?: boolean;
+    numeric?: boolean;
+}): string;
+export declare function headingLevel(level: HeadingLevel | number | string | undefined): HeadingLevel;
+export declare function headingSize(level: HeadingLevel | number | string | undefined): HeadingSize;
+export declare function headingClass(options?: {
+    level?: HeadingLevel | number | string;
+    size?: HeadingSize;
+}): string;
+```
+
+## src/messages.d.ts
+
+```ts
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type Messages = Record<MessageKey, string>;
+export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
+export declare const DEFAULT_LOCALE: 'es-ES';
+export declare const MESSAGES: Record<LocaleName, Messages>;
+export declare function messagesFor(locale?: string, overrides?: Partial<Messages>): Messages;
+export declare function formatMessage(template: string, values?: Record<string, string | number | null | undefined>): string;
+```
+
+## src/patterns.d.ts
+
+```ts
+import type { Messages } from './messages.js';
+export type StatusTone = 'info' | 'success' | 'warning' | 'danger';
+export interface ChoiceOption {
+    value: string;
+    label: string;
+    description?: string;
+    disabled?: boolean;
+    keywords?: string;
+}
+export interface MenuItem {
+    id: string;
+    label: string;
+    disabled?: boolean;
+    danger?: boolean;
+    separator?: boolean;
+}
+export interface BreadcrumbItem {
+    label: string;
+    href?: string;
+}
+export interface StepItem {
+    id: string;
+    label: string;
+    description?: string;
+    disabled?: boolean;
+}
+export interface TimelineItem {
+    id: string;
+    title: string;
+    description?: string;
+    date?: string;
+    dateTime?: string;
+    tone?: StatusTone;
+}
+export interface FilterItem {
+    id: string;
+    label: string;
+}
+export interface UploadItem {
+    id: string;
+    name: string;
+    status?: 'uploading' | 'success' | 'error';
+    progress?: number;
+    error?: string;
+}
+export interface DateRangeValue {
+    start: string;
+    end: string;
+}
+export interface SortState {
+    key: string;
+    direction: 'asc' | 'desc';
+}
+export declare function normalizeSearch(value: unknown): string;
+export declare function filterOptions<T extends ChoiceOption>(options: T[], query: string): T[];
+export declare function pageCount(total: number, pageSize: number): number;
+export declare function pageItems(page: number, count: number): Array<number | 'ellipsis'>;
+export declare function compareValues(a: unknown, b: unknown): number;
+export declare function fileError(file: Pick<File, 'name' | 'size' | 'type'>, accept?: string, maxSize?: number, options?: {
+    messages?: Messages;
+    locale?: string;
+}): string;
+export declare function rangeError(start?: string, end?: string, min?: string, max?: string, messages?: Messages): string;
+export declare function lockScroll(doc: Document): () => void;
+export declare function moveFocus(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey' | 'preventDefault'>, container: HTMLElement, selector: string, horizontal?: boolean): void;
+export declare function nextIndex(key: string, index: number, length: number): number | null;
+export declare function overflowsSide(element: Element, side: 'left' | 'right'): boolean;
+export declare function selectionLabel(count: number, messages?: Messages): string;
+export interface CommandItem {
+    id: string;
+    label: string;
+    description?: string;
+    keywords?: string;
+    shortcut?: string;
+    disabled?: boolean;
+}
+export interface CommandGroup {
+    label: string;
+    items: CommandItem[];
+}
+export interface ChartSeries {
+    key: string;
+    label: string;
+    tone?: 1 | 2 | 3 | 4 | 5;
+}
+export interface CalendarDay {
+    iso: string;
+    day: number;
+    outside: boolean;
+}
+export declare function parseNumber(text: string | null | undefined, locale?: string): number | null;
+export declare function decimalsOf(step: number): number;
+export declare function formatNumber(value: number | null | undefined, locale?: string, decimals?: number): string;
+export declare function clampNumber(value: number, min?: number, max?: number): number;
+export declare function stepNumber(value: number | null | undefined, step: number, times: number, min?: number, max?: number): number;
+export declare function toIso(year: number, month: number, day: number): string;
+export declare function parseIso(iso: string | null | undefined): {
+    year: number;
+    month: number;
+    day: number;
+} | null;
+export declare function todayIso(now?: Date): string;
+export declare function addDays(iso: string, days: number): string;
+export declare function addMonths(iso: string, months: number): string;
+export declare function weekday(iso: string): number;
+export declare function startOfWeek(iso: string, weekStartsOn?: number): string;
+export declare function clampDate(iso: string, min?: string, max?: string): string;
+export declare function monthWeeks(month: string, weekStartsOn?: number): CalendarDay[][];
+export declare function weekdayNames(locale?: string, weekStartsOn?: number): Array<{
+    short: string;
+    long: string;
+}>;
+export declare function monthTitle(month: string, locale?: string): string;
+export declare function dateLabel(iso: string, locale?: string): string;
+export declare function nextRange(range: DateRangeValue | null | undefined, iso: string): DateRangeValue;
+export declare function niceScale(max: number, count?: number): {
+    max: number;
+    step: number;
+    ticks: number[];
+};
+export declare function filterGroups<T extends CommandGroup>(groups: T[], query: string): T[];
+export declare function isShortcut(event: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey' | 'altKey'>, key: string | false | null | undefined): boolean;
+export interface DescriptionItem {
+    id?: string;
+    term: string;
+    description?: string;
+    copy?: string;
+    mono?: boolean;
+}
+export interface AvatarItem {
+    name: string;
+    src?: string;
+}
+export interface ProgressState {
+    indeterminate: boolean;
+    stepped: boolean;
+    max: number;
+    now: number | null;
+    ratio: number;
+    text: string;
+}
+export declare function formatPercent(ratio: number | null | undefined, locale?: string, decimals?: number): string;
+export declare function progressState(options?: {
+    value?: number | null;
+    max?: number;
+    steps?: number;
+    locale?: string;
+    messages?: Messages;
+}): ProgressState;
+export declare function splitAvatars<T>(items?: T[], max?: number): {
+    shown: T[];
+    rest: T[];
+};
+export declare function tagFocusTarget(button: Element | null | undefined): HTMLElement | null;
+export declare function copyText(text: string, env?: {
+    navigator?: Navigator;
+    document?: Document;
+}): Promise<boolean>;
+export interface ChartPoint {
+    x: number;
+    y: number;
+}
+export interface DonutSegment {
+    label: string;
+    value: number;
+    tone?: 1 | 2 | 3 | 4 | 5;
+}
+export interface DonutSlice {
+    start: number;
+    length: number;
+    percent: number;
+}
+export type MeterLevel = 'good' | 'fair' | 'poor' | 'neutral';
+export type EnergyNode = 'solar' | 'home' | 'battery' | 'grid';
+export interface EnergyNodeState {
+    flow: 'in' | 'out' | 'none';
+    state: import('./messages.js').MessageKey;
+}
+export declare function sparklinePoints(values: readonly number[] | null | undefined): ChartPoint[];
+export declare function chartPoints(values: readonly number[], max: number): ChartPoint[];
+export declare function linePath(points: readonly ChartPoint[]): string;
+export declare function areaPath(points: readonly ChartPoint[], base?: number): string;
+export declare function donutSlices(values: readonly number[], total?: number): DonutSlice[];
+export declare function meterRatio(value: number, min?: number, max?: number): number;
+export declare function meterLevel(options: {
+    value: number;
+    min?: number;
+    max?: number;
+    low?: number;
+    high?: number;
+    optimum?: number;
+}): MeterLevel;
+export declare function meterSegments(ratio: number, count: number): number;
+export declare function energyFlow(node: EnergyNode, value: number | null | undefined): EnergyNodeState;
+export interface AddressValue {
+    street: string;
+    postalCode: string;
+    city: string;
+    province: string;
+    cadastralRef?: string;
+}
+export interface AddressOption {
+    id: string;
+    label: string;
+    description?: string;
+    value: AddressValue;
+}
+export interface SliderMark {
+    value: number;
+    label: string;
+}
+export type PhoneCountryCode = 'ES' | 'PT' | 'FR' | 'DE' | 'IT' | 'GB';
+export interface PhoneCountry {
+    code: PhoneCountryCode;
+    dial: string;
+    example: string;
+}
+export type NifKind = 'dni' | 'nie' | 'cif';
+export declare function significantCount(text: string | null | undefined, end?: number): number;
+export declare function caretAfter(text: string | null | undefined, count: number): number;
+export declare function parseTime(text: string | null | undefined): number | null;
+export declare function formatTime(minutes: number | null | undefined): string;
+export declare function normalizeTime(text: string | null | undefined): string | null;
+export declare function timeSlots(min?: string, max?: string, step?: number): string[];
+export declare function nearestTime(slots: string[], time: string | null | undefined): number;
+export declare function timeError(text: string | null | undefined, range?: {
+    min?: string;
+    max?: string;
+}, messages?: Messages): string;
+export declare const PHONE_COUNTRIES: PhoneCountry[];
+export declare function phoneCountryOf(text: string | null | undefined): PhoneCountryCode | null;
+export declare function parsePhone(text: string | null | undefined, country?: string): {
+    country: PhoneCountryCode;
+    digits: string;
+};
+export declare function formatPhone(text: string | null | undefined, country?: string): string;
+export declare function toE164(text: string | null | undefined, country?: string): string;
+export declare function nationalNumber(e164: string | null | undefined, country?: string): string;
+export declare function phoneError(text: string | null | undefined, country?: string, messages?: Messages): string;
+export declare function isValidPhone(text: string | null | undefined, country?: string): boolean;
+export declare function normalizeNif(text: string | null | undefined): string;
+export declare function nifKind(text: string | null | undefined): NifKind | null;
+export declare function nifError(text: string | null | undefined, messages?: Messages): string;
+export declare function isValidNif(text: string | null | undefined): boolean;
+export declare const IBAN_LENGTHS: Record<string, number>;
+export declare function normalizeIban(text: string | null | undefined): string;
+export declare function formatIban(text: string | null | undefined): string;
+export declare function ibanError(text: string | null | undefined, messages?: Messages): string;
+export declare function isValidIban(text: string | null | undefined): boolean;
+export declare function selectedCount(count: number, messages?: Messages): string;
+export declare function menuPosition(point: {
+    x: number;
+    y: number;
+}, size: {
+    width: number;
+    height: number;
+}, viewport: {
+    width: number;
+    height: number;
+}, margin?: number): {
+    x: number;
+    y: number;
+};
+export declare function toggleValues(current: string[], value: string, type?: 'single' | 'multiple', order?: string[]): string[];
+export interface ToastAction {
+    label: string;
+    onClick: () => void;
+}
+export interface ToastOptions {
+    id?: string;
+    tone?: StatusTone;
+    description?: string;
+    action?: ToastAction;
+    duration?: number;
+}
+export interface ToastItem {
+    id: string;
+    title: string;
+    tone: StatusTone;
+    description?: string;
+    action?: ToastAction;
+    duration: number;
+}
+export interface ToastPromiseMessages<T> {
+    loading: string;
+    success: string | ((value: T) => string);
+    error: string | ((reason: unknown) => string);
+}
+export interface ToastFunction {
+    (title: string, options?: ToastOptions): string;
+    success(title: string, options?: Omit<ToastOptions, 'tone'>): string;
+    warning(title: string, options?: Omit<ToastOptions, 'tone'>): string;
+    error(title: string, options?: Omit<ToastOptions, 'tone'>): string;
+    info(title: string, options?: Omit<ToastOptions, 'tone'>): string;
+    dismiss(id?: string): void;
+    promise<T>(work: Promise<T> | (() => Promise<T>), messages: ToastPromiseMessages<T>): Promise<T>;
+}
+export interface ToastStore {
+    toast: ToastFunction;
+    subscribe(listener: () => void): () => void;
+    getSnapshot(): readonly ToastItem[];
+}
+export declare function createToastStore(): ToastStore;
+export declare function visibleToasts(items: readonly ToastItem[], max?: number): ToastItem[];
+```

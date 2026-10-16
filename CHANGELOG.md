@@ -2,7 +2,41 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-tech-es/grado-vue`. Los tres paquetes comparten número de versión.
 
-## 0.3.0 · sin publicar
+## 0.4.0 · sin publicar
+
+Primera fase de 0.4, «Adopción»: lo que necesita una app para pasar a Grado sin trabajo a mano. Las APIs de 0.3.0 siguen igual.
+
+### Componentes
+
+- Todos los componentes de `@1k5-tech-es/grado-react` pasan `ref`, también con React 18. En los campos va al `<input>` que recibe el foco, también en `Combobox`, `MultiSelect`, `TimePicker` y `AddressInput`; en el resto, al elemento que recibe las props HTML o, si no las admite, al raíz. Así funcionan `register()` de react-hook-form, el foco en el primer error y los paneles anclados. Un test en el navegador comprueba el elemento de cada componente.
+- `toast()` y `Toaster`: avisos desde cualquier parte de la app, con cola. `toast.success`, `warning`, `error` e `info`; `action` para «Deshacer»; `toast.promise`, que pasa de «Guardando…» al resultado en el mismo aviso; y `toast.dismiss`. Se ven como mucho `max` avisos a la vez (3) y los demás esperan su turno, así que no se pierde ninguno. La región «Notificaciones» está siempre en la página y `toast.error` se anuncia con `role="alert"`.
+- `createToastStore()` y `visibleToasts()` en `@1k5-tech-es/grado/patterns`: la cola que usan React y Vue.
+- Vue: `Toast` acepta `role`, como en React. Antes el atributo acababa en el contenedor y no en el aviso.
+- Tipos nuevos en React: `CardSectionProps`, `CardDescriptionProps` y `AppLogoProps`.
+- Texto nuevo `notifications` en español, alemán e inglés.
+
+### Migración
+
+- `npx @1k5-tech-es/grado migrate` actualiza un proyecto desde 0.1, 0.2 o 0.3. Cambia imports y dependencias de `@1k5/…` a `@1k5-tech-es/…` y las sube a esta versión, pasa los alias `--k5-text-badge`, `-label`, `-nav` y `-section` a `caption`, `small` y `heading` (mismo tamaño), quita la clase `k5-unit` y añade el registro de GitHub Packages a `.npmrc`. Lo que pide una decisión lo avisa con archivo y línea: `variant="danger"`, `tone="highlight"`, la densidad táctil y los `.tgz` de `vendor/`. Con `--dry` enseña los cambios sin escribir nada.
+
+### Rendimiento
+
+- Los formateadores de números y fechas (`Intl`) se crean una vez y se reutilizan. 100 `Calendar` se montan 2,5 veces más rápido y un `LineChart` de 2000 puntos, 3,5 veces. También ganan `DatePicker`, `BarChart`, `Donut`, `Meter`, `Slider`, `NumberInput`, `EnergyFlow` y `Kpi`.
+- `DataTable` ordena las columnas de texto 7 veces más rápido: de 210 a 30 ms con 10 000 filas.
+- `Combobox`, `MultiSelect` y `CommandPalette` no repiten la búsqueda al mover el ratón o las flechas, y guardan el texto ya normalizado de cada opción. Con 8000 opciones, abrir la lista tarda la mitad y el resaltado, menos de la mitad.
+
+### Calidad y distribución
+
+- Informe de la API pública en `api/`: una línea por prop de cada componente de React y de Vue, y los tipos de `@1k5-tech-es/grado`. El CI falla si la API cambia y el informe no (`npm run api` lo regenera), así que cualquier cambio de API se ve en el diff del pull request.
+- Presupuesto de tamaño (`npm run size`): CSS, tokens y cada paquete entero, minificados y con gzip. El CI falla si algo pasa de su límite y deja la tabla en el resumen del trabajo.
+- El workflow de publicación genera la web y los `.tgz` antes de publicar los paquetes: si algo falla, no se publica nada a medias.
+
+### Al actualizar desde 0.3.0
+
+- No hay que cambiar nada. Si una app tenía su propia cola de avisos, puede pasar a `toast()` y `Toaster`.
+- Vue: si pasabas `role` a `Toast`, ahora llega al aviso y no al contenedor.
+
+## 0.3.0 · 15 de octubre de 2026
 
 Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las APIs de 0.2.0 siguen funcionando; lo que cambia de aspecto está en «Al actualizar desde 0.2.0».
 
@@ -37,12 +71,6 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 - `AppShell`: nueva prop `banner` (slot `#banner` en Vue) para un Banner bajo la cabecera.
 - Textos nuevos en español, alemán e inglés para todos los componentes nuevos.
 
-### Rendimiento
-
-- Los formateadores de números y fechas (`Intl`) se crean una vez y se reutilizan. 100 `Calendar` se montan 2,5 veces más rápido y un `LineChart` de 2000 puntos, 3,5 veces. También ganan `DatePicker`, `BarChart`, `Donut`, `Meter`, `Slider`, `NumberInput`, `EnergyFlow` y `Kpi`.
-- `DataTable` ordena las columnas de texto 7 veces más rápido: de 210 a 30 ms con 10 000 filas.
-- `Combobox`, `MultiSelect` y `CommandPalette` no repiten la búsqueda al mover el ratón o las flechas, y guardan el texto ya normalizado de cada opción. Con 8000 opciones, abrir la lista tarda la mitad y el resaltado, menos de la mitad.
-
 ### Calidad y distribución
 
 - CI en GitHub Actions: lint, tests, navegador, web y capturas en cada pull request. Las capturas se hacen dentro de la imagen de Playwright y se pueden regenerar lanzando el workflow a mano.
@@ -65,7 +93,7 @@ Menos ruido visual, escalas completas en los tokens y 34 componentes nuevos. Las
 - `radius-panel` en Consola pasa de 16 a 12 px (tarjetas, tablas y paneles).
 - En pantallas táctiles los controles miden 44 px de alto si no se indica otra densidad. Para mantener la altura del tema, pon `data-k5-density="default"` en `<html>`.
 
-## 0.2.0 · sin publicar
+## 0.2.0 · no se publicó por separado: sus cambios llegaron con 0.3.0
 
 ### Accesibilidad
 

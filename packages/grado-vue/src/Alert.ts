@@ -50,6 +50,7 @@ export const Toast = defineComponent({
     tone: { type: String as PropType<StatusTone>, default: 'info' },
     duration: { type: Number, default: 5000 },
     dismissLabel: String,
+    role: { type: String as PropType<'status' | 'alert' | 'none'>, default: 'status' },
   },
   emits: ['update:open'],
   setup(props, { attrs, emit, slots }) {
@@ -110,6 +111,7 @@ export const Toast = defineComponent({
                   title: props.title,
                   tone: props.tone,
                   dismissLabel: props.dismissLabel,
+                  role: props.role,
                   dismissible: true,
                   onDismiss: () => emit('update:open', false),
                 },

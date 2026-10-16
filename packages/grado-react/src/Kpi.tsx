@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type ElementType, type HTMLAttributes, type ReactNode } from 'react'
 import {
   ARROW_PATHS,
   cx,
@@ -21,10 +21,10 @@ export interface KpiGroupProps extends HTMLAttributes<HTMLDivElement> {
   label?: string
 }
 
-export function KpiGroup({ label, className, ...rest }: KpiGroupProps) {
+export const KpiGroup = forwardRef<HTMLDivElement, KpiGroupProps>(function KpiGroup({ label, className, ...rest }, ref) {
   const { messages: m } = useGrado()
-  return <div {...rest} role="group" aria-label={label ?? m.indicators} className={cx('k5-kpis', className)} />
-}
+  return <div ref={ref} {...rest} role="group" aria-label={label ?? m.indicators} className={cx('k5-kpis', className)} />
+})
 
 function TrendArrow({ direction }: { direction: TrendDirection }) {
   return (
@@ -67,29 +67,32 @@ export interface KpiProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> 
   children?: ReactNode
 }
 
-export function Kpi({
-  label,
-  value,
-  change,
-  better = 'higher',
-  previous,
-  previousLabel,
-  hint,
-  tone,
-  selectable = false,
-  selected = false,
-  locale,
-  trend: series,
-  className,
-  children,
-  ...rest
-}: KpiProps) {
+export const Kpi = forwardRef<HTMLElement, KpiProps>(function Kpi(
+  {
+    label,
+    value,
+    change,
+    better = 'higher',
+    previous,
+    previousLabel,
+    hint,
+    tone,
+    selectable = false,
+    selected = false,
+    locale,
+    trend: series,
+    className,
+    children,
+    ...rest
+  },
+  ref,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const trend = kpiTrend(change, better)
-  const Tag = selectable ? 'button' : 'div'
+  const Tag = (selectable ? 'button' : 'div') as ElementType
   const interactive = selectable ? { type: 'button' as const, 'aria-pressed': selected } : {}
   return (
-    <Tag {...rest} {...interactive} className={cx(kpiClass({ tone }), className)}>
+    <Tag ref={ref} {...rest} {...interactive} className={cx(kpiClass({ tone }), className)}>
       <span className="k5-kpi__label">{label}</span>
       <span className="k5-kpi__row">
         <span className="k5-kpi__value">{value}</span>
@@ -115,4 +118,4 @@ export function Kpi({
       </span>
     </Tag>
   )
-}
+})

@@ -70,22 +70,18 @@ export interface RadioGroupProps {
   orientation?: 'horizontal' | 'vertical'
   className?: string
 }
-export function RadioGroup({
-  label,
-  options,
-  value,
-  defaultValue = '',
-  onValueChange,
-  name,
-  required,
-  disabled,
-  orientation = 'vertical',
-  className,
-}: RadioGroupProps) {
+export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup(
+  { label, options, value, defaultValue = '', onValueChange, name, required, disabled, orientation = 'vertical', className },
+  ref,
+) {
   const [selected, select] = useValue(value, defaultValue, onValueChange),
     id = useAutoId('k5-radio')
   return (
-    <fieldset className={cx('k5-radio-group', orientation === 'horizontal' && 'k5-radio-group--horizontal', className)} disabled={disabled}>
+    <fieldset
+      ref={ref}
+      className={cx('k5-radio-group', orientation === 'horizontal' && 'k5-radio-group--horizontal', className)}
+      disabled={disabled}
+    >
       <legend>{label}</legend>
       <div className="k5-radio-group__options">
         {options.map((option, index) => (
@@ -114,4 +110,4 @@ export function RadioGroup({
       </div>
     </fieldset>
   )
-}
+})

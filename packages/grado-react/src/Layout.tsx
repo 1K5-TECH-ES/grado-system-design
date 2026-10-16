@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes } from 'react'
+import { forwardRef, type ElementType, type HTMLAttributes } from 'react'
 import {
   containerClass,
   cx,
@@ -27,9 +27,12 @@ export interface StackProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** Apila hijos en una dirección con un hueco de la escala de espacio. Solo clases: compatible con CSP. */
-export function Stack({ as: Tag = 'div', direction, gap, align, justify, wrap, className, ...rest }: StackProps) {
-  return <Tag {...rest} className={cx(stackClass({ direction, gap, align, justify, wrap }), className)} />
-}
+export const Stack = forwardRef<HTMLElement, StackProps>(function Stack(
+  { as: Tag = 'div', direction, gap, align, justify, wrap, className, ...rest },
+  ref,
+) {
+  return <Tag ref={ref} {...rest} className={cx(stackClass({ direction, gap, align, justify, wrap }), className)} />
+})
 
 export interface GridProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType
@@ -41,9 +44,12 @@ export interface GridProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** Rejilla de elementos del mismo peso: tarjetas, KPI, campos de un formulario. */
-export function Grid({ as: Tag = 'div', columns, minItemWidth, gap, className, ...rest }: GridProps) {
-  return <Tag {...rest} className={cx(gridClass({ columns, minItemWidth, gap }), className)} />
-}
+export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
+  { as: Tag = 'div', columns, minItemWidth, gap, className, ...rest },
+  ref,
+) {
+  return <Tag ref={ref} {...rest} className={cx(gridClass({ columns, minItemWidth, gap }), className)} />
+})
 
 export interface ContainerProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType
@@ -54,6 +60,9 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** Limita el ancho del contenido y lo centra. */
-export function Container({ as: Tag = 'div', size, padded = true, className, ...rest }: ContainerProps) {
-  return <Tag {...rest} className={cx(containerClass({ size, padded }), className)} />
-}
+export const Container = forwardRef<HTMLElement, ContainerProps>(function Container(
+  { as: Tag = 'div', size, padded = true, className, ...rest },
+  ref,
+) {
+  return <Tag ref={ref} {...rest} className={cx(containerClass({ size, padded }), className)} />
+})

@@ -1,4 +1,5 @@
 'use client'
+import { forwardRef } from 'react'
 import { cx, meterClass, type MeterVariant } from '@1k5-tech-es/grado/classes'
 import { formatNumber, meterLevel, meterRatio, meterSegments } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
@@ -32,23 +33,26 @@ export interface MeterProps {
  * Valor dentro de un rango conocido: carga de batería, cobertura solar. El tono (bien,
  * regular, mal) sale de low, high y optimum, con el mismo criterio que <meter> de HTML.
  */
-export function Meter({
-  value,
-  min = 0,
-  max = 100,
-  low,
-  high,
-  optimum,
-  label,
-  unit,
-  showValue = true,
-  variant = 'bar',
-  segments = 10,
-  valueText,
-  decimals = 1,
-  locale: localeProp,
-  className,
-}: MeterProps) {
+export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
+  {
+    value,
+    min = 0,
+    max = 100,
+    low,
+    high,
+    optimum,
+    label,
+    unit,
+    showValue = true,
+    variant = 'bar',
+    segments = 10,
+    valueText,
+    decimals = 1,
+    locale: localeProp,
+    className,
+  },
+  ref,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const locale = localeProp ?? contextLocale
   const ratio = meterRatio(value, min, max)
@@ -59,6 +63,7 @@ export function Meter({
   const on = meterSegments(ratio, count)
   return (
     <div
+      ref={ref}
       className={cx(meterClass({ variant, level: meterLevel({ value, min, max, low, high, optimum }) }), className)}
       role="meter"
       aria-label={label ?? m.meterLabel}
@@ -86,4 +91,4 @@ export function Meter({
       )}
     </div>
   )
-}
+})

@@ -1,5 +1,5 @@
 'use client'
-import { Fragment } from 'react'
+import { forwardRef, Fragment } from 'react'
 import { ENERGY_ICONS, cx, energyLineClass, energyNodeClass } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { energyFlow, formatNumber, formatPercent, type EnergyNode } from '@1k5-tech-es/grado/patterns'
@@ -50,18 +50,10 @@ function Icon({ paths, className }: { paths: string[]; className?: string }) {
  * inversor. Las líneas muestran el sentido con flechas y, si se permite movimiento, con
  * un trazo animado. Es una imagen con un resumen como nombre y una lista oculta con los datos.
  */
-export function EnergyFlow({
-  solar,
-  home,
-  battery,
-  grid,
-  batteryLevel,
-  unit = 'kW',
-  title,
-  decimals = 1,
-  locale: localeProp,
-  className,
-}: EnergyFlowProps) {
+export const EnergyFlow = forwardRef<HTMLElement, EnergyFlowProps>(function EnergyFlow(
+  { solar, home, battery, grid, batteryLevel, unit = 'kW', title, decimals = 1, locale: localeProp, className },
+  ref,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const locale = localeProp ?? contextLocale
   const values: Record<EnergyNode, number | undefined> = { solar, home, battery, grid }
@@ -77,7 +69,7 @@ export function EnergyFlow({
     })
   const heading = title ?? m.energyFlow
   return (
-    <figure className={cx('k5-energy', battery == null && 'k5-energy--no-battery', className)}>
+    <figure ref={ref} className={cx('k5-energy', battery == null && 'k5-energy--no-battery', className)}>
       <figcaption className="k5-energy__title">{heading}</figcaption>
       <div className="k5-energy__diagram" role="img" aria-label={`${heading}. ${nodes.map((n) => n.text).join('. ')}`}>
         {nodes.map((n) => (
@@ -107,4 +99,4 @@ export function EnergyFlow({
       </ul>
     </figure>
   )
-}
+})

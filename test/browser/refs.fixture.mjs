@@ -1,0 +1,119 @@
+// Página ?refs=1 (solo React): cada componente recibe una ref y se comprueba a qué elemento apunta.
+// Regla: en los campos, al <input> que recibe el foco; en el resto, al elemento que recibe las
+// props HTML o, si no las admite, al raíz. Un componente nuevo sin caso aquí hace fallar el test.
+import { createElement as r } from 'react'
+import * as R from '@1k5-tech-es/grado-react'
+
+const Icon = (props) => r('svg', { 'aria-hidden': props['aria-hidden'] })
+const chart = { data: [{ day: 'Lun', kwh: 4 }], categoryKey: 'day', series: [{ key: 'kwh', label: 'Producción' }] }
+
+// [componente, props, selector que tiene que cumplir el elemento de la ref]
+export const cases = [
+  ['Button', { children: 'Guardar' }, 'button.k5-btn'],
+  ['IconButton', { icon: Icon, label: 'Editar' }, 'button'],
+  ['Switch', { 'aria-label': 'Activo' }, 'input[role=switch]'],
+  ['Checkbox', { 'aria-label': 'Aceptar' }, 'input[type=checkbox]'],
+  ['Input', { 'aria-label': 'Nombre' }, 'input'],
+  ['Textarea', { 'aria-label': 'Notas' }, 'textarea'],
+  ['Select', { 'aria-label': 'Tipo' }, 'select'],
+  ['DatePicker', { 'aria-label': 'Fecha' }, 'input[type=date]'],
+  ['Slider', { label: 'Potencia' }, 'input[type=range]'],
+  ['SearchInput', {}, 'input[type=search]'],
+  ['PasswordInput', { 'aria-label': 'Contraseña' }, 'input[type=password]'],
+  ['PhoneInput', { 'aria-label': 'Teléfono' }, 'input[type=tel]'],
+  ['NifInput', { 'aria-label': 'NIF' }, 'input'],
+  ['IbanInput', { 'aria-label': 'IBAN' }, 'input'],
+  ['NumberInput', { 'aria-label': 'kWp' }, 'input[role=spinbutton]'],
+  ['Combobox', { label: 'Cliente', options: [] }, 'input[role=combobox]'],
+  ['MultiSelect', { label: 'Provincias', options: [] }, 'input[role=combobox]'],
+  ['TimePicker', { label: 'Hora' }, 'input[role=combobox]'],
+  ['AddressInput', { label: 'Dirección', suggest: async () => [] }, 'input[role=combobox]'],
+  ['RadioGroup', { label: 'Tipo', options: [] }, 'fieldset'],
+  ['DateRangePicker', { label: 'Periodo' }, 'fieldset'],
+  ['SegmentedControl', { label: 'Periodo', options: [{ value: 'm', label: 'Mes' }] }, '[role=radiogroup]'],
+  ['ToggleGroup', { label: 'Formato', options: [{ value: 'b', label: 'Negrita' }] }, '[role=group]'],
+  ['Field', { label: 'Nombre', children: r(R.Input) }, 'div.k5-field'],
+  ['FileUpload', {}, 'div.k5-upload'],
+  ['Badge', { children: 'Nuevo' }, 'span'],
+  ['Spinner', {}, 'span[role=status]'],
+  ['Status', { children: 'Activa' }, 'span'],
+  ['Skeleton', {}, 'span.k5-skeleton'],
+  ['Table', {}, 'table'],
+  ['Separator', {}, 'div'],
+  ['PageHeader', { title: 'Tickets' }, 'header.k5-page-header'],
+  ['Kbd', { keys: ['Ctrl', 'K'] }, 'kbd.k5-kbd'],
+  ['EmptyState', { title: 'Sin datos' }, 'div'],
+  ['Timeline', { items: [] }, 'ol.k5-timeline'],
+  ['Breadcrumbs', { items: [{ label: 'Inicio' }] }, 'nav.k5-breadcrumbs'],
+  ['Avatar', { name: 'Ana Gómez' }, 'span'],
+  ['AvatarGroup', { items: [{ name: 'Ana Gómez' }] }, 'div'],
+  ['Sparkline', { data: [1, 3, 2] }, 'span'],
+  ['DescriptionList', { items: [] }, 'dl'],
+  ['Tooltip', { label: 'Ayuda', content: 'Texto' }, 'span.k5-tooltip'],
+  ['Banner', { title: 'Mantenimiento' }, 'div'],
+  ['Tag', { label: 'Madrid' }, 'span'],
+  ['Stepper', { items: [{ id: 'a', label: 'Cliente' }], value: 'a' }, 'ol.k5-stepper'],
+  ['CopyButton', { value: 'ES91' }, 'button'],
+  ['Accordion', { items: [] }, 'div.k5-accordion'],
+  ['Pagination', { total: 20 }, 'nav.k5-pagination'],
+  ['Tabs', { label: 'Ficha', items: [{ value: 'a', label: 'Resumen', content: 'Texto' }] }, 'div.k5-tabs'],
+  ['Progress', { value: 40 }, 'div'],
+  ['Meter', { value: 72 }, '[role=meter]'],
+  ['EnergyFlow', { solar: 3.2, home: 1.1 }, 'figure.k5-energy'],
+  ['Donut', { value: 68 }, 'div'],
+  ['Calendar', { today: '2026-10-16' }, 'div.k5-calendar'],
+  ['ActionBar', { count: 2, inline: true }, '[role=toolbar]'],
+  ['Card', {}, 'div'],
+  ['CardHeader', {}, 'div.k5-card__header'],
+  ['CardTitle', { children: 'Título' }, 'h3.k5-card__title'],
+  ['CardDescription', {}, 'p.k5-card__description'],
+  ['CardContent', {}, 'div.k5-card__content'],
+  ['CardFooter', {}, 'div.k5-card__footer'],
+  ['Stack', { as: 'ul' }, 'ul'],
+  ['Grid', {}, 'div'],
+  ['Container', {}, 'div'],
+  ['Text', { as: 'span', children: 'Hola' }, 'span'],
+  ['Heading', { level: 2, children: 'Sección' }, 'h2'],
+  ['Kpi', { label: 'Producción', value: '12 kWh', selectable: true }, 'button'],
+  ['KpiGroup', {}, 'div[role=group]'],
+  ['Link', { href: '#', children: 'Ver' }, 'a'],
+  ['BarChart', chart, 'figure.k5-chart'],
+  ['LineChart', chart, 'figure.k5-chart'],
+  ['AreaChart', chart, 'figure.k5-chart'],
+  ['DataTable', { rows: [], columns: [{ key: 'name', header: 'Nombre' }], rowKey: 'name', caption: 'Clientes' }, 'div.k5-data-table'],
+  ['Dialog', { title: 'Editar' }, 'dialog'],
+  ['AlertDialog', { title: 'Eliminar' }, 'dialog'],
+  ['Drawer', { title: 'Ficha' }, 'dialog'],
+  ['Sheet', { title: 'Ficha' }, 'dialog'],
+  ['CommandPalette', { groups: [], hotkey: false }, 'dialog'],
+  ['DropdownMenu', { label: 'Acciones', items: [] }, 'div.k5-menu'],
+  ['ContextMenu', { items: [] }, 'div.k5-context-menu'],
+  ['Popover', { label: 'Filtros' }, 'div.k5-popover'],
+  ['FilterChip', { label: 'Estado' }, 'span.k5-chip'],
+  ['FilterBar', {}, '[role=search]'],
+  ['Alert', { title: 'Aviso' }, 'div.k5-alert'],
+  ['Toast', { title: 'Guardado', open: true, duration: 0, onOpenChange: () => {} }, 'div.k5-toast'],
+  ['Toaster', {}, 'section.k5-toaster'],
+  ['AppShell', { mainId: 'refs-main' }, 'div'],
+  ['AppLogo', {}, 'svg.k5-logo'],
+  ['AppSearch', {}, 'button.k5-app-search'],
+  ['Nav', {}, 'nav.k5-nav'],
+  ['NavSection', {}, 'div.k5-nav__section'],
+  ['NavItem', { href: '#', label: 'Tickets' }, 'a.k5-nav-item'],
+  ['NavGroup', { label: 'Email' }, 'div.k5-nav-group'],
+]
+
+/** Componentes que dibujan DOM y no tienen caso: el test los da por error. */
+export const missing = Object.entries(R)
+  .filter(([name, value]) => value?.$$typeof === Symbol.for('react.forward_ref') && !cases.some(([c]) => c === name))
+  .map(([name]) => name)
+
+export function renderRefs(found) {
+  return r(
+    'div',
+    null,
+    cases.map(([name, props]) =>
+      r('section', { key: name, 'data-case': name }, r(R[name], { ...props, ref: (node) => (found[name] = node) })),
+    ),
+  )
+}

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 
 export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
@@ -9,9 +9,12 @@ export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'titl
   as?: 'h1' | 'h2'
 }
 
-export function PageHeader({ title, subtitle, actions, as: Heading = 'h1', className, children, ...rest }: PageHeaderProps) {
+export const PageHeader = forwardRef<HTMLElement, PageHeaderProps>(function PageHeader(
+  { title, subtitle, actions, as: Heading = 'h1', className, children, ...rest },
+  ref,
+) {
   return (
-    <header {...rest} className={cx('k5-page-header', className)}>
+    <header ref={ref} {...rest} className={cx('k5-page-header', className)}>
       <div className="k5-page-header__titles">
         <Heading className="k5-page-header__title">{title}</Heading>
         {subtitle != null ? <p className="k5-page-header__subtitle">{subtitle}</p> : null}
@@ -20,4 +23,4 @@ export function PageHeader({ title, subtitle, actions, as: Heading = 'h1', class
       {children}
     </header>
   )
-}
+})

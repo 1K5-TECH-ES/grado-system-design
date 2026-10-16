@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterGroups, isShortcut, lockScroll, nextIndex, type CommandGroup, type CommandItem } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -28,25 +28,17 @@ export interface CommandPaletteProps {
  * Buscador de acciones y registros sobre un <dialog> modal. Ábrela desde AppSearch o con
  * Ctrl/⌘ + K. Flechas para moverse, Enter para elegir y Escape para cerrar.
  */
-export function CommandPalette({
-  groups,
-  onSelect,
-  open,
-  defaultOpen = false,
-  onOpenChange,
-  onQueryChange,
-  label,
-  placeholder,
-  emptyLabel,
-  hotkey = 'k',
-  className,
-}: CommandPaletteProps) {
+export const CommandPalette = forwardRef<HTMLDialogElement, CommandPaletteProps>(function CommandPalette(
+  { groups, onSelect, open, defaultOpen = false, onOpenChange, onQueryChange, label, placeholder, emptyLabel, hotkey = 'k', className },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [visible, setVisible] = useValue(open, defaultOpen, onOpenChange)
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(0)
   const dialog = useRef<HTMLDialogElement>(null)
   const input = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => dialog.current as HTMLDialogElement, [])
   const id = useAutoId('k5-command')
   const { filtered, items, enabled } = useMemo(() => {
     const filtered = filterGroups(groups, query)
@@ -190,4 +182,4 @@ export function CommandPalette({
       </div>
     </dialog>
   )
-}
+})

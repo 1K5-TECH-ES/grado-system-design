@@ -270,3 +270,52 @@ export declare function menuPosition(
   margin?: number,
 ): { x: number; y: number }
 export declare function toggleValues(current: string[], value: string, type?: 'single' | 'multiple', order?: string[]): string[]
+
+// ---------- Avisos (0.4) ----------
+export interface ToastAction {
+  label: string
+  /** El aviso se cierra después de llamarla. */
+  onClick: () => void
+}
+export interface ToastOptions {
+  /** Con el id de un aviso que ya está en la cola, lo sustituye en su sitio. */
+  id?: string
+  tone?: StatusTone
+  description?: string
+  action?: ToastAction
+  /** Milisegundos desde que se ve; 0 lo deja hasta que se cierre. Por defecto, 5000. */
+  duration?: number
+}
+export interface ToastItem {
+  id: string
+  title: string
+  tone: StatusTone
+  description?: string
+  action?: ToastAction
+  duration: number
+}
+export interface ToastPromiseMessages<T> {
+  loading: string
+  success: string | ((value: T) => string)
+  error: string | ((reason: unknown) => string)
+}
+export interface ToastFunction {
+  /** Añade un aviso a la cola y devuelve su id. */
+  (title: string, options?: ToastOptions): string
+  success(title: string, options?: Omit<ToastOptions, 'tone'>): string
+  warning(title: string, options?: Omit<ToastOptions, 'tone'>): string
+  /** Tono danger: se anuncia con role="alert". */
+  error(title: string, options?: Omit<ToastOptions, 'tone'>): string
+  info(title: string, options?: Omit<ToastOptions, 'tone'>): string
+  /** Cierra un aviso; sin id, todos. */
+  dismiss(id?: string): void
+  /** Un aviso que dice «cargando» mientras la promesa sigue y luego el resultado. Devuelve la misma promesa. */
+  promise<T>(work: Promise<T> | (() => Promise<T>), messages: ToastPromiseMessages<T>): Promise<T>
+}
+export interface ToastStore {
+  toast: ToastFunction
+  subscribe(listener: () => void): () => void
+  getSnapshot(): readonly ToastItem[]
+}
+export declare function createToastStore(): ToastStore
+export declare function visibleToasts(items: readonly ToastItem[], max?: number): ToastItem[]

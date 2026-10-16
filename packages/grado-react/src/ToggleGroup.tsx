@@ -1,5 +1,5 @@
 'use client'
-import { useState, type KeyboardEvent } from 'react'
+import { forwardRef, useState, type KeyboardEvent } from 'react'
 import { cx, toggleGroupClass, type Size } from '@1k5-tech-es/grado/classes'
 import { nextIndex, toggleValues } from '@1k5-tech-es/grado/patterns'
 import { useValue } from './hooks.js'
@@ -42,7 +42,7 @@ const asList = (value: string | string[] | undefined) =>
   value === undefined ? undefined : Array.isArray(value) ? value : value ? [value] : []
 
 /** Botones conmutables que se combinan: formato de texto, filtros rápidos. Un solo punto de Tab. */
-export function ToggleGroup(props: ToggleGroupProps) {
+export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(function ToggleGroup(props, ref) {
   const { options, label, size, iconOnly = false, disabled = false, className } = props
   const multiple = props.type === 'multiple'
   const change = props.onValueChange as ((value: string | string[]) => void) | undefined
@@ -63,7 +63,7 @@ export function ToggleGroup(props: ToggleGroupProps) {
     buttons[next].focus()
   }
   return (
-    <div role="group" aria-label={label} className={cx(toggleGroupClass({ size, iconOnly }), className)} onKeyDown={onKey}>
+    <div ref={ref} role="group" aria-label={label} className={cx(toggleGroupClass({ size, iconOnly }), className)} onKeyDown={onKey}>
       {options.map(({ value, label: text, icon: Icon, disabled: off }) => (
         <button
           key={value}
@@ -92,4 +92,4 @@ export function ToggleGroup(props: ToggleGroupProps) {
       ))}
     </div>
   )
-}
+})

@@ -1,5 +1,5 @@
 'use client'
-import { type ReactNode } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { bannerClass, cx, ICON_PATHS, STATUS_ICONS, type BannerTone } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -21,11 +21,14 @@ export interface BannerProps {
 }
 
 /** Aviso para toda la aplicación, de borde a borde. En AppShell va en la prop banner. */
-export function Banner({ title, children, tone = 'info', action, onDismiss, dismissLabel, role, className }: BannerProps) {
+export const Banner = forwardRef<HTMLDivElement, BannerProps>(function Banner(
+  { title, children, tone = 'info', action, onDismiss, dismissLabel, role, className },
+  ref,
+) {
   const { messages: m } = useGrado()
   const live = role ?? (tone === 'danger' ? 'alert' : 'status')
   return (
-    <div className={cx(bannerClass({ tone }), className)} role={live === 'none' ? undefined : live}>
+    <div ref={ref} className={cx(bannerClass({ tone }), className)} role={live === 'none' ? undefined : live}>
       <PathIcon paths={ICON_PATHS[tone === 'brand' ? 'info' : STATUS_ICONS[tone]]} className="k5-banner__icon" />
       <div className="k5-banner__content">
         <strong className="k5-banner__title">{title}</strong>
@@ -39,4 +42,4 @@ export function Banner({ title, children, tone = 'info', action, onDismiss, dism
       )}
     </div>
   )
-}
+})

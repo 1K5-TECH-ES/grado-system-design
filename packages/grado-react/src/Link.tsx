@@ -1,5 +1,13 @@
 'use client'
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
+import {
+  forwardRef,
+  type ForwardedRef,
+  type ComponentPropsWithoutRef,
+  type ElementType,
+  type ReactElement,
+  type ReactNode,
+  type Ref,
+} from 'react'
 import { cx, DATA_ICON_PATHS, linkClass, type LinkTone, type LinkUnderline } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -19,11 +27,15 @@ interface LinkOwnProps<C extends ElementType> {
 export type LinkProps<C extends ElementType = 'a'> = LinkOwnProps<C> & Omit<ComponentPropsWithoutRef<C>, keyof LinkOwnProps<C>>
 
 /** Enlace con el estilo del sistema. */
-export function Link<C extends ElementType = 'a'>({ as, external, tone, underline, className, children, ...rest }: LinkProps<C>) {
+export const Link = forwardRef(function Link<C extends ElementType = 'a'>(
+  { as, external, tone, underline, className, children, ...rest }: LinkProps<C>,
+  ref: ForwardedRef<HTMLAnchorElement>,
+) {
   const { messages: m } = useGrado()
   const Tag: ElementType = as ?? 'a'
   return (
     <Tag
+      ref={ref}
       {...rest}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={cx(linkClass({ tone, underline }), className)}
@@ -33,4 +45,4 @@ export function Link<C extends ElementType = 'a'>({ as, external, tone, underlin
       {external ? <span className="k5-sr-only">{` ${m.opensInNewTab}`}</span> : null}
     </Tag>
   )
-}
+}) as <C extends ElementType = 'a'>(props: LinkProps<C> & { ref?: Ref<HTMLAnchorElement> }) => ReactElement | null

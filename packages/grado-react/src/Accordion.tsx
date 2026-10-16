@@ -1,5 +1,5 @@
 'use client'
-import { type ReactNode } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId, useValue } from './hooks.js'
@@ -18,11 +18,14 @@ export interface AccordionProps {
   multiple?: boolean
   className?: string
 }
-export function Accordion({ items, value, defaultValue = [], onValueChange, multiple = false, className }: AccordionProps) {
+export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
+  { items, value, defaultValue = [], onValueChange, multiple = false, className },
+  ref,
+) {
   const [selected, select] = useValue(value, defaultValue, onValueChange),
     id = useAutoId('k5-accordion')
   return (
-    <div className={cx('k5-accordion', className)}>
+    <div ref={ref} className={cx('k5-accordion', className)}>
       {items.map((item, index) => {
         const open = selected.includes(item.value)
         return (
@@ -57,4 +60,4 @@ export function Accordion({ items, value, defaultValue = [], onValueChange, mult
       })}
     </div>
   )
-}
+})

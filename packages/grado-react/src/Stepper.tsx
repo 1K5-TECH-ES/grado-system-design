@@ -1,4 +1,5 @@
 'use client'
+import { forwardRef } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { type StepItem } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -11,11 +12,11 @@ export interface StepperProps {
   onValueChange?: (value: string) => void
   className?: string
 }
-export function Stepper({ items, value, label, onValueChange, className }: StepperProps) {
+export const Stepper = forwardRef<HTMLOListElement, StepperProps>(function Stepper({ items, value, label, onValueChange, className }, ref) {
   const { messages: m } = useGrado()
   const current = items.findIndex((item) => item.id === value)
   return (
-    <ol className={cx('k5-stepper', className)} aria-label={label ?? m.progress}>
+    <ol ref={ref} className={cx('k5-stepper', className)} aria-label={label ?? m.progress}>
       {items.map((item, index) => {
         const content = (
           <>
@@ -50,4 +51,4 @@ export function Stepper({ items, value, label, onValueChange, className }: Stepp
       })}
     </ol>
   )
-}
+})

@@ -8,6 +8,7 @@ import * as datos from './groups/datos.fixture.mjs'
 import * as graficos from './groups/graficos.fixture.mjs'
 import * as entradas from './groups/entradas.fixture.mjs'
 import * as superposiciones from './groups/superposiciones.fixture.mjs'
+import { cases, missing, renderRefs } from './refs.fixture.mjs'
 
 const groups = [maquetacion, datos, graficos, entradas, superposiciones]
 
@@ -28,6 +29,7 @@ const initial = () => ({
   tab: 'a',
   page: 1,
   toast: false,
+  undone: false,
   action: '',
   range: { start: '2026-10-01', end: '2026-10-31' },
   files: [],
@@ -376,6 +378,18 @@ function renderUI(framework, state, update) {
         ],
       }),
     ),
+    section(
+      'toaster',
+      button('Avisar', () => {
+        G.toast.success('Oferta enviada', { duration: 0, action: { label: 'Deshacer', onClick: () => update({ undone: true }) } })
+        G.toast.error('No se ha podido guardar', { duration: 0 })
+        G.toast('Documento subido', { duration: 0 })
+        G.toast('Instalación programada', { duration: 0 })
+      }),
+      button('Cerrar avisos', () => G.toast.dismiss()),
+      make('output', null, String(state.undone)),
+      C('Toaster', { max: 3 }),
+    ),
     section('german', C('GradoProvider', { locale: 'de-DE' }, C('Pagination', { total: 40, pageSize: 10 }))),
     section(
       'table',
@@ -404,7 +418,21 @@ if (new URLSearchParams(location.search).get('framework') === 'vue')
       },
     }),
   ).mount('#app')
-else
+else if (new URLSearchParams(location.search).get('refs')) {
+  // Cada ref, como «Combobox: input[role=combobox]» si apunta al elemento esperado o «Combobox: DIV.k5-combobox» si no.
+  const found = {}
+  createRoot(document.querySelector('#app')).render(renderRefs(found))
+  setTimeout(() => {
+    window.refResults = {
+      missing,
+      results: cases.map(([name, , selector]) => {
+        const node = found[name]
+        const seen = node ? `${node.tagName}${node.classList.length ? `.${[...node.classList].join('.')}` : ''}` : 'null'
+        return `${name}: ${node?.matches?.(selector) ? selector : seen}`
+      }),
+    }
+  }, 100)
+} else
   createRoot(document.querySelector('#app')).render(
     r(function App() {
       const [state, setState] = useState(initial())

@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes } from 'react'
+import { forwardRef, type HTMLAttributes } from 'react'
 import { avatarClass, avatarGroupClass, cx, type Size } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { splitAvatars, type AvatarItem } from '@1k5-tech-es/grado/patterns'
@@ -14,11 +14,14 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /** Avatares solapados de un equipo. */
-export function AvatarGroup({ items, max = 4, size, className, ...rest }: AvatarGroupProps) {
+export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(function AvatarGroup(
+  { items, max = 4, size, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const { shown, rest: hidden } = splitAvatars(items, max)
   return (
-    <div {...rest} className={cx(avatarGroupClass({ size }), className)}>
+    <div ref={ref} {...rest} className={cx(avatarGroupClass({ size }), className)}>
       {shown.map((item, index) => (
         <Avatar key={`${item.name}-${index}`} name={item.name} src={item.src} size={size} />
       ))}
@@ -30,4 +33,4 @@ export function AvatarGroup({ items, max = 4, size, className, ...rest }: Avatar
       ) : null}
     </div>
   )
-}
+})

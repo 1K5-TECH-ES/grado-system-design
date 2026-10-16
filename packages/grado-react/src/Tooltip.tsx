@@ -1,5 +1,5 @@
 'use client'
-import { useState, type ReactNode } from 'react'
+import { forwardRef, useState, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { Button } from './Button.js'
 import { PathIcon } from './PathIcon.js'
@@ -11,11 +11,15 @@ export interface TooltipProps {
   children?: ReactNode
   className?: string
 }
-export function Tooltip({ label, content, children = <PathIcon paths={ICON_PATHS.info} />, className }: TooltipProps) {
+export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip(
+  { label, content, children = <PathIcon paths={ICON_PATHS.info} />, className },
+  ref,
+) {
   const [open, setOpen] = useState(false),
     id = useAutoId('k5-tooltip')
   return (
     <span
+      ref={ref}
       className={cx('k5-tooltip', className)}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
@@ -38,4 +42,4 @@ export function Tooltip({ label, content, children = <PathIcon paths={ICON_PATHS
       )}
     </span>
   )
-}
+})

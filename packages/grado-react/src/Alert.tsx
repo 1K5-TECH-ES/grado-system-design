@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react'
 import { cx, ICON_PATHS, STATUS_ICONS } from '@1k5-tech-es/grado/classes'
 import { type StatusTone } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -17,10 +17,13 @@ export interface AlertProps {
   className?: string
   role?: 'status' | 'alert' | 'none'
 }
-export function Alert({ title, children, tone = 'info', action, onDismiss, dismissLabel, className, role = 'status' }: AlertProps) {
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  { title, children, tone = 'info', action, onDismiss, dismissLabel, className, role = 'status' },
+  ref,
+) {
   const { messages: m } = useGrado()
   return (
-    <div className={cx('k5-alert', `k5-alert--${tone}`, className)} role={role === 'none' ? undefined : role}>
+    <div ref={ref} className={cx('k5-alert', `k5-alert--${tone}`, className)} role={role === 'none' ? undefined : role}>
       <PathIcon paths={ICON_PATHS[STATUS_ICONS[tone] ?? 'info']} className="k5-alert__icon" />
       <div className="k5-alert__content">
         <strong className="k5-alert__title">{title}</strong>
@@ -34,13 +37,16 @@ export function Alert({ title, children, tone = 'info', action, onDismiss, dismi
       )}
     </div>
   )
-}
+})
 export interface ToastProps extends Omit<AlertProps, 'onDismiss'> {
   open: boolean
   onOpenChange: (open: boolean) => void
   duration?: number
 }
-export function Toast({ open, onOpenChange, duration = 5000, className, ...props }: ToastProps) {
+export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
+  { open, onOpenChange, duration = 5000, className, ...props },
+  ref,
+) {
   const [paused, setPaused] = useState(false),
     remaining = useRef(duration),
     started = useRef(0)
@@ -61,6 +67,7 @@ export function Toast({ open, onOpenChange, duration = 5000, className, ...props
   if (!open) return null
   return (
     <div
+      ref={ref}
       className={cx('k5-toast', className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
@@ -77,4 +84,4 @@ export function Toast({ open, onOpenChange, duration = 5000, className, ...props
       <Alert {...props} onDismiss={() => onOpenChange(false)} />
     </div>
   )
-}
+})

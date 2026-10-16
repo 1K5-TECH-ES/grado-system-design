@@ -182,5 +182,7 @@ export function Layout({ children }) {
       emptyLabel: 'No hay resultados.',
       onSelect: (to) => navigate(to),
     }),
+    // Un solo Toaster para toda la web: lo usan las demos de toast().
+    h(G.Toaster),
   )
 }

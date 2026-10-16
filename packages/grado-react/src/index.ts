@@ -12,7 +12,18 @@ export {
   type SelectProps,
 } from './Field.js'
 export { Switch, type SwitchProps } from './Switch.js'
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, type CardProps, type CardTitleProps } from './Card.js'
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  type CardProps,
+  type CardTitleProps,
+  type CardSectionProps,
+  type CardDescriptionProps,
+} from './Card.js'
 export { Table, type TableProps } from './Table.js'
 export { Kpi, KpiGroup, type KpiProps, type KpiGroupProps } from './Kpi.js'
 export { PageHeader, type PageHeaderProps } from './PageHeader.js'
@@ -29,6 +40,7 @@ export {
   NavItem,
   NavGroup,
   type AppShellProps,
+  type AppLogoProps,
   type AppSearchProps,
   type NavProps,
   type NavSectionProps,
@@ -70,3 +82,6 @@ export * from './group-graficos.js'
 export * from './group-entradas.js'
 export * from './group-superposiciones.js'
 export * from './group-maquetacion.js'
+// Componentes de 0.4.
+export { Toaster, toast, type ToasterProps } from './Toaster.js'
+export type { ToastAction, ToastItem, ToastOptions, ToastFunction, ToastPromiseMessages } from '@1k5-tech-es/grado/patterns'

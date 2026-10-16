@@ -1,5 +1,5 @@
 'use client'
-import type { CSSProperties, ReactNode } from 'react'
+import { forwardRef, type CSSProperties, type ForwardedRef, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { areaPath, chartPoints, formatNumber, linePath, niceScale, type ChartSeries } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
@@ -37,21 +37,25 @@ const numberOf = (row: object, key: string) => {
  * Series temporales con los colores del tema: producción y consumo diarios. Ejes y textos
  * en HTML, líneas en SVG. Para lectores de pantalla, los datos van en una tabla oculta.
  */
-export function LineChart<T extends object>({
-  data,
-  categoryKey,
-  series,
-  area = false,
-  unit,
-  title,
-  description,
-  categoryLabel,
-  height,
-  decimals = 1,
-  locale: localeProp,
-  legend,
-  className,
-}: LineChartProps<T>) {
+// forwardRef pierde el parámetro de tipo: el cast del final lo recupera.
+export const LineChart = forwardRef(function LineChart<T extends object>(
+  {
+    data,
+    categoryKey,
+    series,
+    area = false,
+    unit,
+    title,
+    description,
+    categoryLabel,
+    height,
+    decimals = 1,
+    locale: localeProp,
+    legend,
+    className,
+  }: LineChartProps<T>,
+  ref: ForwardedRef<HTMLElement>,
+) {
   const { messages: m, locale: contextLocale } = useGrado()
   const locale = localeProp ?? contextLocale
   const scale = niceScale(Math.max(0, ...data.flatMap((row) => series.map((s) => numberOf(row, s.key)))))
@@ -68,7 +72,7 @@ export function LineChart<T extends object>({
   }))
   const style = height == null ? undefined : ({ '--_plot': typeof height === 'number' ? `${height}px` : height } as CSSProperties)
   return (
-    <figure className={cx('k5-chart', 'k5-chart--line', className)} style={style}>
+    <figure ref={ref} className={cx('k5-chart', 'k5-chart--line', className)} style={style}>
       {title != null || description != null ? (
         <figcaption className="k5-chart__header">
           {title != null ? <span className="k5-chart__title">{title}</span> : null}
@@ -157,9 +161,9 @@ export function LineChart<T extends object>({
       </table>
     </figure>
   )
-}
+}) as unknown as <T extends object>(props: LineChartProps<T> & { ref?: Ref<HTMLElement> }) => ReactElement | null
 
 /** LineChart con el área rellena por defecto. */
-export function AreaChart<T extends object>(props: LineChartProps<T>) {
-  return <LineChart {...props} area={props.area ?? true} />
-}
+export const AreaChart = forwardRef(function AreaChart<T extends object>(props: LineChartProps<T>, ref: ForwardedRef<HTMLElement>) {
+  return <LineChart {...props} ref={ref} area={props.area ?? true} />
+}) as unknown as <T extends object>(props: LineChartProps<T> & { ref?: Ref<HTMLElement> }) => ReactElement | null

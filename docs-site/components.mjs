@@ -242,7 +242,44 @@ export const newComponents = [
       ['duration', 'Milisegundos; 0 mantiene el aviso', '5000'],
       ['tone', 'info · success · warning · danger', 'info'],
     ],
-    'El temporizador se pausa con el puntero o el foco dentro. Muestra un Toast activo por posición; una cola de avisos pertenece a la aplicación.',
+    'El temporizador se pausa con el puntero o el foco dentro. Muestra un Toast activo por posición; para varios avisos seguidos, usa toast() y Toaster.',
+  ),
+  entry(
+    'toaster',
+    'Toaster',
+    'Respuesta',
+    'La cola de avisos: lanza toast() desde cualquier parte de la app y Toaster los muestra por orden.',
+    react(
+      'Button, Toaster, toast',
+      `<>
+  <Button onClick={enviar}>Enviar oferta</Button>
+  <Toaster />
+</>`,
+      `const enviar = () =>
+  toast.success('Oferta enviada', {
+    description: 'A Lucía Fernández',
+    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+  });`,
+    ),
+    vue(
+      'Button, Toaster, toast',
+      `<Button @click="enviar">Enviar oferta</Button>
+<Toaster />`,
+      `const enviar = () =>
+  toast.success('Oferta enviada', {
+    description: 'A Lucía Fernández',
+    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+  });`,
+    ),
+    [
+      ['toast(título, opciones)', 'tone, description, action { label, onClick }, duration (0: hasta que se cierre), id', '—'],
+      ['toast.success · warning · error · info', 'El mismo aviso con su tono. error se anuncia con role="alert"', '—'],
+      ['toast.promise(promesa, textos)', 'loading mientras sigue; después success o error, que pueden ser funciones', '—'],
+      ['toast.dismiss(id?)', 'Cierra un aviso o, sin id, todos', '—'],
+      ['max', 'Avisos a la vez en Toaster; los demás esperan su turno', '3'],
+      ['label', 'Nombre de la región para lectores de pantalla', 'Notificaciones'],
+    ],
+    'Pon un solo Toaster en la app. Los avisos salen por orden de llegada y los que no caben esperan, así que no se pierde ninguno. El tiempo de cada uno empieza cuando se ve y se pausa con el puntero o el foco dentro.',
   ),
   entry(
     'alert',

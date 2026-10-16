@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react'
 import { cx, descriptionListClass, type DescriptionLayout } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import type { DescriptionItem } from '@1k5-tech-es/grado/patterns'
@@ -17,10 +17,13 @@ export interface DescriptionListProps extends HTMLAttributes<HTMLDListElement> {
 }
 
 /** Pares dato–valor de una ficha de cliente o instalación, en un <dl>. */
-export function DescriptionList({ items, layout, className, ...rest }: DescriptionListProps) {
+export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps>(function DescriptionList(
+  { items, layout, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   return (
-    <dl {...rest} className={cx(descriptionListClass({ layout }), className)}>
+    <dl ref={ref} {...rest} className={cx(descriptionListClass({ layout }), className)}>
       {items.map((item, index) => (
         <div key={item.id ?? index} className="k5-dl__item">
           <dt className="k5-dl__term">{item.term}</dt>
@@ -32,4 +35,4 @@ export function DescriptionList({ items, layout, className, ...rest }: Descripti
       ))}
     </dl>
   )
-}
+})

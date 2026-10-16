@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState, type ButtonHTMLAttributes, type MouseEvent } from 'react'
+import { forwardRef, useEffect, useRef, useState, type ButtonHTMLAttributes, type MouseEvent } from 'react'
 import { copyButtonClass, cx, DATA_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { copyText } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -22,7 +22,10 @@ export interface CopyButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 type CopyState = 'idle' | 'copied' | 'failed'
 
 /** Copia un texto al portapapeles y lo anuncia a los lectores de pantalla. */
-export function CopyButton({ value, label, copiedLabel, iconOnly = false, size, onCopy, onClick, className, ...rest }: CopyButtonProps) {
+export const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(function CopyButton(
+  { value, label, copiedLabel, iconOnly = false, size, onCopy, onClick, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [state, setState] = useState<CopyState>('idle')
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -42,6 +45,7 @@ export function CopyButton({ value, label, copiedLabel, iconOnly = false, size, 
   return (
     <span className={cx('k5-copy', className)}>
       <button
+        ref={ref}
         {...rest}
         type="button"
         className={copyButtonClass({ size, iconOnly, copied })}
@@ -56,4 +60,4 @@ export function CopyButton({ value, label, copiedLabel, iconOnly = false, size, 
       </span>
     </span>
   )
-}
+})

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { nextIndex, type AddressOption } from '@1k5-tech-es/grado/patterns'
@@ -40,25 +40,28 @@ export interface AddressInputProps {
  * Dirección con autocompletado asíncrono, sin proveedor incluido: pasa tu función suggest.
  * Espera a que se dejen de pulsar teclas y descarta las respuestas que llegan tarde.
  */
-export function AddressInput({
-  suggest,
-  minChars = 3,
-  debounce = 250,
-  value,
-  defaultValue = null,
-  onValueChange,
-  onQueryChange,
-  placeholder,
-  label,
-  emptyLabel,
-  size,
-  disabled,
-  required,
-  invalid,
-  name,
-  id,
-  className,
-}: AddressInputProps) {
+export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(function AddressInput(
+  {
+    suggest,
+    minChars = 3,
+    debounce = 250,
+    value,
+    defaultValue = null,
+    onValueChange,
+    onQueryChange,
+    placeholder,
+    label,
+    emptyLabel,
+    size,
+    disabled,
+    required,
+    invalid,
+    name,
+    id,
+    className,
+  },
+  ref,
+) {
   const { messages: m } = useGrado()
   const field = useField()
   const inputId = useAutoId('k5-address', id ?? field?.id),
@@ -72,6 +75,7 @@ export function AddressInput({
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(-1)
   const input = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   // Cada búsqueda lleva un número; solo se atiende la respuesta de la última.
   const ticket = useRef(0)
@@ -229,4 +233,4 @@ export function AddressInput({
       {name ? <input type="hidden" name={name} value={current?.id ?? ''} disabled={disabled} /> : null}
     </div>
   )
-}
+})

@@ -1,4 +1,5 @@
 'use client'
+import { forwardRef } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
 import { type TimelineItem } from '@1k5-tech-es/grado/patterns'
 import { useGrado } from './Locale.js'
@@ -8,10 +9,10 @@ export interface TimelineProps {
   label?: string
   className?: string
 }
-export function Timeline({ items, label, className }: TimelineProps) {
+export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(function Timeline({ items, label, className }, ref) {
   const { messages: m } = useGrado()
   return (
-    <ol className={cx('k5-timeline', className)} aria-label={label ?? m.history}>
+    <ol ref={ref} className={cx('k5-timeline', className)} aria-label={label ?? m.history}>
       {items.map((item) => (
         <li key={item.id} className="k5-timeline__item">
           <span aria-hidden="true" className={cx('k5-timeline__dot', item.tone && `k5-timeline__dot--${item.tone}`)} />
@@ -26,4 +27,4 @@ export function Timeline({ items, label, className }: TimelineProps) {
       ))}
     </ol>
   )
-}
+})

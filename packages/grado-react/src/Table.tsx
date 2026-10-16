@@ -1,4 +1,4 @@
-import type { ReactNode, TableHTMLAttributes } from 'react'
+import { forwardRef, type ReactNode, type TableHTMLAttributes } from 'react'
 import { cx, tableClass, tableWrapClass } from '@1k5-tech-es/grado/classes'
 
 export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
@@ -9,13 +9,16 @@ export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
 }
 
 /** Envuelve una <table> normal. Para columnas numéricas usa className="k5-num" en th y td. */
-export function Table({ caption, compact, plain, className, children, ...rest }: TableProps) {
+export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
+  { caption, compact, plain, className, children, ...rest },
+  ref,
+) {
   return (
     <div className={tableWrapClass({ plain })}>
-      <table {...rest} className={cx(tableClass({ compact }), className)}>
+      <table ref={ref} {...rest} className={cx(tableClass({ compact }), className)}>
         {caption != null ? <caption>{caption}</caption> : null}
         {children}
       </table>
     </div>
   )
-}
+})

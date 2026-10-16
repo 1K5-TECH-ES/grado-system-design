@@ -8,6 +8,7 @@ export const DEFAULT_LOCALE = 'es-ES'
 const es = {
   close: 'Cerrar',
   dismiss: 'Cerrar aviso',
+  notifications: 'Notificaciones',
   loading: 'Cargando',
   loadingEllipsis: 'Cargando…',
   loadingData: 'Cargando datos',
@@ -135,6 +136,7 @@ const es = {
 const de = {
   close: 'Schließen',
   dismiss: 'Hinweis schließen',
+  notifications: 'Benachrichtigungen',
   loading: 'Wird geladen',
   loadingEllipsis: 'Wird geladen…',
   loadingData: 'Daten werden geladen',
@@ -262,6 +264,7 @@ const de = {
 const en = {
   close: 'Close',
   dismiss: 'Dismiss',
+  notifications: 'Notifications',
   loading: 'Loading',
   loadingEllipsis: 'Loading…',
   loadingData: 'Loading data',

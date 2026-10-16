@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cx, FIELD_ICON_PATHS, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { nearestTime, normalizeTime, timeError, timeSlots } from '@1k5-tech-es/grado/patterns'
 import { Input, useField } from './Field.js'
@@ -37,24 +37,27 @@ export interface TimePickerProps {
  * Hora «HH:MM». Se puede escribir («9», «930», «9:30», «09.30»: al salir queda «09:30») o elegir
  * en la lista de franjas, con las flechas y Enter como en Combobox.
  */
-export function TimePicker({
-  value,
-  defaultValue = '',
-  onValueChange,
-  step = 15,
-  min,
-  max,
-  placeholder,
-  size,
-  label,
-  disabled,
-  required,
-  invalid,
-  name,
-  id,
-  className,
-  onErrorChange,
-}: TimePickerProps) {
+export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(function TimePicker(
+  {
+    value,
+    defaultValue = '',
+    onValueChange,
+    step = 15,
+    min,
+    max,
+    placeholder,
+    size,
+    label,
+    disabled,
+    required,
+    invalid,
+    name,
+    id,
+    className,
+    onErrorChange,
+  },
+  ref,
+) {
   const { messages: m } = useGrado()
   const field = useField()
   const inputId = useAutoId('k5-time', id ?? field?.id),
@@ -66,6 +69,7 @@ export function TimePicker({
   const [open, setOpen] = useState(false),
     [active, setActive] = useState(-1)
   const input = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
   const slots = useMemo(() => timeSlots(min ?? '00:00', max ?? '23:59', step), [min, max, step])
   const text = draft ?? current
   const range = { min, max }
@@ -222,4 +226,4 @@ export function TimePicker({
       {name ? <input type="hidden" name={name} value={current} disabled={disabled} /> : null}
     </div>
   )
-}
+})

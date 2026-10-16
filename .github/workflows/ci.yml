@@ -1,5 +1,5 @@
 # Integración continua: lo mismo que `npm run test:all`, repartido en dos trabajos.
-# - checks: lint, tests unitarios y de paridad, navegador (teclado, foco y axe) y web.
+# - checks: lint, tests unitarios y de paridad, API pública, tamaño, navegador (teclado, foco y axe) y web.
 # - visual: capturas del catálogo dentro de la imagen oficial de Playwright, para que el
 #   renderizado sea siempre el mismo. Para regenerarlas, lanza el workflow a mano con
 #   «update-snapshots» y descarga el artefacto «capturas» en test/visual/__screenshots__/.
@@ -33,6 +33,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+      # La API pública (api/*.api.md) y el tamaño de los paquetes no cambian sin querer.
+      - run: npm run api:check
+      - run: npm run size
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - run: npm run docs:build

@@ -39,7 +39,10 @@ export interface FieldProps {
   children: ReactNode
 }
 
-export function Field({ label, hint, error, required = false, id, className, children }: FieldProps) {
+export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
+  { label, hint, error, required = false, id, className, children },
+  ref,
+) {
   const auto = useId()
   const controlId = id ?? `k5-${auto.replace(/[^a-zA-Z0-9_-]/g, '')}`
   const hintId = present(hint) ? `${controlId}-hint` : undefined
@@ -47,7 +50,7 @@ export function Field({ label, hint, error, required = false, id, className, chi
   const value = { id: controlId, describedBy: cx(hintId, errorId) || undefined, invalid: Boolean(errorId), required }
   return (
     <FieldContext.Provider value={value}>
-      <div className={cx('k5-field', className)}>
+      <div ref={ref} className={cx('k5-field', className)}>
         {present(label) ? (
           <label className="k5-field__label" htmlFor={controlId}>
             {label}
@@ -72,7 +75,7 @@ export function Field({ label, hint, error, required = false, id, className, chi
       </div>
     </FieldContext.Provider>
   )
-}
+})
 
 interface ControlOwnProps {
   id?: string

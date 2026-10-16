@@ -1,5 +1,15 @@
 'use client'
-import { forwardRef, useEffect, useMemo, useRef, useState, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react'
 import { cx, ICON_PATHS, type Size } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import {
@@ -207,18 +217,10 @@ export interface SegmentedControlProps {
 }
 
 /** Una opción entre pocas (de dos a cinco) que cambia la vista al momento. */
-export function SegmentedControl({
-  options,
-  value,
-  defaultValue,
-  onValueChange,
-  label,
-  size,
-  block = false,
-  disabled = false,
-  name,
-  className,
-}: SegmentedControlProps) {
+export const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(function SegmentedControl(
+  { options, value, defaultValue, onValueChange, label, size, block = false, disabled = false, name, className },
+  ref,
+) {
   const first = options.find((option) => !option.disabled)?.value ?? ''
   const [selected, select] = useValue(value, defaultValue ?? first, onValueChange)
   const focusable = options.some((option) => option.value === selected && !option.disabled) ? selected : first
@@ -232,6 +234,7 @@ export function SegmentedControl({
   }
   return (
     <div
+      ref={ref}
       role="radiogroup"
       aria-label={label}
       aria-disabled={disabled || undefined}
@@ -256,7 +259,7 @@ export function SegmentedControl({
       {name ? <input type="hidden" name={name} value={selected} disabled={disabled} /> : null}
     </div>
   )
-}
+})
 
 // ---------- MultiSelect ----------
 
@@ -284,22 +287,25 @@ export interface MultiSelectProps {
  * Varias opciones con búsqueda. Enter marca o desmarca; la lista sigue abierta.
  * Retroceso con el buscador vacío quita la última opción elegida.
  */
-export function MultiSelect({
-  options,
-  value,
-  defaultValue = [],
-  onValueChange,
-  onQueryChange,
-  label,
-  placeholder,
-  disabled,
-  required,
-  loading,
-  emptyLabel,
-  name,
-  id,
-  className,
-}: MultiSelectProps) {
+export const MultiSelect = forwardRef<HTMLInputElement, MultiSelectProps>(function MultiSelect(
+  {
+    options,
+    value,
+    defaultValue = [],
+    onValueChange,
+    onQueryChange,
+    label,
+    placeholder,
+    disabled,
+    required,
+    loading,
+    emptyLabel,
+    name,
+    id,
+    className,
+  },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [selected, select] = useValue(value, defaultValue, onValueChange)
   const [open, setOpen] = useState(false)
@@ -309,6 +315,7 @@ export function MultiSelect({
   const controlId = useAutoId('k5-multi', id ?? field?.id)
   const listId = `${controlId}-list`
   const input = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
   const filtered = useMemo(() => filterOptions(options, query), [options, query])
   const chosen = selected.map((v) => options.find((option) => option.value === v) ?? { value: v, label: v })
   const activeOption = filtered[active]
@@ -446,4 +453,4 @@ export function MultiSelect({
       {name ? selected.map((v) => <input key={v} type="hidden" name={name} value={v} disabled={disabled} />) : null}
     </div>
   )
-}
+})

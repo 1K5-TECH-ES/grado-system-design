@@ -872,3 +872,62 @@ export function toggleValues(current, value, type = 'single', order = []) {
   const next = on ? current.filter((item) => item !== value) : [...current, value]
   return order.length ? order.filter((item) => next.includes(item)) : next
 }
+
+// ---------- Avisos (0.4) ----------
+
+const TOAST_TONES = { success: 'success', warning: 'warning', error: 'danger', info: 'info' }
+
+/**
+ * Cola de avisos de toast(). @1k5-tech-es/grado-react y @1k5-tech-es/grado-vue crean una cada uno
+ * y Toaster la pinta. Los avisos salen por orden de llegada: los que no caben esperan su turno, así
+ * que nadie se pierde un aviso aunque lleguen varios a la vez.
+ */
+export function createToastStore() {
+  let items = []
+  let counter = 0
+  const listeners = new Set()
+  const set = (next) => {
+    items = next
+    listeners.forEach((listener) => listener())
+  }
+  // Con un id que ya existe, el aviso se actualiza en su sitio (lo usa toast.promise).
+  const show = (title, options = {}) => {
+    const id = options.id ?? `k5-toast-${++counter}`
+    const item = {
+      id,
+      title: String(title),
+      tone: options.tone ?? 'info',
+      description: options.description,
+      action: options.action,
+      duration: options.duration ?? 5000,
+    }
+    set(items.some((old) => old.id === id) ? items.map((old) => (old.id === id ? item : old)) : [...items, item])
+    return id
+  }
+  const toast = (title, options) => show(title, options)
+  for (const [name, tone] of Object.entries(TOAST_TONES)) toast[name] = (title, options) => show(title, { ...options, tone })
+  toast.dismiss = (id) => set(id == null ? [] : items.filter((item) => item.id !== id))
+  toast.promise = (work, messages) => {
+    const id = show(messages.loading, { tone: 'info', duration: 0 })
+    const text = (message, value) => (typeof message === 'function' ? message(value) : message)
+    const promise = Promise.resolve(typeof work === 'function' ? work() : work)
+    promise.then(
+      (value) => show(text(messages.success, value), { id, tone: 'success' }),
+      (reason) => show(text(messages.error, reason), { id, tone: 'danger' }),
+    )
+    return promise
+  }
+  return {
+    toast,
+    subscribe(listener) {
+      listeners.add(listener)
+      return () => listeners.delete(listener)
+    },
+    getSnapshot: () => items,
+  }
+}
+
+/** Avisos visibles: los `max` primeros de la cola. */
+export function visibleToasts(items, max = 3) {
+  return items.slice(0, Math.max(1, Math.floor(max)))
+}

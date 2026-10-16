@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react'
 import { cx, emptyClass } from '@1k5-tech-es/grado/classes'
 import type { IconComponent } from './types.js'
 
@@ -11,9 +11,12 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   compact?: boolean
 }
 
-export function EmptyState({ icon: Icon, title, description, action, compact, className, children, ...rest }: EmptyStateProps) {
+export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(function EmptyState(
+  { icon: Icon, title, description, action, compact, className, children, ...rest },
+  ref,
+) {
   return (
-    <div {...rest} className={cx(emptyClass({ compact }), className)}>
+    <div ref={ref} {...rest} className={cx(emptyClass({ compact }), className)}>
       {Icon ? (
         <span className="k5-empty__icon">
           <Icon aria-hidden="true" />
@@ -25,4 +28,4 @@ export function EmptyState({ icon: Icon, title, description, action, compact, cl
       {action != null ? <div className="k5-empty__action">{action}</div> : null}
     </div>
   )
-}
+})

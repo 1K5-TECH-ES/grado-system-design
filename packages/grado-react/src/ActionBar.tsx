@@ -1,5 +1,5 @@
 'use client'
-import { useRef, type ReactNode } from 'react'
+import { forwardRef, useRef, type ReactNode } from 'react'
 import { actionBarClass, cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { moveFocus, selectedCount } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -23,7 +23,10 @@ export interface ActionBarProps {
 }
 
 /** Barra flotante de acciones en lote mientras hay filas elegidas en una tabla. */
-export function ActionBar({ count, label, children, onClear, clearLabel, inline = false, className }: ActionBarProps) {
+export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(function ActionBar(
+  { count, label, children, onClear, clearLabel, inline = false, className },
+  ref,
+) {
   const { messages: m } = useGrado()
   // Al quitar la selección la barra desaparece: el foco vuelve a donde estaba antes de entrar.
   const before = useRef<HTMLElement | null>(null)
@@ -36,6 +39,7 @@ export function ActionBar({ count, label, children, onClear, clearLabel, inline 
   }
   return (
     <div
+      ref={ref}
       role="toolbar"
       aria-label={text}
       className={cx(actionBarClass({ inline }), className)}
@@ -59,4 +63,4 @@ export function ActionBar({ count, label, children, onClear, clearLabel, inline 
       )}
     </div>
   )
-}
+})

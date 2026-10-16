@@ -270,6 +270,9 @@ export default function Installation() {
                   vueLabel: 'Terminal · en tu aplicación',
                 }),
                 P('Instala siempre el paquete base y el del framework en la misma versión.'),
+                P(
+                  'Los cambios mecánicos los hace el codemod: imports, dependencias, alias y clases retiradas. `npx @1k5-tech-es/grado migrate --dry` enseña lo que cambiaría; sin `--dry` lo escribe. Lo que pide una decisión, como un `variant="danger"` que debería ser `destructive`, lo avisa con archivo y línea.',
+                ),
               ),
             },
             {
@@ -286,7 +289,7 @@ export default function Installation() {
                   vueLabel: 'Terminal · en tu aplicación',
                 }),
                 P(
-                  'Después, sustituye `@1k5/` por `@1k5-tech-es/` en los imports de JavaScript y de CSS, y borra los `.tgz` de `vendor/`. Los componentes, las clases y los tokens no cambian de nombre.',
+                  'Después, `npx @1k5-tech-es/grado migrate` cambia `@1k5/` por `@1k5-tech-es/` en los imports de JavaScript y de CSS y en `package.json`, y te dice qué `.tgz` de `vendor/` puedes borrar. Los componentes, las clases y los tokens no cambian de nombre.',
                 ),
               ),
             },

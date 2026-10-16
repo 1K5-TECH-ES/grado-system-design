@@ -270,12 +270,29 @@ export const guidelines = {
       'Escape cierra y devuelve el foco al botón. Tab sale del menú.',
     ],
   },
+  toaster: {
+    use: [
+      "Úsalo para confirmar acciones desde cualquier parte de la app: toast.success('Oferta enviada').",
+      'Usa toast.promise para guardar o enviar: el mismo aviso pasa de «Guardando…» al resultado.',
+      'Pon un solo Toaster, junto a AppShell.',
+    ],
+    avoid: [
+      'Para errores que piden corregir algo usa Alert o el error del campo; el aviso desaparece.',
+      'Si el aviso lleva una acción importante, repítela en la pantalla: no todo el mundo llega a pulsarla.',
+      'No subas max por encima de 3: más avisos a la vez tapan la pantalla.',
+    ],
+    a11y: [
+      'La región «Notificaciones» siempre está en la página, así que los lectores de pantalla anuncian lo que entra.',
+      'toast.error se anuncia con role="alert"; el resto, con aria-live="polite".',
+      'El tiempo empieza cuando el aviso se ve y se pausa con el puntero o el foco dentro. Escape lo cierra.',
+    ],
+  },
   toast: {
     use: ['Úsalo para confirmar una acción ya hecha, como «Oferta enviada».', 'Usa tone success o info. Desaparece a los cinco segundos.'],
     avoid: [
       'Para errores que piden una acción usa Alert junto al contenido.',
       'Si incluye una acción, usa duration 0 o repite la acción en la pantalla.',
-      'Muestra un Toast por posición. La cola de avisos la gestiona tu aplicación.',
+      'Para varios avisos seguidos no apiles Toast: usa toast() y Toaster, que llevan la cola.',
     ],
     a11y: [
       'Usa role="status" por defecto. Para fallos urgentes pasa role="alert".',

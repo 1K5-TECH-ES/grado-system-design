@@ -35,24 +35,16 @@ export interface DateRangePickerProps {
   name?: string
   className?: string
 }
-export function DateRangePicker({
-  label,
-  value,
-  defaultValue = { start: '', end: '' },
-  onValueChange,
-  min,
-  max,
-  required,
-  disabled,
-  name,
-  className,
-}: DateRangePickerProps) {
+export const DateRangePicker = forwardRef<HTMLFieldSetElement, DateRangePickerProps>(function DateRangePicker(
+  { label, value, defaultValue = { start: '', end: '' }, onValueChange, min, max, required, disabled, name, className },
+  ref,
+) {
   const [range, select] = useValue(value, defaultValue, onValueChange),
     id = useAutoId('k5-range'),
     { messages: m } = useGrado(),
     error = rangeError(range.start, range.end, min, max, m)
   return (
-    <fieldset className={cx('k5-date-range', className)} disabled={disabled}>
+    <fieldset ref={ref} className={cx('k5-date-range', className)} disabled={disabled}>
       <legend>{label}</legend>
       <div className="k5-date-range__fields">
         <label>
@@ -89,4 +81,4 @@ export function DateRangePicker({
       )}
     </fieldset>
   )
-}
+})

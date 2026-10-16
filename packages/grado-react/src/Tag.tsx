@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes, MouseEvent, ReactNode } from 'react'
+import { forwardRef, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react'
 import { cx, ICON_PATHS, tagClass, type SmallSize } from '@1k5-tech-es/grado/classes'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { tagFocusTarget } from '@1k5-tech-es/grado/patterns'
@@ -20,7 +20,10 @@ export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'childre
 }
 
 /** Etiqueta que se puede quitar, como una provincia de una zona de trabajo. */
-export function Tag({ label, children, onRemove, removeLabel, size, disabled = false, className, ...rest }: TagProps) {
+export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
+  { label, children, onRemove, removeLabel, size, disabled = false, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const text = label ?? (typeof children === 'string' || typeof children === 'number' ? String(children) : '')
   const remove = (event: MouseEvent<HTMLButtonElement>) => {
@@ -29,7 +32,7 @@ export function Tag({ label, children, onRemove, removeLabel, size, disabled = f
     onRemove?.()
   }
   return (
-    <span {...rest} className={cx(tagClass({ size, disabled }), className)}>
+    <span ref={ref} {...rest} className={cx(tagClass({ size, disabled }), className)}>
       <span className="k5-tag__label">{children ?? label}</span>
       {onRemove ? (
         <button
@@ -44,4 +47,4 @@ export function Tag({ label, children, onRemove, removeLabel, size, disabled = f
       ) : null}
     </span>
   )
-}
+})

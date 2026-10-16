@@ -29,10 +29,11 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      # La web y los .tgz se generan antes de publicar: si algo falla, no se publica nada a medias.
+      - run: npm run docs:build
       - run: npm publish --workspaces
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: npm run docs:build
       - name: Release en GitHub con los paquetes y las notas del CHANGELOG
         run: |
           node scripts/release.mjs notes "${GITHUB_REF_NAME#v}" > notas.md

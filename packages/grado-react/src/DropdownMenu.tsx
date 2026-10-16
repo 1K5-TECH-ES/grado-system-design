@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { moveFocus, overflowsSide, type MenuItem } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
@@ -14,11 +14,15 @@ export interface DropdownMenuProps {
   align?: 'start' | 'end'
   className?: string
 }
-export function DropdownMenu({ label, items, onAction, disabled, align = 'end', className }: DropdownMenuProps) {
+export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(function DropdownMenu(
+  { label, items, onAction, disabled, align = 'end', className },
+  ref,
+) {
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null),
     menu = useRef<HTMLDivElement>(null),
     trigger = useRef<HTMLButtonElement>(null)
+  useImperativeHandle(ref, () => root.current as HTMLDivElement, [])
   const first = useRef<'first' | 'last'>('first'),
     id = useAutoId('k5-menu')
   // Si el menú no cabe por el lado pedido (ventana o contenedor con scroll), se abre hacia el otro.
@@ -111,4 +115,4 @@ export function DropdownMenu({ label, items, onAction, disabled, align = 'end', 
       )}
     </div>
   )
-}
+})

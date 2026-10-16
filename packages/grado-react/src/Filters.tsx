@@ -1,5 +1,5 @@
 'use client'
-import { useRef, type ReactNode } from 'react'
+import { forwardRef, useImperativeHandle, useRef, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { type FilterItem } from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
@@ -15,10 +15,10 @@ export interface FilterChipProps {
   onRemove?: () => void
   className?: string
 }
-export function FilterChip({ label, onRemove, className }: FilterChipProps) {
+export const FilterChip = forwardRef<HTMLSpanElement, FilterChipProps>(function FilterChip({ label, onRemove, className }, ref) {
   const { messages: m } = useGrado()
   return (
-    <span className={cx('k5-chip', className)}>
+    <span ref={ref} className={cx('k5-chip', className)}>
       {label}
       {onRemove && (
         <button type="button" className="k5-chip__remove" aria-label={formatMessage(m.removeFilter, { label })} onClick={onRemove}>
@@ -27,7 +27,7 @@ export function FilterChip({ label, onRemove, className }: FilterChipProps) {
       )}
     </span>
   )
-}
+})
 export interface FilterBarProps {
   query?: string
   onQueryChange?: (query: string) => void
@@ -39,20 +39,14 @@ export interface FilterBarProps {
   children?: ReactNode
   className?: string
 }
-export function FilterBar({
-  query = '',
-  onQueryChange,
-  filters = [],
-  onRemoveFilter,
-  onClear,
-  label: labelProp,
-  placeholder,
-  children,
-  className,
-}: FilterBarProps) {
+export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(function FilterBar(
+  { query = '', onQueryChange, filters = [], onRemoveFilter, onClear, label: labelProp, placeholder, children, className },
+  ref,
+) {
   const { messages: m } = useGrado(),
     label = labelProp ?? m.search,
     root = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => root.current as HTMLDivElement, [])
   // Al quitar un filtro su botón desaparece: el foco vuelve al buscador para no perderse.
   const removed = (id: string) => {
     onRemoveFilter?.(id)
@@ -87,4 +81,4 @@ export function FilterBar({
       )}
     </div>
   )
-}
+})

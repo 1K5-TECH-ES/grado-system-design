@@ -213,6 +213,34 @@ function CoreDemo({ id }) {
         'La instalación se ha actualizado.',
       ),
     )
+  if (id === 'toaster')
+    return row(
+      h(
+        G.Button,
+        {
+          variant: 'secondary',
+          onClick: () =>
+            G.toast.success('Oferta enviada', {
+              description: 'A Lucía Fernández',
+              action: { label: 'Deshacer', onClick: () => G.toast('Envío deshecho') },
+            }),
+        },
+        'Enviar oferta',
+      ),
+      h(
+        G.Button,
+        {
+          variant: 'secondary',
+          onClick: () =>
+            G.toast.promise(new Promise((done) => setTimeout(done, 1500)), {
+              loading: 'Guardando la instalación…',
+              success: 'Instalación guardada',
+              error: 'No se ha podido guardar',
+            }),
+        },
+        'Guardar',
+      ),
+    )
   if (id === 'alert')
     return stack(
       h(G.Alert, { title: 'Documentación pendiente', tone: 'warning' }, 'Añade el certificado de instalación para continuar.'),

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { forwardRef, useEffect, useMemo, useState, type ForwardedRef, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { compareValues, pageCount, selectionLabel, type SortState } from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
@@ -38,26 +38,30 @@ export interface DataTableProps<T extends object> {
   className?: string
 }
 /** Client-side table. Filter rows before passing them; rowKey must be stable and unique. */
-export function DataTable<T extends object>({
-  rows,
-  columns,
-  rowKey,
-  caption,
-  pageSize = 10,
-  page,
-  onPageChange,
-  sort,
-  defaultSort = null,
-  onSortChange,
-  selectable = false,
-  selectedKeys,
-  onSelectionChange,
-  rowActions,
-  loading,
-  error,
-  emptyLabel,
-  className,
-}: DataTableProps<T>) {
+// forwardRef pierde el parámetro de tipo: el cast del final lo recupera.
+export const DataTable = forwardRef(function DataTable<T extends object>(
+  {
+    rows,
+    columns,
+    rowKey,
+    caption,
+    pageSize = 10,
+    page,
+    onPageChange,
+    sort,
+    defaultSort = null,
+    onSortChange,
+    selectable = false,
+    selectedKeys,
+    onSelectionChange,
+    rowActions,
+    loading,
+    error,
+    emptyLabel,
+    className,
+  }: DataTableProps<T>,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
   const { messages: m } = useGrado()
   const [innerPage, setInnerPage] = useState(1),
     [innerSort, setInnerSort] = useState<SortState | null>(defaultSort),
@@ -108,7 +112,7 @@ export function DataTable<T extends object>({
     )
   const skeletonRows = Array.from({ length: Math.min(size, 3) }, (_, i) => i)
   return (
-    <div className={cx('k5-data-table', className)} aria-busy={loading || undefined}>
+    <div ref={ref} className={cx('k5-data-table', className)} aria-busy={loading || undefined}>
       {selectable && (
         <span className="k5-data-table__selection" role="status">
           {selectionLabel(selected.length, m)}
@@ -211,4 +215,4 @@ export function DataTable<T extends object>({
       {!loading && !error && <Pagination total={rows.length} pageSize={size} page={current} onPageChange={changePage} />}
     </div>
   )
-}
+}) as unknown as <T extends object>(props: DataTableProps<T> & { ref?: Ref<HTMLDivElement> }) => ReactElement | null

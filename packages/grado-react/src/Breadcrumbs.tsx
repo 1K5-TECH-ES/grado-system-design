@@ -1,4 +1,5 @@
 'use client'
+import { forwardRef } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { type BreadcrumbItem } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
@@ -9,10 +10,10 @@ export interface BreadcrumbsProps {
   label?: string
   className?: string
 }
-export function Breadcrumbs({ items, label, className }: BreadcrumbsProps) {
+export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs({ items, label, className }, ref) {
   const { messages: m } = useGrado()
   return (
-    <nav className={cx('k5-breadcrumbs', className)} aria-label={label ?? m.breadcrumbs}>
+    <nav ref={ref} className={cx('k5-breadcrumbs', className)} aria-label={label ?? m.breadcrumbs}>
       <ol>
         {items.map((item, index) => (
           <li key={index}>
@@ -27,4 +28,4 @@ export function Breadcrumbs({ items, label, className }: BreadcrumbsProps) {
       </ol>
     </nav>
   )
-}
+})

@@ -1,4 +1,5 @@
 'use client'
+import { forwardRef } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { pageCount, pageItems } from '@1k5-tech-es/grado/patterns'
 import { formatMessage } from '@1k5-tech-es/grado/messages'
@@ -15,13 +16,16 @@ export interface PaginationProps {
   label?: string
   className?: string
 }
-export function Pagination({ total, pageSize = 10, page, defaultPage = 1, onPageChange, label, className }: PaginationProps) {
+export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagination(
+  { total, pageSize = 10, page, defaultPage = 1, onPageChange, label, className },
+  ref,
+) {
   const { messages: m } = useGrado()
   const [selected, select] = useValue(page, defaultPage, onPageChange),
     count = pageCount(total, pageSize),
     current = Math.max(1, Math.min(count, selected))
   return (
-    <nav className={cx('k5-pagination', className)} aria-label={label ?? m.pagination}>
+    <nav ref={ref} className={cx('k5-pagination', className)} aria-label={label ?? m.pagination}>
       <span aria-live="polite">
         {total > 0
           ? formatMessage(m.pageRange, {
@@ -58,4 +62,4 @@ export function Pagination({ total, pageSize = 10, page, defaultPage = 1, onPage
       </div>
     </nav>
   )
-}
+})

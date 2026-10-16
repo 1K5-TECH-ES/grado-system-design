@@ -101,6 +101,22 @@ import { Ticket, Users } from 'lucide-react'
 
 Además, los componentes interactivos (`Dialog`, `Tabs`, `Combobox`, `DataTable`…) están documentados con ejemplos en la web de Grado.
 
+## Avisos
+
+Pon un `Toaster` una vez, junto a `AppShell`, y lanza los avisos desde cualquier sitio, también fuera de un componente:
+
+```tsx
+import { Toaster, toast } from '@1k5-tech-es/grado-react'
+
+<Toaster />
+
+toast.success('Oferta enviada', { description: 'A Lucía Fernández', action: { label: 'Deshacer', onClick: deshacer } })
+toast.error('No se ha podido guardar')
+toast.promise(guardar(), { loading: 'Guardando…', success: 'Guardado', error: 'No se ha podido guardar' })
+```
+
+Se ven como mucho tres a la vez (`max`); el resto espera su turno. El tiempo de cada uno empieza cuando se ve.
+
 ## Idioma
 
 Sin configurar nada, los textos de los componentes están en español. Para otro idioma:
@@ -122,6 +138,6 @@ Los módulos con estado o eventos llevan `'use client'`, así que se pueden impo
 Reglas comunes:
 
 - `className` y el resto de atributos HTML van al elemento principal: el `<button>`, el `<input>`, el `<table>`…
-- `Button`, `Input`, `Textarea`, `Select` y `Switch` reenvían `ref`, así que funcionan con react-hook-form.
+- Todos los componentes reenvían `ref`. En los campos (`Input`, `NumberInput`, `Combobox`, `TimePicker`…) va al `<input>` que recibe el foco, así que funcionan con `register()` de react-hook-form y con el foco en el primer error. En el resto va al elemento que recibe los atributos HTML o, si no los admite, al raíz: el `<dialog>` de `Dialog`, la `<table>` de `Table`, el `<figure>` de los gráficos.
 - Dentro de un `Field`, los controles reciben solos el `id`, `aria-describedby`, `aria-invalid` y `required`.
 - Para un enlace con aspecto de botón (o el `Link` del router), usa la función: `<Link className={buttonClass({ variant: 'secondary' })}>`.

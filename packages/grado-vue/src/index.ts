@@ -38,3 +38,6 @@ export * from './group-graficos.js'
 export * from './group-entradas.js'
 export * from './group-superposiciones.js'
 export * from './group-maquetacion.js'
+// Componentes de 0.4.
+export { Toaster, toast } from './Toaster.js'
+export type { ToastAction, ToastItem, ToastOptions, ToastFunction, ToastPromiseMessages } from '@1k5-tech-es/grado/patterns'

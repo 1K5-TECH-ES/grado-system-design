@@ -4,10 +4,17 @@ import { createElement as r } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import * as G from '@1k5-tech-es/grado-react'
 
-test('los controles reenvían ref (react-hook-form los necesita)', () => {
-  for (const name of ['Button', 'Input', 'Textarea', 'Select', 'Switch']) {
-    assert.equal(G[name].$$typeof, Symbol.for('react.forward_ref'), `${name} debe usar forwardRef`)
+test('todos los componentes reenvían ref (react-hook-form y los popovers la necesitan)', () => {
+  // GradoProvider no pinta nada; el resto son componentes o constantes en mayúsculas.
+  const components = Object.entries(G).filter(
+    ([name, value]) => /^[A-Z]/.test(name) && name !== 'GradoProvider' && typeof value !== 'string',
+  )
+  const constants = ['MESSAGES']
+  for (const [name, value] of components) {
+    if (constants.includes(name)) continue
+    assert.equal(value.$$typeof, Symbol.for('react.forward_ref'), `${name} debe usar forwardRef`)
   }
+  assert.ok(components.length > 90)
 })
 
 test('un Input fuera de Field no inventa atributos', () => {

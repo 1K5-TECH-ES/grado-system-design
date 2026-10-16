@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes } from 'react'
+import { forwardRef, type HTMLAttributes } from 'react'
 import { avatarClass, cx, initials, type AvatarStatus, type Size } from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 
@@ -16,12 +16,15 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   status?: AvatarStatus
 }
 
-export function Avatar({ name, initials: given, src, size, status, className, ...rest }: AvatarProps) {
+export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
+  { name, initials: given, src, size, status, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const spoken = name ? [name, status && m[STATUS_KEYS[status]]].filter(Boolean).join(' · ') : undefined
   const a11y = spoken ? { role: 'img', 'aria-label': spoken, title: name } : { 'aria-hidden': true as const }
   return (
-    <span {...rest} {...a11y} className={cx(avatarClass({ size }), className)}>
+    <span ref={ref} {...rest} {...a11y} className={cx(avatarClass({ size }), className)}>
       {given ?? initials(name)}
       {src ? (
         <img
@@ -36,4 +39,4 @@ export function Avatar({ name, initials: given, src, size, status, className, ..
       {status ? <span className={`k5-avatar__status k5-avatar__status--${status}`} /> : null}
     </span>
   )
-}
+})

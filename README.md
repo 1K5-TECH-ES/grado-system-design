@@ -17,6 +17,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
+| 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`), `DataTable` con datos del servidor y gráficos interactivos. Fase 3: gráficos de energía, iconos y Figma | Fase 1 hecha |
 
 ## Decisiones tomadas
 
@@ -40,6 +41,8 @@ npm run lint          # ESLint, Stylelint y Prettier
 npm run format        # formatea y corrige lo que se pueda
 npm run test:all      # todo lo anterior más la web, como haría el CI
 npm run contrast      # informe de contraste de todos los temas
+npm run api           # regenera api/*.api.md, el informe de la API pública (npm run api:check lo compara)
+npm run size          # tamaño con gzip de CSS, tokens y paquetes, con su límite
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
@@ -49,7 +52,7 @@ npm run release:check -- 0.3.0  # versiones de los tres paquetes y sección del 
 ## Publicar una versión
 
 1. Sube la versión en los tres `package.json` (y la dependencia `@1k5-tech-es/grado` de React y Vue) y escribe su sección en `CHANGELOG.md`.
-2. `npm run release:check -- X.Y.Z`.
+2. `npm run release:check -- X.Y.Z`. Si la API ha cambiado, `npm run api` y revisa el diff de `api/`.
 3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
 
 Los paquetes se publican en **GitHub Packages** con el ámbito `@1k5-tech-es`, el de la organización de GitHub. Son privados como este repositorio y gratis dentro de la cuota de la organización. El workflow publica con su propio `GITHUB_TOKEN`; no hace falta configurar secretos.
@@ -77,6 +80,10 @@ Después del build:
 - **Componentes:** abre `catalog/index.html`. Admite `?tema=marca&modo=dark`.
 - **Armazón:** abre `catalog/app.html`. Admite además `&plegado=si` y `&menu=abierto` (en móvil).
 - **Documentación web:** genera con `npm run docs:build` y sirve `docs-site/dist/` con fallback a `index.html`. React Router expone `/personalizar`, `/instalacion` y `/componentes`. Consulta [cómo publicar la web](docs-site/README.md).
+
+### Actualizar una app
+
+`npx @1k5-tech-es/grado migrate` en la carpeta de la app hace los cambios mecánicos desde 0.1, 0.2 o 0.3 (imports, dependencias, alias, clases retiradas, `.npmrc`) y avisa con archivo y línea de lo que pide una decisión. `--dry` enseña los cambios sin escribir nada.
 
 ## Cómo cambiar un token
 
@@ -131,16 +138,21 @@ test/patterns-*.test.mjs lógica compartida: validación de NIF, IBAN y teléfon
 test/i18n.test.mjs       idiomas: mismas claves y mismo HTML en React y Vue
 test/browser/            teclado, foco y axe-core en Chrome; groups/ tiene la parte de cada grupo de 0.3
 test/visual/             capturas de referencia del catálogo
+test/migrate.test.mjs    codemod de migración
+api/                     informe de la API pública (generado por npm run api; el CI lo compara)
 scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las secciones de 0.3)
 scripts/release.mjs      comprobaciones y notas de publicación
+scripts/api.mjs          informe de la API pública
+scripts/size.mjs         presupuesto de tamaño (límites dentro del archivo)
 scripts/docs.mjs         genera docs-site/dist/ con documentación y ejemplos
 docs-site/               estilos, interacción y guía de publicación de la web (groups/: fichas y demos de 0.3)
 packages/grado/
   src/tokens.json        fuente única
   src/css/               un archivo CSS por componente; el build los une en dist/grado.css
   src/classes.js         props → clases k5-*, compartido por React y Vue
-  src/patterns.js        comportamiento compartido: búsqueda, números, fechas, escalas
+  src/patterns.js        comportamiento compartido: búsqueda, números, fechas, escalas, cola de avisos
   src/messages.js        textos en es-ES, de-DE y en-GB
+  src/migrate.js         reglas del codemod; bin/grado.mjs es la orden «migrate»
   scripts/build.mjs      genera dist/ (sin dependencias)
   scripts/contrast.mjs   informe de contraste
   scripts/lib/           color, carga de tokens, vista previa

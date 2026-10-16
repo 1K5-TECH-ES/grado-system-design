@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes } from 'react'
+import { forwardRef, type HTMLAttributes } from 'react'
 import { cx, progressClass, type ProgressTone, type SmallSize } from '@1k5-tech-es/grado/classes'
 import { progressState } from '@1k5-tech-es/grado/patterns'
 import { useAutoId } from './hooks.js'
@@ -21,25 +21,21 @@ export interface ProgressProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   steps?: number
 }
 
-export function Progress({
-  value = null,
-  max = 100,
-  label,
-  showLabel = false,
-  showValue = false,
-  tone,
-  size,
-  steps,
-  className,
-  ...rest
-}: ProgressProps) {
+export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progress(
+  { value = null, max = 100, label, showLabel = false, showValue = false, tone, size, steps, className, ...rest },
+  ref,
+) {
   const { messages: m, locale } = useGrado()
   const labelId = useAutoId('k5')
   const state = progressState({ value, max, steps, locale, messages: m })
   const name = label ?? m.progress
   const head = showLabel || (showValue && state.text)
   return (
-    <div {...rest} className={cx(progressClass({ tone, size, indeterminate: state.indeterminate, steps: state.stepped }), className)}>
+    <div
+      ref={ref}
+      {...rest}
+      className={cx(progressClass({ tone, size, indeterminate: state.indeterminate, steps: state.stepped }), className)}
+    >
       {head ? (
         <div className="k5-progress__head">
           {showLabel ? (
@@ -77,4 +73,4 @@ export function Progress({
       </div>
     </div>
   )
-}
+})

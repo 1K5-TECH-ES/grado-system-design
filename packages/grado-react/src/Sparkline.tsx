@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { forwardRef, type CSSProperties } from 'react'
 import { cx, sparklineClass, type SparklineTone } from '@1k5-tech-es/grado/classes'
 import { areaPath, linePath, sparklinePoints } from '@1k5-tech-es/grado/patterns'
 
@@ -16,12 +16,15 @@ export interface SparklineProps {
 }
 
 /** Línea de tendencia mínima, sin ejes. El último punto va marcado. */
-export function Sparkline({ data, tone, area = false, height = 32, label, className }: SparklineProps) {
+export const Sparkline = forwardRef<HTMLSpanElement, SparklineProps>(function Sparkline(
+  { data, tone, area = false, height = 32, label, className },
+  ref,
+) {
   const points = sparklinePoints(data)
   const last = points[points.length - 1]
   const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true as const }
   return (
-    <span {...a11y} className={cx(sparklineClass({ tone }), className)} style={{ '--_height': `${height}px` } as CSSProperties}>
+    <span ref={ref} {...a11y} className={cx(sparklineClass({ tone }), className)} style={{ '--_height': `${height}px` } as CSSProperties}>
       <span className="k5-sparkline__plot">
         <svg className="k5-sparkline__svg" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false" aria-hidden="true">
           {area && points.length ? <path className="k5-sparkline__area" d={areaPath(points)} /> : null}
@@ -31,4 +34,4 @@ export function Sparkline({ data, tone, area = false, height = 32, label, classN
       </span>
     </span>
   )
-}
+})

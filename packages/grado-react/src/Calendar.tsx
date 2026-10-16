@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { forwardRef, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import {
   addDays,
@@ -67,7 +67,7 @@ const KEY_MOVES: Record<string, (iso: string, shift: boolean, weekStartsOn: numb
  * inicio; segundo, final). Flechas: días y semanas. Re Pág / Av Pág: meses (con
  * Mayúsculas, años). Inicio y Fin: principio y final de la semana.
  */
-export function Calendar(props: CalendarProps) {
+export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calendar(props, ref) {
   const {
     mode = 'single',
     min,
@@ -137,7 +137,7 @@ export function Calendar(props: CalendarProps) {
   const nextBlocked = Boolean(max && addMonths(`${visible}-01`, 1) > max)
 
   return (
-    <div className={cx('k5-calendar', plain && 'k5-calendar--plain', className)} role="group" aria-label={label ?? m.calendar}>
+    <div ref={ref} className={cx('k5-calendar', plain && 'k5-calendar--plain', className)} role="group" aria-label={label ?? m.calendar}>
       <div className="k5-calendar__header">
         <button
           type="button"
@@ -223,4 +223,4 @@ export function Calendar(props: CalendarProps) {
       </table>
     </div>
   )
-}
+})

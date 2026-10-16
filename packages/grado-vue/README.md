@@ -81,6 +81,19 @@ En `Input`, `Textarea`, `Select`, `Switch` y `Table`, `class` y los atributos va
 
 En `Input`, `v-model` devuelve siempre texto. Para cifras usa `NumberInput`, que entiende «8,4» y devuelve 8.4.
 
+## Avisos
+
+Pon un `<Toaster />` una vez, junto a `AppShell`, y lanza los avisos desde cualquier sitio, también fuera de un componente:
+
+```ts
+import { toast } from '@1k5-tech-es/grado-vue'
+
+toast.success('Oferta enviada', { description: 'A Lucía Fernández', action: { label: 'Deshacer', onClick: deshacer } })
+toast.promise(guardar(), { loading: 'Guardando…', success: 'Guardado', error: 'No se ha podido guardar' })
+```
+
+Se ven como mucho tres a la vez (`max`); el resto espera su turno.
+
 ## Idioma
 
 Sin configurar nada, los textos están en español. Para toda la app:

@@ -1,8 +1,10 @@
 'use client'
 import {
   cloneElement,
+  forwardRef,
   isValidElement,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
@@ -37,22 +39,26 @@ export interface PopoverProps {
 }
 
 /** Contenido libre anclado a un control, sin bloquear la página. Escape y clic fuera lo cierran. */
-export function Popover({
-  trigger,
-  label,
-  title,
-  children,
-  open: openProp,
-  defaultOpen = false,
-  onOpenChange,
-  align = 'start',
-  side = 'bottom',
-  id: idProp,
-  className,
-}: PopoverProps) {
+export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
+  {
+    trigger,
+    label,
+    title,
+    children,
+    open: openProp,
+    defaultOpen = false,
+    onOpenChange,
+    align = 'start',
+    side = 'bottom',
+    id: idProp,
+    className,
+  },
+  ref,
+) {
   const [open, setOpen] = useValue(openProp, defaultOpen, onOpenChange)
   const root = useRef<HTMLDivElement>(null),
     panel = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => root.current as HTMLDivElement, [])
   const id = useAutoId('k5-popover', idProp),
     titleId = `${id}-title`
   const toggler = () => root.current?.querySelector<HTMLElement>('[aria-haspopup="dialog"]')
@@ -145,4 +151,4 @@ export function Popover({
       )}
     </div>
   )
-}
+})

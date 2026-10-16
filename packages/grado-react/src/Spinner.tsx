@@ -1,5 +1,5 @@
 'use client'
-import type { HTMLAttributes } from 'react'
+import { forwardRef, type HTMLAttributes } from 'react'
 import { cx, spinnerClass, type Size } from '@1k5-tech-es/grado/classes'
 import { useGrado } from './Locale.js'
 
@@ -11,8 +11,11 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   decorative?: boolean
 }
 
-export function Spinner({ size, label, decorative = false, className, ...rest }: SpinnerProps) {
+export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
+  { size, label, decorative = false, className, ...rest },
+  ref,
+) {
   const { messages: m } = useGrado()
   const a11y = decorative ? { 'aria-hidden': true as const } : { role: 'status', 'aria-label': label ?? m.loading }
-  return <span {...rest} {...a11y} className={cx(spinnerClass({ size }), className)} />
-}
+  return <span ref={ref} {...rest} {...a11y} className={cx(spinnerClass({ size }), className)} />
+})
