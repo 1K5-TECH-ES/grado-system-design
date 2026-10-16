@@ -362,3 +362,36 @@ export declare function chartSlotAt(offset: number, width: number, count: number
 export declare function chartKeyMove(key: string, current: number | null, count: number): number | undefined
 export declare function tooltipAlign(x: number): 'before' | 'after'
 export declare function slotCenter(index: number, count: number): number
+
+// ---------- Energía (0.4) ----------
+export type TariffPeriod = 'valle' | 'llano' | 'punta'
+export interface PriceSlot {
+  index: number
+  /** «HH:MM». */
+  start: string
+  end: string
+  hour: number
+  period: TariffPeriod
+  price: number | null
+}
+export declare const NATIONAL_HOLIDAYS: string[]
+export declare function isOffPeakDay(date?: string, holidays?: string[]): boolean
+export declare function tariffPeriod(hour: number, offPeak?: boolean): TariffPeriod
+export declare function priceSlots(
+  prices: (number | null)[],
+  options?: { date?: string; holidays?: string[]; periods?: TariffPeriod[] },
+): PriceSlot[]
+export declare function priceExtremes(slots: PriceSlot[]): { cheapest: PriceSlot | null; dearest: PriceSlot | null }
+export declare function slotAt(slots: PriceSlot[], time?: string): number
+export type BatteryState = 'charging' | 'discharging' | 'idle'
+export declare function batteryState(power?: number | null): BatteryState
+export declare function heatLevels(
+  rows: (number | null)[][],
+  options?: { min?: number; max?: number },
+): { min: number; max: number; levels: (number | null)[][] }
+export declare function gridKeyMove(
+  key: string,
+  current: [number, number] | null,
+  rows: number,
+  columns: number,
+): [number, number] | undefined

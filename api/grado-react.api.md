@@ -2,7 +2,7 @@
 
 Generado por `npm run api`. Si cambia sin querer, alguien ha cambiado la API pública.
 
-Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyNode, EnergyNodeName, EnergyNodeState, ErrorSummaryItem, ErrorSummaryProps, FieldCheck, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
+Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BatteryLevelProps, BatteryState, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyIconName, EnergyIconProps, EnergyNode, EnergyNodeName, EnergyNodeState, ErrorSummaryItem, ErrorSummaryProps, FieldCheck, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, HeatmapProps, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, PriceChartProps, PriceSlot, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TariffPeriod, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
 
 ## Accordion
 
@@ -215,6 +215,21 @@ ref: HTMLElement
   stacked?: boolean
   title?: ReactNode
   unit?: string
+```
+
+## BatteryLevel
+
+ref: HTMLDivElement · admite además los atributos HTML de ese elemento
+
+```ts
+  capacity?: number
+  decimals?: number
+  label?: string
+  level: number
+  locale?: string
+  power?: number | null
+  reserve?: number
+  size?: "sm" | "md"
 ```
 
 ## Breadcrumbs
@@ -561,6 +576,14 @@ ref: HTMLDivElement
   onAction?: ((id: string) => void)
 ```
 
+## ElectricMeterIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
 ## EmptyState
 
 ref: HTMLDivElement · admite además los atributos HTML de ese elemento
@@ -571,6 +594,12 @@ ref: HTMLDivElement · admite además los atributos HTML de ese elemento
   description?: ReactNode
   icon?: IconComponent
   title?: ReactNode
+```
+
+## ENERGY_ICON_PATHS
+
+```ts
+Record<EnergyIconName, string[]>
 ```
 
 ## EnergyFlow
@@ -732,6 +761,44 @@ ref: HTMLHeadingElement · admite además los atributos HTML de ese elemento
 (options?: { level?: HeadingLevel | number | string; size?: HeadingSize; }) => string
 ```
 
+## Heatmap
+
+ref: HTMLElement
+
+```ts
+  className?: string
+  columnLabels?: string[]
+  data: (number | null)[][]
+  decimals?: number
+  description?: ReactNode
+  interactive?: boolean
+  legend?: boolean
+  locale?: string
+  max?: number
+  min?: number
+  rowLabel?: string
+  rowLabels?: string[]
+  title?: ReactNode
+  tone?: 1 | 2 | 3 | 4 | 5
+  unit?: string
+```
+
+## HeatPumpIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
+## HomeBatteryIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
 ## IbanInput
 
 ref: HTMLInputElement · admite además los atributos HTML de ese elemento
@@ -768,6 +835,20 @@ ref: HTMLInputElement · admite además los atributos HTML de ese elemento
   prefix?: ReactNode
   size?: Size
   suffix?: ReactNode
+```
+
+## InverterIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
+## isOffPeakDay
+
+```ts
+(date?: string, holidays?: string[]) => boolean
 ```
 
 ## Kbd
@@ -899,6 +980,12 @@ ref: HTMLInputElement
   placeholder?: string
   required?: boolean
   value?: string[]
+```
+
+## NATIONAL_HOLIDAYS
+
+```ts
+string[]
 ```
 
 ## Nav
@@ -1057,6 +1144,48 @@ ref: HTMLDivElement
   trigger?: ReactElement<unknown, string | React.JSXElementConstructor<any>>
 ```
 
+## PowerGridIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
+## PriceChart
+
+ref: HTMLElement
+
+```ts
+  className?: string
+  date?: string
+  decimals?: number
+  description?: ReactNode
+  height?: string | number
+  holidays?: string[]
+  interactive?: boolean
+  legend?: boolean
+  locale?: string
+  now?: string
+  periods?: TariffPeriod[]
+  prices: (number | null)[]
+  summary?: boolean
+  title?: ReactNode
+  unit?: string
+```
+
+## priceExtremes
+
+```ts
+(slots: PriceSlot[]) => { cheapest: PriceSlot | null; dearest: PriceSlot | null; }
+```
+
+## priceSlots
+
+```ts
+(prices: (number | null)[], options?: { date?: string; holidays?: string[]; periods?: TariffPeriod[]; }) => PriceSlot[]
+```
+
 ## Progress
 
 ref: HTMLDivElement · admite además los atributos HTML de ese elemento
@@ -1189,6 +1318,14 @@ ref: HTMLInputElement · admite además los atributos HTML de ese elemento
   value?: number
 ```
 
+## SolarPanelIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
+```
+
 ## Sparkline
 
 ref: HTMLSpanElement
@@ -1303,6 +1440,12 @@ ref: HTMLSpanElement · admite además los atributos HTML de ese elemento
   onRemove?: (() => void)
   removeLabel?: string
   size?: SmallSize
+```
+
+## tariffPeriod
+
+```ts
+(hour: number, offPeak?: boolean) => TariffPeriod
 ```
 
 ## Text
@@ -1436,4 +1579,12 @@ ref: HTMLSpanElement
 
 ```ts
 () => GradoContextValue
+```
+
+## WallboxIcon
+
+ref: SVGSVGElement · admite además los atributos HTML de ese elemento
+
+```ts
+  title?: string
 ```

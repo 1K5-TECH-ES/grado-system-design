@@ -102,6 +102,12 @@ export const cases = [
   ['NavSection', {}, 'div.k5-nav__section'],
   ['NavItem', { href: '#', label: 'Tickets' }, 'a.k5-nav-item'],
   ['NavGroup', { label: 'Email' }, 'div.k5-nav-group'],
+  ['PriceChart', { prices: [0.1, 0.2] }, 'figure.k5-price'],
+  ['BatteryLevel', { level: 50 }, 'div.k5-battery[role=meter]'],
+  ['Heatmap', { data: [[1, 2]] }, 'figure.k5-heatmap'],
+  ...['SolarPanelIcon', 'HomeBatteryIcon', 'PowerGridIcon', 'HeatPumpIcon', 'WallboxIcon', 'ElectricMeterIcon', 'InverterIcon'].map(
+    (name) => [name, {}, 'svg.k5-energy-icon'],
+  ),
 ]
 
 /** Componentes que dibujan DOM y no tienen caso: el test los da por error. */

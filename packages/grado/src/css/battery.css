@@ -1,0 +1,107 @@
+/* BatteryLevel: carga de la batería de casa. Verde, ámbar por debajo del 25 % y rojo por
+   debajo del 10 %. El estado (cargando, descargando, en reposo) va con punto y texto. */
+.k5-battery {
+  --_tone: var(--k5-success);
+  display: grid;
+  gap: var(--k5-space-1-5);
+  min-width: 0;
+}
+.k5-battery--medium {
+  --_tone: var(--k5-warning);
+}
+.k5-battery--low {
+  --_tone: var(--k5-destructive);
+}
+.k5-battery__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--k5-space-2);
+}
+.k5-battery__label {
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+}
+.k5-battery__value {
+  font-size: var(--k5-text-heading);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-semibold);
+  line-height: var(--k5-leading-heading);
+}
+.k5-battery__body {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.k5-battery__cell {
+  position: relative;
+  flex: 1;
+  height: 2rem;
+  padding: 3px;
+  border: var(--k5-border-width-strong) solid var(--k5-muted-foreground);
+  border-radius: var(--k5-radius-md);
+}
+.k5-battery__fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--k5-radius-xs);
+  background: var(--_tone);
+  transition: width var(--k5-duration-slow) var(--k5-ease-standard);
+}
+.k5-battery__cap {
+  width: 4px;
+  height: 0.75rem;
+  border-radius: 0 2px 2px 0;
+  background: var(--k5-muted-foreground);
+}
+/* Reserva para cortes de luz: una línea a esa altura de la carga. */
+.k5-battery__reserve {
+  --_at: 0;
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: calc(3px + (100% - 6px) * var(--_at));
+  border-left: 2px dashed var(--k5-foreground);
+  opacity: var(--k5-opacity-muted);
+}
+.k5-battery__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--k5-space-1) var(--k5-space-3);
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+  font-variant-numeric: tabular-nums;
+}
+.k5-battery__state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k5-space-1-5);
+  color: var(--k5-foreground);
+}
+.k5-battery__state::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--k5-radius-full);
+  background: var(--k5-muted-foreground);
+}
+.k5-battery__state--charging::before {
+  background: var(--k5-success);
+}
+.k5-battery__state--discharging::before {
+  background: var(--k5-info);
+}
+.k5-battery--sm .k5-battery__value {
+  font-size: var(--k5-text-body);
+  line-height: var(--k5-leading-body);
+}
+.k5-battery--sm .k5-battery__cell {
+  height: 1.25rem;
+  padding: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .k5-battery__fill {
+    transition: none;
+  }
+}

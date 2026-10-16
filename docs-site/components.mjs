@@ -4,6 +4,7 @@ import { entries as datosEntries } from './groups/datos.docs.mjs'
 import { entries as graficosEntries } from './groups/graficos.docs.mjs'
 import { entries as entradasEntries } from './groups/entradas.docs.mjs'
 import { entries as superposicionesEntries } from './groups/superposiciones.docs.mjs'
+import { entries as energiaEntries } from './groups/energia.docs.mjs'
 
 const modalProps = [
   ['title / description', 'Título y descripción accesibles', 'title obligatorio'],
@@ -891,4 +892,11 @@ function receive(incoming) {
 ]
 
 // Componentes de 0.3, por grupo.
-newComponents.push(...maquetacionEntries, ...datosEntries, ...graficosEntries, ...entradasEntries, ...superposicionesEntries)
+newComponents.push(
+  ...maquetacionEntries,
+  ...datosEntries,
+  ...graficosEntries,
+  ...entradasEntries,
+  ...superposicionesEntries,
+  ...energiaEntries,
+)

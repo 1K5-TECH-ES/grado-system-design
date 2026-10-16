@@ -13,6 +13,7 @@ import { check as entradasCheck } from './groups/entradas.check.mjs'
 import { check as superposicionesCheck } from './groups/superposiciones.check.mjs'
 import { check as formulariosCheck } from './groups/formularios.check.mjs'
 import { check as tablasCheck } from './groups/tablas.check.mjs'
+import { check as energiaCheck } from './groups/energia.check.mjs'
 
 // Análisis de accesibilidad: axe-core con las reglas de WCAG 2.2 A y AA.
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8')
@@ -300,6 +301,7 @@ try {
       formulariosCheck,
       tablasCheck,
       graficosInteractiveCheck,
+      energiaCheck,
     ])
       await check(page, { expect, framework })
     expect(errors).toEqual([])

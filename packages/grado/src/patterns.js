@@ -1065,3 +1065,109 @@ export function tooltipAlign(x) {
 export function slotCenter(index, count) {
   return round2(((index + 0.5) / Math.max(1, count)) * 100)
 }
+
+// ---------- Energía (0.4) ----------
+
+/**
+ * Festivos nacionales de fecha fija (MM-DD). Son los que cuentan en la 2.0TD: todo el día es
+ * valle. Los festivos autonómicos o que cambian de fecha no cuentan.
+ */
+export const NATIONAL_HOLIDAYS = ['01-01', '01-06', '05-01', '08-15', '10-12', '11-01', '12-06', '12-08', '12-25']
+
+/** ¿Día entero en valle? Sábados, domingos y festivos nacionales de fecha fija, más los que pases. */
+export function isOffPeakDay(date, holidays = []) {
+  if (!date) return false
+  const day = weekday(date)
+  return day === 0 || day === 6 || NATIONAL_HOLIDAYS.includes(date.slice(5, 10)) || holidays.includes(date)
+}
+
+/**
+ * Periodo de la tarifa 2.0TD en la península para una hora (0–23) de un día laborable:
+ * valle de 0 a 8, punta de 10 a 14 y de 18 a 22, llano el resto.
+ */
+export function tariffPeriod(hour, offPeak = false) {
+  if (offPeak || hour < 8) return 'valle'
+  if ((hour >= 10 && hour < 14) || (hour >= 18 && hour < 22)) return 'punta'
+  return 'llano'
+}
+
+const clock = (minutes) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+
+/**
+ * Franjas de un día de precios: 24 (horarios) o 96 (cuartohorarios, como el PVPC desde octubre
+ * de 2025). Cada una con su hora de inicio y fin, su periodo 2.0TD y su precio.
+ */
+export function priceSlots(prices, { date, holidays = [], periods } = {}) {
+  const count = prices.length
+  const minutes = count ? Math.round(1440 / count) : 60
+  const offPeak = isOffPeakDay(date, holidays)
+  return prices.map((price, index) => {
+    const start = index * minutes
+    return {
+      index,
+      start: clock(start),
+      end: clock(Math.min(1440, start + minutes)).replace('24:00', '00:00'),
+      hour: Math.floor(start / 60),
+      period: periods?.[index] ?? tariffPeriod(Math.floor(start / 60), offPeak),
+      price: finite(price) ? price : null,
+    }
+  })
+}
+
+/** Franjas más barata y más cara (la primera, si se repiten). null sin precios. */
+export function priceExtremes(slots) {
+  const priced = slots.filter((slot) => slot.price != null)
+  if (!priced.length) return { cheapest: null, dearest: null }
+  return {
+    cheapest: priced.reduce((best, slot) => (slot.price < best.price ? slot : best)),
+    dearest: priced.reduce((best, slot) => (slot.price > best.price ? slot : best)),
+  }
+}
+
+/** Franja de una hora «HH:MM», o -1 si no la hay. */
+export function slotAt(slots, time) {
+  const minutes = timeMinutes(time)
+  if (minutes == null || !slots.length) return -1
+  return Math.min(slots.length - 1, Math.floor(minutes / (1440 / slots.length)))
+}
+const timeMinutes = (time) => {
+  const match = /^(\d{1,2}):(\d{2})$/.exec(String(time ?? ''))
+  return match && +match[1] < 24 && +match[2] < 60 ? +match[1] * 60 + +match[2] : null
+}
+
+/** Estado de una batería por su potencia: positiva carga, negativa descarga; menos de 50 W, en reposo. */
+export function batteryState(power) {
+  if (finite(power) && power > 0.05) return 'charging'
+  if (finite(power) && power < -0.05) return 'discharging'
+  return 'idle'
+}
+
+/** Intensidad (0 a 1, dos decimales) de cada celda de un mapa de calor, entre min y max. */
+export function heatLevels(rows, { min, max } = {}) {
+  const values = rows.flat().filter(finite)
+  const low = min ?? (values.length ? Math.min(...values) : 0)
+  const high = max ?? (values.length ? Math.max(...values) : 1)
+  const span = high - low
+  return {
+    min: low,
+    max: high,
+    levels: rows.map((row) =>
+      row.map((value) => (finite(value) ? round2(span > 0 ? Math.min(1, Math.max(0, (value - low) / span)) : 0.5) : null)),
+    ),
+  }
+}
+
+/** Celda a la que lleva una tecla en un mapa de calor: flechas, Inicio y Fin (de la fila). */
+export function gridKeyMove(key, current, rows, columns) {
+  if (!rows || !columns) return undefined
+  const [row, column] = current ?? [-1, -1]
+  if (!current && ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'].includes(key)) return [0, 0]
+  const clampTo = (n, size) => Math.min(size - 1, Math.max(0, n))
+  if (key === 'ArrowRight') return [row, clampTo(column + 1, columns)]
+  if (key === 'ArrowLeft') return [row, clampTo(column - 1, columns)]
+  if (key === 'ArrowDown') return [clampTo(row + 1, rows), column]
+  if (key === 'ArrowUp') return [clampTo(row - 1, rows), column]
+  if (key === 'Home') return [row, 0]
+  if (key === 'End') return [row, columns - 1]
+  return undefined
+}

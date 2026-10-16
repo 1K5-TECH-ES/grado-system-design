@@ -11,8 +11,9 @@ const KB = 1024
 const LIMITS = {
   'grado.min.css': 17 * KB,
   'tokens.css': 4 * KB,
-  '@1k5-tech-es/grado-react': 46 * KB,
-  '@1k5-tech-es/grado-vue': 48 * KB,
+  // 0.4: de 46 a 50 KB y de 48 a 52 KB por PriceChart, BatteryLevel, Heatmap y los iconos de energía.
+  '@1k5-tech-es/grado-react': 50 * KB,
+  '@1k5-tech-es/grado-vue': 52 * KB,
   // Los adaptadores, con los componentes que usan; sin la librería de formularios.
   '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
   '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,

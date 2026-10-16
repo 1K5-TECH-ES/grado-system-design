@@ -27,6 +27,18 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - `LineChart`, `AreaChart` y `BarChart`: al pasar el ratón, una tarjeta con el valor de cada serie, una guía vertical y el dato resaltado. Con el teclado, el gráfico recibe el foco y las flechas, Inicio y Fin recorren los datos; cada dato se anuncia. `interactive={false}` los deja como antes, con el `title` nativo en cada columna.
 
 
+### Energía
+
+- `PriceChart`: el precio de la luz de un día, por horas o por cuartos de hora, con cada franja del color de su periodo de la 2.0TD (valle, llano y punta). Con `date`, sábados, domingos y festivos nacionales de fecha fija son valle todo el día; `now` marca la franja de ahora; bajo el título, las franjas más barata y más cara. Tarjeta, teclado y tabla oculta como los demás gráficos.
+- `BatteryLevel`: carga de la batería de casa con su energía («7,2 de 10 kWh»), si carga o descarga y la reserva para cortes. Es un `role="meter"` con todo el texto en `aria-valuetext`.
+- `Heatmap`: un valor por celda en la intensidad de un color, como el consumo por hora y día de la semana. Con 7 filas pone los días y con 24 columnas, las horas. Se recorre con las flechas en las dos direcciones.
+- Iconos de energía con el trazo de Lucide, para pasar como `icon`: `SolarPanelIcon`, `HomeBatteryIcon`, `PowerGridIcon`, `HeatPumpIcon`, `WallboxIcon`, `ElectricMeterIcon` e `InverterIcon`. Sus trazos, en `ENERGY_ICON_PATHS` de `@1k5-tech-es/grado/classes`.
+- `tariffPeriod`, `isOffPeakDay`, `NATIONAL_HOLIDAYS`, `priceSlots`, `priceExtremes`, `slotAt`, `batteryState`, `heatLevels` y `gridKeyMove` en `@1k5-tech-es/grado/patterns`.
+
+### Figma
+
+- `npm run figma:check` compara un export de Tokens Studio guardado en `design/figma-tokens.json` con los tokens del repositorio y dice qué falta, qué sobra y qué valor cambia. El CI lo ejecuta en cada pull request; sin el archivo no hace nada.
+
 ### Componentes y avisos
 
 - Todos los componentes de `@1k5-tech-es/grado-react` pasan `ref`, también con React 18. En los campos va al `<input>` que recibe el foco, también en `Combobox`, `MultiSelect`, `TimePicker` y `AddressInput`; en el resto, al elemento que recibe las props HTML o, si no las admite, al raíz. Así funcionan `register()` de react-hook-form, el foco en el primer error y los paneles anclados. Un test en el navegador comprueba el elemento de cada componente.
@@ -34,7 +46,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - `createToastStore()` y `visibleToasts()` en `@1k5-tech-es/grado/patterns`: la cola que usan React y Vue.
 - Vue: `Toast` acepta `role`, como en React. Antes el atributo acababa en el contenedor y no en el aviso.
 - Tipos nuevos en React: `CardSectionProps`, `CardDescriptionProps` y `AppLogoProps`.
-- Textos nuevos en español, alemán e inglés: `notifications`, `fieldRequired`, `fieldInvalid`, `errorSummaryOne`, `errorSummaryMany`, `columns` y `chartHint`.
+- Textos nuevos en español, alemán e inglés: `notifications`, `fieldRequired`, `fieldInvalid`, `errorSummaryOne`, `errorSummaryMany`, `columns`, `chartHint`, los tres periodos de la tarifa (`tariffValle`, `tariffLlano`, `tariffPunta`) y los de PriceChart y BatteryLevel.
 
 ### Migración
 
@@ -51,6 +63,8 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react` y `@1k5-
 - Informe de la API pública en `api/`: una línea por prop de cada componente de React y de Vue, y los tipos de `@1k5-tech-es/grado`. El CI falla si la API cambia y el informe no (`npm run api` lo regenera), así que cualquier cambio de API se ve en el diff del pull request.
 - Presupuesto de tamaño (`npm run size`): CSS, tokens y cada paquete entero, minificados y con gzip. El CI falla si algo pasa de su límite y deja la tabla en el resumen del trabajo.
 - El workflow de publicación genera la web y los `.tgz` antes de publicar los paquetes: si algo falla, no se publica nada a medias.
+- El presupuesto de tamaño sube a 50 KB (React) y 52 KB (Vue) por los componentes de energía. Los paquetes son `sideEffects: false`: una app que no los usa no los descarga.
+- La página Estado cuenta bien los tests escritos en varias líneas: antes daba por no probados una treintena de componentes que sí lo estaban.
 
 ### Corregido
 

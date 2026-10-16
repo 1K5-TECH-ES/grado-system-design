@@ -390,6 +390,7 @@ function GROUP_CSS() {
     ...['sparkline', 'donut', 'meter', 'energy-flow'], // Gráficos
     ...['search-input', 'password-input', 'slider', 'time-picker', 'phone-input', 'code-input', 'address-input'], // Campos especiales
     ...['popover', 'banner', 'action-bar', 'icon-button', 'toggle-group', 'context-menu'], // Superposiciones y acciones
+    ...['battery', 'price-chart', 'heatmap'], // Energía (0.4)
   ]
 }
 

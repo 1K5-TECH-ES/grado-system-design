@@ -126,6 +126,19 @@ import { ErrorSummary, Form, FormField } from '@1k5-tech-es/grado-react/react-ho
 
 `FormField` conecta su control (value, checked o `onValueChange`, según el tipo) y le pone id, ref y aria-invalid. Para usar `watch` o `reset`, crea el formulario con `useForm()` y pásalo como `form`. Los errores del servidor van en `errors`.
 
+## Energía
+
+```tsx
+import { BatteryLevel, Heatmap, HeatPumpIcon, PriceChart } from '@1k5-tech-es/grado-react'
+
+<PriceChart prices={preciosDeHoy} date="2026-10-16" now="20:15" title="Precio de la luz" />
+<BatteryLevel level={72} capacity={10} power={2.1} reserve={20} />
+<Heatmap data={consumoPorHora} unit="kWh" title="Consumo por hora" />
+<Button icon={HeatPumpIcon}>Añadir aerotermia</Button>
+```
+
+`PriceChart` colorea cada franja por su periodo de la 2.0TD (valle, llano, punta); con `date`, fines de semana y festivos nacionales son valle. Los iconos de energía (`SolarPanelIcon`, `HomeBatteryIcon`, `PowerGridIcon`, `HeatPumpIcon`, `WallboxIcon`, `ElectricMeterIcon`, `InverterIcon`) tienen el trazo de Lucide.
+
 ## Avisos
 
 Pon un `Toaster` una vez, junto a `AppShell`, y lanza los avisos desde cualquier sitio, también fuera de un componente:

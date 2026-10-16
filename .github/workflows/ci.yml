@@ -36,6 +36,8 @@ jobs:
       # La API pública (api/*.api.md) y el tamaño de los paquetes no cambian sin querer.
       - run: npm run api:check
       - run: npm run size
+      # Si diseño ha subido design/figma-tokens.json (export de Tokens Studio), tiene que coincidir.
+      - run: npm run figma:check
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - run: npm run docs:build

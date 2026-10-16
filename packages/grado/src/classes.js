@@ -303,6 +303,50 @@ export const ENERGY_ICONS = {
   arrow: ['m9 18 6-6-6-6'],
 }
 
+// ---------- Iconos de energía (0.4) ----------
+/**
+ * Iconos de una instalación, con el trazo de Lucide (24 × 24, línea de 2, puntas redondas).
+ * solar, home, battery y grid son los de EnergyFlow; el resto son propios de Grado.
+ */
+export const ENERGY_ICON_PATHS = {
+  solarPanel: ['M5 3h14l2 11H3z', 'M12 3v11', 'M4 8.5h16', 'M12 14v7', 'M8 21h8'],
+  homeBattery: ENERGY_ICONS.battery,
+  powerGrid: ENERGY_ICONS.grid,
+  heatPump: [
+    'M5 4h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+    'M6 11.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 1 0-7 0',
+    'M9.5 11.5c-.5-2 .5-3.5 2.3-2.9',
+    'M9.5 11.5c2 .6 2.8 2.2 1.4 3.4',
+    'M9.5 11.5c-1.5 1.4-3.3 1.3-3.7-.5',
+    'M16 9h2',
+    'M16 12h2',
+    'M16 15h2',
+    'M7 19v2',
+    'M17 19v2',
+  ],
+  wallbox: [
+    'M6 2h7a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z',
+    'm10.5 6-2.5 4h3l-2.5 4',
+    'M15 14h2a2 2 0 0 1 2 2v1a2 2 0 0 0 4 0V9',
+    'M21 9V6',
+    'M19 9h4',
+  ],
+  electricMeter: ['M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z', 'M7 7h10v5H7z', 'm12.5 14-1.5 2.5h2L11.5 19'],
+  inverter: [
+    'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z',
+    'M3 21 21 3',
+    'M6 8h5',
+    'M6 10.5h5',
+    'M13 16c1-2 2-2 3 0s2 2 3 0',
+  ],
+}
+
+/** Clase del BatteryLevel según la carga: low (hasta 10 %), medium (hasta 25 %) o high. */
+export function batteryClass({ level = 0, size = 'md' } = {}) {
+  const tone = level <= 10 ? 'low' : level <= 25 ? 'medium' : 'high'
+  return cx('k5-battery', `k5-battery--${tone}`, size === 'sm' && 'k5-battery--sm')
+}
+
 // ---------- Campos especiales (0.3) ----------
 /** Iconos de los campos especiales (SearchInput, PasswordInput, TimePicker, AddressInput). Trazos de Lucide. */
 export const FIELD_ICON_PATHS = {

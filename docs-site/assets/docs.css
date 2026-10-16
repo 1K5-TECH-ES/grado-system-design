@@ -1935,3 +1935,16 @@ kbd {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Demo de iconos de energía: cada icono con su nombre debajo. */
+.demo-icon {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k5-space-1);
+  min-width: 5.5rem;
+}
+.demo-icon svg {
+  width: 2rem;
+  height: 2rem;
+}

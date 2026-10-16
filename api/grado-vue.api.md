@@ -172,6 +172,19 @@ emits: dismiss
   unit: String
 ```
 
+## BatteryLevel
+
+```ts
+  capacity: Number
+  decimals: Number  // con valor por defecto
+  label: String
+  level: Number  // obligatoria
+  locale: String
+  power: Number  // con valor por defecto
+  reserve: Number
+  size: String  // con valor por defecto
+```
+
 ## Breadcrumbs
 
 ```ts
@@ -455,6 +468,12 @@ emits: update:open
 
 emits: action
 
+## ElectricMeterIcon
+
+```ts
+  title: String
+```
+
 ## EmptyState
 
 ```ts
@@ -463,6 +482,10 @@ emits: action
   icon: Object | Function
   title: String
 ```
+
+## ENERGY_ICON_PATHS
+
+object
 
 ## EnergyFlow
 
@@ -597,6 +620,37 @@ function
 
 function
 
+## Heatmap
+
+```ts
+  columnLabels: Array
+  data: Array  // obligatoria
+  decimals: Number  // con valor por defecto
+  description: String
+  interactive: Boolean  // con valor por defecto
+  legend: Boolean  // con valor por defecto
+  locale: String
+  max: Number
+  min: Number
+  rowLabel: String
+  rowLabels: Array
+  title: String
+  tone: Number  // con valor por defecto
+  unit: String
+```
+
+## HeatPumpIcon
+
+```ts
+  title: String
+```
+
+## HomeBatteryIcon
+
+```ts
+  title: String
+```
+
 ## IbanInput
 
 ```ts
@@ -637,6 +691,16 @@ emits: update:pressed
 ```
 
 emits: update:modelValue
+
+## InverterIcon
+
+```ts
+  title: String
+```
+
+## isOffPeakDay
+
+function
 
 ## Kbd
 
@@ -742,6 +806,10 @@ function
 ```
 
 emits: queryChange, update:modelValue
+
+## NATIONAL_HOLIDAYS
+
+array
 
 ## Nav
 
@@ -885,6 +953,39 @@ emits: error-change, update:country, update:modelValue
 
 emits: update:open
 
+## PowerGridIcon
+
+```ts
+  title: String
+```
+
+## PriceChart
+
+```ts
+  date: String
+  decimals: Number  // con valor por defecto
+  description: String
+  height: Number | String
+  holidays: Array
+  interactive: Boolean  // con valor por defecto
+  legend: Boolean  // con valor por defecto
+  locale: String
+  now: String
+  periods: Array
+  prices: Array  // obligatoria
+  summary: Boolean  // con valor por defecto
+  title: String
+  unit: String  // con valor por defecto
+```
+
+## priceExtremes
+
+function
+
+## priceSlots
+
+function
+
 ## Progress
 
 ```ts
@@ -1010,6 +1111,12 @@ emits: update:open
 
 emits: update:modelValue
 
+## SolarPanelIcon
+
+```ts
+  title: String
+```
+
 ## Sparkline
 
 ```ts
@@ -1106,6 +1213,10 @@ emits: update:modelValue
 ```
 
 emits: remove
+
+## tariffPeriod
+
+function
 
 ## Text
 
@@ -1213,3 +1324,9 @@ function
 ## useGrado
 
 function
+
+## WallboxIcon
+
+```ts
+  title: String
+```

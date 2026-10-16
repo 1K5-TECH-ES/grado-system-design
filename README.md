@@ -17,7 +17,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 5. Calidad para la 1.0 (0.2.0) | Contraste AA sin excepciones, tokens de espaciado, movimiento y capas, Barlow en el paquete, axe y regresión visual, `'use client'`, lint y formato | Hecha |
 | 6. Madurez (0.2.0) | NumberInput, SegmentedControl, MultiSelect, Calendar, CommandPalette y BarChart; idiomas (es, de, en); CSS minificado, en capa y por componente; guías de uso, página de estado y de cambios; tokens en formato W3C | Hecha |
 | 7. Sistema completo (0.3.0) | Limpieza visual con cuatro principios; escalas de tipografía, tono, elevación, radio, densidad, iconos y contenedores; 34 componentes nuevos (maquetación, datos, gráficos y EnergyFlow, campos españoles, superposiciones); Tokens Studio para Figma; CI y publicación por etiqueta; página Fundamentos | Hecha |
-| 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: gráficos de energía, iconos y Figma | Fases 1 y 2 hechas |
+| 8. Adopción (0.4.0) | Fase 1: `ref` en todos los componentes de React, `toast()` con cola, codemod `npx @1k5-tech-es/grado migrate`, informe de API y presupuesto de tamaño en el CI. Fase 2: formularios (`Form`, `FormField`, `ErrorSummary`) con react-hook-form y VeeValidate, `DataTable` con datos del servidor, columnas, cabecera fija y CSV, y gráficos interactivos. Fase 3: `PriceChart` (2.0TD), `BatteryLevel`, `Heatmap`, iconos de energía y `npm run figma:check` | Hecha (sin publicar) |
 
 ## Decisiones tomadas
 
@@ -43,6 +43,7 @@ npm run test:all      # todo lo anterior más la web, como haría el CI
 npm run contrast      # informe de contraste de todos los temas
 npm run api           # regenera api/*.api.md, el informe de la API pública (npm run api:check lo compara)
 npm run size          # tamaño con gzip de CSS, tokens y paquetes, con su límite
+npm run figma:check   # compara design/figma-tokens.json (export de Tokens Studio) con los tokens del repositorio
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
@@ -80,6 +81,10 @@ Después del build:
 - **Componentes:** abre `catalog/index.html`. Admite `?tema=marca&modo=dark`.
 - **Armazón:** abre `catalog/app.html`. Admite además `&plegado=si` y `&menu=abierto` (en móvil).
 - **Documentación web:** genera con `npm run docs:build` y sirve `docs-site/dist/` con fallback a `index.html`. React Router expone `/personalizar`, `/instalacion` y `/componentes`. Consulta [cómo publicar la web](docs-site/README.md).
+
+### Tokens en Figma
+
+Diseño trabaja con el plugin Tokens Studio. Para llevar los tokens a Figma, importa `packages/grado/dist/tokens-studio.json` (un conjunto por tema y modo). Para comprobar que Figma no se ha separado del repositorio, exporta desde Tokens Studio a un solo archivo, guárdalo en `design/figma-tokens.json` y súbelo en un pull request: `npm run figma:check` (también en el CI) lista lo que falta, lo que sobra y lo que cambia de valor. La fuente sigue siendo `packages/grado/src/tokens.json`.
 
 ### Actualizar una app
 
@@ -144,6 +149,7 @@ scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las s
 scripts/release.mjs      comprobaciones y notas de publicación
 scripts/api.mjs          informe de la API pública
 scripts/size.mjs         presupuesto de tamaño (límites dentro del archivo)
+scripts/figma.mjs        comparación de los tokens de Figma con los del repositorio
 scripts/docs.mjs         genera docs-site/dist/ con documentación y ejemplos
 docs-site/               estilos, interacción y guía de publicación de la web (groups/: fichas y demos de 0.3)
 packages/grado/

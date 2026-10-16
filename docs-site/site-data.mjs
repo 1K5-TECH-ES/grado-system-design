@@ -43,8 +43,9 @@ function coverage(adoption) {
       // Form y FormField viven en los adaptadores de react-hook-form y VeeValidate.
       react: names.every((name) => name in G || name in RF),
       vue: names.every((name) => name in V || name in VF),
-      parity: mentions(sources.parity, names, [(n) => `\\bRF?\\.${n}\\b`, (n) => `\\['${n}'`]),
-      browser: mentions(sources.browser, names, [(n) => `C\\('${n}'`, (n) => `\\b[GF]\\.${n}\\b`]),
+      // Las llamadas pueden ocupar varias líneas (Prettier): C(\n  'Dialog', …), same('Sparkline', …), [\n  'SegmentedControl', …].
+      parity: mentions(sources.parity, names, [(n) => `\\bRF?\\.${n}\\b`, (n) => `\\[\\s*'${n}'`, (n) => `\\b(?:same|pair)\\(\\s*'${n}'`]),
+      browser: mentions(sources.browser, names, [(n) => `\\b(?:C|D|direct)\\(\\s*'${n}'`, (n) => `\\b[GF]\\.${n}\\b`]),
       visual: mentions(sources.visual, names, [(n) => `G\\.${n}\\b`]),
       guide: Boolean(guidelines[c.id]),
       figma: adoption.figma?.[c.id] ?? '',

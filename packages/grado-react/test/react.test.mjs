@@ -5,15 +5,9 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import * as G from '@1k5-tech-es/grado-react'
 
 test('todos los componentes reenvían ref (react-hook-form y los popovers la necesitan)', () => {
-  // GradoProvider no pinta nada; el resto son componentes o constantes en mayúsculas.
-  const components = Object.entries(G).filter(
-    ([name, value]) => /^[A-Z]/.test(name) && name !== 'GradoProvider' && typeof value !== 'string',
-  )
-  const constants = ['MESSAGES']
-  for (const [name, value] of components) {
-    if (constants.includes(name)) continue
-    assert.equal(value.$$typeof, Symbol.for('react.forward_ref'), `${name} debe usar forwardRef`)
-  }
+  // GradoProvider no pinta nada; las constantes van en mayúsculas (MESSAGES, ENERGY_ICON_PATHS…).
+  const components = Object.entries(G).filter(([name]) => /^[A-Z][a-z]/.test(name) && name !== 'GradoProvider')
+  for (const [name, value] of components) assert.equal(value.$$typeof, Symbol.for('react.forward_ref'), `${name} debe usar forwardRef`)
   assert.ok(components.length > 90)
 })
 

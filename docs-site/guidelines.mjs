@@ -5,6 +5,7 @@ import { guidelines as datosGuidelines } from './groups/datos.docs.mjs'
 import { guidelines as graficosGuidelines } from './groups/graficos.docs.mjs'
 import { guidelines as entradasGuidelines } from './groups/entradas.docs.mjs'
 import { guidelines as superposicionesGuidelines } from './groups/superposiciones.docs.mjs'
+import { guidelines as energiaGuidelines } from './groups/energia.docs.mjs'
 export const guidelines = {
   button: {
     use: [
@@ -596,4 +597,12 @@ export const guidelines = {
 }
 
 // Componentes de 0.3, por grupo.
-Object.assign(guidelines, maquetacionGuidelines, datosGuidelines, graficosGuidelines, entradasGuidelines, superposicionesGuidelines)
+Object.assign(
+  guidelines,
+  maquetacionGuidelines,
+  datosGuidelines,
+  graficosGuidelines,
+  entradasGuidelines,
+  superposicionesGuidelines,
+  energiaGuidelines,
+)

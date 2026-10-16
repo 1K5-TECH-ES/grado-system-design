@@ -298,12 +298,18 @@ export declare function headingClass(options?: {
     level?: HeadingLevel | number | string;
     size?: HeadingSize;
 }): string;
+export type EnergyIconName = 'solarPanel' | 'homeBattery' | 'powerGrid' | 'heatPump' | 'wallbox' | 'electricMeter' | 'inverter';
+export declare const ENERGY_ICON_PATHS: Record<EnergyIconName, string[]>;
+export declare function batteryClass(options?: {
+    level?: number;
+    size?: 'sm' | 'md';
+}): string;
 ```
 
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';
@@ -653,4 +659,43 @@ export declare function chartSlotAt(offset: number, width: number, count: number
 export declare function chartKeyMove(key: string, current: number | null, count: number): number | undefined;
 export declare function tooltipAlign(x: number): 'before' | 'after';
 export declare function slotCenter(index: number, count: number): number;
+export type TariffPeriod = 'valle' | 'llano' | 'punta';
+export interface PriceSlot {
+    index: number;
+    start: string;
+    end: string;
+    hour: number;
+    period: TariffPeriod;
+    price: number | null;
+}
+export declare const NATIONAL_HOLIDAYS: string[];
+export declare function isOffPeakDay(date?: string, holidays?: string[]): boolean;
+export declare function tariffPeriod(hour: number, offPeak?: boolean): TariffPeriod;
+export declare function priceSlots(prices: (number | null)[], options?: {
+    date?: string;
+    holidays?: string[];
+    periods?: TariffPeriod[];
+}): PriceSlot[];
+export declare function priceExtremes(slots: PriceSlot[]): {
+    cheapest: PriceSlot | null;
+    dearest: PriceSlot | null;
+};
+export declare function slotAt(slots: PriceSlot[], time?: string): number;
+export type BatteryState = 'charging' | 'discharging' | 'idle';
+export declare function batteryState(power?: number | null): BatteryState;
+export declare function heatLevels(rows: (number | null)[][], options?: {
+    min?: number;
+    max?: number;
+}): {
+    min: number;
+    max: number;
+    levels: (number | null)[][];
+};
+export declare function gridKeyMove(key: string, current: [
+    number,
+    number
+] | null, rows: number, columns: number): [
+    number,
+    number
+] | undefined;
 ```

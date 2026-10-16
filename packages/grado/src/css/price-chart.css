@@ -1,0 +1,52 @@
+/* PriceChart: precio de cada franja del día coloreado por su periodo 2.0TD. Usa los ejes,
+   la rejilla, la leyenda y la tarjeta de BarChart (k5-chart). */
+.k5-price__bar--valle {
+  background: var(--k5-chart-2);
+}
+.k5-price__bar--llano {
+  background: var(--k5-chart-4);
+}
+.k5-price__bar--punta {
+  background: var(--k5-chart-1);
+}
+.k5-price .k5-chart__bars {
+  width: min(78%, 2rem);
+}
+/* 96 franjas de 15 minutos: barras pegadas. */
+.k5-price--fine .k5-chart__bars {
+  width: 100%;
+  gap: 0;
+}
+.k5-price--fine .k5-chart__bar {
+  border-radius: 1px 1px 0 0;
+}
+.k5-price__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--k5-space-1) var(--k5-space-4);
+  margin: 0;
+  color: var(--k5-muted-foreground);
+  font-size: var(--k5-text-small);
+}
+.k5-price__summary strong {
+  color: var(--k5-foreground);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-medium);
+}
+/* La franja de ahora: anillo alrededor de su barra y la etiqueta encima. */
+.k5-chart__group[data-current] .k5-chart__bar {
+  box-shadow:
+    0 0 0 1px var(--k5-card),
+    0 0 0 2px var(--k5-foreground);
+}
+.k5-price__now {
+  position: absolute;
+  top: 0;
+  color: var(--k5-foreground);
+  font-size: var(--k5-text-caption);
+  font-weight: var(--k5-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  transform: translate(-50%, calc(-100% - var(--k5-space-1)));
+  pointer-events: none;
+}

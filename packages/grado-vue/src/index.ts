@@ -38,6 +38,7 @@ export * from './group-graficos.js'
 export * from './group-entradas.js'
 export * from './group-superposiciones.js'
 export * from './group-maquetacion.js'
+export * from './group-energia.js'
 // Componentes de 0.4.
 export { Toaster, toast } from './Toaster.js'
 export { ErrorSummary } from './ErrorSummary.js'

@@ -170,3 +170,8 @@ export declare function textClass(options?: {
 export declare function headingLevel(level: HeadingLevel | number | string | undefined): HeadingLevel
 export declare function headingSize(level: HeadingLevel | number | string | undefined): HeadingSize
 export declare function headingClass(options?: { level?: HeadingLevel | number | string; size?: HeadingSize }): string
+
+// ---------- Iconos de energía (0.4) ----------
+export type EnergyIconName = 'solarPanel' | 'homeBattery' | 'powerGrid' | 'heatPump' | 'wallbox' | 'electricMeter' | 'inverter'
+export declare const ENERGY_ICON_PATHS: Record<EnergyIconName, string[]>
+export declare function batteryClass(options?: { level?: number; size?: 'sm' | 'md' }): string
