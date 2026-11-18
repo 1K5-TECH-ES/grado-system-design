@@ -61,7 +61,7 @@ npm run release:check -- 0.7.0  # versiones de los cuatro paquetes y sección de
 2. `npm run release:check -- X.Y.Z`. Si la API ha cambiado, `npm run api` y revisa el diff de `api/`.
 3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
 
-Los paquetes se publican en **GitHub Packages** con el ámbito `@1k5-tech-es`, el de la organización de GitHub. Son privados como este repositorio y gratis dentro de la cuota de la organización. El workflow publica con su propio `GITHUB_TOKEN`; no hace falta configurar secretos.
+Los paquetes se publican en **GitHub Packages** con el ámbito `@1k5-tech-es`, el de la organización de GitHub. Son públicos, como este repositorio, pero el registro npm de GitHub pide un token con `read:packages` incluso para descargar paquetes públicos. El workflow publica con su propio `GITHUB_TOKEN`; no hace falta configurar secretos.
 
 ### Instalar en un proyecto interno
 
@@ -72,8 +72,8 @@ Añade este `.npmrc` en la raíz del proyecto, para que npm busque `@1k5-tech-es
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-- **En tu máquina:** crea un token *classic* de GitHub con el permiso `read:packages` (GitHub Packages no admite todavía los tokens granulares para npm) y expórtalo como `GITHUB_TOKEN` en tu shell. Después, `npm i @1k5-tech-es/grado @1k5-tech-es/grado-react` (o `@1k5-tech-es/grado-vue`).
-- **En GitHub Actions del proyecto:** da acceso al repositorio en los ajustes de cada paquete (*Manage Actions access*), añade `packages: read` a los `permissions` del workflow y pasa `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}` en el paso de `npm ci`.
+- **En tu máquina:** con cualquier cuenta de GitHub, sin pertenecer a la organización, crea un token *classic* con el permiso `read:packages` (GitHub Packages no admite todavía los tokens granulares para npm) y expórtalo como `GITHUB_TOKEN` en tu shell. Después, `npm i @1k5-tech-es/grado @1k5-tech-es/grado-react` (o `@1k5-tech-es/grado-vue`).
+- **En GitHub Actions del proyecto:** añade `packages: read` a los `permissions` del workflow y pasa `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}` en el paso de `npm ci`.
 - **En otros despliegues (Docker, Vercel, Netlify…):** guarda como variable de entorno `GITHUB_TOKEN` un token *classic* con `read:packages`, mejor de una cuenta de servicio que de una persona.
 
 No subas nunca el token en sí al repositorio: el `.npmrc` solo lo referencia.

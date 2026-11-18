@@ -30,7 +30,7 @@ const paths = (total) => [
     to: '/instalacion',
     icon: icons.installation,
     title: 'Instala',
-    text: 'Paquetes privados en GitHub Packages, estilos para Tailwind 3, Tailwind 4 o CSS y ejemplos en React y Vue.',
+    text: 'Paquetes públicos en GitHub Packages, estilos para Tailwind 3, Tailwind 4 o CSS y ejemplos en React y Vue.',
     sample: h('code', { className: 'docs-command' }, 'npm install @1k5-tech-es/grado'),
     cta: 'Ver la guía',
   },

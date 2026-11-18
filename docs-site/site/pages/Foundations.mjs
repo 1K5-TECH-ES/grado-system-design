@@ -102,7 +102,7 @@ const versions = [
   ],
   [
     'Publicación',
-    'Cada etiqueta vX.Y.Z publica los paquetes en el registro privado y crea una release con las notas del registro de cambios. El CI ejecuta lint, tests, navegador (también con React 18 y Vue 3.5.0), capturas de cada componente, apps de prueba con Vite, Next y Nuxt y la web en cada pull request.',
+    'Cada etiqueta vX.Y.Z publica los paquetes en GitHub Packages y crea una release con las notas del registro de cambios. El CI ejecuta lint, tests, navegador (también con React 18 y Vue 3.5.0), capturas de cada componente, apps de prueba con Vite, Next y Nuxt y la web en cada pull request.',
   ],
 ]
 

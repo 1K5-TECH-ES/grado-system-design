@@ -173,7 +173,7 @@ export interface DonutSegment {
 export interface DonutSlice {
   /** Inicio y longitud, de 0 a 100. */
   start: number
-  length: number
+  length: number-
   /** Porcentaje entero. */
   percent: number
 }

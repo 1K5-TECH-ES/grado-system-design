@@ -210,7 +210,7 @@ export default function Installation() {
         P(
           'Utiliza React 18 o superior, o Vue 3.5 o superior. El comando npx @1k5-tech-es/grado y la compilación del repositorio necesitan Node.js 22 o superior. Tailwind es opcional.',
         ),
-        P('Para instalar los paquetes necesitas una cuenta de GitHub con acceso a la organización `1K5-TECH-ES`.'),
+        P('Para instalar los paquetes necesitas una cuenta de GitHub, cualquiera: no hace falta pertenecer a la organización `1K5-TECH-ES`.'),
         P(
           "Con el App Router de Next.js puedes importar los componentes desde un Server Component: los que tienen estado llevan `'use client'`.",
         ),
@@ -222,7 +222,7 @@ export default function Installation() {
           G.Alert,
           { tone: 'info', title: 'Desde la 0.3.0, Grado se instala con npm' },
           rich(
-            'Los paquetes están en GitHub Packages, privados para la organización `1K5-TECH-ES`, y se llaman `@1k5-tech-es/…`. Ya no hace falta guardar archivos `.tgz` en tu repositorio.',
+            'Los paquetes son públicos, están en GitHub Packages y se llaman `@1k5-tech-es/…`. Ya no hace falta guardar archivos `.tgz` en tu repositorio.',
           ),
         ),
         P(
@@ -230,7 +230,7 @@ export default function Installation() {
         ),
         h(CodeBlock, { code: npmrc, label: '.npmrc · raíz de tu aplicación' }),
         P(
-          '**Crea tu token, una sola vez.** En GitHub, ve a Settings → Developer settings → Personal access tokens → Tokens (classic) y crea uno con el permiso `read:packages`. Tiene que ser «classic»: GitHub Packages no acepta tokens granulares para npm. Si la organización usa SSO, autoriza el token para `1K5-TECH-ES`. Después, guárdalo en tu shell:',
+          '**Crea tu token, una sola vez.** Aunque los paquetes son públicos, el registro npm de GitHub Packages pide un token para descargar cualquier paquete. En GitHub, ve a Settings → Developer settings → Personal access tokens → Tokens (classic) y crea uno con el permiso `read:packages`. Tiene que ser «classic»: GitHub Packages no acepta tokens granulares para npm. Después, guárdalo en tu shell:',
         ),
         h(CodeBlock, { code: tokenShell, label: '~/.bashrc o ~/.zshrc · no lo subas a ningún repositorio' }),
         P('**Instala el paquete base y el de tu framework.**'),
@@ -249,7 +249,7 @@ export default function Installation() {
                 'div',
                 null,
                 P(
-                  '**GitHub Actions.** En GitHub, abre cada paquete de Grado (pestaña Packages de la organización), entra en Package settings → Manage Actions access y añade el repositorio de tu aplicación. Después, en su workflow:',
+                  '**GitHub Actions.** Como los paquetes son públicos, el `GITHUB_TOKEN` del propio workflow basta para descargarlos. En el workflow de tu aplicación:',
                 ),
                 h(CodeBlock, { code: actionsWorkflow, label: '.github/workflows/ci.yml · solo lo que cambia' }),
                 P(
@@ -308,12 +308,12 @@ export default function Installation() {
             },
             {
               value: 'descargas',
-              title: 'Sin acceso a la organización: paquetes descargables',
+              title: 'Sin token: paquetes descargables',
               content: h(
                 'div',
                 null,
                 P(
-                  'Para probar Grado sin cuenta en `1K5-TECH-ES`, descarga el paquete base y el de tu framework, guárdalos en `vendor/` dentro de tu aplicación y añádelos al repositorio para que el despliegue también los tenga.',
+                  'Para probar Grado sin crear un token, o para instalar sin acceso al registro, descarga el paquete base y el de tu framework, guárdalos en `vendor/` dentro de tu aplicación y añádelos al repositorio para que el despliegue también los tenga.',
                 ),
                 downloads,
                 h(FrameworkCode, {

@@ -2,7 +2,7 @@
 
 Tokens de diseño de 1KOMMA5° España: colores de marca, tipografía, radios, sombras y alturas de control. Funcionan con React, Vue, Tailwind 3, Tailwind 4 o CSS sin framework.
 
-> Paquete privado en GitHub Packages: configura el `.npmrc` del [README principal](../../README.md#instalar-en-un-proyecto-interno) y luego `npm i @1k5-tech-es/grado`. Cambios: [CHANGELOG.md](../../CHANGELOG.md).
+> Paquete público en GitHub Packages (npm pide igualmente un token con `read:packages`): configura el `.npmrc` del [README principal](../../README.md#instalar-en-un-proyecto-interno) y luego `npm i @1k5-tech-es/grado`. Cambios: [CHANGELOG.md](../../CHANGELOG.md).
 
 ## Qué archivo usar
 
