@@ -12,6 +12,7 @@
     "contrast": "npm run contrast -w @1k5-tech-es/grado",
     "api": "npm run build && node scripts/api.mjs",
     "api:check": "node scripts/api.mjs check",
+    "skill": "npm run build && node scripts/skill.mjs",
     "size": "node scripts/size.mjs",
     "figma:check": "node scripts/figma.mjs check",
     "catalog": "npm run build && node scripts/catalog.mjs",

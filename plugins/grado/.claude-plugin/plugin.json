@@ -1,0 +1,10 @@
+{
+  "name": "grado",
+  "version": "0.7.0",
+  "description": "Usar Grado, el sistema de diseño de 1KOMMA5° España, en una app React, Vue o HTML: instalación, estilos, componentes, temas, CI y migración.",
+  "author": {
+    "name": "1KOMMA5° España"
+  },
+  "repository": "https://github.com/1K5-TECH-ES/grado-system-design",
+  "keywords": ["grado", "design-system", "1komma5"]
+}

@@ -4,6 +4,24 @@ Esta guía es para el agente (Claude Code u otro) que trabaja en una app de 1KOM
 
 Versión actual: **0.7.0**. Hasta la 1.0, una versión menor (0.7 → 0.8) puede cambiar una API o el aspecto: lee el `CHANGELOG.md` antes de actualizar.
 
+> **Con Claude Code, mejor la skill.** Este repositorio publica un plugin con la skill `grado`, que lleva esta guía partida por temas y Claude carga sola cuando la tarea toca Grado. Dentro de la app:
+>
+> ```
+> /plugin marketplace add 1K5-TECH-ES/grado-system-design
+> /plugin install grado@grado
+> ```
+>
+> Para que todo el equipo la tenga, en el `.claude/settings.json` de la app:
+>
+> ```json
+> {
+>   "extraKnownMarketplaces": {
+>     "grado": { "source": { "source": "github", "repo": "1K5-TECH-ES/grado-system-design" } }
+>   },
+>   "enabledPlugins": { "grado@grado": true }
+> }
+> ```
+
 ---
 
 ## 1. Qué es Grado
@@ -247,6 +265,7 @@ Ante la duda, mira `api/grado-vue.api.md`: lista props y `emits` de cada compone
 
 - **Armazón:** `AppShell`, `Nav`, `NavSection`, `NavGroup`, `NavItem`, `AppSearch`, `AppLogo`, `Avatar`, `AvatarGroup`, `PageHeader`
 - **Maquetación y texto:** `Container`, `Stack`, `Grid`, `Separator`, `Heading`, `Text`, `Link`, `Kbd`
+- **Tarjetas:** `Card` (`variant`: `panel`, `alert` o `plain`), `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`
 - **Acciones:** `Button`, `IconButton`, `CopyButton`, `DropdownMenu`, `ContextMenu`, `CommandPalette`, `ActionBar`
 - **Formularios:** `Field`, `Input`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `NumberInput`, `PasswordInput`, `SearchInput`, `Combobox`, `MultiSelect`, `SegmentedControl`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `TimePicker`, `Calendar`, `FileUpload`
 - **Campos españoles:** `NifInput`, `IbanInput`, `PhoneInput`, `AddressInput`
@@ -256,7 +275,7 @@ Ante la duda, mira `api/grado-vue.api.md`: lista props y `emits` de cada compone
 - **Gráficos:** `LineChart`, `AreaChart`, `BarChart`, `Donut`, `Sparkline`, `Heatmap`
 - **Energía:** `EnergyFlow`, `PriceChart` (tarifa 2.0TD), `BatteryLevel` e iconos (`SolarPanelIcon`, `InverterIcon`, `HomeBatteryIcon`, `WallboxIcon`, `HeatPumpIcon`, `ElectricMeterIcon`, `PowerGridIcon`)
 - **Formularios con librería:** `@1k5-tech-es/grado-react/react-hook-form` y `@1k5-tech-es/grado-vue/vee-validate` traen `Form`, `FormField` y `ErrorSummary`
-- **`labs`** (`…/labs`, la API puede cambiar sin aviso): `TariffComparison`, `SignaturePad`, `SolarForecast`, `Amount` + `formatEuro`/`formatEnergy`/`formatPower`, `RelativeTime`, `useTheme` + `ThemeToggle`, `ScrollArea`, `useHotkey`, `VisuallyHidden`
+- **`labs`** (`…/labs`, la API puede cambiar sin aviso): `TariffComparison`, `SignaturePad`, `SolarForecast`, `Amount` + `formatEuro`/`formatEnergy`/`formatPower`, `RelativeTime`, `useTheme` + `ThemeToggle`, `ScrollArea`, `useHotkey`, `VisuallyHidden`. Necesitan además `@import '@1k5-tech-es/grado/labs.css'` después de `grado.css`
 
 Funciones útiles: `buttonClass()`, `badgeClass()`… dan las clases de un componente para aplicarlas a otro elemento (por ejemplo, un `<a>` o el `Link` del router con aspecto de botón). `cx()` une clases.
 

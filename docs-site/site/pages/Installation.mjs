@@ -210,7 +210,9 @@ export default function Installation() {
         P(
           'Utiliza React 18 o superior, o Vue 3.5 o superior. El comando npx @1k5-tech-es/grado y la compilación del repositorio necesitan Node.js 22 o superior. Tailwind es opcional.',
         ),
-        P('Para instalar los paquetes necesitas una cuenta de GitHub, cualquiera: no hace falta pertenecer a la organización `1K5-TECH-ES`.'),
+        P(
+          'Para instalar los paquetes necesitas una cuenta de GitHub, cualquiera: no hace falta pertenecer a la organización `1K5-TECH-ES`.',
+        ),
         P(
           "Con el App Router de Next.js puedes importar los componentes desde un Server Component: los que tienen estado llevan `'use client'`.",
         ),
