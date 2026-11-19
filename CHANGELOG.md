@@ -48,6 +48,8 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
 - `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.
 - `DescriptionList`: como un panel de propiedades, con el dato en gris terciario, el valor con el texto de la interfaz y sin líneas entre filas.
+- Gráficos (`BarChart`, `LineChart`, `PriceChart` y los que comparten sus ejes): valores de los ejes y categorías en gris terciario, rejilla continua de 1 px en lugar de discontinua, título con el texto de la interfaz y barras con radio de 2 px.
+- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px y pulso de 1,6 s.
 - `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
 
 ### Atajos de teclado

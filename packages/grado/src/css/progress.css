@@ -9,7 +9,7 @@
 }
 .k5-progress {
   --_c: var(--k5-primary);
-  --_h: 0.5rem;
+  --_h: 0.375rem;
   display: flex;
   flex-direction: column;
   gap: var(--k5-space-1-5);

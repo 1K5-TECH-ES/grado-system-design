@@ -7,9 +7,9 @@
 .k5-skeleton {
   display: block;
   min-height: 0.5rem;
-  border-radius: calc(var(--k5-radius) - 2px);
+  border-radius: var(--k5-radius-xs);
   background: color-mix(in srgb, var(--k5-foreground) 11%, transparent);
-  animation: k5-pulse 1.8s ease-in-out infinite;
+  animation: k5-pulse 1.6s ease-in-out infinite;
 }
 .k5-skeleton--circle {
   border-radius: 50%;
