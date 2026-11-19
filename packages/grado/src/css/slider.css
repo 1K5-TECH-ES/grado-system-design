@@ -2,8 +2,8 @@
    --_fill (de 0 a 1) llega del componente; el relleno acaba en el centro del tirador. */
 .k5-slider {
   --_fill: 0;
-  --_thumb: var(--k5-icon-lg);
-  --_track: var(--k5-space-1-5);
+  --_thumb: 0.875rem;
+  --_track: 0.25rem;
   --_stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_fill));
   display: flex;
   align-items: flex-start;
@@ -53,15 +53,15 @@
   background: var(--k5-primary);
 }
 
-/* Tirador: un círculo berenjena separado de la pista por el color del fondo. */
+/* Tirador: un círculo de 14 px del color de la tarjeta, con línea y sombra, sobre la pista. */
 .k5-slider__input::-webkit-slider-thumb {
   box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
   margin-top: calc((var(--_track) - var(--_thumb)) / 2);
-  border: var(--k5-border-width-strong) solid var(--k5-background);
+  border: 1px solid var(--k5-input);
   border-radius: var(--k5-radius-full);
-  background: var(--k5-primary);
+  background: var(--k5-card);
   box-shadow: var(--k5-shadow-raised);
   appearance: none;
   transition: box-shadow var(--k5-duration-base);
@@ -70,23 +70,23 @@
   box-sizing: border-box;
   width: var(--_thumb);
   height: var(--_thumb);
-  border: var(--k5-border-width-strong) solid var(--k5-background);
+  border: 1px solid var(--k5-input);
   border-radius: var(--k5-radius-full);
-  background: var(--k5-primary);
+  background: var(--k5-card);
   box-shadow: var(--k5-shadow-raised);
   transition: box-shadow var(--k5-duration-base);
 }
 .k5-slider__input:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 2px var(--k5-ring);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--k5-ring) 35%, transparent);
 }
 .k5-slider__input:focus-visible::-moz-range-thumb {
-  box-shadow: 0 0 0 2px var(--k5-ring);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--k5-ring) 35%, transparent);
 }
 .k5-slider__input[aria-invalid='true']::-webkit-slider-thumb {
-  background: var(--k5-destructive);
+  border-color: var(--k5-destructive);
 }
 .k5-slider__input[aria-invalid='true']::-moz-range-thumb {
-  background: var(--k5-destructive);
+  border-color: var(--k5-destructive);
 }
 .k5-slider:has(.k5-slider__input:disabled) {
   opacity: var(--k5-opacity-disabled);

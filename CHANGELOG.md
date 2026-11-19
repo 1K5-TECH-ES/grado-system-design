@@ -10,6 +10,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
 - El configurador de temas de la web calcula los neutros de Consola igual que el tema de serie, en OKLCH con el matiz del principal, y la sección activa de la barra lateral en gris. Con los colores de marca vuelve a reproducir Consola exactamente; para eso, cinco neutros de Consola se ajustan una unidad (el matiz pasa de 305 a 307, el del berenjena).
+- `--k5-field`: el fondo hundido de los campos, un punto por debajo del panel (en oscuro, más oscuro que la tarjeta). Pasa AA con el texto y con el placeholder en los tres temas; en Campo es el fondo, para no perder contraste al sol.
 - `--k5-tertiary-foreground`: tercer nivel de texto (fechas, contadores, pistas), más claro que `muted-foreground` y con 4,5 : 1 sobre el fondo y sobre gris en Consola y Marca. En Campo es igual que `muted-foreground`, para mantener 7 : 1. El configurador de temas de la web también lo calcula.
 - `--k5-text-title-ui` y `--k5-leading-title-ui`: el título de `PageHeader` y el valor de `Kpi`. 24 px en Consola (antes 28); Marca y Campo siguen en 28.
 - Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
@@ -46,6 +47,15 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `ToggleGroup`: la opción activa va en gris levantado en lugar de berenjena.
 - `Accordion`: texto de la interfaz; al pasar, el título se aclara en lugar de volverse berenjena.
 - `Checkbox` y `RadioGroup`: texto de la interfaz, con la casilla centrada en la primera línea.
+- `Input`, `Select`, `Textarea` y los campos con prefijo: fondo hundido (`--k5-field`) y anillo de foco más visible.
+- `Checkbox` y `RadioGroup`: casilla y opción propias de 14 px (16 en Marca, 20 en Campo) con fondo hundido; marcadas, el color principal con un check que se dibuja, un guion en indeterminado o un punto de 6 px. Siguen siendo el input nativo; en alto contraste vuelven a ser los del sistema.
+- `Switch`: 28 × 16 px en Consola.
+- `SegmentedControl`: pista hundida con línea interior, a su ancho; la opción elegida, levantada.
+- `Kbd`: tecla hundida con línea interior.
+- `Slider`: pista de 4 px y pulgar de 14 px del color de la tarjeta, con anillo al enfocar.
+- `Button`: cargando conserva su color; desactivado, el primario y el destructivo pasan a gris en lugar de desvaír su color.
+- `Accordion`: filas de 32 px sin separadores, chevron a la izquierda que gira 90° y contenido alineado con el título.
+- `Skeleton`: brillo que recorre el bloque en lugar de pulso.
 - `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
 - `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
 - `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.
@@ -53,7 +63,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Gráficos (`BarChart`, `LineChart`, `PriceChart` y los que comparten sus ejes): valores de los ejes y categorías en gris terciario, rejilla continua de 1 px en lugar de discontinua, título con el texto de la interfaz y barras con radio de 2 px.
 - `Banner`: franja de 36 px con el texto de la interfaz.
 - `Stepper`: indicador de 24 px (antes 28) sin halo en el paso actual, y texto de la interfaz.
-- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px y pulso de 1,6 s.
+- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px.
 - `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
 
 ### Atajos de teclado

@@ -1,15 +1,24 @@
-/* Esqueleto de carga: forma del contenido con un pulso suave. */
-@keyframes k5-pulse {
-  50% {
-    opacity: 0.5;
+/* Esqueleto de carga: forma del contenido con un brillo que la recorre cada 1,6 s. */
+@keyframes k5-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
   }
 }
 .k5-skeleton {
   display: block;
   min-height: 0.5rem;
   border-radius: var(--k5-radius-xs);
-  background: color-mix(in srgb, var(--k5-foreground) 11%, transparent);
-  animation: k5-pulse 1.6s ease-in-out infinite;
+  background: linear-gradient(
+      90deg,
+      var(--k5-muted) 0%,
+      color-mix(in srgb, var(--k5-foreground) 12%, var(--k5-muted)) 50%,
+      var(--k5-muted) 100%
+    )
+    0 0 / 200% 100%;
+  animation: k5-shimmer 1.6s ease-in-out infinite;
 }
 .k5-skeleton--circle {
   border-radius: 50%;
