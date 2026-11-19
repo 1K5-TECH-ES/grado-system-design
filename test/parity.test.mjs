@@ -91,6 +91,10 @@ const SCENARIOS = {
         h(V.Status, { progress: 'done', tone: 'brand' }, text('Resuelto')),
       ]),
   ],
+  'panel lateral sin velo': [
+    r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'),
+    () => h(V.Drawer, { title: 'Vista previa', modal: false }, () => 'Detalle'),
+  ],
   'filtro en partes, editable y quitable': [
     r(R.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', onEdit: () => {}, onRemove: () => {} }),
     () => h(V.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', editable: true, removable: true }),
@@ -394,4 +398,11 @@ test('FilterChip en partes: grupo con la frase entera, una parte por botón y qu
     /<span class="k5-chip__part k5-chip__value">Madrid<\/span>/,
   )
   assert.equal(renderToStaticMarkup(r(R.FilterChip, { label: 'Estado: abierto' })), '<span class="k5-chip">Estado: abierto</span>')
+})
+
+test('Drawer sin velo: sin aria-modal y con su clase; Dialog sigue modal', () => {
+  const html = renderToStaticMarkup(r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'))
+  assert.match(html, /class="k5-dialog k5-drawer k5-drawer--modeless"/)
+  assert.doesNotMatch(html, /aria-modal/)
+  assert.match(renderToStaticMarkup(r(R.Drawer, { title: 'Ficha' }, 'Detalle')), /aria-modal="true"/)
 })

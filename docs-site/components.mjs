@@ -151,7 +151,15 @@ export const newComponents = [
 </Drawer>`,
       'const open = ref(false);',
     ),
-    [...modalProps, ['side', 'left · right', 'right']],
+    [
+      ...modalProps,
+      ['side', 'left · right', 'right'],
+      [
+        'modal',
+        'false: vista previa sin velo. La página sigue usable detrás (pasar de una fila a otra) y Escape, con el foco en el panel, o el botón de cierre lo cierran',
+        'true',
+      ],
+    ],
     'Sheet es un alias de Drawer. En móvil el panel ocupa el ancho disponible.',
   ),
   entry(

@@ -570,6 +570,7 @@ ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
   footer?: ReactNode
   fullscreen?: boolean
   header?: boolean
+  modal?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"
@@ -1303,6 +1304,7 @@ ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
   footer?: ReactNode
   fullscreen?: boolean
   header?: boolean
+  modal?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"

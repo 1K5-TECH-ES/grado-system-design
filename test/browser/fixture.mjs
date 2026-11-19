@@ -27,6 +27,7 @@ const initial = () => ({
   modal: false,
   alert: false,
   drawer: false,
+  preview: null,
   checked: false,
   choice: 'a',
   client: '',
@@ -234,6 +235,22 @@ function renderUI(framework, state, update) {
       'drawer',
       button('Abrir panel', () => update({ drawer: true })),
       C('Drawer', { title: 'Ficha', open: state.drawer, onOpenChange: set('drawer') }, 'Contenido de la ficha'),
+    ),
+    // Vista previa sin velo (0.9): se pasa de una fila a otra con el panel abierto.
+    section(
+      'preview',
+      button('Fila 1', () => update({ preview: 'Fila 1' })),
+      button('Fila 2', () => update({ preview: 'Fila 2' })),
+      C(
+        'Drawer',
+        {
+          title: state.preview ?? 'Vista previa',
+          modal: false,
+          open: state.preview != null,
+          onOpenChange: (open) => !open && update({ preview: null }),
+        },
+        'Detalle de la fila',
+      ),
     ),
     section('tabs', C('Tabs', { items, label: 'Ficha', value: state.tab, onValueChange: set('tab') })),
     section(

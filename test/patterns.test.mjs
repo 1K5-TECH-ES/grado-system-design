@@ -97,6 +97,7 @@ const fixtures = [
   ['Dialog', { title: 'Editar' }],
   ['AlertDialog', { title: 'Eliminar' }],
   ['Drawer', { title: 'Ficha' }],
+  ['Drawer', { title: 'Vista previa', modal: false, side: 'left' }],
   ['Sheet', { title: 'Ficha' }],
   ['DropdownMenu', { label: 'Acciones', items: [{ id: 'edit', label: 'Editar', shortcut: ['E'] }] }],
   ['Tooltip', { label: 'Ayuda', content: 'Contenido' }],

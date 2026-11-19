@@ -225,3 +225,8 @@
     animation: none;
   }
 }
+
+/* Drawer sin velo (modal false): no está en la capa superior, así que lleva su propio z-index. */
+.k5-drawer--modeless {
+  z-index: var(--k5-z-drawer);
+}

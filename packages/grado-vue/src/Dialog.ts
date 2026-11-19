@@ -22,6 +22,11 @@ function makeModal(name: string, kind = 'dialog') {
       fullscreen: Boolean,
       header: { type: Boolean, default: true },
       side: { type: String as PropType<'left' | 'right'>, default: 'right' },
+      /**
+       * Solo Drawer. false: vista previa sin velo. La página sigue usable detrás (por ejemplo, pasar de una
+       * fila a otra de la lista) y Escape o el botón de cierre lo cierran.
+       */
+      modal: { type: Boolean, default: true },
     },
     emits: ['update:open'],
     setup(props, { attrs, slots, emit }) {
@@ -36,11 +41,18 @@ function makeModal(name: string, kind = 'dialog') {
         t = useGrado()
       let unlock: (() => void) | undefined,
         previous: HTMLElement | null = null
+      const modal = () => kind !== 'drawer' || props.modal
+      // Sin velo, el foco vuelve al último control usado fuera del panel (la fila elegida), y solo si estaba dentro.
+      const track = (event: FocusEvent) => {
+        if (!dialog.value?.contains(event.target as Node)) previous = event.target as HTMLElement
+      }
       const close = () => {
+        document.removeEventListener('focusin', track)
+        const inside = !!dialog.value?.contains(document.activeElement)
         dialog.value?.close()
         unlock?.()
         unlock = undefined
-        if (previous?.isConnected) previous.focus()
+        if ((modal() || inside) && previous?.isConnected) previous.focus()
         previous = null
       }
       onMounted(() =>
@@ -49,8 +61,14 @@ function makeModal(name: string, kind = 'dialog') {
           (open) => {
             if (open && dialog.value) {
               previous = document.activeElement as HTMLElement
-              dialog.value.showModal()
-              unlock = lockScroll(document)
+              // Sin velo (modal false) la página sigue viva: ni bloqueo de scroll ni foco atrapado.
+              if (!modal()) {
+                dialog.value.show()
+                document.addEventListener('focusin', track)
+              } else {
+                dialog.value.showModal()
+                unlock = lockScroll(document)
+              }
             } else close()
           },
           { immediate: true, flush: 'post' },
@@ -68,7 +86,7 @@ function makeModal(name: string, kind = 'dialog') {
           mergeProps(attrs, {
             ref: dialog,
             role: kind === 'alert' ? 'alertdialog' : undefined,
-            'aria-modal': 'true',
+            'aria-modal': modal() ? 'true' : undefined,
             'aria-labelledby': `${id}-title`,
             'aria-describedby': props.description ? `${id}-description` : undefined,
             class: cx(
@@ -78,14 +96,22 @@ function makeModal(name: string, kind = 'dialog') {
               !props.header && 'k5-dialog--headless',
               kind === 'drawer' && 'k5-drawer',
               kind === 'drawer' && props.side === 'left' && 'k5-drawer--left',
+              !modal() && 'k5-drawer--modeless',
             ),
+            onKeydown: (event: KeyboardEvent) => {
+              // Un <dialog> abierto con show() no recibe cancel: Escape se atiende aquí.
+              if (!modal() && event.key === 'Escape' && !event.defaultPrevented && props.closeOnEscape) {
+                event.preventDefault()
+                setVisible(false)
+              }
+            },
             onCancel: (event: Event) => {
               event.preventDefault()
               if (props.closeOnEscape) setVisible(false)
             },
             onPointerdown: (event: PointerEvent) => backdrop.down(event),
             onClick: (event: MouseEvent) => {
-              if (backdrop.click(event) && props.closeOnOutside && kind !== 'alert') setVisible(false)
+              if (modal() && backdrop.click(event) && props.closeOnOutside && kind !== 'alert') setVisible(false)
             },
           }),
           [

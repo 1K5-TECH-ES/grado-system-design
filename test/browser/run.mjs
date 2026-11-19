@@ -114,6 +114,18 @@ try {
     await page.locator('#drawer > button').click()
     await expect(page.locator('#drawer dialog')).toBeVisible()
     await page.locator('#drawer .k5-close').click()
+    // Drawer sin velo: la lista sigue usable detrás, Escape lo cierra y el foco vuelve a la última fila.
+    const preview = page.locator('#preview dialog')
+    await page.locator('#preview > button', { hasText: 'Fila 1' }).click()
+    await expect(preview).toBeVisible()
+    await expect(preview).not.toHaveAttribute('aria-modal', 'true')
+    await page.locator('#preview > button', { hasText: 'Fila 2' }).click()
+    await expect(preview.locator('.k5-dialog__title')).toHaveText('Fila 2')
+    await expect(preview).toBeVisible()
+    await preview.locator('.k5-close').focus()
+    await page.keyboard.press('Escape')
+    await expect(preview).toBeHidden()
+    await expect(page.locator('#preview > button', { hasText: 'Fila 2' })).toBeFocused()
     // Pantalla completa sin cabecera: Escape no la cierra (la app lo usa), el botón de la app sí.
     await page.locator('#editor > button').click()
     await expect(page.locator('#editor dialog')).toBeVisible()

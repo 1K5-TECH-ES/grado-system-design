@@ -62,6 +62,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `groupRows()` en `@1k5-tech-es/grado/core` junta las filas igual para quien pinte su propia tabla.
 - El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos.
 
+### Drawer
+
+- `modal={false}` (Vue: `:modal="false"`): vista previa sin velo. Se abre con `show()` en lugar de `showModal()`, sin `aria-modal`, sin bloquear el scroll ni atrapar el foco, así que la persona puede pasar de una fila a otra de la lista con el panel abierto. Escape (con el foco en el panel) y el botón de cierre lo cierran, y el foco vuelve al último control usado fuera del panel.
+
 ### FilterBar y FilterChip
 
 - Filtro en partes: `field`, `operator` y `value` (Estado · es uno de · Abierta, En obra) en lugar de una etiqueta, separadas por una línea fina, con el botón de quitar al final. El chip es un grupo con la frase entera como nombre. Con `onEdit` (Vue: `editable` y el evento `edit`) cada parte es un botón que avisa de cuál se ha pulsado (`field`, `operator` o `value`) para abrir su selector sin quitar el filtro. En `FilterBar`, los filtros aceptan las mismas partes y avisan con `onEditFilter(id, part)` (Vue: `editable` y `edit-filter`). `label` sigue sirviendo para los filtros de una pieza.

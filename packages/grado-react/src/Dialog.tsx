@@ -25,7 +25,7 @@ export interface DialogProps extends Omit<DialogHTMLAttributes<HTMLDialogElement
   /** false: sin cabecera ni botón de cierre. El título sigue nombrando el diálogo para lectores de pantalla y el cuerpo va sin márgenes. */
   header?: boolean
 }
-const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; side?: 'left' | 'right' }>(function Modal(
+const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; side?: 'left' | 'right'; modal?: boolean }>(function Modal(
   {
     title,
     description,
@@ -42,6 +42,7 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
     className,
     alert = false,
     side,
+    modal = true,
     ...rest
   },
   forwarded,
@@ -55,21 +56,32 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
   useEffect(() => {
     const dialog = ref.current
     if (!dialog || !visible) return
-    const previous = dialog.ownerDocument.activeElement as HTMLElement | null
-    dialog.showModal()
-    const unlock = lockScroll(dialog.ownerDocument)
-    return () => {
-      dialog.close()
-      unlock()
-      if (previous?.isConnected) previous.focus()
+    const doc = dialog.ownerDocument
+    let previous = doc.activeElement as HTMLElement | null
+    // Sin velo (modal false) la página sigue viva: ni bloqueo de scroll ni foco atrapado. Al cerrar,
+    // el foco vuelve al último control usado fuera del panel (la fila elegida), y solo si estaba dentro.
+    const track = (event: FocusEvent) => {
+      if (!dialog.contains(event.target as Node)) previous = event.target as HTMLElement
     }
-  }, [visible])
+    if (!modal) {
+      dialog.show()
+      doc.addEventListener('focusin', track)
+    } else dialog.showModal()
+    const unlock = modal ? lockScroll(doc) : undefined
+    return () => {
+      doc.removeEventListener('focusin', track)
+      const inside = dialog.contains(doc.activeElement)
+      dialog.close()
+      unlock?.()
+      if ((modal || inside) && previous?.isConnected) previous.focus()
+    }
+  }, [visible, modal])
   return (
     <dialog
       {...rest}
       ref={ref}
       role={alert ? 'alertdialog' : undefined}
-      aria-modal="true"
+      aria-modal={modal ? 'true' : undefined}
       aria-labelledby={`${id}-title`}
       aria-describedby={description ? `${id}-description` : undefined}
       className={cx(
@@ -79,8 +91,17 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
         !header && 'k5-dialog--headless',
         side && 'k5-drawer',
         side === 'left' && 'k5-drawer--left',
+        !modal && 'k5-drawer--modeless',
         className,
       )}
+      onKeyDown={(event) => {
+        rest.onKeyDown?.(event)
+        // Un <dialog> abierto con show() no recibe cancel: Escape se atiende aquí.
+        if (!modal && event.key === 'Escape' && !event.defaultPrevented && closeOnEscape) {
+          event.preventDefault()
+          setVisible(false)
+        }
+      }}
       onCancel={(event) => {
         rest.onCancel?.(event)
         event.preventDefault()
@@ -92,7 +113,7 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
       }}
       onClick={(event) => {
         rest.onClick?.(event)
-        if (backdrop.click(event) && closeOnOutside && !alert) setVisible(false)
+        if (modal && backdrop.click(event) && closeOnOutside && !alert) setVisible(false)
       }}
     >
       {header ? (
@@ -136,8 +157,13 @@ export const AlertDialog = forwardRef<HTMLDialogElement, DialogProps>(function A
 })
 export interface DrawerProps extends DialogProps {
   side?: 'left' | 'right'
+  /**
+   * false: vista previa sin velo. La página sigue usable detrás (por ejemplo, pasar de una fila a otra
+   * de la lista) y Escape o el botón de cierre lo cierran. Por defecto, modal como Dialog.
+   */
+  modal?: boolean
 }
-export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer({ side = 'right', ...props }, ref) {
-  return <Modal {...props} ref={ref} side={side} />
+export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer({ side = 'right', modal = true, ...props }, ref) {
+  return <Modal {...props} ref={ref} side={side} modal={modal} />
 })
 export const Sheet = Drawer

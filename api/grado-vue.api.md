@@ -68,6 +68,7 @@ emits: dismiss
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -427,6 +428,7 @@ string
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -465,6 +467,7 @@ function
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -1099,6 +1102,7 @@ emits: update:modelValue
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
