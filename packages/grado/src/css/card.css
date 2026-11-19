@@ -27,10 +27,10 @@
   gap: var(--k5-space-2);
   margin: 0;
   color: var(--k5-foreground);
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
   font-weight: var(--k5-weight-semibold);
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: -0.006em;
+  line-height: var(--k5-leading-ui);
 }
 .k5-card__title svg {
   width: 1rem;

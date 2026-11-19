@@ -529,6 +529,7 @@ import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5-tech-es/grado-v
       ['product', 'Nombre de la aplicación', '—'],
       ['brand / search / actions / sidebar / sidebarFooter', 'Props React / slots Vue (sidebar-footer)', '—'],
       ['collapsed', 'Barra lateral compacta en escritorio', 'false'],
+      ['brandHeader', 'Consola: cabecera berenjena de 0.8. Obsoleta, se retira en 0.10', 'false'],
       ['NavItem: as / active / badge', 'Enlace de router / boolean / contador', 'a / false / —'],
       ['NavGroup: open', 'onOpenChange en React / v-model:open en Vue', 'No controlado'],
     ],

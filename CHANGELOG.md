@@ -2,6 +2,51 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
+## 0.9.0 · sin publicar
+
+0.9, «Precisión». Primera entrega del rediseño inspirado en Linear: el armazón se retira para que mande el contenido, Consola baja a 13 px y controles de 28 px, el movimiento se acorta y los iconos pasan a trazo 1,5. Los colores de marca, los tres temas y los cuatro principios no cambian.
+
+### Fundamentos
+
+- Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
+- Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
+- Controles de Consola a 24 · 28 · 32 px (antes 28 · 32 · 40). La densidad `compact` baja a 22 · 24 · 28 px. Marca y Campo no cambian.
+- Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
+- Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
+- Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
+
+### AppShell
+
+- Consola: la cabecera y la barra lateral van sobre el fondo base (`--k5-sidebar`) y el contenido en un panel con borde y radio de 8 px. Sin cabecera berenjena, la marca deja de competir con la acción principal. En móvil el contenido ocupa todo el ancho, como antes. Marca no cambia.
+- `brandHeader` (React y Vue): recupera la cabecera berenjena de 0.8. Obsoleta: se retira en 0.10.
+- `Nav`: filas del alto del control (28 px), texto de 13 px, iconos más tenues que el texto, títulos de sección en minúscula y gris, contadores sin pastilla. Al pasar y en la sección activa, gris en lugar de menta y lila.
+
+### Componentes
+
+- `Button`: texto de 13 px (antes 12), relleno más corto, primario y destructivo con un brillo interior de 1 px, y el borde del secundario un punto más visible.
+- `Input`, `Select`, `Textarea` y los campos con prefijo: radio de 6 px, texto de la interfaz y un borde que se oscurece al pasar.
+- `DropdownMenu`, `ContextMenu` y `Combobox`: filas del alto del control y opción resaltada en gris en lugar de menta (un solo acento por vista). Los iconos de las opciones van más tenues y se encienden con la opción.
+- `Tooltip`: más compacto, en peso medio.
+- `Dialog`, `AlertDialog` y `Drawer`: cabecera sin línea debajo y título de 16 px, pie sin fondo gris, velo sin desenfoque y entrada más corta (de 0,98 a 1). `Drawer` flota a 8 px del borde con las cuatro esquinas redondeadas; en móvil sigue ocupando la pantalla.
+- `Tabs`: el subrayado de la pestaña activa va en el color del texto, no en berenjena; texto de la interfaz. En `pill`, la elegida lleva un borde fino en lugar de negrita.
+- `Table`: filas de `--k5-row-h`, separadores más tenues y cabecera con la misma línea que el resto.
+- `Kbd`: tecla con fondo gris y sin borde.
+- `SegmentedControl`: la opción elegida lleva un borde fino y se mueve con la curva nueva.
+- `Switch`: 32 × 18 px en Consola; Marca y Campo mantienen 44 × 24.
+- `Card`: título con el texto de la interfaz.
+- `CommandPalette`: resultados del alto de 36 px con el texto de la interfaz, grupos con título en minúscula y sin separadores, y resultado activo en gris en lugar de menta.
+- `Popover`: texto de la interfaz.
+- `Alert` y `Toast`: superficie de tarjeta con borde fino; el tono va solo en el icono, el título en el color del texto y la descripción en gris. El fondo de color queda para `Banner`.
+- `ToggleGroup`: la opción activa va en gris levantado en lugar de berenjena.
+- `Accordion`: texto de la interfaz; al pasar, el título se aclara en lugar de volverse berenjena.
+- `Checkbox` y `RadioGroup`: texto de la interfaz, con la casilla centrada en la primera línea.
+
+### Al actualizar desde 0.8.0
+
+- **Rompe** · `AppShell` en Consola cambia de aspecto: sin cabecera berenjena y con el contenido en un panel. Si la app necesita la cabecera de antes mientras se adapta, añade `brandHeader` (React) o `brand-header` (Vue); se retira en 0.10. Si la app pintaba su propio fondo en `<main>`, quítalo: el panel ya lo pone.
+- Los controles de Consola miden 4 px menos y el texto de los botones pasa de 12 a 13 px. Revisa las maquetas ajustadas a mano (alturas fijas alrededor de un botón o un campo). En pantallas táctiles no cambia nada: `comfortable` sigue en 36 · 44 · 48.
+- Los menús ya no resaltan en menta. Si una app contaba con ese color para algo, usa `--k5-accent` directamente.
+
 ## 0.8.0 · sin publicar
 
 ### Arreglos

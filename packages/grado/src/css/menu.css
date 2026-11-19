@@ -1,5 +1,6 @@
-/* Menú desplegable, lista del combobox y tooltip: superficie popover como los
-   menús de 1komma5es_help. El elemento resaltado usa el acento menta. */
+/* Menú desplegable, lista del combobox y tooltip: superficie popover. Desde 0.9 el elemento
+   resaltado es un gris sobre el popover (un solo acento por vista: la menta queda para datos
+   y selección) y las filas miden el alto del control. */
 @keyframes k5-pop-in {
   from {
     opacity: 0;
@@ -53,14 +54,15 @@
   align-items: center;
   gap: var(--k5-space-2);
   width: 100%;
-  padding: var(--k5-space-1-5) var(--k5-space-2);
+  min-height: var(--k5-control-h);
+  padding: var(--k5-space-1) var(--k5-space-2);
   border: 0;
-  border-radius: calc(var(--k5-radius) - 4px);
+  border-radius: calc(var(--k5-radius) - 3px);
   background: transparent;
   color: inherit;
   font-family: inherit;
-  font-size: var(--k5-text-body);
-  line-height: 1.4;
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
   text-align: left;
   cursor: pointer;
   outline: none;
@@ -70,8 +72,20 @@
 }
 .k5-menu__item:focus,
 .k5-combobox__option[data-active='true'] {
-  background: var(--k5-accent);
-  color: var(--k5-accent-foreground);
+  background: color-mix(in srgb, var(--k5-popover-foreground) 8%, var(--k5-popover));
+  color: var(--k5-popover-foreground);
+}
+.k5-menu__item svg,
+.k5-combobox__option svg {
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+  flex-shrink: 0;
+  opacity: 0.7;
+  stroke-width: 1.5;
+}
+.k5-menu__item:focus svg,
+.k5-combobox__option[data-active='true'] svg {
+  opacity: 1;
 }
 .k5-menu__item--danger {
   color: var(--k5-destructive-text);
@@ -100,9 +114,9 @@
 .k5-combobox .k5-input {
   padding-right: var(--k5-space-8);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23828282' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5'/%3E%3Cpath d='m7 9 5-5 5 5'/%3E%3C/svg%3E");
-  background-position: right 0.625rem center;
+  background-position: right 0.5rem center;
   background-repeat: no-repeat;
-  background-size: 1rem;
+  background-size: 0.875rem;
 }
 .k5-combobox__list {
   width: 100%;
@@ -113,8 +127,8 @@
   min-width: 0;
 }
 .k5-combobox__check {
-  width: 1rem;
-  height: 1rem;
+  width: 0.875rem;
+  height: 0.875rem;
   flex-shrink: 0;
   visibility: hidden;
 }
@@ -139,14 +153,14 @@
   left: 50%;
   width: max-content;
   max-width: min(16rem, calc(100vw - 2rem));
-  padding: var(--k5-space-1-5) var(--k5-space-3);
+  padding: var(--k5-space-1) var(--k5-space-2);
   border: 1px solid var(--k5-border);
   border-radius: calc(var(--k5-radius) - 2px);
   background: var(--k5-popover);
   color: var(--k5-popover-foreground);
   box-shadow: var(--k5-shadow-popover);
   font-size: var(--k5-text-caption);
-  font-weight: var(--k5-weight-regular);
+  font-weight: var(--k5-weight-medium);
   line-height: 1.45;
   transform: translateX(-50%);
   animation: k5-fade-in var(--k5-duration-fast) var(--k5-ease-out);

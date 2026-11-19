@@ -1,11 +1,11 @@
 /* Casilla y opciones: controles nativos en berenjena, como los checkbox de 1komma5es_help. */
-/* margin-top: centra el control (16 px) con la primera línea del texto (14 px × 1,4). */
+/* margin-top: centra el control (16 px) con la primera línea del texto de la interfaz. */
 .k5-checkbox,
 .k5-radio {
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
-  margin: 0.1125rem 0 0;
+  margin: calc((var(--k5-leading-ui) - 1rem) / 2) 0 0;
   accent-color: var(--k5-primary);
   cursor: pointer;
 }
@@ -23,10 +23,10 @@
 .k5-radio-option {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--k5-space-2-5);
+  gap: var(--k5-space-2);
   color: var(--k5-foreground);
-  font-size: var(--k5-text-body);
-  line-height: 1.4;
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
   cursor: pointer;
 }
 .k5-checkbox-field:has(:disabled),

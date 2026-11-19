@@ -36,7 +36,7 @@ export declare const ICON_ATTRS: Record<string, string>
 export type AvatarStatus = 'online' | 'away' | 'busy'
 export declare const SIDEBAR_ID: string
 export declare const AVATAR_STATUSES: readonly AvatarStatus[]
-export declare function appShellClass(options?: { collapsed?: boolean; navOpen?: boolean }): string
+export declare function appShellClass(options?: { collapsed?: boolean; navOpen?: boolean; brandHeader?: boolean }): string
 export declare function avatarClass(options?: { size?: Size }): string
 export declare function initials(name?: string): string
 export declare const LOGO: { viewBox: string; letters: string[]; ring: string }

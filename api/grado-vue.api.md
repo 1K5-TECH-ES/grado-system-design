@@ -91,6 +91,7 @@ emits: update:open
 ## AppShell
 
 ```ts
+  brandHeader: Boolean
   collapsed: Boolean
   mainId: String  // con valor por defecto
   menuLabel: String

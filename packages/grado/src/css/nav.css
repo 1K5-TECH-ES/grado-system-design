@@ -11,49 +11,51 @@
   gap: var(--k5-space-0-5);
 }
 .k5-nav__section + .k5-nav__section {
-  margin-top: var(--k5-space-3);
+  margin-top: var(--k5-space-4);
 }
+/* Título de sección en minúscula y gris, como una etiqueta más: no compite con los enlaces. */
 .k5-nav__title {
   margin: 0;
-  padding: var(--k5-space-2) var(--k5-space-3) var(--k5-space-1);
-  color: color-mix(in srgb, var(--k5-sidebar-foreground) 65%, transparent);
+  padding: var(--k5-space-1) var(--k5-space-2);
+  color: color-mix(in srgb, var(--k5-sidebar-foreground) 68%, transparent);
   font-size: var(--k5-text-caption);
-  font-weight: var(--k5-weight-semibold);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: var(--k5-weight-medium);
 }
 
 .k5-nav-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--k5-space-3);
+  gap: var(--k5-space-2);
   width: 100%;
-  min-height: 2.25rem;
-  padding: var(--k5-space-2) var(--k5-space-3);
+  min-height: var(--k5-control-h);
+  padding: var(--k5-space-1) var(--k5-space-2);
   border: 0;
-  border-radius: var(--k5-radius);
+  border-radius: calc(var(--k5-radius) - 2px);
   background: none;
   color: var(--k5-sidebar-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
   font-weight: var(--k5-weight-medium);
-  line-height: 1.25;
+  line-height: var(--k5-leading-ui);
   text-align: left;
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color var(--k5-duration-base),
-    color var(--k5-duration-base);
+    background-color var(--k5-duration-fast),
+    color var(--k5-duration-fast);
 }
+/* Iconos más tenues que el texto; el activo los sube al color del texto. */
 .k5-nav-item svg {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
+  opacity: 0.72;
+  stroke-width: 1.5;
 }
 .k5-nav-item:hover {
-  background: var(--k5-accent);
-  color: var(--k5-accent-foreground);
+  background: var(--k5-sidebar-accent);
+  color: var(--k5-sidebar-accent-foreground);
 }
 .k5-nav-item:focus-visible {
   outline: 2px solid var(--k5-sidebar-ring);
@@ -64,6 +66,10 @@
   background: var(--k5-sidebar-accent);
   color: var(--k5-sidebar-accent-foreground);
 }
+.k5-nav-item[aria-current='page'] svg,
+.k5-nav-item[data-active='true'] svg {
+  opacity: 1;
+}
 .k5-nav-item__label {
   flex: 1;
   min-width: 0;
@@ -71,14 +77,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* Contador: solo la cifra, en gris. Marca lo pinta en fucsia. */
 .k5-nav-item__badge {
   flex-shrink: 0;
-  padding: 0.0625rem 0.4375rem;
+  padding: 0 0.125rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--k5-sidebar-primary) 12%, transparent);
-  color: var(--k5-sidebar-accent-foreground);
+  color: color-mix(in srgb, var(--k5-sidebar-foreground) 68%, transparent);
   font-size: var(--k5-text-caption);
-  font-weight: var(--k5-weight-semibold);
+  font-weight: var(--k5-weight-medium);
   font-variant-numeric: tabular-nums;
 }
 
@@ -93,18 +99,17 @@
   flex-direction: column;
   gap: var(--k5-space-0-5);
   margin: var(--k5-space-0-5) 0 0;
-  padding: 0 0 0 2.25rem;
+  padding: 0 0 0 1.5rem;
   list-style: none;
 }
 .k5-nav-group__items[hidden] {
   display: none;
 }
 .k5-nav-group__items .k5-nav-item {
-  min-height: 2rem;
-  padding: var(--k5-space-1-5) var(--k5-space-3);
-  border-radius: calc(var(--k5-radius) - 2px);
+  min-height: var(--k5-control-h);
+  padding: var(--k5-space-1) var(--k5-space-2);
   color: color-mix(in srgb, var(--k5-sidebar-foreground) 75%, transparent);
-  font-size: var(--k5-text-small);
+  font-size: var(--k5-text-ui);
 }
 .k5-nav-group__items .k5-nav-item[aria-current='page'] {
   color: var(--k5-sidebar-accent-foreground);
@@ -128,6 +133,8 @@
   border-radius: 50%;
 }
 :where([data-k5-theme='marca']) .k5-nav-item__badge:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  padding: 0.0625rem 0.4375rem;
   background: var(--k5-fuchsia);
   color: var(--k5-graphite);
+  font-weight: var(--k5-weight-semibold);
 }

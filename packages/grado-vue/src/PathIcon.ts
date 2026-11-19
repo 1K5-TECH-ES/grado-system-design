@@ -5,7 +5,7 @@ import { ICON_ATTRS } from '@1k5-tech-es/grado/classes'
 export function pathIcon(paths: string[], className?: string) {
   return h(
     'svg',
-    { ...ICON_ATTRS, 'stroke-width': '2', ...(className ? { class: className } : {}) },
+    { ...ICON_ATTRS, 'stroke-width': '1.5', ...(className ? { class: className } : {}) },
     paths.map((d) => h('path', { d })),
   )
 }

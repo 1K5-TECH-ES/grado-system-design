@@ -1,5 +1,6 @@
 /* Paleta de comandos (⌘K): un diálogo con buscador y resultados agrupados. Va arriba,
-   no centrado, para que la lista crezca hacia abajo sin mover el buscador. */
+   no centrado, para que la lista crezca hacia abajo sin mover el buscador. Desde 0.9: grupos
+   con título en minúscula, sin separadores, y resultado activo en gris. */
 .k5-dialog.k5-command {
   width: min(36rem, calc(100vw - 2rem));
   max-height: min(28rem, calc(100vh - 6rem));
@@ -44,15 +45,14 @@
 .k5-command__kbd,
 .k5-command__shortcut {
   flex-shrink: 0;
-  padding: 0 var(--k5-space-1-5);
-  border: 1px solid var(--k5-border);
-  border-bottom-width: 2px;
-  border-radius: calc(var(--k5-radius) - 4px);
+  padding: 0 var(--k5-space-1);
+  border-radius: var(--k5-radius-xs);
   background: var(--k5-muted);
   color: var(--k5-muted-foreground);
   font-family: var(--k5-font-sans);
-  font-size: var(--k5-text-caption);
-  line-height: 1.25rem;
+  font-size: 0.6875rem;
+  font-weight: var(--k5-weight-medium);
+  line-height: 1.125rem;
 }
 .k5-command__list {
   flex: 1;
@@ -61,31 +61,38 @@
   overflow: auto;
 }
 .k5-command__group + .k5-command__group {
-  margin-top: var(--k5-space-1);
-  padding-top: var(--k5-space-1);
-  border-top: 1px solid var(--k5-border);
+  margin-top: var(--k5-space-2);
 }
 .k5-command__group-title {
   margin: 0;
-  padding: var(--k5-space-1-5) var(--k5-space-2) var(--k5-space-1);
+  padding: var(--k5-space-1-5) var(--k5-space-2-5) var(--k5-space-1);
   color: var(--k5-muted-foreground);
   font-size: var(--k5-text-caption);
-  font-weight: var(--k5-weight-semibold);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: var(--k5-weight-medium);
 }
 .k5-command__item {
   display: flex;
   align-items: center;
-  gap: var(--k5-space-3);
-  padding: var(--k5-space-2);
-  border-radius: calc(var(--k5-radius) - 4px);
-  font-size: var(--k5-text-body);
+  gap: var(--k5-space-2-5);
+  min-height: 2.25rem;
+  padding: var(--k5-space-1-5) var(--k5-space-2-5);
+  border-radius: calc(var(--k5-radius) - 2px);
+  font-size: var(--k5-text-ui);
   cursor: pointer;
 }
+.k5-command__item > svg {
+  width: var(--k5-icon-md);
+  height: var(--k5-icon-md);
+  flex-shrink: 0;
+  opacity: 0.7;
+  stroke-width: 1.5;
+}
 .k5-command__item[data-active='true'] {
-  background: var(--k5-accent);
-  color: var(--k5-accent-foreground);
+  background: color-mix(in srgb, var(--k5-card-foreground) 7%, var(--k5-card));
+  color: var(--k5-card-foreground);
+}
+.k5-command__item[data-active='true'] > svg {
+  opacity: 1;
 }
 .k5-command__item[aria-disabled='true'] {
   opacity: 0.5;
@@ -103,10 +110,7 @@
   font-size: var(--k5-text-caption);
   white-space: nowrap;
 }
-.k5-command__item[data-active='true'] .k5-command__description {
-  color: inherit;
-  opacity: 0.8;
-}
+
 .k5-command__empty {
   margin: 0;
   padding: var(--k5-space-8) var(--k5-space-4);

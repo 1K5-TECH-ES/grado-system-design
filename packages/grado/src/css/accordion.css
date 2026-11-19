@@ -16,18 +16,18 @@
   justify-content: space-between;
   gap: var(--k5-space-4);
   width: 100%;
-  padding: var(--k5-space-3-5) 0;
+  padding: var(--k5-space-3) 0;
   border: 0;
   background: transparent;
   color: var(--k5-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
   font-weight: var(--k5-weight-medium);
   text-align: left;
   cursor: pointer;
 }
 .k5-accordion__trigger:hover:not(:disabled) {
-  color: var(--k5-primary-text);
+  color: var(--k5-muted-foreground);
 }
 .k5-accordion__trigger:focus-visible {
   outline: 2px solid var(--k5-ring);

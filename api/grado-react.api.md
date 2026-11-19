@@ -115,6 +115,7 @@ ref: HTMLDivElement · admite además los atributos HTML de ese elemento
   actions?: ReactNode
   banner?: ReactNode
   brand?: ReactNode
+  brandHeader?: boolean
   collapsed?: boolean
   mainId?: string
   menuLabel?: string

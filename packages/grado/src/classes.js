@@ -104,8 +104,8 @@ export const ICON_ATTRS = {
 
 export const SIDEBAR_ID = 'k5-app-sidebar'
 
-export function appShellClass({ collapsed = false, navOpen = false } = {}) {
-  return cx('k5-app', collapsed && 'k5-app--collapsed', navOpen && 'k5-app--nav-open')
+export function appShellClass({ collapsed = false, navOpen = false, brandHeader = false } = {}) {
+  return cx('k5-app', collapsed && 'k5-app--collapsed', navOpen && 'k5-app--nav-open', brandHeader && 'k5-app--brand-header')
 }
 
 export function avatarClass({ size = 'md' } = {}) {

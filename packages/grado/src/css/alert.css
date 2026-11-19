@@ -1,17 +1,18 @@
-/* Aviso: tinte del tono al 8 %, sin borde de color; icono y título en el color de texto del tono. */
+/* Aviso: superficie de tarjeta con borde fino; el tono va solo en el icono (desde 0.9, el
+   fondo de color queda para el Banner). Título en el color del texto y descripción en gris. */
 .k5-alert {
   --_tone: var(--k5-info);
   --_text: var(--k5-info-text);
   display: flex;
   align-items: flex-start;
   gap: var(--k5-space-3);
-  padding: var(--k5-space-3-5) var(--k5-space-4);
-  border: var(--k5-border-width) solid transparent;
+  padding: var(--k5-space-3) var(--k5-space-3-5);
+  border: var(--k5-border-width) solid var(--k5-border);
   border-radius: var(--k5-radius);
-  background: color-mix(in srgb, var(--_tone) 8%, var(--k5-card));
-  color: var(--k5-foreground);
-  font-size: var(--k5-text-body);
-  line-height: 1.45;
+  background: var(--k5-card);
+  color: var(--k5-card-foreground);
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
 }
 .k5-alert--info {
   --_tone: var(--k5-info);
@@ -42,12 +43,12 @@
 }
 .k5-alert__title {
   display: block;
-  color: var(--_text);
+  color: var(--k5-card-foreground);
   font-weight: var(--k5-weight-semibold);
 }
 .k5-alert__description {
-  margin-top: var(--k5-space-1);
-  color: var(--k5-foreground);
+  margin-top: var(--k5-space-0-5);
+  color: var(--k5-muted-foreground);
 }
 .k5-alert__action {
   margin-top: var(--k5-space-3);
@@ -74,8 +75,7 @@
   animation: k5-toast-in var(--k5-duration-slow) var(--k5-ease-out);
 }
 .k5-toast .k5-alert {
-  border-color: var(--k5-border);
-  background: var(--k5-card);
+  background: var(--k5-popover);
 }
 
 /* Toaster: la pila de avisos de toast(). Cada Toast deja de ser fijo y se apila en ella. */

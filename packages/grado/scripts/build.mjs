@@ -593,7 +593,12 @@ function dtcg() {
   return out
 }
 // Las curvas con nombre de CSS, como puntos de Bézier (lo que pide el formato W3C).
-const EASE_POINTS = { ease: [0.25, 0.1, 0.25, 1], 'ease-out': [0, 0, 0.58, 1], 'cubic-bezier(0.32, 0.72, 0, 1)': [0.32, 0.72, 0, 1] }
+const EASE_POINTS = {
+  ease: [0.25, 0.1, 0.25, 1],
+  'ease-out': [0, 0, 0.58, 1],
+  'cubic-bezier(0.32, 0.72, 0, 1)': [0.32, 0.72, 0, 1],
+  'cubic-bezier(0.16, 1, 0.3, 1)': [0.16, 1, 0.3, 1],
+}
 const dtcgData = dtcg()
 write('tokens.dtcg.json', JSON.stringify(dtcgData, null, 2) + '\n')
 
