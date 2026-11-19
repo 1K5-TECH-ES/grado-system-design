@@ -2,6 +2,23 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
+## 0.8.0 · sin publicar
+
+### Arreglos
+
+- `Dialog` y `Drawer` (React, Vue y `k5-dialog`): pulsar dentro de un campo y soltar en el fondo, como al seleccionar texto arrastrando, cerraba el diálogo y se perdía lo escrito. Ahora el clic en el fondo solo cierra si empieza y acaba en el fondo. La regla está en `backdropGesture()` de `@1k5-tech-es/grado/patterns`, compartida por los tres.
+- `Tooltip`: Escape con el tooltip abierto dentro de un `Dialog` o un `Drawer` cerraba también el diálogo. Ahora quita solo el tooltip, y el siguiente Escape cierra el diálogo. Con el tooltip ya oculto, Escape deja de quedarse en el tooltip y llega a lo que haya debajo.
+- `Popover`: si la app cerraba el panel desde dentro (una opción que elige y cierra), el foco se quedaba en la página y quien usa el teclado volvía al principio. Ahora vuelve al disparador, como con Escape.
+- `ContextMenu` (Vue): si la zona se volvía a pintar con el menú abierto (un dato que cambia, nuevos `items`), el menú perdía la corrección de posición y se salía de la ventana. Ahora guarda la posición medida, como en React.
+
+### Documentación
+
+- `ContextMenu`: la ficha y la guía cuentan que las opciones pueden depender de lo que hay bajo el puntero (el `onContextMenu` de un hijo se ejecuta antes de abrir y puede preparar `items`) y que un hijo puede dejarlo cerrado con `event.stopPropagation()`. Funcionaba ya en 0.7; ahora lo fija un test de navegador.
+
+### Al actualizar desde 0.7.0
+
+- Nada que cambiar. Si tu app devolvía a mano el foco al disparador de un `Popover` al cerrarlo desde dentro, o evitaba que el arrastre cerrara un `Dialog`, ya puedes quitarlo.
+
 ## 0.7.0 · 16 de octubre de 2026
 
 0.7, lo que hizo falta para pasar Memorias (React 19 + Tailwind 4) a Grado instalado desde GitHub Packages, sin componentes de shadcn.

@@ -15,6 +15,7 @@ import {
   pageItems,
   rangeError,
   lockScroll,
+  backdropGesture,
   selectionLabel,
 } from '@1k5-tech-es/grado/patterns'
 import { normalize } from './normalize.mjs'
@@ -66,6 +67,19 @@ test('valida extensiones, MIME, límites y fechas sin modificar el dato', () => 
   assert.match(rangeError('2026-10-31', '2026-10-01'), /posterior/)
   assert.match(rangeError('2026-01-01', '', '2026-02-01'), /partir/)
   assert.equal(rangeError('2026-10-01', '2026-10-31'), '')
+})
+test('el fondo de un diálogo solo cierra si el gesto empieza y acaba fuera', () => {
+  const dialog = { getBoundingClientRect: () => ({ left: 100, right: 500, top: 100, bottom: 400 }) }
+  const at = (x, y, target = dialog) => ({ target, currentTarget: dialog, clientX: x, clientY: y })
+  const field = {}
+  const gesture = backdropGesture()
+  gesture.down(at(20, 20))
+  assert.equal(gesture.click(at(20, 20)), true, 'clic en el fondo')
+  gesture.down(at(200, 200, field))
+  assert.equal(gesture.click(at(20, 20)), false, 'pulsar en un campo y soltar en el fondo')
+  gesture.down(at(20, 20))
+  assert.equal(gesture.click(at(200, 200)), false, 'pulsar en el fondo y soltar dentro de la caja')
+  assert.equal(gesture.click(at(20, 20)), false, 'un click sin pointerdown antes no cierra')
 })
 test('los bloqueos de scroll anidados restauran el valor original una sola vez', () => {
   const doc = { body: { style: { overflow: 'scroll' } } }

@@ -7,6 +7,7 @@
 // Escape y clic fuera cierran, y el foco vuelve a quien lo abrió. Se abre con .show(), con el
 // atributo open o con cualquier botón data-k5-open="id". Avisa con un evento close.
 import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { backdropGesture } from '@1k5-tech-es/grado/patterns'
 import { define, el, icon, setAttrs, texts, uid } from './dom.js'
 
 export class K5Dialog extends HTMLElement {
@@ -36,12 +37,12 @@ export class K5Dialog extends HTMLElement {
       event.preventDefault()
       this.close()
     })
-    // Clic fuera: el clic llega al propio <dialog> cuando cae en el fondo.
+    // Clic fuera: el clic llega al propio <dialog> cuando cae en el fondo. Solo cuenta si también
+    // empezó ahí: arrastrar desde un campo hasta el fondo no lo cierra.
+    const backdrop = backdropGesture()
+    this.dialog.addEventListener('pointerdown', (event) => backdrop.down(event))
     this.dialog.addEventListener('click', (event) => {
-      if (event.target !== this.dialog) return
-      const box = this.dialog.getBoundingClientRect()
-      const outside = event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom
-      if (outside && !this.hasAttribute('keep-open')) this.close()
+      if (backdrop.click(event) && !this.hasAttribute('keep-open')) this.close()
     })
     this.replaceChildren(this.dialog)
     this.render()

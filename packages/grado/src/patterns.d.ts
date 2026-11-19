@@ -65,6 +65,11 @@ export declare function fileError(
 ): string
 export declare function rangeError(start?: string, end?: string, min?: string, max?: string, messages?: Messages): string
 export declare function lockScroll(doc: Document): () => void
+/** Clic en el fondo de un <dialog> modal: solo si el gesto empieza y acaba fuera de su caja. */
+export declare function backdropGesture(): {
+  down(event: Pick<MouseEvent, 'target' | 'currentTarget' | 'clientX' | 'clientY'>): void
+  click(event: Pick<MouseEvent, 'target' | 'currentTarget' | 'clientX' | 'clientY'>): boolean
+}
 export declare function moveFocus(
   event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey' | 'preventDefault'>,
   container: HTMLElement,
@@ -173,7 +178,7 @@ export interface DonutSegment {
 export interface DonutSlice {
   /** Inicio y longitud, de 0 a 100. */
   start: number
-  length: number-
+  length: number
   /** Porcentaje entero. */
   percent: number
 }

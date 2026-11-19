@@ -29,8 +29,11 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
       onFocus={() => setOpen(true)}
       onBlur={() => setOpen(false)}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') {
+        // Escape quita el tooltip y nada más: sin preventDefault, el <dialog> que lo contiene también
+        // se cerraría. Con el tooltip ya oculto, Escape sigue su camino y cierra lo que haya debajo.
+        if (event.key === 'Escape' && open) {
           setOpen(false)
+          event.preventDefault()
           event.stopPropagation()
         }
       }}

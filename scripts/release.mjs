@@ -34,6 +34,9 @@ if (command === 'check') {
     const internal = pkg.dependencies?.['@1k5-tech-es/grado']
     if (internal && internal !== `^${version}`) problems.push(`${pkg.name} depende de @1k5-tech-es/grado ${internal}`)
   }
+  // La skill de Claude Code se actualiza en las apps cuando cambia esta versión.
+  const plugin = JSON.parse(read('plugins/grado/.claude-plugin/plugin.json'))
+  if (plugin.version !== version) problems.push(`plugins/grado/.claude-plugin/plugin.json está en ${plugin.version}`)
   const changelog = read('CHANGELOG.md')
   if (!changelogSection(changelog, version)) problems.push(`CHANGELOG.md no tiene la sección ${version}`)
   // La web y la release enseñan el título tal cual: «sin publicar» se quedaría para siempre (pasó con 0.3.0).

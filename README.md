@@ -57,7 +57,7 @@ npm run release:check -- 0.7.0  # versiones de los cuatro paquetes y sección de
 
 ## Publicar una versión
 
-1. Sube la versión en los cuatro `package.json` (y la dependencia `@1k5-tech-es/grado` de React, Vue y Elements), `npm install --package-lock-only`, y escribe su sección en `CHANGELOG.md` con la fecha en el título.
+1. Sube la versión en los cuatro `package.json` (y la dependencia `@1k5-tech-es/grado` de React, Vue y Elements) y en `plugins/grado/.claude-plugin/plugin.json`, `npm install --package-lock-only`, y escribe su sección en `CHANGELOG.md` con la fecha en el título. Actualiza la versión y lo que haya cambiado en la skill (`plugins/grado/skills/grado/`) y en `GUIA-INTEGRACION.md`: `npm test` avisa si se quedan atrás. Las guías de uso de la skill se generan con `npm run skill` desde las de la web.
 2. `npm run release:check -- X.Y.Z`. Si la API ha cambiado, `npm run api` y revisa el diff de `api/`.
 3. Crea y sube la etiqueta `vX.Y.Z`. El workflow `Release` prueba, publica los paquetes y crea la release con las notas y los `.tgz`.
 
@@ -157,6 +157,10 @@ scripts/visual-docker.mjs  regresión visual dentro de la imagen de Playwright d
 test/migrate.test.mjs    codemod de migración
 test/usage.test.mjs      inventario de uso
 test/smoke/              apps de prueba (Vite + React, Next, Nuxt); scripts/smoke.mjs las instala y compila
+GUIA-INTEGRACION.md      guía para el agente de código que integra Grado en una app
+plugins/grado/           plugin de Claude Code con la skill «grado», la misma guía por temas (.claude-plugin/ es su marketplace)
+test/skill.test.mjs      la skill y la guía no se quedan atrás de la versión ni de la API
+scripts/skill.mjs        genera las guías de uso de la skill desde las de la web (npm run skill)
 api/                     informe de la API pública (generado por npm run api; el CI lo compara)
 scripts/catalog.mjs      genera catalog/index.html (scripts/catalog/ tiene las secciones de 0.3)
 scripts/release.mjs      comprobaciones y notas de publicación

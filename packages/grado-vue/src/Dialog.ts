@@ -1,6 +1,6 @@
 import { defineComponent, h, mergeProps, onBeforeUnmount, onMounted, ref, watch, type PropType } from 'vue'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { lockScroll } from '@1k5-tech-es/grado/patterns'
+import { backdropGesture, lockScroll } from '@1k5-tech-es/grado/patterns'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { autoId, booleanOptional, model } from './helpers.js'
@@ -32,6 +32,7 @@ function makeModal(name: string, kind = 'dialog') {
       )
       const dialog = ref<HTMLDialogElement>(),
         id = autoId('k5-dialog'),
+        backdrop = backdropGesture(),
         t = useGrado()
       let unlock: (() => void) | undefined,
         previous: HTMLElement | null = null
@@ -82,12 +83,9 @@ function makeModal(name: string, kind = 'dialog') {
               event.preventDefault()
               if (props.closeOnEscape) setVisible(false)
             },
+            onPointerdown: (event: PointerEvent) => backdrop.down(event),
             onClick: (event: MouseEvent) => {
-              if (event.target === event.currentTarget && props.closeOnOutside && kind !== 'alert') {
-                const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-                if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)
-                  setVisible(false)
-              }
+              if (backdrop.click(event) && props.closeOnOutside && kind !== 'alert') setVisible(false)
             },
           }),
           [

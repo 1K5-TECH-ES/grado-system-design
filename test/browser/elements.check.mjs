@@ -95,6 +95,16 @@ export async function checkElements(browser, base, { expect, axe }) {
   await p.keyboard.press('Escape')
   await expect(p.locator('k5-dialog dialog')).toBeHidden()
   await expect(opener).toBeFocused()
+  // Pulsar en el campo y soltar en el fondo no lo cierra; un clic en el fondo, sí.
+  await opener.click()
+  const field = await p.locator('k5-dialog input').boundingBox()
+  await p.mouse.move(field.x + 4, field.y + field.height / 2)
+  await p.mouse.down()
+  await p.mouse.move(5, 5, { steps: 4 })
+  await p.mouse.up()
+  await expect(p.locator('k5-dialog dialog')).toBeVisible()
+  await p.mouse.click(5, 5)
+  await expect(p.locator('k5-dialog dialog')).toBeHidden()
 
   // k5-menu: flecha abajo abre en la primera, Fin va a la última, Enter elige y avisa.
   await p.evaluate(() =>

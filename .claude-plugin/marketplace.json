@@ -1,0 +1,16 @@
+{
+  "name": "grado",
+  "owner": {
+    "name": "1KOMMA5° España"
+  },
+  "metadata": {
+    "description": "Plugins de Claude Code para trabajar con Grado, el sistema de diseño de 1KOMMA5° España."
+  },
+  "plugins": [
+    {
+      "name": "grado",
+      "source": "./plugins/grado",
+      "description": "Skill para usar Grado en una app: instalación desde GitHub Packages, estilos, componentes, temas, CI y migración."
+    }
+  ]
+}

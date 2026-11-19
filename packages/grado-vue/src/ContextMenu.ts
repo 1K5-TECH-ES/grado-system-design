@@ -25,7 +25,10 @@ export const ContextMenu = defineComponent({
   emits: ['action'],
   setup(props, { emit, slots }) {
     const t = useGrado()
+    // point es donde se pidió el menú; at, dónde queda tras medirlo para que quepa en la ventana.
+    // La posición va en el estado y no en el style del elemento: si no, un nuevo pintado la borraría.
     const point = ref<Point | null>(null),
+      at = ref<Point | null>(null),
       zone = ref<HTMLElement>(),
       menu = ref<HTMLElement>(),
       id = autoId('k5-context-menu')
@@ -51,17 +54,16 @@ export const ContextMenu = defineComponent({
     }
     // Mide el menú antes de pintarlo y lo coloca dentro de la ventana.
     watch(point, async (value, old) => {
+      at.value = null
       if (!value) return listen(false)
       await nextTick()
       if (!menu.value || point.value !== value) return
       const view = document.documentElement
-      const at = menuPosition(
+      at.value = menuPosition(
         value,
         { width: menu.value.offsetWidth, height: menu.value.offsetHeight },
         { width: view.clientWidth, height: view.clientHeight },
       )
-      menu.value.style.left = `${at.x}px`
-      menu.value.style.top = `${at.y}px`
       if (!old) {
         menu.value.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus()
         listen(true)
@@ -109,7 +111,7 @@ export const ContextMenu = defineComponent({
                   role: 'menu',
                   'aria-label': props.label ?? t.value.messages.actions,
                   class: 'k5-menu__content k5-context-menu__content',
-                  style: { left: `${point.value.x}px`, top: `${point.value.y}px` },
+                  style: { left: `${(at.value ?? point.value).x}px`, top: `${(at.value ?? point.value).y}px` },
                   onKeydown: (event: KeyboardEvent) => {
                     event.stopPropagation()
                     if (event.key === 'Escape' || wantsMenu(event)) {

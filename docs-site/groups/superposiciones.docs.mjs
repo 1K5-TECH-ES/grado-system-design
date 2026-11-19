@@ -158,7 +158,7 @@ export const entries = [
       ['label', 'Nombre de la zona y del menú', '«Acciones» en el menú'],
       ['disabled', 'Deja el menú del navegador', 'false'],
     ],
-    'Se abre en la posición del puntero o, con Mayúsculas + F10 o la tecla de menú, bajo el elemento con el foco. Siempre queda dentro de la ventana. Mismo teclado que DropdownMenu; Escape devuelve el foco.',
+    'Se abre en la posición del puntero o, con Mayúsculas + F10 o la tecla de menú, bajo el elemento con el foco. Siempre queda dentro de la ventana. Mismo teclado que DropdownMenu; Escape devuelve el foco. Las opciones pueden depender de lo que hay bajo el puntero: el `onContextMenu` (`@contextmenu`) de un hijo se ejecuta antes de abrir, así que puede preparar `items` ahí. Si el hijo llama a `event.stopPropagation()`, el menú no se abre.',
   ),
   entry(
     'icon-button',
@@ -278,6 +278,8 @@ export const guidelines = {
       'Úsalo para atajos sobre un registro o una tarjeta, como abrir la ficha o copiar el CUPS.',
       'Repite las mismas acciones en un sitio visible: un DropdownMenu o los botones de la ficha.',
       'Marca con danger las acciones destructivas y sepáralas con separator.',
+      'Si las opciones dependen de lo que hay bajo el puntero, como una pieza de un plano o una fila, calcúlalas en el onContextMenu (@contextmenu) de ese elemento: se ejecuta antes de abrir el menú.',
+      'Para no abrir el menú en un sitio, llama a event.stopPropagation() en el onContextMenu del hijo, y también a preventDefault() si no quieres el del navegador.',
     ],
     avoid: [
       'No escondas en él acciones que solo existen ahí: en móvil no hay clic derecho.',
