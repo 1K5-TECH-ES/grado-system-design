@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject, mergeProps, provide, useId, type ComputedRef, type InjectionKey, type PropType } from 'vue'
-import { controlClass, cx, inputWrapClass, type Size } from '@1k5-tech-es/grado/classes'
+import { controlClass, cx, inputWrapClass, type SelectVariant, type Size } from '@1k5-tech-es/grado/classes'
 
 export interface FieldContext {
   id: string
@@ -142,14 +142,20 @@ export const Textarea = defineComponent({
 export const Select = defineComponent({
   name: 'K5Select',
   inheritAttrs: false,
-  props: { ...controlProps, modelValue: String, size: String as PropType<Size> },
+  props: {
+    ...controlProps,
+    modelValue: String,
+    size: String as PropType<Size>,
+    /** property: chip de propiedad sin borde y a su ancho (estado, responsable, prioridad). Necesita aria-label o Field. */
+    variant: String as PropType<SelectVariant>,
+  },
   emits: { 'update:modelValue': (value: string) => typeof value === 'string' },
   setup(props, { attrs, emit, slots }) {
     const control = useControl(props, attrs)
     return () =>
       h(
         'select',
-        mergeProps({ class: controlClass('select', { size: props.size }) }, attrs, control(), {
+        mergeProps({ class: controlClass('select', { size: props.size, variant: props.variant }) }, attrs, control(), {
           ...(props.modelValue !== undefined ? { value: props.modelValue } : {}),
           onChange: (event: Event) => emit('update:modelValue', valueOf(event)),
         }),

@@ -1,5 +1,6 @@
 /* Grupo de botones conmutables: opciones que se combinan (negrita, cursiva) o filtros rápidos.
-   El grupo lleva borde; la opción activa, fondo y texto del tono primario. */
+   El grupo lleva borde; la opción activa, un gris levantado (desde 0.9: el acento queda para
+   la acción principal). */
 .k5-toggle-group {
   --_h: var(--k5-control-h);
   display: inline-flex;
@@ -56,8 +57,9 @@
   color: var(--k5-foreground);
 }
 .k5-toggle-group__item[aria-pressed='true'] {
-  background: var(--k5-primary-subtle);
-  color: var(--k5-primary-text);
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
+  box-shadow: inset 0 0 0 1px var(--k5-border);
 }
 .k5-toggle-group__item:focus-visible {
   outline: 2px solid var(--k5-ring);

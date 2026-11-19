@@ -21,14 +21,56 @@ export function buttonClass({ variant = 'primary', size = 'md', iconOnly = false
   return cx('k5-btn', `k5-btn--${v}`, s !== 'md' && `k5-btn--${s}`, iconOnly && 'k5-btn--icon', block && 'k5-btn--block')
 }
 
+// Teclas de un atajo tal como se pintan → nombres de aria-keyshortcuts. Lo que no está en la
+// tabla (letras, F1…) va tal cual, con las letras en mayúscula.
+const KEY_NAMES = {
+  '⌘': 'Meta',
+  Cmd: 'Meta',
+  Meta: 'Meta',
+  Ctrl: 'Control',
+  Control: 'Control',
+  '⌥': 'Alt',
+  Alt: 'Alt',
+  Opción: 'Alt',
+  '⇧': 'Shift',
+  Shift: 'Shift',
+  Mayús: 'Shift',
+  '↵': 'Enter',
+  Enter: 'Enter',
+  Intro: 'Enter',
+  Esc: 'Escape',
+  Escape: 'Escape',
+  '⌫': 'Backspace',
+  '⌦': 'Delete',
+  Supr: 'Delete',
+  Tab: 'Tab',
+  Espacio: 'Space',
+  '↑': 'ArrowUp',
+  '↓': 'ArrowDown',
+  '←': 'ArrowLeft',
+  '→': 'ArrowRight',
+}
+
+/** Atajo para aria-keyshortcuts: ['⌘', 'K'] → 'Meta+K', ['⇧', 'v'] → 'Shift+V'. */
+export function keyShortcuts(keys = []) {
+  return keys.map((key) => KEY_NAMES[key] ?? (key.length === 1 ? key.toUpperCase() : key)).join('+')
+}
+
 export function badgeClass({ tone = 'neutral' } = {}) {
   return cx('k5-badge', `k5-badge--${pick(tone, BADGE_TONES, 'neutral')}`)
 }
 
-/** kind: 'input' | 'select' | 'textarea'. El tamaño no aplica a textarea. */
-export function controlClass(kind = 'input', { size = 'md' } = {}) {
+/**
+ * kind: 'input' | 'select' | 'textarea'. El tamaño no aplica a textarea. variant 'property' (solo
+ * select): chip de propiedad sin borde, a su ancho, como el estado o el responsable de un ticket.
+ */
+export function controlClass(kind = 'input', { size = 'md', variant = 'default' } = {}) {
   const s = pick(size, SIZES, 'md')
-  return cx(`k5-${kind}`, kind !== 'textarea' && s !== 'md' && `k5-input--${s}`)
+  return cx(
+    `k5-${kind}`,
+    kind !== 'textarea' && s !== 'md' && `k5-input--${s}`,
+    kind === 'select' && variant === 'property' && 'k5-select--property',
+  )
 }
 
 export function inputWrapClass({ size = 'md' } = {}) {
@@ -104,8 +146,8 @@ export const ICON_ATTRS = {
 
 export const SIDEBAR_ID = 'k5-app-sidebar'
 
-export function appShellClass({ collapsed = false, navOpen = false } = {}) {
-  return cx('k5-app', collapsed && 'k5-app--collapsed', navOpen && 'k5-app--nav-open')
+export function appShellClass({ collapsed = false, navOpen = false, brandHeader = false } = {}) {
+  return cx('k5-app', collapsed && 'k5-app--collapsed', navOpen && 'k5-app--nav-open', brandHeader && 'k5-app--brand-header')
 }
 
 export function avatarClass({ size = 'md' } = {}) {
@@ -173,9 +215,28 @@ export const LINK_TONES = ['default', 'muted']
 export const LINK_UNDERLINES = ['hover', 'always']
 const SMALL_SIZES = ['sm', 'md']
 
-/** Estado de una fila: punto de color y texto. pulse: el punto late (estados «en vivo»). */
-export function statusClass({ tone = 'neutral', pulse = false } = {}) {
-  return cx('k5-status', `k5-status--${pick(tone, STATUS_TONES, 'neutral')}`, pulse && 'k5-status--pulse')
+/**
+ * Pasos de un flujo con orden (ticket, instalación). La forma del icono se lee sin color:
+ * discontinuo, vacío, medio, tres cuartos, lleno con check y lleno con aspa. Cada paso trae su
+ * tono por defecto.
+ */
+export const STATUS_PROGRESS = {
+  backlog: 'neutral',
+  todo: 'neutral',
+  started: 'warning',
+  waiting: 'info',
+  done: 'success',
+  canceled: 'neutral',
+}
+
+/**
+ * Estado de una fila: punto de color y texto. pulse: el punto late (estados «en vivo»).
+ * progress: el punto pasa a icono de progreso; sin tone, usa el del paso.
+ */
+export function statusClass({ tone, pulse = false, progress } = {}) {
+  const step = Object.hasOwn(STATUS_PROGRESS, progress) ? progress : null
+  const t = pick(tone ?? (step ? STATUS_PROGRESS[step] : 'neutral'), STATUS_TONES, 'neutral')
+  return cx('k5-status', `k5-status--${t}`, pulse && 'k5-status--pulse', step && `k5-status--progress k5-status--${step}`)
 }
 
 /** Barra de progreso. steps: variante por pasos; indeterminate: sin valor conocido. */
@@ -412,7 +473,7 @@ export const GRID_COLUMNS = [1, 2, 3, 4, 5, 6, 'auto']
 export const GRID_MIN_WIDTHS = ['sm', 'md', 'lg']
 export const CONTAINER_SIZES = ['sm', 'md', 'lg']
 export const TEXT_SIZES = ['caption', 'small', 'body', 'lead']
-export const TEXT_TONES = ['default', 'muted', 'primary', 'success', 'warning', 'danger', 'info']
+export const TEXT_TONES = ['default', 'muted', 'tertiary', 'primary', 'success', 'warning', 'danger', 'info']
 export const TEXT_WEIGHTS = ['regular', 'medium', 'semibold']
 export const HEADING_LEVELS = [1, 2, 3, 4, 5, 6]
 export const HEADING_SIZES = ['lead', 'heading', 'title', 'display']

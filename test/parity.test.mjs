@@ -75,6 +75,66 @@ const SCENARIOS = {
     r(R.Button, { variant: 'danger', size: 'lg', type: 'submit', disabled: true }, 'Eliminar cliente'),
     () => h(V.Button, { variant: 'danger', size: 'lg', type: 'submit', disabled: true }, text('Eliminar cliente')),
   ],
+  'botón con atajo de teclado': [
+    r(R.Button, { shortcut: ['⌘', '↵'] }, 'Crear ticket'),
+    () => h(V.Button, { shortcut: ['⌘', '↵'] }, text('Crear ticket')),
+  ],
+  'botón solo icono con atajo: sin teclas pintadas, con aria-keyshortcuts': [
+    r(R.Button, { variant: 'ghost', iconOnly: true, icon: IconR, 'aria-label': 'Asignar', shortcut: ['a'] }),
+    () => h(V.Button, { variant: 'ghost', iconOnly: true, icon: IconV, 'aria-label': 'Asignar', shortcut: ['a'] }),
+  ],
+  'estado con icono de progreso': [
+    r('div', null, r(R.Status, { progress: 'started' }, 'En curso'), r(R.Status, { progress: 'done', tone: 'brand' }, 'Resuelto')),
+    () =>
+      h('div', null, [
+        h(V.Status, { progress: 'started' }, text('En curso')),
+        h(V.Status, { progress: 'done', tone: 'brand' }, text('Resuelto')),
+      ]),
+  ],
+  // Sin descripción: la normalización de ids de Vue (v-0-1) se come el índice de su id.
+  'fecha escrita con valor': [
+    r(R.DatePicker, { natural: true, today: '2026-11-19', value: '2026-12-03', 'aria-label': 'Vence', name: 'vence' }),
+    () => h(V.DatePicker, { natural: true, today: '2026-11-19', modelValue: '2026-12-03', 'aria-label': 'Vence', name: 'vence' }),
+  ],
+  'select como chip de propiedad': [
+    r(R.Select, { variant: 'property', 'aria-label': 'Prioridad' }, r('option', { value: 'alta' }, 'Alta')),
+    () => h(V.Select, { variant: 'property', 'aria-label': 'Prioridad' }, () => h('option', { value: 'alta' }, 'Alta')),
+  ],
+  'opciones en tarjeta': [
+    r(R.RadioGroup, {
+      label: 'Tarifa',
+      variant: 'card',
+      orientation: 'horizontal',
+      defaultValue: 'fija',
+      options: [
+        { value: 'fija', label: 'Fija · 0,14 €/kWh' },
+        { value: 'dinamica', label: 'Dinámica' },
+      ],
+    }),
+    () =>
+      h(V.RadioGroup, {
+        label: 'Tarifa',
+        variant: 'card',
+        orientation: 'horizontal',
+        defaultValue: 'fija',
+        options: [
+          { value: 'fija', label: 'Fija · 0,14 €/kWh' },
+          { value: 'dinamica', label: 'Dinámica' },
+        ],
+      }),
+  ],
+  'panel lateral sin velo': [
+    r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'),
+    () => h(V.Drawer, { title: 'Vista previa', modal: false }, () => 'Detalle'),
+  ],
+  'filtro en partes, editable y quitable': [
+    r(R.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', onEdit: () => {}, onRemove: () => {} }),
+    () => h(V.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', editable: true, removable: true }),
+  ],
+  'filtro en partes sin operador ni edición': [
+    r(R.FilterChip, { field: 'Provincia', value: 'Madrid' }),
+    () => h(V.FilterChip, { field: 'Provincia', value: 'Madrid' }),
+  ],
   'badges de todos los tonos': [
     r(
       'div',
@@ -209,6 +269,15 @@ const SCENARIOS = {
         { actions: () => h(V.Button, null, text('Nuevo ticket')) },
       ),
   ],
+  'cabecera en barra con contenido en medio': [
+    r(R.PageHeader, { variant: 'bar', title: 'Tickets', actions: r(R.Button, { size: 'sm' }, 'Nuevo ticket') }, r('span', null, 'Vistas')),
+    () =>
+      h(
+        V.PageHeader,
+        { variant: 'bar', title: 'Tickets' },
+        { actions: () => h(V.Button, { size: 'sm' }, text('Nuevo ticket')), default: () => h('span', null, 'Vistas') },
+      ),
+  ],
   'estado vacío': [
     r(R.EmptyState, {
       icon: IconR,
@@ -302,6 +371,21 @@ test('el id automático enlaza etiqueta y control', () => {
   assert.match(out, /id="k5-AUTO"/)
 })
 
+test('el atajo se anuncia con aria-keyshortcuts y se pinta oculto a lectores de pantalla', () => {
+  const html = renderToStaticMarkup(r(R.Button, { shortcut: ['⌘', '⇧', 'k'] }, 'Buscar'))
+  assert.match(html, /aria-keyshortcuts="Meta\+Shift\+K"/)
+  assert.match(html, /<span class="k5-btn__shortcut" aria-hidden="true"><kbd>⌘<\/kbd><kbd>⇧<\/kbd><kbd>k<\/kbd><\/span>/)
+})
+
+test('cada paso de progreso trae su tono, y tone manda si se da', () => {
+  const html = renderToStaticMarkup(
+    r('div', null, r(R.Status, { progress: 'started' }, 'a'), r(R.Status, { progress: 'done', tone: 'brand' }, 'b')),
+  )
+  assert.match(html, /class="k5-status k5-status--warning k5-status--progress k5-status--started"/)
+  assert.match(html, /class="k5-status k5-status--brand k5-status--progress k5-status--done"/)
+  assert.match(renderToStaticMarkup(r(R.Status, { progress: 'otro' }, 'c')), /class="k5-status k5-status--neutral"/)
+})
+
 test('un botón cargando queda desactivado y lo anuncia', () => {
   const out = html['botón secundario pequeño cargando']
   assert.match(out, /aria-busy="true"/)
@@ -330,4 +414,36 @@ test('el armazón enlaza menú y barra lateral y marca la página actual', () =>
 
 test('plegado: los elementos llevan su nombre como title', () => {
   assert.match(html['armazón plegado'], /<a class="k5-nav-item" href="\/chat" title="Chat">/)
+})
+
+test('FilterChip en partes: grupo con la frase entera, una parte por botón y quitar con la frase', () => {
+  const html = renderToStaticMarkup(
+    r(R.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', onEdit: () => {}, onRemove: () => {} }),
+  )
+  assert.match(html, /^<span class="k5-chip k5-chip--parts" role="group" aria-label="Estado es uno de Abierta, En obra">/)
+  assert.match(html, /<button type="button" class="k5-chip__part k5-chip__field">Estado<\/button>/)
+  assert.match(html, /<button type="button" class="k5-chip__part k5-chip__operator">es uno de<\/button>/)
+  assert.match(html, /aria-label="Quitar filtro: Estado es uno de Abierta, En obra"/)
+  // Sin onEdit, las partes son texto; sin field, el chip de siempre.
+  assert.match(
+    renderToStaticMarkup(r(R.FilterChip, { field: 'Provincia', value: 'Madrid' })),
+    /<span class="k5-chip__part k5-chip__value">Madrid<\/span>/,
+  )
+  assert.equal(renderToStaticMarkup(r(R.FilterChip, { label: 'Estado: abierto' })), '<span class="k5-chip">Estado: abierto</span>')
+})
+
+test('Drawer sin velo: sin aria-modal y con su clase; Dialog sigue modal', () => {
+  const html = renderToStaticMarkup(r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'))
+  assert.match(html, /class="k5-dialog k5-drawer k5-drawer--modeless"/)
+  assert.doesNotMatch(html, /aria-modal/)
+  assert.match(renderToStaticMarkup(r(R.Drawer, { title: 'Ficha' }, 'Detalle')), /aria-modal="true"/)
+})
+
+test('DatePicker natural: combobox con la fecha corta y el valor ISO para el formulario', () => {
+  const html = renderToStaticMarkup(r(R.DatePicker, { natural: true, today: '2026-11-19', value: '2026-11-20', name: 'vence' }))
+  assert.match(html, /<input type="hidden" name="vence" value="2026-11-20"\/>/)
+  assert.match(html, /role="combobox"/)
+  assert.match(html, /value="Mañana · vie, 20 nov"/)
+  // Sin natural, el campo nativo de siempre.
+  assert.match(renderToStaticMarkup(r(R.DatePicker, {})), /type="date"/)
 })

@@ -15,9 +15,9 @@ export default preset;
 ```ts
 export type ThemeName = "consola" | "marca" | "campo";
 export type ThemeMode = 'light' | 'dark';
-export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
+export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "tertiary-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
 export type ShadowToken = "raised" | "overlay" | "popover";
-export type SizeToken = "radius" | "control-h-sm" | "control-h" | "control-h-lg" | "radius-panel" | "radius-badge" | "radius-xs" | "radius-sm" | "radius-md" | "radius-lg" | "radius-full";
+export type SizeToken = "radius" | "control-h-sm" | "control-h" | "control-h-lg" | "radius-panel" | "radius-badge" | "radius-xs" | "radius-sm" | "radius-md" | "radius-lg" | "radius-full" | "text-ui" | "leading-ui" | "row-h" | "text-title-ui" | "leading-title-ui";
 export type PaletteName = "aubergine" | "aubergine-75" | "aubergine-50" | "aubergine-25" | "aubergine-10" | "mint" | "mint-75" | "mint-50" | "mint-25" | "mint-10" | "fuchsia" | "fuchsia-75" | "fuchsia-50" | "fuchsia-25" | "fuchsia-10" | "graphite" | "graphite-75" | "graphite-50" | "graphite-25" | "graphite-10" | "white" | "black";
 export type BrandName = "aubergine" | "mint" | "fuchsia";
 export interface BrandColor {
@@ -91,6 +91,7 @@ export declare const SIZES: readonly Size[];
 export declare const BADGE_TONES: readonly BadgeTone[];
 export declare const CARD_VARIANTS: readonly CardVariant[];
 export declare function cx(...parts: unknown[]): string;
+export declare function keyShortcuts(keys?: string[]): string;
 export declare function buttonClass(options?: {
     variant?: ButtonVariant;
     size?: Size;
@@ -100,8 +101,10 @@ export declare function buttonClass(options?: {
 export declare function badgeClass(options?: {
     tone?: BadgeTone;
 }): string;
+export type SelectVariant = 'default' | 'property';
 export declare function controlClass(kind?: ControlKind, options?: {
     size?: Size;
+    variant?: SelectVariant;
 }): string;
 export declare function inputWrapClass(options?: {
     size?: Size;
@@ -135,6 +138,7 @@ export declare const AVATAR_STATUSES: readonly AvatarStatus[];
 export declare function appShellClass(options?: {
     collapsed?: boolean;
     navOpen?: boolean;
+    brandHeader?: boolean;
 }): string;
 export declare function avatarClass(options?: {
     size?: Size;
@@ -161,9 +165,12 @@ export declare const PROGRESS_TONES: readonly ProgressTone[];
 export declare const DESCRIPTION_LAYOUTS: readonly DescriptionLayout[];
 export declare const LINK_TONES: readonly LinkTone[];
 export declare const LINK_UNDERLINES: readonly LinkUnderline[];
+export type StatusProgress = 'backlog' | 'todo' | 'started' | 'waiting' | 'done' | 'canceled';
+export declare const STATUS_PROGRESS: Record<StatusProgress, RowStatusTone>;
 export declare function statusClass(options?: {
     tone?: RowStatusTone;
     pulse?: boolean;
+    progress?: StatusProgress;
 }): string;
 export declare function progressClass(options?: {
     tone?: ProgressTone;
@@ -252,7 +259,7 @@ export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 'auto';
 export type GridMinItemWidth = 'sm' | 'md' | 'lg';
 export type ContainerSize = 'sm' | 'md' | 'lg';
 export type TextSize = 'caption' | 'small' | 'body' | 'lead';
-export type TextTone = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type TextTone = 'default' | 'muted' | 'tertiary' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
 export type TextWeight = 'regular' | 'medium' | 'semibold';
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingSize = 'lead' | 'heading' | 'title' | 'display';
@@ -356,6 +363,8 @@ export interface ComboboxView {
     inputValue: string;
     inputPlaceholder: string;
 }
+export declare const COMBOBOX_CREATE: string;
+export declare function withCreateOption(filtered: ChoiceOption[], query: string, options: ChoiceOption[], label: string): ChoiceOption[];
 export declare function comboboxView(state: ComboboxState, options: {
     options: ChoiceOption[];
     filtered: ChoiceOption[];
@@ -422,6 +431,14 @@ export interface TableColumnLike {
     sortValue?: (row: never) => unknown;
 }
 export declare function sortRows<T>(rows: T[], columns: TableColumnLike[], sort: SortState | null | undefined, manual?: boolean): T[];
+export type GroupBy<T> = string | ((row: T) => string);
+export declare function groupRows<T>(rows: T[], groupBy: GroupBy<T> | null | undefined, order?: T[]): T[];
+export interface TableGroup<T> {
+    key: string;
+    rows: T[];
+    count: number;
+    collapsed: boolean;
+}
 export interface TableView<T> {
     keyOf: (row: T) => string;
     total: number;
@@ -432,6 +449,7 @@ export interface TableView<T> {
     keys: string[];
     all: boolean;
     some: boolean;
+    groups: TableGroup<T>[] | null;
     range: VirtualWindow | null;
 }
 export declare function tableView<T>(options: {
@@ -453,6 +471,8 @@ export declare function tableView<T>(options: {
         rowHeight: number;
     };
     sorted?: T[];
+    groupBy?: GroupBy<T>;
+    collapsed?: string[];
 }): TableView<T>;
 ```
 
@@ -632,7 +652,7 @@ export declare function labsMessagesFor(locale?: string, overrides?: Partial<Rec
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noGroup' | 'createOption' | 'datePlaceholder' | 'dateHint' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';
@@ -675,6 +695,7 @@ export interface MenuItem {
     disabled?: boolean;
     danger?: boolean;
     separator?: boolean;
+    shortcut?: string[];
 }
 export interface BreadcrumbItem {
     label: string;
@@ -694,9 +715,13 @@ export interface TimelineItem {
     dateTime?: string;
     tone?: StatusTone;
 }
+export type FilterPart = 'field' | 'operator' | 'value';
 export interface FilterItem {
     id: string;
-    label: string;
+    label?: string;
+    field?: string;
+    operator?: string;
+    value?: string;
 }
 export interface UploadItem {
     id: string;
@@ -931,6 +956,7 @@ export declare function toggleValues(current: string[], value: string, type?: 's
 export interface ToastAction {
     label: string;
     onClick: () => void;
+    shortcut?: string[];
 }
 export interface ToastOptions {
     id?: string;
@@ -1056,4 +1082,20 @@ export declare function virtualWindow(options: {
     overscan?: number;
 }): VirtualWindow;
 export declare function pixelHeight(value: number | string | null | undefined): number | null;
+export interface DateSuggestion {
+    value: string;
+    label: string;
+}
+export declare function dateSuggestions(query: string, options?: {
+    today?: string;
+    locale?: string;
+    weekStartsOn?: number;
+    min?: string;
+    max?: string;
+    limit?: number;
+}): DateSuggestion[];
+export declare function shortDateLabel(iso: string, options?: {
+    today?: string;
+    locale?: string;
+}): string;
 ```

@@ -1,5 +1,6 @@
-/* Tabla: cabecera en texto pequeño gris, sin fondo ni mayúsculas, separada por una línea
-   algo más marcada. k5-table-wrap--plain quita la caja cuando la tabla ya está en un panel. */
+/* Tabla: filas del alto de fila del tema (36 px en Consola) separadas por una línea tenue,
+   cabecera en texto pequeño gris y fondo al pasar. k5-table-wrap--plain quita la caja
+   cuando la tabla ya está en un panel. */
 .k5-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--k5-border);
@@ -15,7 +16,7 @@
   width: 100%;
   border-collapse: collapse;
   color: var(--k5-card-foreground);
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
 }
 .k5-table caption {
   padding: var(--k5-space-3-5) var(--k5-space-4) var(--k5-space-2);
@@ -24,8 +25,9 @@
   text-align: left;
 }
 .k5-table th {
-  padding: var(--k5-space-3) var(--k5-space-4);
-  border-bottom: var(--k5-border-width) solid color-mix(in srgb, var(--k5-muted-foreground) 35%, var(--k5-border));
+  height: var(--k5-control-h-lg);
+  padding: var(--k5-space-1) var(--k5-space-3);
+  border-bottom: var(--k5-border-width) solid var(--k5-border);
   color: var(--k5-muted-foreground);
   font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
@@ -33,14 +35,16 @@
   white-space: nowrap;
 }
 .k5-table td {
-  padding: var(--k5-space-3) var(--k5-space-4);
-  border-top: 1px solid var(--k5-border);
+  height: var(--k5-row-h);
+  padding: var(--k5-space-1-5) var(--k5-space-3);
+  border-top: 1px solid color-mix(in srgb, var(--k5-border) 65%, transparent);
   vertical-align: middle;
 }
 /* La cabecera de fila (<th scope="row">) es una celda más, con el nombre en negrita. */
 .k5-table tbody th,
 .k5-table tfoot th {
-  border-top: 1px solid var(--k5-border);
+  height: var(--k5-row-h);
+  border-top: 1px solid color-mix(in srgb, var(--k5-border) 65%, transparent);
   border-bottom: 0;
   color: inherit;
   font-size: inherit;
@@ -54,14 +58,13 @@
 }
 .k5-table tbody tr:hover td,
 .k5-table tbody tr:hover th {
-  background: color-mix(in srgb, var(--k5-muted) 50%, transparent);
+  background: color-mix(in srgb, var(--k5-muted) 70%, transparent);
 }
 .k5-table .k5-num {
   text-align: right;
 }
-.k5-table--compact th {
-  padding: var(--k5-space-2) var(--k5-space-3);
-}
+.k5-table--compact th,
 .k5-table--compact td {
-  padding: var(--k5-space-2) var(--k5-space-3);
+  height: var(--k5-control-h);
+  padding: var(--k5-space-1) var(--k5-space-2-5);
 }

@@ -142,7 +142,7 @@ function CoreDemo({ id }) {
     [checked, setChecked] = useState(false)
   const [query, setQuery] = useState(''),
     [filters, setFilters] = useState([
-      { id: 'status', label: 'Estado: en obra' },
+      { id: 'status', field: 'Estado', operator: 'es', value: 'En obra' },
       { id: 'owner', label: 'Responsable: Marta' },
     ])
   const [files, setFiles] = useState([
@@ -221,7 +221,20 @@ function CoreDemo({ id }) {
       h(G.Checkbox, { label: 'Selección parcial', indeterminate: true, checked: false, readOnly: true }),
       h(G.Checkbox, { label: 'No disponible', disabled: true }),
     )
-  if (id === 'radio-group') return h(G.RadioGroup, { label: 'Tipo de instalación', options: choices, defaultValue: 'solar' })
+  if (id === 'radio-group')
+    return stack(
+      h(G.RadioGroup, { label: 'Tipo de instalación', options: choices, defaultValue: 'solar' }),
+      h(G.RadioGroup, {
+        label: 'Tarifa',
+        variant: 'card',
+        orientation: 'horizontal',
+        defaultValue: 'fija',
+        options: [
+          { value: 'fija', label: 'Fija · 0,14 €/kWh', description: 'El mismo precio a cualquier hora.' },
+          { value: 'dinamica', label: 'Dinámica', description: 'Precio de mercado, hora a hora.' },
+        ],
+      }),
+    )
   if (id === 'dropdown-menu')
     return trigger(
       h(G.DropdownMenu, {
@@ -317,10 +330,14 @@ function CoreDemo({ id }) {
     )
   if (id === 'pagination') return h(G.Pagination, { total: 128, pageSize: 10 })
   if (id === 'date-picker')
-    return h(
-      G.Field,
-      { label: 'Fecha de instalación' },
-      h(G.DatePicker, { defaultValue: '2026-10-20', min: '2026-01-01', max: '2027-12-31' }),
+    return grid2(
+      h(G.Field, { label: 'Fecha de instalación' }, h(G.DatePicker, { defaultValue: '2026-10-20', min: '2026-01-01', max: '2027-12-31' })),
+      h(
+        G.Field,
+        { label: 'Vence', hint: 'Prueba «mañana», «vie», «en 2 semanas» o «20/11».' },
+        // today fijo: la captura de la web no cambia de un día a otro.
+        h(G.DatePicker, { natural: true, today: '2026-11-19', defaultValue: '2026-11-20' }),
+      ),
     )
   if (id === 'date-range-picker')
     return h(G.DateRangePicker, {
@@ -356,6 +373,12 @@ function CoreDemo({ id }) {
         onQueryChange: setQuery,
         filters,
         onRemoveFilter: (key) => setFilters((items) => items.filter((item) => item.id !== key)),
+        // El operador alterna entre «es» y «no es»; en una app, el campo y los valores abrirían su selector.
+        onEditFilter: (key, part) =>
+          part === 'operator' &&
+          setFilters((items) =>
+            items.map((item) => (item.id === key ? { ...item, operator: item.operator === 'es' ? 'no es' : 'es' } : item)),
+          ),
         onClear: () => {
           setQuery('')
           setFilters([])
@@ -370,6 +393,7 @@ function CoreDemo({ id }) {
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'loading' ? 'ready' : 'loading') }, 'Carga'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'error' ? 'ready' : 'error') }, 'Error'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'empty' ? 'ready' : 'empty') }, 'Vacío'),
+        h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'grouped' ? 'ready' : 'grouped') }, 'Agrupar'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode('ready') }, 'Restablecer'),
       ),
       h(G.DataTable, {
@@ -378,7 +402,8 @@ function CoreDemo({ id }) {
         rowKey: 'id',
         caption: 'Instalaciones · datos de ejemplo',
         selectable: true,
-        pageSize: 3,
+        pageSize: mode === 'grouped' ? 10 : 3,
+        groupBy: mode === 'grouped' ? 'estado' : undefined,
         loading: mode === 'loading',
         error: mode === 'error' ? 'No se pudieron cargar las instalaciones.' : undefined,
         rowActions: (item) =>

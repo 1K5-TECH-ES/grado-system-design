@@ -1,5 +1,7 @@
 /* Armazón de aplicación: cabecera, aviso (Banner), barra lateral y contenido.
-   Consola: cabecera berenjena a todo el ancho y barra lateral clara (1komma5es_help).
+   Consola (desde 0.9): cabecera y barra lateral sobre el fondo base y el contenido en un
+   panel con borde, para que mande lo que se está haciendo. k5-app--brand-header recupera la
+   cabecera berenjena de 0.8 (obsoleta, se retira en 0.10).
    Marca: barra lateral berenjena a toda altura con el logo y cabecera clara.
    Móvil (< 768 px): la barra lateral se abre como cajón desde el botón de menú. */
 .k5-logo {
@@ -17,7 +19,8 @@
   grid-template-rows: auto auto minmax(0, 1fr);
   grid-template-areas: 'header header' 'banner banner' 'sidebar main';
   height: 100dvh;
-  background: var(--k5-background);
+  padding: 0 var(--k5-space-2) var(--k5-space-2) 0;
+  background: var(--k5-sidebar);
   color: var(--k5-foreground);
 }
 
@@ -47,10 +50,9 @@
   align-items: center;
   gap: var(--k5-space-2) var(--k5-space-4);
   min-width: 0;
-  height: 3.5rem;
-  padding: 0 var(--k5-space-4);
-  background: var(--k5-header);
-  color: var(--k5-header-foreground);
+  height: 3rem;
+  padding: 0 0 0 var(--k5-space-4);
+  color: var(--k5-sidebar-foreground);
 }
 .k5-app__brand,
 .k5-app__sidebar-brand {
@@ -107,7 +109,7 @@
   outline-color: currentColor;
 }
 .k5-app__header .k5-avatar {
-  --_ring: var(--k5-header);
+  --_ring: var(--k5-sidebar);
 }
 
 .k5-app-search {
@@ -115,48 +117,50 @@
   align-items: center;
   gap: var(--k5-space-2);
   width: 100%;
-  height: 2.25rem;
-  padding: 0 var(--k5-space-3);
+  height: 2rem;
+  padding: 0 var(--k5-space-2-5);
   border: 0;
-  border-radius: var(--k5-radius);
-  background: color-mix(in srgb, currentColor 10%, transparent);
+  border-radius: calc(var(--k5-radius) - 2px);
+  background: color-mix(in srgb, currentColor 7%, transparent);
   color: inherit;
   font-family: inherit;
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
   text-align: left;
   cursor: pointer;
   transition: background-color var(--k5-duration-base);
 }
 .k5-app-search:hover {
-  background: color-mix(in srgb, currentColor 15%, transparent);
+  background: color-mix(in srgb, currentColor 11%, transparent);
 }
 .k5-app-search:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
 .k5-app-search svg {
-  width: 1rem;
-  height: 1rem;
+  width: 0.875rem;
+  height: 0.875rem;
   flex-shrink: 0;
-  opacity: 0.85;
+  opacity: 0.75;
 }
 .k5-app-search__label {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  opacity: 0.8;
+  opacity: 0.75;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .k5-app-search__kbd {
   flex-shrink: 0;
-  padding: 0.0625rem var(--k5-space-1-5);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  padding: 0 var(--k5-space-1);
+  border: 0;
   border-radius: 4px;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  font-family: var(--k5-font-mono);
-  font-size: var(--k5-text-caption);
+  background: color-mix(in srgb, currentColor 9%, transparent);
+  font-family: inherit;
+  font-size: 0.6875rem;
   font-weight: var(--k5-weight-medium);
+  line-height: 1.125rem;
+  opacity: 0.85;
 }
 
 .k5-app__sidebar {
@@ -165,8 +169,7 @@
   flex-direction: column;
   width: 14rem;
   min-height: 0;
-  padding: var(--k5-space-3) 0;
-  border-right: 1px solid var(--k5-sidebar-border);
+  padding: var(--k5-space-1) 0 var(--k5-space-1);
   background: var(--k5-sidebar);
   color: var(--k5-sidebar-foreground);
   transition: width var(--k5-duration-base);
@@ -180,12 +183,11 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 0 var(--k5-space-3);
+  padding: 0 var(--k5-space-2) 0 var(--k5-space-2-5);
 }
 .k5-app__sidebar-footer {
-  margin-top: var(--k5-space-3);
-  padding: var(--k5-space-3) var(--k5-space-3) 0;
-  border-top: 1px solid var(--k5-sidebar-border);
+  margin-top: var(--k5-space-2);
+  padding: var(--k5-space-2) var(--k5-space-2) 0 var(--k5-space-2-5);
 }
 /* Aviso de toda la aplicación (Banner): bajo la cabecera, sobre barra lateral y contenido.
    Sin aviso, su fila mide 0. */
@@ -202,12 +204,44 @@
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius);
+  background: var(--k5-background);
+  box-shadow: var(--k5-shadow-raised);
 }
 .k5-app__main:focus {
   outline: none;
 }
 .k5-app__backdrop {
   display: none;
+}
+
+/* Cabecera berenjena de 0.8 (brandHeader). Obsoleta: se retira en 0.10. */
+.k5-app--brand-header {
+  padding: 0;
+  background: var(--k5-background);
+}
+.k5-app--brand-header .k5-app__header {
+  height: 3.5rem;
+  padding: 0 var(--k5-space-4);
+  background: var(--k5-header);
+  color: var(--k5-header-foreground);
+}
+.k5-app--brand-header .k5-app__header .k5-avatar {
+  --_ring: var(--k5-header);
+}
+.k5-app--brand-header .k5-app-search {
+  height: 2.25rem;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.k5-app--brand-header .k5-app__sidebar {
+  padding-top: var(--k5-space-3);
+  border-right: 1px solid var(--k5-sidebar-border);
+}
+.k5-app--brand-header .k5-app__main {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /* Barra lateral plegada: solo iconos (escritorio). */
@@ -245,10 +279,14 @@
     height: 0.5rem;
     padding: 0;
     overflow: hidden;
+    background: var(--k5-sidebar-primary);
     font-size: 0;
   }
   .k5-app--collapsed .k5-nav-item[aria-current='page']::after {
     display: none;
+  }
+  :where([data-k5-theme='marca']) .k5-app--collapsed .k5-nav-item__badge:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+    background: var(--k5-fuchsia);
   }
 }
 
@@ -256,8 +294,20 @@
    Marca (vistas previas de temas, por ejemplo): ahí manda Consola, el tema más cercano. */
 :where([data-k5-theme='marca']) .k5-app:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
   grid-template-areas: 'sidebar header' 'sidebar banner' 'sidebar main';
+  padding: 0;
+  background: var(--k5-background);
+}
+:where([data-k5-theme='marca']) .k5-app__main:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+:where([data-k5-theme='marca']) .k5-app-search:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  height: 2.25rem;
 }
 :where([data-k5-theme='marca']) .k5-app__header:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  height: 3.5rem;
+  padding: 0 var(--k5-space-4);
   border-bottom: 1px solid var(--k5-border);
   background: var(--k5-background);
   color: var(--k5-foreground);
@@ -274,14 +324,19 @@
 :where([data-k5-theme='marca']) .k5-app__sidebar:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
   width: 15rem;
   padding-top: var(--k5-space-5);
-  border-right: 0;
+  padding-bottom: var(--k5-space-3);
+}
+:where([data-k5-theme='marca']) .k5-app__sidebar-footer:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  margin-top: var(--k5-space-3);
+  padding: var(--k5-space-3) var(--k5-space-3) 0;
+  border-top: 1px solid var(--k5-sidebar-border);
+}
+:where([data-k5-theme='marca']) .k5-app__nav:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
+  padding: 0 var(--k5-space-3);
 }
 :where([data-k5-theme='marca']) .k5-app__sidebar-brand:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
   display: flex;
   color: var(--k5-white);
-}
-:where([data-k5-theme='marca']) .k5-app__sidebar-footer:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
-  border-top-color: var(--k5-sidebar-border);
 }
 
 /* Móvil: la barra lateral es un cajón. */
@@ -290,10 +345,17 @@
   :where([data-k5-theme='marca']) .k5-app:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'header' 'banner' 'main';
+    padding: 0;
   }
-  .k5-app__header {
+  .k5-app__header,
+  .k5-app--brand-header .k5-app__header {
     padding: 0 var(--k5-space-2) 0 var(--k5-space-1);
     gap: var(--k5-space-1) var(--k5-space-2);
+  }
+  .k5-app__main {
+    border-width: 1px 0 0;
+    border-radius: 0;
+    box-shadow: none;
   }
   .k5-app__menu {
     display: inline-flex;
@@ -306,7 +368,8 @@
   .k5-app__search + .k5-app__actions {
     margin-left: 0;
   }
-  .k5-app-search {
+  .k5-app-search,
+  .k5-app--brand-header .k5-app-search {
     width: 2.25rem;
     padding: 0;
     justify-content: center;

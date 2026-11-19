@@ -46,6 +46,8 @@ export const AppShell = defineComponent({
     product: String,
     /** Barra lateral solo con iconos (escritorio). */
     collapsed: Boolean,
+    /** Consola: cabecera berenjena a todo el ancho, como hasta 0.8. Obsoleta: se retira en 0.10. */
+    brandHeader: Boolean,
     /** id del <main>, destino del enlace «Saltar al contenido». */
     mainId: { type: String, default: 'contenido' },
     skipLabel: String,
@@ -83,7 +85,7 @@ export const AppShell = defineComponent({
       const brand = (): VNodeArrayChildren =>
         slots.brand?.() ?? [h(AppLogo), props.product ? h('span', { class: 'k5-app__product' }, props.product) : null]
       const hasSidebar = Boolean(slots.sidebar)
-      return h('div', { class: appShellClass({ collapsed: props.collapsed, navOpen: navOpen.value }) }, [
+      return h('div', { class: appShellClass({ collapsed: props.collapsed, navOpen: navOpen.value, brandHeader: props.brandHeader }) }, [
         h('a', { class: 'k5-app__skip', href: `#${props.mainId}` }, props.skipLabel ?? t.value.messages.skipToContent),
         h('header', { class: 'k5-app__header' }, [
           hasSidebar

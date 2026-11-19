@@ -17,9 +17,13 @@ export declare const BADGE_TONES: readonly BadgeTone[]
 export declare const CARD_VARIANTS: readonly CardVariant[]
 
 export declare function cx(...parts: unknown[]): string
+/** Atajo para aria-keyshortcuts: ['⌘', 'K'] → 'Meta+K'. */
+export declare function keyShortcuts(keys?: string[]): string
 export declare function buttonClass(options?: { variant?: ButtonVariant; size?: Size; iconOnly?: boolean; block?: boolean }): string
 export declare function badgeClass(options?: { tone?: BadgeTone }): string
-export declare function controlClass(kind?: ControlKind, options?: { size?: Size }): string
+/** default: campo de formulario. property (solo select): chip de propiedad sin borde y a su ancho. */
+export type SelectVariant = 'default' | 'property'
+export declare function controlClass(kind?: ControlKind, options?: { size?: Size; variant?: SelectVariant }): string
 export declare function inputWrapClass(options?: { size?: Size }): string
 export declare function cardClass(options?: { variant?: CardVariant }): string
 export declare function tableClass(options?: { compact?: boolean }): string
@@ -36,7 +40,7 @@ export declare const ICON_ATTRS: Record<string, string>
 export type AvatarStatus = 'online' | 'away' | 'busy'
 export declare const SIDEBAR_ID: string
 export declare const AVATAR_STATUSES: readonly AvatarStatus[]
-export declare function appShellClass(options?: { collapsed?: boolean; navOpen?: boolean }): string
+export declare function appShellClass(options?: { collapsed?: boolean; navOpen?: boolean; brandHeader?: boolean }): string
 export declare function avatarClass(options?: { size?: Size }): string
 export declare function initials(name?: string): string
 export declare const LOGO: { viewBox: string; letters: string[]; ring: string }
@@ -76,7 +80,10 @@ export declare const PROGRESS_TONES: readonly ProgressTone[]
 export declare const DESCRIPTION_LAYOUTS: readonly DescriptionLayout[]
 export declare const LINK_TONES: readonly LinkTone[]
 export declare const LINK_UNDERLINES: readonly LinkUnderline[]
-export declare function statusClass(options?: { tone?: RowStatusTone; pulse?: boolean }): string
+export type StatusProgress = 'backlog' | 'todo' | 'started' | 'waiting' | 'done' | 'canceled'
+/** Tono por defecto de cada paso de progress. */
+export declare const STATUS_PROGRESS: Record<StatusProgress, RowStatusTone>
+export declare function statusClass(options?: { tone?: RowStatusTone; pulse?: boolean; progress?: StatusProgress }): string
 export declare function progressClass(options?: { tone?: ProgressTone; size?: SmallSize; indeterminate?: boolean; steps?: boolean }): string
 export declare function descriptionListClass(options?: { layout?: DescriptionLayout }): string
 export declare function copyButtonClass(options?: { size?: Size; iconOnly?: boolean; copied?: boolean }): string
@@ -132,7 +139,7 @@ export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 'auto'
 export type GridMinItemWidth = 'sm' | 'md' | 'lg'
 export type ContainerSize = 'sm' | 'md' | 'lg'
 export type TextSize = 'caption' | 'small' | 'body' | 'lead'
-export type TextTone = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+export type TextTone = 'default' | 'muted' | 'tertiary' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
 export type TextWeight = 'regular' | 'medium' | 'semibold'
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 export type HeadingSize = 'lead' | 'heading' | 'title' | 'display'

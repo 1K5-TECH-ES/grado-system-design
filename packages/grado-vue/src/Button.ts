@@ -1,6 +1,7 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
-import { buttonClass, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
+import { buttonClass, keyShortcuts, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { Spinner } from './Spinner.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 
 /** Para enlaces o RouterLink, usa buttonClass() de @1k5-tech-es/grado/classes. */
 export const Button = defineComponent({
@@ -16,6 +17,11 @@ export const Button = defineComponent({
     block: Boolean,
     /** Muestra un spinner y desactiva el botón. */
     loading: Boolean,
+    /**
+     * Atajo de teclado que activa la acción: ['C'], ['⌘', '↵']. Se pinta dentro del botón (no en los de
+     * solo icono: ahí va en el Tooltip) y se anuncia con aria-keyshortcuts. La app escucha la tecla.
+     */
+    shortcut: Array as PropType<string[]>,
     disabled: Boolean,
     type: { type: String as PropType<'button' | 'submit' | 'reset'>, default: 'button' },
   },
@@ -28,10 +34,12 @@ export const Button = defineComponent({
           class: buttonClass({ variant: props.variant, size: props.size, iconOnly: props.iconOnly, block: props.block }),
           disabled: props.disabled || props.loading,
           'aria-busy': props.loading ? 'true' : undefined,
+          'aria-keyshortcuts': props.shortcut?.length ? keyShortcuts(props.shortcut) : undefined,
         },
         [
           props.loading ? h(Spinner, { size: 'sm', decorative: true }) : props.icon ? h(props.icon, { 'aria-hidden': 'true' }) : null,
           slots.default?.(),
+          props.shortcut?.length && !props.iconOnly ? shortcutKeys(props.shortcut, 'k5-btn__shortcut') : null,
         ],
       )
   },

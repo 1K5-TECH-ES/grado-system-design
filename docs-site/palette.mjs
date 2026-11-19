@@ -123,6 +123,7 @@ export function normalizeHex(input) {
 }
 
 const rgb = (hex) => parseColor(hex)
+
 const hex = (color) => toHex(color)
 const hsl = (value) => rgbToHsl(rgb(value))
 const clamp = (n, min, max) => Math.min(max, Math.max(min, n))
@@ -320,13 +321,17 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
   // Grises con el tono del principal; si el principal es casi gris, grises neutros.
   const k = clamp(ps / 40, 0, 1)
   const n = (sat, light) => fromHsl(h, sat * k, light)
+  // Consola (0.9): neutros en OKLCH con el matiz del principal, como el tema de serie.
+  const oh = oklch(primary).h
+  const o = (L, C) => fromOklch(L, C * k, oh)
+  const consola = !marca && !campo
 
   const lightBg = marca ? n(33, 96.5) : WHITE
-  const lightSecondary = marca ? tinted(primary, 0.1) : n(20, 95)
-  const lightMuted = marca ? n(28, 94) : n(15, 96)
+  const lightSecondary = marca ? tinted(primary, 0.1) : consola ? o(0.955, 0.006) : n(20, 95)
+  const lightMuted = marca ? n(28, 94) : consola ? o(0.955, 0.006) : n(15, 96)
   const lightFg = campo ? '#111111' : GRAPHITE
   const onPrimary = on(primary)
-  const lightBorder = campo ? reach(n(10, 60), lightBg, 3.5) : marca ? n(22, 90) : n(15, 90)
+  const lightBorder = campo ? reach(n(10, 60), lightBg, 3.5) : marca ? n(22, 90) : o(0.925, 0.007)
   const light = {
     background: lightBg,
     ...(campo ? { foreground: lightFg, 'card-foreground': lightFg, 'popover-foreground': lightFg } : {}),
@@ -337,13 +342,15 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
     'primary-subtle': blend(WHITE, primary, 0.1),
     'primary-border': blend(WHITE, primary, 0.3),
     secondary: lightSecondary,
-    'secondary-foreground': reach(n(Math.min(92, ps), 20), lightSecondary, 7),
+    'secondary-foreground': consola ? lightFg : reach(n(Math.min(92, ps), 20), lightSecondary, 7),
     muted: lightMuted,
-    'muted-foreground': reach(n(8, campo ? 30 : 40), lightMuted, min),
+    'muted-foreground': reach(consola ? o(0.47, 0.016) : n(8, campo ? 30 : 40), lightMuted, min),
+    // Tercer nivel: parte más claro y oscurece lo justo para pasar sobre el gris.
+    'tertiary-foreground': reach(consola ? o(0.53, 0.014) : n(6, 60), lightMuted, min),
     accent,
     'accent-foreground': on(accent),
     border: lightBorder,
-    input: campo ? reach(n(10, 45), lightBg, 4.5) : lightBorder,
+    input: campo ? reach(n(10, 45), lightBg, 4.5) : consola ? o(0.885, 0.009) : lightBorder,
     ring: primary,
     header: primary,
     'header-foreground': onPrimary,
@@ -362,18 +369,29 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
           'sidebar-border': blend(primary, WHITE, 0.08),
           'sidebar-ring': accent,
         }
-      : {
-          'sidebar-primary': primary,
-          'sidebar-primary-foreground': onPrimary,
-          'sidebar-accent': tinted(primary, 0.1),
-          'sidebar-accent-foreground': textOnTint(primary, lightFg, [WHITE], min),
-          'sidebar-border': lightBorder,
-          'sidebar-ring': primary,
-        }),
+      : consola
+        ? {
+            // 0.9: barra lateral sobre el fondo base y sección activa en gris (un solo acento por vista).
+            sidebar: o(0.972, 0.005),
+            'sidebar-primary': primary,
+            'sidebar-primary-foreground': onPrimary,
+            'sidebar-accent': o(0.935, 0.008),
+            'sidebar-accent-foreground': lightFg,
+            'sidebar-border': lightBorder,
+            'sidebar-ring': primary,
+          }
+        : {
+            'sidebar-primary': primary,
+            'sidebar-primary-foreground': onPrimary,
+            'sidebar-accent': tinted(primary, 0.1),
+            'sidebar-accent-foreground': textOnTint(primary, lightFg, [WHITE], min),
+            'sidebar-border': lightBorder,
+            'sidebar-ring': primary,
+          }),
   }
 
-  const darkBg = campo ? '#000000' : marca ? n(38, 5) : n(25, 6)
-  const darkCard = campo ? n(20, 5) : marca ? n(30, 10) : n(25, 8)
+  const darkBg = campo ? '#000000' : marca ? n(38, 5) : o(0.185, 0.01)
+  const darkCard = campo ? n(20, 5) : marca ? n(30, 10) : o(0.205, 0.011)
   // Fuera de campo, el principal oscuro se aclara lo justo para que su texto llegue al mínimo
   // (con el de serie sale #B86CE5 y texto grafito, como en Grado).
   const darkTone = (light) => n(clamp(ps, 40, 70), light)
@@ -385,28 +403,30 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
   let accentLight = 45
   while (!campo && accentLight < 85 && ratio(accentTone(accentLight), on(accentTone(accentLight))) < min) accentLight += 1
   const darkAccent = campo ? reach(accentTone(55), darkBg, 7) : accentTone(accentLight)
-  const darkFg = campo ? WHITE : '#FAFAFA'
+  const darkFg = campo ? WHITE : consola ? o(0.965, 0.004) : '#FAFAFA'
   const darkHeader = marca ? n(75, 15) : n(60, 18)
-  const darkMuted = n(15, campo ? 10 : 14)
-  const darkBorder = campo ? reach(n(10, 45), darkBg, 3.5) : n(15, 18)
+  const darkMuted = consola ? o(0.245, 0.012) : n(15, campo ? 10 : 14)
+  const darkBorder = campo ? reach(n(10, 45), darkBg, 3.5) : consola ? o(0.28, 0.012) : n(15, 18)
   const dark = {
     background: darkBg,
     ...(campo ? { foreground: darkFg, 'card-foreground': darkFg, 'popover-foreground': darkFg } : {}),
+    ...(consola ? { foreground: darkFg, 'card-foreground': darkFg, 'popover-foreground': darkFg } : {}),
     card: darkCard,
-    popover: darkCard,
+    popover: consola ? o(0.225, 0.011) : darkCard,
     primary: darkPrimary,
     'primary-foreground': on(darkPrimary),
     'primary-text': textOnTint(darkPrimary, darkFg, [darkBg, darkCard], min),
     'primary-subtle': blend(darkCard, darkPrimary, 0.1),
     'primary-border': blend(darkCard, darkPrimary, 0.3),
-    secondary: n(15, 16),
+    secondary: consola ? o(0.255, 0.012) : n(15, 16),
     'secondary-foreground': darkFg,
     muted: darkMuted,
-    'muted-foreground': reach(n(8, 65), darkMuted, min),
+    'muted-foreground': reach(consola ? o(0.74, 0.012) : n(8, 65), darkMuted, min),
+    'tertiary-foreground': reach(consola ? o(0.63, 0.012) : n(6, 40), darkMuted, min),
     accent: darkAccent,
     'accent-foreground': on(darkAccent),
     border: darkBorder,
-    input: campo ? reach(n(10, 55), darkBg, 4.5) : darkBorder,
+    input: campo ? reach(n(10, 55), darkBg, 4.5) : consola ? o(0.32, 0.014) : darkBorder,
     ring: darkPrimary,
     header: darkHeader,
     'header-foreground': WHITE,
@@ -425,15 +445,25 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
           'sidebar-border': n(50, 21),
           'sidebar-ring': accent,
         }
-      : {
-          sidebar: darkBg,
-          'sidebar-primary': darkPrimary,
-          'sidebar-primary-foreground': onColor(darkPrimary),
-          'sidebar-accent': blend(darkBg, darkPrimary, 0.12),
-          'sidebar-accent-foreground': n(75, 82),
-          'sidebar-border': darkBorder,
-          'sidebar-ring': darkPrimary,
-        }),
+      : consola
+        ? {
+            sidebar: o(0.155, 0.009),
+            'sidebar-primary': darkPrimary,
+            'sidebar-primary-foreground': onColor(darkPrimary),
+            'sidebar-accent': darkMuted,
+            'sidebar-accent-foreground': darkFg,
+            'sidebar-border': darkBorder,
+            'sidebar-ring': darkPrimary,
+          }
+        : {
+            sidebar: darkBg,
+            'sidebar-primary': darkPrimary,
+            'sidebar-primary-foreground': onColor(darkPrimary),
+            'sidebar-accent': blend(darkBg, darkPrimary, 0.12),
+            'sidebar-accent-foreground': n(75, 82),
+            'sidebar-border': darkBorder,
+            'sidebar-ring': darkPrimary,
+          }),
   }
   return { light, dark, radius: RADII[radius] ?? RADII.r8, font: fontById(font).stack }
 }
@@ -530,6 +560,7 @@ export function contrastChecks({ config, tokens }) {
     checks.push({ mode, label: 'Enlaces y texto de marca', background: c.background, foreground: c['primary-text'], min: text })
     checks.push({ mode, label: 'Texto de marca sobre tinte', background: c['primary-subtle'], foreground: c['primary-text'], min: text })
     checks.push({ mode, label: 'Texto secundario', background: c.muted, foreground: c['muted-foreground'], min: text })
+    checks.push({ mode, label: 'Texto terciario', background: c.muted, foreground: c['tertiary-foreground'], min: text })
     if (mode === 'light')
       checks.push({ mode, label: 'Acento sobre el fondo', background: c.background, foreground: c.accent, min: 3, ui: true })
     checks.push({ mode, label: 'Texto sobre el acento', background: c.accent, foreground: c['accent-foreground'], min: text })

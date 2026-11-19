@@ -1,7 +1,8 @@
 import { defineComponent, h, onBeforeUnmount, onMounted, shallowRef } from 'vue'
-import { buttonClass } from '@1k5-tech-es/grado/classes'
+import { buttonClass, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { createToastStore, visibleToasts, type ToastItem } from '@1k5-tech-es/grado/patterns'
 import { Toast } from './Alert.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 
 const store = createToastStore()
@@ -59,8 +60,13 @@ export const Toaster = defineComponent({
                 ? () =>
                     h(
                       'button',
-                      { type: 'button', class: buttonClass({ variant: 'link', size: 'sm' }), onClick: () => act(item) },
-                      item.action?.label,
+                      {
+                        type: 'button',
+                        class: buttonClass({ variant: 'link', size: 'sm' }),
+                        'aria-keyshortcuts': item.action?.shortcut?.length ? keyShortcuts(item.action.shortcut) : undefined,
+                        onClick: () => act(item),
+                      },
+                      [item.action?.label, item.action?.shortcut?.length ? shortcutKeys(item.action.shortcut, 'k5-btn__shortcut') : null],
                     )
                 : undefined,
             },

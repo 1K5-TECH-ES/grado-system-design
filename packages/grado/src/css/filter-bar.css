@@ -1,4 +1,4 @@
-/* Barra de filtros: búsqueda con lupa, controles propios y chips quitables. */
+/* Barra de filtros: búsqueda con lupa, controles propios y chips quitables, en gris (el acento queda para la acción). */
 .k5-filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -27,9 +27,9 @@
   gap: var(--k5-space-1);
   max-width: 100%;
   padding: 0.1875rem var(--k5-space-1) 0.1875rem var(--k5-space-2);
-  border: 1px solid color-mix(in srgb, var(--k5-primary) 22%, var(--k5-border));
+  border: 1px solid transparent;
   border-radius: var(--k5-radius-badge);
-  background: color-mix(in srgb, var(--k5-primary) 6%, var(--k5-card));
+  background: var(--k5-muted);
   color: var(--k5-foreground);
   font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
@@ -55,10 +55,63 @@
   height: 0.75rem;
 }
 .k5-chip__remove:hover {
-  background: color-mix(in srgb, var(--k5-primary) 12%, transparent);
+  background: color-mix(in srgb, var(--k5-foreground) 8%, transparent);
   color: var(--k5-foreground);
 }
 .k5-chip__remove:focus-visible {
   outline: 2px solid var(--k5-ring);
   outline-offset: 1px;
+}
+
+/* Filtro en partes: campo · operador · valores · quitar, separadas por una línea del color del fondo.
+   Con onEdit (Vue: editable) cada parte es un botón. */
+.k5-chip--parts {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.k5-chip__part {
+  padding: 0.1875rem var(--k5-space-2);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+}
+.k5-chip__part + .k5-chip__part,
+.k5-chip--parts .k5-chip__remove {
+  border-left: 1px solid var(--k5-background);
+}
+.k5-chip__field,
+.k5-chip__operator {
+  color: var(--k5-muted-foreground);
+}
+.k5-chip__operator {
+  font-weight: var(--k5-weight-regular);
+}
+.k5-chip__value {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+button.k5-chip__part {
+  cursor: pointer;
+}
+button.k5-chip__part:hover {
+  background: color-mix(in srgb, var(--k5-foreground) 8%, transparent);
+  color: var(--k5-foreground);
+}
+button.k5-chip__part:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: -2px;
+}
+.k5-chip--parts .k5-chip__remove {
+  width: auto;
+  height: auto;
+  align-self: stretch;
+  padding: 0 var(--k5-space-1-5);
+  border-radius: 0;
+}
+.k5-chip--parts .k5-chip__remove:focus-visible {
+  outline-offset: -2px;
 }

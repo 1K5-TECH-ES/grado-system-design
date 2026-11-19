@@ -128,7 +128,10 @@ test('tokens-studio.json trae un tema de Figma por tema y modo, sobre el conjunt
 test('fonts.css apunta a archivos que existen en el paquete', () => {
   const fonts = read('fonts.css')
   const urls = [...fonts.matchAll(/url\('([^']+)'\)/g)].map((m) => m[1])
-  assert.equal(urls.length, 8, 'Inter 400–700 en latin y latin-ext')
+  assert.equal(urls.length, 2, 'Inter variable en latin y latin-ext')
+  assert.match(fonts, /font-weight: 100 900;/)
+  // Con la fuente variable, medio y semibold a 510 y 590; html:root gana a :root de tokens.css.
+  assert.match(fonts, /html:root \{\s*--k5-weight-medium: 510;\s*--k5-weight-semibold: 590;\s*\}/)
   for (const url of urls) assert.ok(existsSync(new URL(url, dist)), url)
   assert.ok(existsSync(new URL('../assets/fonts/OFL.txt', dist)), 'la licencia OFL viaja con las fuentes')
   assert.match(tokens.typography['font-sans'], /^Inter, /)

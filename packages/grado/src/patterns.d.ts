@@ -14,6 +14,8 @@ export interface MenuItem {
   disabled?: boolean
   danger?: boolean
   separator?: boolean
+  /** Atajo de la opción: ['⌘', 'D']. Se pinta a la derecha y se anuncia con aria-keyshortcuts; la app escucha la tecla. */
+  shortcut?: string[]
 }
 export interface BreadcrumbItem {
   label: string
@@ -33,9 +35,16 @@ export interface TimelineItem {
   dateTime?: string
   tone?: StatusTone
 }
+/** Parte de un filtro que se puede editar: el campo, el operador o los valores. */
+export type FilterPart = 'field' | 'operator' | 'value'
 export interface FilterItem {
   id: string
-  label: string
+  /** Texto del filtro en una pieza. Con field, nombra el filtro si quieres otro texto que el de las partes. */
+  label?: string
+  /** Filtro en partes: campo (Estado), operador (es uno de) y valores (Abierta, En obra). */
+  field?: string
+  operator?: string
+  value?: string
 }
 export interface UploadItem {
   id: string
@@ -281,6 +290,8 @@ export interface ToastAction {
   label: string
   /** El aviso se cierra después de llamarla. */
   onClick: () => void
+  /** Atajo de la acción: ['⌘', 'Z']. Se pinta en el botón y se anuncia con aria-keyshortcuts; la app escucha la tecla. */
+  shortcut?: string[]
 }
 export interface ToastOptions {
   /** Con el id de un aviso que ya está en la cola, lo sustituye en su sitio. */
@@ -417,3 +428,22 @@ export declare function virtualWindow(options: {
   overscan?: number
 }): VirtualWindow
 export declare function pixelHeight(value: number | string | null | undefined): number | null
+
+// ---------- Fechas escritas (0.9) ----------
+export interface DateSuggestion {
+  /** YYYY-MM-DD */
+  value: string
+  /** «Mañana · vie, 20 nov» */
+  label: string
+}
+/**
+ * Fechas que propone un campo de fecha a partir de lo que se escribe, en el idioma de locale:
+ * «mañana», «vie», «próximo lunes», «en 2 semanas», «2w», «fin de mes», «20/11», «20 nov».
+ * Sin texto, unas cuantas de partida.
+ */
+export declare function dateSuggestions(
+  query: string,
+  options?: { today?: string; locale?: string; weekStartsOn?: number; min?: string; max?: string; limit?: number },
+): DateSuggestion[]
+/** Fecha corta: «vie, 20 nov», con el año si no es el de today. */
+export declare function shortDateLabel(iso: string, options?: { today?: string; locale?: string }): string

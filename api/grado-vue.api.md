@@ -68,6 +68,7 @@ emits: dismiss
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -91,6 +92,7 @@ emits: update:open
 ## AppShell
 
 ```ts
+  brandHeader: Boolean
   collapsed: Boolean
   mainId: String  // con valor por defecto
   menuLabel: String
@@ -203,6 +205,7 @@ emits: dismiss
   icon: Object | Function
   iconOnly: Boolean
   loading: Boolean
+  shortcut: Array
   size: String
   type: String  // con valor por defecto
   variant: String
@@ -284,6 +287,7 @@ emits: update:modelValue
 ## Combobox
 
 ```ts
+  creatable: Boolean
   defaultValue: String  // con valor por defecto
   disabled: Boolean
   emptyLabel: String
@@ -297,7 +301,7 @@ emits: update:modelValue
   required: Boolean  // con valor por defecto
 ```
 
-emits: queryChange, update:modelValue
+emits: create, queryChange, update:modelValue
 
 ## CommandPalette
 
@@ -355,12 +359,16 @@ function
 
 ```ts
   caption: String  // obligatoria
+  collapsedGroups: Array  // con valor por defecto
   columnPicker: Boolean
   columns: Array  // obligatoria
+  defaultCollapsedGroups: Array  // con valor por defecto
   defaultHiddenColumns: Array  // con valor por defecto
   defaultSort: Object  // con valor por defecto
   emptyLabel: String
   error: String
+  groupBy: String | Function
+  groupLabel: Function
   hiddenColumns: Array  // con valor por defecto
   loading: Boolean
   manual: Boolean
@@ -375,12 +383,14 @@ function
   totalRows: Number
 ```
 
-emits: update:hiddenColumns, update:page, update:selectedKeys, update:sort
+emits: update:collapsedGroups, update:hiddenColumns, update:page, update:selectedKeys, update:sort
 
 ## DatePicker
 
 ```ts
   modelValue: String
+  natural: Boolean
+  today: String
 ```
 
 emits: update:modelValue
@@ -421,6 +431,7 @@ string
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -459,6 +470,7 @@ function
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -559,6 +571,7 @@ emits: filesChange, reject, remove, retry
 
 ```ts
   clearable: Boolean
+  editable: Boolean
   filters: Array  // con valor por defecto
   label: String
   placeholder: String
@@ -566,16 +579,20 @@ emits: filesChange, reject, remove, retry
   searchable: Boolean  // con valor por defecto
 ```
 
-emits: clear, removeFilter, update:query
+emits: clear, editFilter, removeFilter, update:query
 
 ## FilterChip
 
 ```ts
-  label: String  // obligatoria
+  editable: Boolean
+  field: String
+  label: String
+  operator: String
   removable: Boolean
+  value: String
 ```
 
-emits: remove
+emits: edit, remove
 
 ## focusField
 
@@ -899,6 +916,7 @@ emits: update:modelValue
   as: String  // con valor por defecto
   subtitle: String
   title: String  // obligatoria
+  variant: String
 ```
 
 ## Pagination
@@ -1019,6 +1037,7 @@ function
   options: Array  // obligatoria
   orientation: String  // con valor por defecto
   required: Boolean
+  variant: String  // con valor por defecto
 ```
 
 emits: update:modelValue
@@ -1065,6 +1084,7 @@ emits: update:modelValue
   modelValue: String
   required: Boolean  // con valor por defecto
   size: String
+  variant: String
 ```
 
 emits: update:modelValue
@@ -1087,6 +1107,7 @@ emits: update:modelValue
   description: String
   fullscreen: Boolean
   header: Boolean  // con valor por defecto
+  modal: Boolean  // con valor por defecto
   open: Boolean  // con valor por defecto
   side: String  // con valor por defecto
   title: String  // obligatoria
@@ -1169,6 +1190,7 @@ function
 ## Status
 
 ```ts
+  progress: String
   pulse: Boolean
   tone: String
 ```
@@ -1327,6 +1349,7 @@ emits: update:modelValue
 ```ts
   content: String
   label: String
+  shortcut: Array
 ```
 
 ## useField

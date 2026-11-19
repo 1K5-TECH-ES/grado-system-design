@@ -10,6 +10,19 @@ import { addDays, addMonths, clampDate, dateLabel, monthTitle, monthWeeks, nextR
 
 // ---------- Combobox ----------
 
+/** Valor de la opción «Crear "…"»: al elegirla, el combobox avisa con onCreate en lugar de seleccionar. */
+export const COMBOBOX_CREATE = '\u0000create'
+
+/**
+ * Con onCreate: añade «Crear "…"» al final de las opciones que se ven si lo escrito no es ya una
+ * opción (sin distinguir mayúsculas). label es el texto de esa opción, ya traducido.
+ */
+export function withCreateOption(filtered, query, options, label) {
+  const text = query.trim().toLocaleLowerCase()
+  if (!text || options.some((option) => option.label.trim().toLocaleLowerCase() === text)) return filtered
+  return [...filtered, { value: COMBOBOX_CREATE, label }]
+}
+
 /** Estado inicial: lista cerrada, sin búsqueda ni opción activa. */
 export const comboboxState = () => ({ open: false, query: '', active: -1 })
 
@@ -22,7 +35,13 @@ const enabledIndexes = (options) => options.map((option, i) => (option.disabled 
  * stopPropagation? }: select es el valor que hay que elegir ('' lo vacía) y query, la búsqueda
  * que hay que avisar.
  */
-export function comboboxReduce(state, event, { filtered = [], loading = false } = {}) {
+export function comboboxReduce(state, event, ctx) {
+  const result = reduceCombobox(state, event, ctx)
+  // Elegir, Escape o salir vacían la búsqueda: se avisa para que quien la usa (carga externa,
+  // DatePicker natural) vuelva a la lista de partida.
+  return result.query === undefined && state.query && !result.state.query ? { ...result, query: '' } : result
+}
+function reduceCombobox(state, event, { filtered = [], loading = false } = {}) {
   const pick = (option) =>
     option.disabled ? { state } : { state: { ...state, open: false, query: '' }, select: option.value, focusInput: true }
   switch (event.type) {
@@ -180,10 +199,27 @@ export const toggleRow = (selected, key, checked) =>
 /** Columnas ocultas tras marcar o desmarcar una en «Columnas». */
 export const toggleColumn = (hidden, key, visible) => (visible ? hidden.filter((value) => value !== key) : [...hidden, key])
 
+const groupOf = (groupBy) => (typeof groupBy === 'function' ? groupBy : (row) => String(row[groupBy] ?? ''))
+
+/**
+ * Filas juntas por grupo (groupBy: un campo o una función). Los grupos salen en el orden en que
+ * aparecen en order (por defecto, rows); dentro de cada grupo, las filas siguen en su orden.
+ */
+export function groupRows(rows, groupBy, order = rows) {
+  if (!groupBy) return rows
+  const of = groupOf(groupBy),
+    index = new Map()
+  for (const row of order) if (!index.has(of(row))) index.set(of(row), index.size)
+  return [...rows].sort((a, b) => (index.get(of(a)) ?? 0) - (index.get(of(b)) ?? 0))
+}
+
 /**
  * Lo que pinta DataTable: la página (ordenada en el cliente salvo con manual), sus claves, si
  * están todas o algunas seleccionadas, el total y las páginas, y el tramo de filas virtuales
  * si hay alto máximo y más de VIRTUAL_ROWS filas. sorted se puede pasar ya calculado (memo).
+ * Con groupBy, groups trae los grupos de la página: { key, rows, count (en todas las filas),
+ * collapsed }. Las filas de un grupo plegado no cuentan para «seleccionar la página», y con
+ * grupos no hay filas virtuales.
  */
 export function tableView({
   rows,
@@ -200,16 +236,31 @@ export function tableView({
   error,
   scroll,
   sorted,
+  groupBy,
+  collapsed = [],
 }) {
   const keyOf = (row) => (typeof rowKey === 'function' ? rowKey(row) : String(row[rowKey]))
   const total = manual ? (totalRows ?? rows.length) : rows.length
   const size = Math.max(1, pageSize)
   const count = pageCount(total, size)
   const current = Math.min(count, Math.max(1, page))
-  const ordered = sorted ?? sortRows(rows, columns, sort, manual)
-  const visible = manual ? rows : ordered.slice((current - 1) * size, current * size)
-  const keys = visible.map(keyOf)
-  const virtual = maxHeight != null && !loading && !error && visible.length > VIRTUAL_ROWS
+  const ordered = groupRows(sorted ?? sortRows(rows, columns, sort, manual), groupBy, rows)
+  const visible = manual ? groupRows(rows, groupBy) : ordered.slice((current - 1) * size, current * size)
+  let groups = null
+  if (groupBy) {
+    const of = groupOf(groupBy),
+      counts = new Map()
+    for (const row of rows) counts.set(of(row), (counts.get(of(row)) ?? 0) + 1)
+    groups = []
+    for (const row of visible) {
+      const key = of(row),
+        last = groups[groups.length - 1]
+      if (last?.key === key) last.rows.push(row)
+      else groups.push({ key, rows: [row], count: counts.get(key), collapsed: collapsed.includes(key) })
+    }
+  }
+  const keys = (groups ? groups.flatMap((group) => (group.collapsed ? [] : group.rows)) : visible).map(keyOf)
+  const virtual = !groups && maxHeight != null && !loading && !error && visible.length > VIRTUAL_ROWS
   return {
     keyOf,
     total,
@@ -220,6 +271,7 @@ export function tableView({
     keys,
     all: keys.length > 0 && keys.every((key) => selected.includes(key)),
     some: keys.some((key) => selected.includes(key)),
+    groups,
     range: virtual
       ? virtualWindow({ count: visible.length, rowHeight: scroll?.rowHeight, scrollTop: scroll?.top, viewport: scroll?.viewport })
       : null,

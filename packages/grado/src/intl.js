@@ -18,3 +18,4 @@ function cached(Formatter) {
 export const numberFormat = cached(Intl.NumberFormat)
 export const dateTimeFormat = cached(Intl.DateTimeFormat)
 export const collator = cached(Intl.Collator)
+export const relativeTimeFormat = cached(Intl.RelativeTimeFormat)

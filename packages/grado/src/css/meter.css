@@ -45,7 +45,7 @@
 }
 .k5-meter__track {
   display: block;
-  height: var(--k5-space-2);
+  height: 0.375rem;
   overflow: hidden;
   border-radius: var(--k5-radius-full);
   background: var(--k5-muted);

@@ -1,7 +1,8 @@
 'use client'
-import { forwardRef, type InputHTMLAttributes } from 'react'
+import { forwardRef, useState, type InputHTMLAttributes } from 'react'
 import { cx } from '@1k5-tech-es/grado/classes'
-import { rangeError, type DateRangeValue } from '@1k5-tech-es/grado/patterns'
+import { dateSuggestions, rangeError, shortDateLabel, todayIso, type DateRangeValue } from '@1k5-tech-es/grado/patterns'
+import { Combobox } from './Combobox.js'
 import { Input } from './Field.js'
 import { useGrado } from './Locale.js'
 import { useAutoId, useValue } from './hooks.js'
@@ -9,8 +10,19 @@ import { useAutoId, useValue } from './hooks.js'
 export type DatePickerProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> & {
   size?: 'sm' | 'md' | 'lg'
   onValueChange?: (value: string) => void
+  /**
+   * Se escribe la fecha («mañana», «viernes», «en 2 semanas», «20/11») y se elige de la lista, en el idioma
+   * de GradoProvider. Es un Combobox: el valor sigue siendo YYYY-MM-DD y name lo envía igual.
+   */
+  natural?: boolean
+  /** Con natural, el día de hoy (YYYY-MM-DD) del que parten «mañana» o «en 2 semanas». Por defecto, el del navegador. */
+  today?: string
 }
-export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePicker({ onValueChange, onChange, ...props }, ref) {
+export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePicker(
+  { onValueChange, onChange, natural, today, ...props },
+  ref,
+) {
+  if (natural) return <NaturalDatePicker {...props} ref={ref} today={today} onValueChange={onValueChange} />
   return (
     <Input
       {...props}
@@ -20,6 +32,40 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
         onChange?.(event)
         onValueChange?.(event.target.value)
       }}
+    />
+  )
+})
+type NaturalProps = Omit<DatePickerProps, 'natural' | 'onChange'>
+const NaturalDatePicker = forwardRef<HTMLInputElement, NaturalProps>(function NaturalDatePicker(
+  { value, defaultValue = '', onValueChange, today, min, max, placeholder, name, disabled, required, id, className, ...rest },
+  ref,
+) {
+  const { locale, messages: m } = useGrado()
+  const [query, setQuery] = useState('')
+  const [current, select] = useValue(value === undefined ? undefined : String(value), String(defaultValue), onValueChange)
+  const now = today ?? todayIso()
+  const options = dateSuggestions(query, { today: now, locale, min: min as string, max: max as string }).map((option) => ({
+    ...option,
+    keywords: query,
+  }))
+  // La fecha elegida sigue en la lista para que el campo la muestre aunque no salga entre las propuestas.
+  if (current && !options.some((option) => option.value === current))
+    options.push({ value: current, label: shortDateLabel(current, { today: now, locale }), keywords: '' })
+  return (
+    <Combobox
+      ref={ref}
+      options={options}
+      value={current}
+      onValueChange={select}
+      onQueryChange={setQuery}
+      label={rest['aria-label']}
+      placeholder={placeholder ?? m.datePlaceholder}
+      emptyLabel={m.dateHint}
+      name={name}
+      disabled={disabled}
+      required={required}
+      id={id}
+      className={className}
     />
   )
 })

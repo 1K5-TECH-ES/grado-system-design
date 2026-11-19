@@ -1,4 +1,5 @@
-/* Botón. Equivale al Button de 1komma5es_help: compacto, rounded-md, texto de 12 px. */
+/* Botón. Compacto: alto del control del tema, radio de 6 px y el texto de la interfaz
+   (13 px en Consola). El primario lleva un brillo interior de 1 px arriba. */
 .k5-btn {
   --_h: var(--k5-control-h);
   display: inline-flex;
@@ -6,13 +7,13 @@
   justify-content: center;
   gap: var(--k5-space-1-5);
   height: var(--_h);
-  padding: 0 var(--k5-space-3);
+  padding: 0 var(--k5-space-2-5);
   border: 1px solid transparent;
   border-radius: calc(var(--k5-radius) - 2px);
   background: transparent;
   color: var(--k5-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-caption);
+  font-size: var(--k5-text-ui);
   font-weight: var(--k5-weight-medium);
   line-height: 1;
   white-space: nowrap;
@@ -20,9 +21,10 @@
   cursor: pointer;
   user-select: none;
   transition:
-    background-color var(--k5-duration-base),
-    color var(--k5-duration-base),
-    border-color var(--k5-duration-base);
+    background-color var(--k5-duration-fast),
+    color var(--k5-duration-fast),
+    border-color var(--k5-duration-fast),
+    box-shadow var(--k5-duration-fast);
 }
 .k5-btn:focus-visible {
   outline: 2px solid var(--k5-ring);
@@ -41,15 +43,17 @@
   width: 0.875rem;
   height: 0.875rem;
   flex-shrink: 0;
+  stroke-width: 1.75;
 }
 
 .k5-btn--sm {
   --_h: var(--k5-control-h-sm);
-  padding: 0 var(--k5-space-2-5);
+  padding: 0 var(--k5-space-2);
+  font-size: var(--k5-text-caption);
 }
 .k5-btn--lg {
   --_h: var(--k5-control-h-lg);
-  padding: 0 var(--k5-space-4);
+  padding: 0 var(--k5-space-3-5);
   font-size: var(--k5-text-body);
 }
 .k5-btn--lg svg {
@@ -67,13 +71,16 @@
 .k5-btn--primary {
   background: var(--k5-primary);
   color: var(--k5-primary-foreground);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(0 0 0 / 0.14);
 }
 .k5-btn--primary:hover {
-  background: color-mix(in srgb, var(--k5-primary) 90%, transparent);
+  background: color-mix(in srgb, var(--k5-primary) 90%, var(--k5-primary-foreground));
 }
 
 .k5-btn--secondary {
-  border-color: var(--k5-border);
+  border-color: var(--k5-input);
   color: var(--k5-foreground);
 }
 .k5-btn--secondary:hover {
@@ -100,9 +107,12 @@
 .k5-btn--destructive {
   background: var(--k5-destructive);
   color: var(--k5-destructive-foreground);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px rgb(0 0 0 / 0.14);
 }
 .k5-btn--destructive:hover {
-  background: color-mix(in srgb, var(--k5-destructive) 90%, transparent);
+  background: color-mix(in srgb, var(--k5-destructive) 90%, var(--k5-destructive-foreground));
 }
 
 .k5-btn--link {
@@ -113,4 +123,14 @@
 }
 .k5-btn--link:hover {
   text-decoration: underline;
+}
+
+/* Atajo dentro del botón (shortcut): teclas pequeñas sobre un tinte del color del texto. */
+.k5-btn__shortcut {
+  display: inline-flex;
+  gap: 0.125rem;
+  margin: 0 calc(var(--k5-space-1) * -1) 0 var(--k5-space-0-5);
+}
+.k5-btn__shortcut kbd {
+  background: color-mix(in srgb, currentColor 14%, transparent);
 }

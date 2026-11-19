@@ -77,6 +77,8 @@ export const RadioGroup = defineComponent({
     required: Boolean,
     disabled: Boolean,
     orientation: { type: String as PropType<'horizontal' | 'vertical'>, default: 'vertical' },
+    /** card: cada opción es una tarjeta con borde, para opciones con descripción o precio (tarifas, planes). */
+    variant: { type: String as PropType<'default' | 'card'>, default: 'default' },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
@@ -89,7 +91,14 @@ export const RadioGroup = defineComponent({
     return () =>
       h(
         'fieldset',
-        { class: cx('k5-radio-group', props.orientation === 'horizontal' && 'k5-radio-group--horizontal'), disabled: props.disabled },
+        {
+          class: cx(
+            'k5-radio-group',
+            props.orientation === 'horizontal' && 'k5-radio-group--horizontal',
+            props.variant === 'card' && 'k5-radio-group--card',
+          ),
+          disabled: props.disabled,
+        },
         [
           h('legend', null, props.label),
           h(

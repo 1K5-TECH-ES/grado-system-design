@@ -68,10 +68,24 @@ export interface RadioGroupProps {
   required?: boolean
   disabled?: boolean
   orientation?: 'horizontal' | 'vertical'
+  /** card: cada opción es una tarjeta con borde, para opciones con descripción o precio (tarifas, planes). */
+  variant?: 'default' | 'card'
   className?: string
 }
 export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup(
-  { label, options, value, defaultValue = '', onValueChange, name, required, disabled, orientation = 'vertical', className },
+  {
+    label,
+    options,
+    value,
+    defaultValue = '',
+    onValueChange,
+    name,
+    required,
+    disabled,
+    orientation = 'vertical',
+    variant = 'default',
+    className,
+  },
   ref,
 ) {
   const [selected, select] = useValue(value, defaultValue, onValueChange),
@@ -79,7 +93,12 @@ export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(funct
   return (
     <fieldset
       ref={ref}
-      className={cx('k5-radio-group', orientation === 'horizontal' && 'k5-radio-group--horizontal', className)}
+      className={cx(
+        'k5-radio-group',
+        orientation === 'horizontal' && 'k5-radio-group--horizontal',
+        variant === 'card' && 'k5-radio-group--card',
+        className,
+      )}
       disabled={disabled}
     >
       <legend>{label}</legend>

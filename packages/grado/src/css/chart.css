@@ -13,7 +13,7 @@
   gap: var(--k5-space-0-5);
 }
 .k5-chart__title {
-  font-size: var(--k5-text-body);
+  font-size: var(--k5-text-ui);
   font-weight: var(--k5-weight-semibold);
 }
 .k5-chart__description {
@@ -35,7 +35,7 @@
 .k5-chart__tick {
   position: absolute;
   right: 0;
-  color: var(--k5-muted-foreground);
+  color: var(--k5-tertiary-foreground);
   font-size: var(--k5-text-caption);
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -52,7 +52,7 @@
   left: 0;
   right: 0;
   height: 0;
-  border-top: 1px dashed color-mix(in srgb, var(--k5-border) 80%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--k5-border) 60%, transparent);
 }
 .k5-chart__groups {
   position: absolute;
@@ -81,7 +81,7 @@
 .k5-chart__bar {
   flex: 1;
   min-width: 0;
-  border-radius: 3px 3px 0 0;
+  border-radius: 2px 2px 0 0;
   transition: opacity var(--k5-duration-base);
 }
 .k5-chart__bars--stacked .k5-chart__bar {
@@ -90,7 +90,7 @@
   border-radius: 0;
 }
 .k5-chart__bars--stacked .k5-chart__bar:last-child {
-  border-radius: 3px 3px 0 0;
+  border-radius: 2px 2px 0 0;
 }
 .k5-chart__bar--1 {
   background: var(--k5-chart-1);
@@ -122,7 +122,7 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  color: var(--k5-muted-foreground);
+  color: var(--k5-tertiary-foreground);
   font-size: var(--k5-text-caption);
   text-align: center;
   text-overflow: ellipsis;

@@ -151,7 +151,15 @@ export const newComponents = [
 </Drawer>`,
       'const open = ref(false);',
     ),
-    [...modalProps, ['side', 'left · right', 'right']],
+    [
+      ...modalProps,
+      ['side', 'left · right', 'right'],
+      [
+        'modal',
+        'false: vista previa sin velo. La página sigue usable detrás (pasar de una fila a otra) y Escape, con el foco en el panel, o el botón de cierre lo cierran',
+        'true',
+      ],
+    ],
     'Sheet es un alias de Drawer. En móvil el panel ocupa el ancho disponible.',
   ),
   entry(
@@ -164,7 +172,7 @@ export const newComponents = [
     [
       ['items', 'value, label, content, disabled', 'Obligatorio'],
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Primera habilitada'],
-      ['variant', 'line · pill', 'line'],
+      ['variant', 'line · pill · view (pastillas con borde para cambiar de vista una lista)', 'line'],
     ],
     'Vue admite slots con el nombre de cada value para contenido complejo. Flechas izquierda/derecha, Home y End cambian la pestaña; las desactivadas se omiten.',
   ),
@@ -206,6 +214,7 @@ export const newComponents = [
       ['options', 'value, label, description, disabled', 'Obligatorio'],
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Vacío'],
       ['orientation', 'vertical · horizontal', 'vertical'],
+      ['variant', 'default · card (cada opción es una tarjeta con borde; en horizontal, en columnas)', 'default'],
       ['name / required / disabled', 'Atributos del formulario', '—'],
     ],
   ),
@@ -217,7 +226,7 @@ export const newComponents = [
     react('DropdownMenu', `<DropdownMenu label="Acciones" items={items} onAction={(id) => console.log(id)} />`, `const items = ${menu};`),
     vue('DropdownMenu', `<DropdownMenu label="Acciones" :items="items" @action="(id) => console.log(id)" />`, `const items = ${menu};`),
     [
-      ['items', 'id, label, disabled, danger, separator', 'Obligatorio'],
+      ['items', 'id, label, disabled, danger, separator, shortcut', 'Obligatorio'],
       ['onAction / @action', 'Recibe el id de la acción', '—'],
       ['disabled', 'Desactiva el botón', 'false'],
       ['align', 'start · end: borde del botón con el que se alinea; si no cabe, se abre hacia el otro lado', 'end'],
@@ -340,7 +349,7 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       `const enviar = () =>
   toast.success('Oferta enviada', {
     description: 'A Lucía Fernández',
-    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+    action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick: () => toast('Envío deshecho') },
   });`,
     ),
     vue(
@@ -350,11 +359,15 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       `const enviar = () =>
   toast.success('Oferta enviada', {
     description: 'A Lucía Fernández',
-    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+    action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick: () => toast('Envío deshecho') },
   });`,
     ),
     [
-      ['toast(título, opciones)', 'tone, description, action { label, onClick }, duration (0: hasta que se cierre), id', '—'],
+      [
+        'toast(título, opciones)',
+        'tone, description, action { label, onClick, shortcut } (shortcut pinta las teclas y pone aria-keyshortcuts; la app escucha la tecla), duration (0: hasta que se cierre), id',
+        '—',
+      ],
       ['toast.success · warning · error · info', 'El mismo aviso con su tono. error se anuncia con role="alert"', '—'],
       ['toast.promise(promesa, textos)', 'loading mientras sigue; después success o error, que pueden ser funciones', '—'],
       ['toast.dismiss(id?)', 'Cierra un aviso o, sin id, todos', '—'],
@@ -412,6 +425,7 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['content', 'Texto de ayuda (Vue: también slot content); no controles interactivos', 'Obligatorio'],
       ['children / slot', 'Contenido visual del botón de información', 'Icono de información'],
       ['trigger', 'React: el control / Vue: slot trigger. Lo acompaña en lugar del botón de información y recibe aria-describedby', '—'],
+      ['shortcut', "Teclas del atajo del control: ['⌘', 'L']. Van tras el texto y el control recibe aria-keyshortcuts", '—'],
     ],
     'Se abre con puntero o foco. Escape lo descarta. Evita colocar el disparador dentro de contenedores que recorten el contenido.',
   ),
@@ -466,6 +480,11 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Vacío'],
       ['loading / emptyLabel', 'Carga / texto sin resultados', 'false / No hay resultados'],
       ['onQueryChange / @query-change', 'Texto de búsqueda para carga externa', '—'],
+      [
+        'onCreate',
+        'Añade «Crear "…"» al final cuando lo escrito no es una opción y avisa con el texto. Vue: creatable y evento create. La app añade la opción y la selecciona',
+        '—',
+      ],
       ['name / required', 'Valor de formulario / obligatorio', '—'],
     ],
     'Selección única. Filtra sin distinguir tildes. Flechas recorren opciones; Enter selecciona y Escape cancela la búsqueda. La consulta a un servidor la gestiona la aplicación.',
@@ -511,8 +530,14 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['value / modelValue', 'Fecha ISO YYYY-MM-DD, sin zona horaria', 'Vacío'],
       ['min / max', 'Fechas ISO límite', '—'],
       ['required / disabled / name', 'Atributos nativos', '—'],
+      [
+        'natural',
+        'Se escribe la fecha («mañana», «vie», «próximo lunes», «en 2 semanas», «2w», «fin de mes», «20/11», «20 nov») y se elige de la lista, en el idioma de GradoProvider. Es un Combobox: el valor sigue siendo ISO y name lo envía igual',
+        'false',
+      ],
+      ['today', 'Con natural, el día del que parten «mañana» o «en 2 semanas»', 'Hoy'],
     ],
-    'La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado.',
+    'La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado. dateSuggestions(texto, { today, locale, min, max }) de @1k5-tech-es/grado/patterns da las mismas propuestas para otros controles.',
   ),
   entry(
     'date-range-picker',
@@ -637,11 +662,16 @@ function receive(incoming) {
     ),
     [
       ['query', 'React: onQueryChange · Vue: v-model:query', 'Vacío'],
-      ['filters', 'Lista de { id, label }', '[]'],
+      ['filters', 'Lista de { id, label } o, en partes, { id, field, operator, value }', '[]'],
+      [
+        'Editar una parte',
+        'React: onEditFilter(id, part) · Vue: editable y evento edit-filter. part es field, operator o value: abre su selector',
+        '—',
+      ],
       ['Eliminar / limpiar', 'React: onRemoveFilter / onClear · Vue: eventos remove-filter / clear', '—'],
       ['children / slot', 'Controles adicionales', '—'],
     ],
-    'Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado; en Vue activa removable para mostrar su botón de cierre.',
+    'Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado (field, operator, value; React: onEdit · Vue: editable y evento edit); en Vue activa removable para mostrar su botón de cierre.',
   ),
   entry(
     'data-table',
@@ -692,10 +722,16 @@ function receive(incoming) {
         'Alto máximo: scroll propio y cabecera fija. Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales); al imprimir salen esas, así que para papel pagina o exporta CSV',
         '—',
       ],
+      [
+        'groupBy / groupLabel',
+        'Junta las filas por un campo o una función; cada grupo lleva una fila de título con su total que se pliega. groupLabel (Vue: también el slot group) pinta el título. Los grupos salen en el orden en que aparecen en rows; sin filas virtuales',
+        '— / la clave',
+      ],
+      ['collapsedGroups', 'Grupos plegados. React: onCollapsedGroupsChange · Vue: v-model:collapsed-groups', '[]'],
       ['loading / error / emptyLabel', 'Estados de respuesta', 'false / —'],
       ['Acciones y celdas', 'React: rowActions / render · Vue: slots actions / cell-{key}', '—'],
     ],
-    'Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual; conserva la selección en otras páginas.',
+    'Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual, sin las filas de los grupos plegados; conserva la selección en otras páginas.',
   ),
   entry(
     'accordion',

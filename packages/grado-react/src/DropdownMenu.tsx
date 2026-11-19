@@ -1,8 +1,9 @@
 'use client'
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
-import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { moveFocus, overflowsSide, type MenuItem } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId } from './hooks.js'
 
@@ -98,6 +99,7 @@ export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(functi
                 tabIndex={-1}
                 disabled={item.disabled}
                 className={cx('k5-menu__item', item.danger && 'k5-menu__item--danger')}
+                aria-keyshortcuts={item.shortcut?.length ? keyShortcuts(item.shortcut) : undefined}
                 onPointerMove={(event) => {
                   if (!item.disabled) event.currentTarget.focus()
                 }}
@@ -108,6 +110,7 @@ export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(functi
                 }}
               >
                 {item.label}
+                {item.shortcut?.length ? <ShortcutKeys keys={item.shortcut} className="k5-menu__shortcut" /> : null}
               </button>
             </div>
           ))}

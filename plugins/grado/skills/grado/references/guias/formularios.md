@@ -35,6 +35,7 @@ Controles nativos para elegir una opción o escribir con más espacio.
 
 - Usa Select para elegir una opción de una lista corta y conocida, como el tipo de instalación.
 - Usa Textarea para textos largos, como las indicaciones para el instalador.
+- Usa variant="property" para cambiar una propiedad en la cabecera o el lateral de una ficha (estado, responsable, prioridad) sin que parezca un formulario.
 
 **Qué evitar**
 
@@ -46,6 +47,7 @@ Controles nativos para elegir una opción o escribir con más espacio.
 
 - Son controles nativos. El teclado y los lectores de pantalla funcionan sin trabajo extra.
 - Ponlos dentro de Field para que tengan etiqueta, ayuda y error.
+- variant="property" no tiene etiqueta visible: ponle aria-label («Prioridad») o mete el nombre en cada opción.
 
 ## Switch
 
@@ -97,6 +99,7 @@ Elige una sola alternativa con controles nativos y una etiqueta de grupo.
 
 - Úsalo para una opción entre pocas que conviene ver a la vez, como Solo placas o Placas y batería.
 - Añade description si las opciones cambian el precio o el plazo.
+- Usa variant="card" cuando cada opción necesita leerse entera, como tarifas o planes con su precio.
 
 **Qué evitar**
 
@@ -162,10 +165,12 @@ Busca una opción por nombre y confirma una selección con teclado o ratón.
 - Úsalo para elegir un valor de una lista larga, como un cliente o un municipio.
 - Añade keywords para encontrar opciones por otros datos, como el CUPS o el NIF.
 - Usa onQueryChange y loading si las opciones llegan del servidor.
+- Usa onCreate para listas que crecen con el uso, como etiquetas: se crea sin salir del campo.
 
 **Qué evitar**
 
 - Con pocas opciones usa Select o RadioGroup.
+- No uses onCreate si crear necesita más datos que un nombre: abre un Dialog.
 - Para elegir varias opciones usa MultiSelect.
 - Para buscar acciones desde cualquier pantalla usa CommandPalette.
 
@@ -185,18 +190,21 @@ Selector de fecha nativo con los estilos y la validación de Field.
 
 - Úsalo para una fecha concreta en un formulario, como la fecha de instalación.
 - Limita con min y max las fechas que no se pueden elegir.
+- Usa natural para fechas cercanas que se piensan en palabras, como el vencimiento de una tarea o la próxima visita.
 
 **Qué evitar**
 
 - Para un periodo con inicio y fin usa DateRangePicker.
+- No uses natural para fechas lejanas o exactas, como una fecha de nacimiento: el campo nativo es más rápido.
 - Si conviene ver el mes entero, por ejemplo para agendar visitas, usa Calendar.
 
 **Accesibilidad**
 
 - Es el input date nativo. El teclado y lo que se anuncia dependen del navegador.
+- Con natural es un Combobox: flechas para recorrer las fechas propuestas, Enter para elegir y Escape para volver a la fecha que había.
 - Ponlo dentro de Field para que tenga etiqueta y error.
 
-**Nota:** La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado.
+**Nota:** La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado. dateSuggestions(texto, { today, locale, min, max }) de @1k5-tech-es/grado/patterns da las mismas propuestas para otros controles.
 
 ## DateRangePicker
 

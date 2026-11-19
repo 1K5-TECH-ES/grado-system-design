@@ -22,6 +22,10 @@
 .k5-text--muted {
   color: var(--k5-muted-foreground);
 }
+/* Tercer nivel: fechas, contadores, pistas. Pasa AA sobre el fondo y sobre gris. */
+.k5-text--tertiary {
+  color: var(--k5-tertiary-foreground);
+}
 .k5-text--primary {
   color: var(--k5-primary-text);
 }

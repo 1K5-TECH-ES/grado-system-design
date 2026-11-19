@@ -60,6 +60,11 @@ export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
   sidebarFooter?: ReactNode
   /** Barra lateral solo con iconos (escritorio). */
   collapsed?: boolean
+  /**
+   * Consola: cabecera berenjena a todo el ancho, como hasta 0.8. Sin ella, la cabecera y la
+   * barra lateral van sobre el fondo base y el contenido en un panel. Obsoleta: se retira en 0.10.
+   */
+  brandHeader?: boolean
   /** id del <main>, destino del enlace «Saltar al contenido». */
   mainId?: string
   skipLabel?: string
@@ -76,6 +81,7 @@ export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppSh
     sidebar,
     sidebarFooter,
     collapsed = false,
+    brandHeader = false,
     mainId = 'contenido',
     skipLabel,
     menuLabel,
@@ -117,7 +123,7 @@ export const AppShell = forwardRef<HTMLDivElement, AppShellProps>(function AppSh
 
   return (
     <ShellContext.Provider value={{ collapsed }}>
-      <div ref={ref} {...rest} className={cx(appShellClass({ collapsed, navOpen }), className)}>
+      <div ref={ref} {...rest} className={cx(appShellClass({ collapsed, navOpen, brandHeader }), className)}>
         <a className="k5-app__skip" href={`#${mainId}`}>
           {skipLabel ?? m.skipToContent}
         </a>

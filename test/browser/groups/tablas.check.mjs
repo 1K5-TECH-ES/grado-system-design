@@ -52,4 +52,21 @@ export async function check(page, { expect }) {
   await expect(virtual.locator('tbody tr', { hasText: 'Lectura 1000' })).toBeVisible()
   // La cabecera sigue fija y la barra no salta: el alto total no cambia al bajar.
   expect(Math.abs((await scroller.evaluate((element) => element.scrollHeight)) - total)).toBeLessThan(100)
+
+  // Agrupada: un título por provincia con su total; se pliega con el ratón y con el teclado.
+  const grouped = page.locator('#agrupada .k5-data-table')
+  const toggles = grouped.locator('.k5-data-table__group-toggle')
+  await expect(toggles).toHaveText(['Madrid3', 'Valencia3', 'Sevilla3'])
+  await expect(grouped.locator('tbody tr:not(.k5-data-table__group-row)')).toHaveCount(9)
+  await toggles.first().click()
+  await expect(toggles.first()).toHaveAttribute('aria-expanded', 'false')
+  await expect(grouped.locator('tbody tr:not(.k5-data-table__group-row)')).toHaveCount(6)
+  // «Seleccionar la página» deja fuera las filas plegadas.
+  await grouped.locator('thead input[type=checkbox]').check()
+  await expect(grouped.locator('.k5-data-table__selection')).toHaveText('6 filas seleccionadas')
+  await toggles.first().focus()
+  await page.keyboard.press('Enter')
+  await expect(toggles.first()).toHaveAttribute('aria-expanded', 'true')
+  await expect(toggles.first()).toBeFocused()
+  await expect(grouped.locator('tbody tr:not(.k5-data-table__group-row)')).toHaveCount(9)
 }

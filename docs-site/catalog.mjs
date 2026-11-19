@@ -53,6 +53,11 @@ const emit = defineEmits(['guardar']);
       ['size', 'sm · md · lg', 'md'],
       ['loading / disabled', 'boolean', 'false'],
       ['icon / iconOnly / block', 'Componente de icono / boolean / boolean', '—'],
+      [
+        'shortcut',
+        "Teclas del atajo: ['⌘', '↵']. Se pintan dentro (no en iconOnly) y se anuncian con aria-keyshortcuts; la app escucha la tecla",
+        '—',
+      ],
     ],
     note: 'Para enviar un formulario utiliza type="submit". Los botones de solo icono necesitan aria-label. Para enlaces utiliza buttonClass() con el enlace de tu router.',
   },
@@ -137,6 +142,13 @@ const potencia = ref('8,4');
         ),
       ),
       h(G.Field, { label: 'Notas' }, h(G.Textarea, { rows: 3, placeholder: 'Añade indicaciones para el instalador…' })),
+      h(
+        G.Select,
+        { variant: 'property', 'aria-label': 'Prioridad', defaultValue: 'alta' },
+        h('option', { value: 'alta' }, 'Prioridad alta'),
+        h('option', { value: 'media' }, 'Prioridad media'),
+        h('option', { value: 'baja' }, 'Prioridad baja'),
+      ),
     ),
     react: `import { Field, Select, Textarea } from '@1k5-tech-es/grado-react';
 
@@ -146,7 +158,11 @@ const potencia = ref('8,4');
     <option value="bateria">Placas y batería</option>
   </Select>
 </Field>
-<Field label="Notas"><Textarea rows={3} /></Field>`,
+<Field label="Notas"><Textarea rows={3} /></Field>
+<Select variant="property" aria-label="Prioridad" defaultValue="alta">
+  <option value="alta">Prioridad alta</option>
+  <option value="baja">Prioridad baja</option>
+</Select>`,
     vue: `<script setup>
 import { ref } from 'vue';
 import { Field, Select, Textarea } from '@1k5-tech-es/grado-vue';
@@ -165,6 +181,11 @@ const notas = ref('');
 </template>`,
     props: [
       ['Select: size', 'sm · md · lg', 'md'],
+      [
+        'Select: variant',
+        'default · property (chip de propiedad sin borde y a su ancho, para el estado o el responsable de una ficha; con aria-label si no va en Field)',
+        'default',
+      ],
       ['invalid', 'boolean', 'Heredado de Field'],
       ['Atributos nativos', 'disabled, name, rows, placeholder…', '—'],
     ],
@@ -383,6 +404,7 @@ import { PageHeader, Button } from '@1k5-tech-es/grado-vue';
       ['title / subtitle', 'Título / descripción', '—'],
       ['actions', 'Prop React / slot Vue', '—'],
       ['as', 'Nivel del encabezado', 'h1'],
+      ['variant', 'default · bar (barra de 44 px para listados: título pequeño, contenido en medio y acciones a la derecha)', 'default'],
     ],
   },
   {
@@ -529,6 +551,7 @@ import { AppShell, Nav, NavItem, PageHeader, Avatar } from '@1k5-tech-es/grado-v
       ['product', 'Nombre de la aplicación', '—'],
       ['brand / search / actions / sidebar / sidebarFooter', 'Props React / slots Vue (sidebar-footer)', '—'],
       ['collapsed', 'Barra lateral compacta en escritorio', 'false'],
+      ['brandHeader', 'Consola: cabecera berenjena de 0.8. Obsoleta, se retira en 0.10', 'false'],
       ['NavItem: as / active / badge', 'Enlace de router / boolean / contador', 'a / false / —'],
       ['NavGroup: open', 'onOpenChange en React / v-model:open en Vue', 'No controlado'],
     ],

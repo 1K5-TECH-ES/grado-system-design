@@ -57,11 +57,11 @@ button.k5-kpi:focus-visible {
 .k5-kpi__value {
   overflow: hidden;
   color: var(--k5-foreground);
-  font-size: var(--k5-text-title);
+  font-size: var(--k5-text-title-ui);
   font-weight: var(--k5-weight-semibold);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--k5-tracking-title);
-  line-height: var(--k5-leading-title);
+  line-height: var(--k5-leading-title-ui);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

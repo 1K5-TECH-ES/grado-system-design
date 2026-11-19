@@ -48,6 +48,51 @@
 .k5-status--danger {
   --_c: var(--k5-destructive);
 }
+/* Progreso (progress): un anillo de 1,5 px y un relleno que crece con el paso. La forma basta
+   para leerlo sin color; el texto sigue diciendo el estado. */
+.k5-status--progress .k5-status__dot {
+  --_fill: 0%;
+  width: 0.875rem;
+  height: 0.875rem;
+  padding: 2px;
+  border: 1.5px solid var(--_c);
+  background: conic-gradient(var(--_c) var(--_fill), transparent 0) content-box;
+}
+.k5-status--backlog .k5-status__dot {
+  border-style: dashed;
+}
+.k5-status--started .k5-status__dot {
+  --_fill: 50%;
+}
+.k5-status--waiting .k5-status__dot {
+  --_fill: 75%;
+}
+.k5-status--done .k5-status__dot,
+.k5-status--canceled .k5-status__dot {
+  padding: 0;
+  background: var(--_c);
+}
+/* Check y aspa en el color del fondo, dibujados con bordes y degradados. */
+.k5-status--done .k5-status__dot::before {
+  content: '';
+  position: absolute;
+  top: 1.5px;
+  left: 3.25px;
+  width: 3px;
+  height: 5.5px;
+  border: solid var(--k5-card);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.k5-status--canceled .k5-status__dot::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background:
+    linear-gradient(45deg, transparent 43%, var(--k5-card) 43% 57%, transparent 57%),
+    linear-gradient(-45deg, transparent 43%, var(--k5-card) 43% 57%, transparent 57%);
+}
+
 /* En vivo: un anillo del mismo color se expande y se desvanece. */
 .k5-status--pulse .k5-status__dot::after {
   content: '';

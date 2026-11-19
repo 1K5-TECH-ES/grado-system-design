@@ -1,11 +1,11 @@
 /* Casilla y opciones: controles nativos en berenjena, como los checkbox de 1komma5es_help. */
-/* margin-top: centra el control (16 px) con la primera línea del texto (14 px × 1,4). */
+/* margin-top: centra el control (16 px) con la primera línea del texto de la interfaz. */
 .k5-checkbox,
 .k5-radio {
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
-  margin: 0.1125rem 0 0;
+  margin: calc((var(--k5-leading-ui) - 1rem) / 2) 0 0;
   accent-color: var(--k5-primary);
   cursor: pointer;
 }
@@ -23,10 +23,10 @@
 .k5-radio-option {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--k5-space-2-5);
+  gap: var(--k5-space-2);
   color: var(--k5-foreground);
-  font-size: var(--k5-text-body);
-  line-height: 1.4;
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
   cursor: pointer;
 }
 .k5-checkbox-field:has(:disabled),
@@ -72,4 +72,27 @@
 .k5-radio-group--horizontal .k5-radio-group__options {
   flex-flow: row wrap;
   gap: var(--k5-space-3) var(--k5-space-6);
+}
+
+/* variant card: cada opción es una tarjeta con borde; la elegida, con el borde en el color principal. */
+.k5-radio-group--card .k5-radio-group__options {
+  display: grid;
+  gap: var(--k5-space-2);
+}
+.k5-radio-group--card.k5-radio-group--horizontal .k5-radio-group__options {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+.k5-radio-group--card .k5-radio-option {
+  display: flex;
+  padding: var(--k5-space-3);
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius);
+  transition: border-color var(--k5-duration-fast);
+}
+.k5-radio-group--card .k5-radio-option:hover:not(:has(:disabled)) {
+  border-color: var(--k5-input);
+}
+.k5-radio-group--card .k5-radio-option:has(:checked) {
+  border-color: var(--k5-primary);
+  box-shadow: inset 0 0 0 1px var(--k5-primary);
 }

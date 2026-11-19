@@ -149,9 +149,9 @@ test('el panel de contraste revisa el modo claro y, si el tema lo incluye, el os
     contrastChecks(resolveTheme(config))
       .filter((item) => !item.pass)
       .map((item) => `${item.mode} · ${item.label} · ${item.status}`)
-  // Botón, enlaces, texto de marca sobre tinte, secundario y texto sobre el acento; en claro, además, el acento sobre el fondo.
-  assert.equal(contrastChecks(resolveTheme({ dark: true })).length, 11)
-  assert.equal(contrastChecks(resolveTheme({ dark: false })).length, 6)
+  // Botón, enlaces, texto de marca sobre tinte, secundario, terciario y texto sobre el acento; en claro, además, el acento sobre el fondo.
+  assert.equal(contrastChecks(resolveTheme({ dark: true })).length, 13)
+  assert.equal(contrastChecks(resolveTheme({ dark: false })).length, 7)
   // Con los colores de marca, la menta no llega a 3 : 1 sobre blanco: es un aviso. Con «Alto contraste», todo cumple.
   assert.deepEqual(failing({ dark: true }), ['light · Acento sobre el fondo · warning'])
   assert.deepEqual(failing({ dark: true, variant: 'C' }), [])

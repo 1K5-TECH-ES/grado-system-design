@@ -18,7 +18,7 @@ export const Text = defineComponent({
     as: { type: [String, Object, Function] as PropType<string | Component>, default: 'p' },
     /** caption, small, body (por defecto) o lead. */
     size: String as PropType<TextSize>,
-    /** default hereda el color del contexto. muted para texto secundario; el resto, solo para estado. */
+    /** default hereda el color del contexto. muted para texto secundario y tertiary para el tercer nivel (fechas, contadores); el resto, solo para estado. */
     tone: String as PropType<TextTone>,
     weight: String as PropType<TextWeight>,
     /** Una sola línea con puntos suspensivos. */

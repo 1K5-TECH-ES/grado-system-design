@@ -23,6 +23,7 @@ export type {
   StepItem,
   TimelineItem,
   FilterItem,
+  FilterPart,
   SortState,
 } from '@1k5-tech-es/grado/patterns'
 export { Grado, GradoProvider, useGrado, GRADO_KEY, type GradoContext, type GradoOptions } from './Locale.js'

@@ -61,6 +61,7 @@ export const guidelines = {
     use: [
       'Usa Select para elegir una opción de una lista corta y conocida, como el tipo de instalación.',
       'Usa Textarea para textos largos, como las indicaciones para el instalador.',
+      'Usa variant="property" para cambiar una propiedad en la cabecera o el lateral de una ficha (estado, responsable, prioridad) sin que parezca un formulario.',
     ],
     avoid: [
       'Con muchas opciones, como clientes o municipios, usa Combobox.',
@@ -70,6 +71,7 @@ export const guidelines = {
     a11y: [
       'Son controles nativos. El teclado y los lectores de pantalla funcionan sin trabajo extra.',
       'Ponlos dentro de Field para que tengan etiqueta, ayuda y error.',
+      'variant="property" no tiene etiqueta visible: ponle aria-label («Prioridad») o mete el nombre en cada opción.',
     ],
   },
   switch: {
@@ -219,12 +221,18 @@ export const guidelines = {
     use: [
       'Úsalo para abrir la ficha de un cliente o un ticket sin salir del listado.',
       'Úsalo también para filtros avanzados que no caben en FilterBar.',
+      'Con modal en false, como vista previa: la persona pasa de una fila a otra y el panel cambia sin cerrarse.',
     ],
     avoid: [
       'Para una confirmación breve usa AlertDialog.',
+      'No uses modal en false para formularios con cambios sin guardar: con la página viva, se pierden con un clic.',
       'Si el contenido necesita la pantalla entera, crea una página con su propia URL.',
     ],
-    a11y: ['Funciona como Dialog. El foco queda dentro y vuelve al disparador al cerrar.', 'title es obligatorio y nombra el panel.'],
+    a11y: [
+      'Funciona como Dialog. El foco queda dentro y vuelve al disparador al cerrar.',
+      'Con modal en false no lleva aria-modal ni atrapa el foco: Tab sale a la página. Al cerrarlo con el foco dentro, vuelve al último control usado fuera del panel.',
+      'title es obligatorio y nombra el panel.',
+    ],
   },
   tabs: {
     use: [
@@ -254,6 +262,7 @@ export const guidelines = {
     use: [
       'Úsalo para una opción entre pocas que conviene ver a la vez, como Solo placas o Placas y batería.',
       'Añade description si las opciones cambian el precio o el plazo.',
+      'Usa variant="card" cuando cada opción necesita leerse entera, como tarifas o planes con su precio.',
     ],
     avoid: ['Con más de cinco opciones usa Select o Combobox.', 'Para cambiar una vista al momento usa SegmentedControl.'],
     a11y: [
@@ -374,9 +383,11 @@ export const guidelines = {
       'Úsalo para elegir un valor de una lista larga, como un cliente o un municipio.',
       'Añade keywords para encontrar opciones por otros datos, como el CUPS o el NIF.',
       'Usa onQueryChange y loading si las opciones llegan del servidor.',
+      'Usa onCreate para listas que crecen con el uso, como etiquetas: se crea sin salir del campo.',
     ],
     avoid: [
       'Con pocas opciones usa Select o RadioGroup.',
+      'No uses onCreate si crear necesita más datos que un nombre: abre un Dialog.',
       'Para elegir varias opciones usa MultiSelect.',
       'Para buscar acciones desde cualquier pantalla usa CommandPalette.',
     ],
@@ -398,13 +409,16 @@ export const guidelines = {
     use: [
       'Úsalo para una fecha concreta en un formulario, como la fecha de instalación.',
       'Limita con min y max las fechas que no se pueden elegir.',
+      'Usa natural para fechas cercanas que se piensan en palabras, como el vencimiento de una tarea o la próxima visita.',
     ],
     avoid: [
       'Para un periodo con inicio y fin usa DateRangePicker.',
+      'No uses natural para fechas lejanas o exactas, como una fecha de nacimiento: el campo nativo es más rápido.',
       'Si conviene ver el mes entero, por ejemplo para agendar visitas, usa Calendar.',
     ],
     a11y: [
       'Es el input date nativo. El teclado y lo que se anuncia dependen del navegador.',
+      'Con natural es un Combobox: flechas para recorrer las fechas propuestas, Enter para elegir y Escape para volver a la fecha que había.',
       'Ponlo dentro de Field para que tenga etiqueta y error.',
     ],
   },
@@ -457,11 +471,13 @@ export const guidelines = {
     use: [
       'Úsalo encima de un listado para buscar y ver los filtros activos.',
       'Añade otros controles, como Select o MultiSelect, como hijos.',
+      'Pasa los filtros en partes (campo, operador, valores) para que se lean como una frase y cada parte se pueda cambiar sin quitar el filtro.',
     ],
     avoid: ['Para buscar en toda la aplicación usa CommandPalette.', 'Muestra solo los filtros activos, uno por FilterChip.'],
     a11y: [
       'Es una región role="search" y el buscador usa label como nombre.',
       'Cada chip tiene un botón «Quitar filtro» con su etiqueta. Al quitarlo, el foco vuelve al buscador.',
+      'Un filtro en partes es un grupo (role="group") con la frase entera como nombre; cada parte editable es un botón con su texto.',
       'El número de resultados no se anuncia. Hazlo con role="status" en tu listado.',
     ],
   },
@@ -470,6 +486,7 @@ export const guidelines = {
       'Úsalo para listados que se ordenan, seleccionan o paginan, como instalaciones u ofertas.',
       'Marca numeric en las columnas de kWp o importes.',
       'Usa loading, error y emptyLabel para los estados de respuesta.',
+      'Usa groupBy para leer un listado por estado o por responsable sin filtrarlo. Ordena rows por grupo para fijar el orden de los grupos.',
     ],
     avoid: [
       'Con cientos de filas o más no las cargues todas: usa manual y pide cada página al servidor.',
@@ -479,6 +496,7 @@ export const guidelines = {
       'caption es obligatorio y nombra la tabla.',
       'La columna ordenada lleva aria-sort y la selección se anuncia con role="status".',
       'Cada casilla se llama «Seleccionar fila» seguida del rowKey. Usa una clave legible, como la referencia.',
+      'Cada grupo es un <tbody> con su título en <th scope="rowgroup">, un botón con aria-expanded que lo pliega.',
     ],
   },
   accordion: {

@@ -57,15 +57,18 @@ Un panel lateral para abrir una ficha sin abandonar el listado.
 
 - Úsalo para abrir la ficha de un cliente o un ticket sin salir del listado.
 - Úsalo también para filtros avanzados que no caben en FilterBar.
+- Con modal en false, como vista previa: la persona pasa de una fila a otra y el panel cambia sin cerrarse.
 
 **Qué evitar**
 
 - Para una confirmación breve usa AlertDialog.
+- No uses modal en false para formularios con cambios sin guardar: con la página viva, se pierden con un clic.
 - Si el contenido necesita la pantalla entera, crea una página con su propia URL.
 
 **Accesibilidad**
 
 - Funciona como Dialog. El foco queda dentro y vuelve al disparador al cerrar.
+- Con modal en false no lleva aria-modal ni atrapa el foco: Tab sale a la página. Al cerrarlo con el foco dentro, vuelve al último control usado fuera del panel.
 - title es obligatorio y nombra el panel.
 
 **Nota:** Sheet es un alias de Drawer. En móvil el panel ocupa el ancho disponible.

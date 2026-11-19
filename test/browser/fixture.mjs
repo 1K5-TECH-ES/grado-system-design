@@ -27,9 +27,13 @@ const initial = () => ({
   modal: false,
   alert: false,
   drawer: false,
+  preview: null,
   checked: false,
   choice: 'a',
   client: '',
+  labels: [{ value: 'urgente', label: 'Urgente' }],
+  label: '',
+  due: '',
   tab: 'a',
   page: 1,
   toast: false,
@@ -38,7 +42,10 @@ const initial = () => ({
   range: { start: '2026-10-01', end: '2026-10-31' },
   files: [],
   step: 'a',
-  filters: [{ id: 'a', label: 'Estado' }],
+  filters: [
+    { id: 'a', label: 'Estado' },
+    { id: 'b', field: 'Provincia', operator: 'es', value: 'Madrid' },
+  ],
   query: '',
   accordion: [],
   reduced: false,
@@ -232,6 +239,22 @@ function renderUI(framework, state, update) {
       button('Abrir panel', () => update({ drawer: true })),
       C('Drawer', { title: 'Ficha', open: state.drawer, onOpenChange: set('drawer') }, 'Contenido de la ficha'),
     ),
+    // Vista previa sin velo (0.9): se pasa de una fila a otra con el panel abierto.
+    section(
+      'preview',
+      button('Fila 1', () => update({ preview: 'Fila 1' })),
+      button('Fila 2', () => update({ preview: 'Fila 2' })),
+      C(
+        'Drawer',
+        {
+          title: state.preview ?? 'Vista previa',
+          modal: false,
+          open: state.preview != null,
+          onOpenChange: (open) => !open && update({ preview: null }),
+        },
+        'Detalle de la fila',
+      ),
+    ),
     section('tabs', C('Tabs', { items, label: 'Ficha', value: state.tab, onValueChange: set('tab') })),
     section(
       'checkbox',
@@ -248,12 +271,47 @@ function renderUI(framework, state, update) {
       ),
       make('output', null, state.client),
     ),
+    // Combobox con «Crear "…"» (0.9): la app añade la opción y la selecciona.
+    section(
+      'creatable',
+      C(
+        'Field',
+        { label: 'Etiqueta' },
+        C('Combobox', {
+          options: state.labels,
+          value: state.label,
+          onValueChange: set('label'),
+          creatable: true,
+          onCreate: (query) =>
+            update({ labels: [...state.labels, { value: query.toLowerCase(), label: query }], label: query.toLowerCase() }),
+        }),
+      ),
+      make('output', null, state.label),
+    ),
+    // Fecha escrita (0.9): «en 2 semanas» y Enter; hoy es el 19 de noviembre de 2026.
+    section(
+      'natural-date',
+      C(
+        'Field',
+        { label: 'Vence' },
+        C('DatePicker', {
+          natural: true,
+          today: '2026-11-19',
+          name: 'vence',
+          value: state.due,
+          modelValue: state.due,
+          onValueChange: set('due'),
+          'onUpdate:modelValue': set('due'),
+        }),
+      ),
+      make('output', null, state.due),
+    ),
     section(
       'menu',
       C('DropdownMenu', {
         label: 'Acciones',
         items: [
-          { id: 'edit', label: 'Editar' },
+          { id: 'edit', label: 'Editar', shortcut: ['⌘', 'e'] },
           { id: 'disabled', label: 'Desactivado', disabled: true },
           { id: 'delete', label: 'Eliminar', danger: true },
         ],
@@ -301,6 +359,20 @@ function renderUI(framework, state, update) {
         onQueryChange: set('query'),
         filters: state.filters,
         onRemoveFilter: (id) => update({ filters: state.filters.filter((f) => f.id !== id) }),
+        // Filtro en partes (0.9): el operador alterna y el valor pasa a Valencia.
+        editable: true,
+        onEditFilter: (id, part) =>
+          update({
+            filters: state.filters.map((f) =>
+              f.id !== id
+                ? f
+                : part === 'operator'
+                  ? { ...f, operator: f.operator === 'es' ? 'no es' : 'es' }
+                  : part === 'value'
+                    ? { ...f, value: 'Valencia' }
+                    : f,
+            ),
+          }),
         onClear: () => update({ query: '', filters: [] }),
       }),
     ),
@@ -404,7 +476,10 @@ function renderUI(framework, state, update) {
     section(
       'toaster',
       button('Avisar', () => {
-        G.toast.success('Oferta enviada', { duration: 0, action: { label: 'Deshacer', onClick: () => update({ undone: true }) } })
+        G.toast.success('Oferta enviada', {
+          duration: 0,
+          action: { label: 'Deshacer', shortcut: ['⌘', 'z'], onClick: () => update({ undone: true }) },
+        })
         G.toast.error('No se ha podido guardar', { duration: 0 })
         G.toast('Documento subido', { duration: 0 })
         G.toast('Instalación programada', { duration: 0 })

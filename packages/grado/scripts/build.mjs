@@ -502,20 +502,22 @@ const FONT_RANGES = {
   'latin-ext':
     'U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF',
 }
-const FONT_WEIGHTS = [400, 500, 600, 700]
+// Inter variable (0.9): un archivo por alfabeto con todos los pesos. Quien carga este archivo tiene la
+// fuente variable, así que aquí los pesos medio y semibold pasan a 510 y 590, como en la propuesta
+// «Precisión». html:root gana a :root de tokens.css aunque se importe antes. Una app con su propia Inter
+// (estática) no carga fonts.css y se queda en 500 y 600: con una fuente estática, 510 saltaría a 600.
 const faces = []
-for (const weight of FONT_WEIGHTS) {
-  for (const [subset, range] of Object.entries(FONT_RANGES)) {
-    const file = `inter-${subset}-${weight}-normal.woff2`
-    readFileSync(`${root}assets/fonts/${file}`) // falla aquí si falta el archivo
-    faces.push(
-      `@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: ${weight};\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
-    )
-  }
+for (const [subset, range] of Object.entries(FONT_RANGES)) {
+  const file = `inter-${subset}-wght-normal.woff2`
+  readFileSync(`${root}assets/fonts/${file}`) // falla aquí si falta el archivo
+  faces.push(
+    `@font-face {\n  font-family: 'Inter';\n  font-style: normal;\n  font-weight: 100 900;\n  font-display: swap;\n  src: url('../assets/fonts/${file}') format('woff2');\n  unicode-range: ${range};\n}`,
+  )
 }
+faces.push(`html:root {\n  --k5-weight-medium: 510;\n  --k5-weight-semibold: 590;\n}`)
 write(
   'fonts.css',
-  `${banner('fonts.css · Inter 400, 500, 600 y 700. Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
+  `${banner('fonts.css · Inter variable (pesos 100–900; medio 510 y semibold 590). Licencia SIL OFL 1.1: assets/fonts/OFL.txt')}\n${faces.join('\n\n')}\n`,
 )
 
 // ---------- Formato W3C (DTCG), para Tokens Studio y Figma ----------
@@ -593,7 +595,12 @@ function dtcg() {
   return out
 }
 // Las curvas con nombre de CSS, como puntos de Bézier (lo que pide el formato W3C).
-const EASE_POINTS = { ease: [0.25, 0.1, 0.25, 1], 'ease-out': [0, 0, 0.58, 1], 'cubic-bezier(0.32, 0.72, 0, 1)': [0.32, 0.72, 0, 1] }
+const EASE_POINTS = {
+  ease: [0.25, 0.1, 0.25, 1],
+  'ease-out': [0, 0, 0.58, 1],
+  'cubic-bezier(0.32, 0.72, 0, 1)': [0.32, 0.72, 0, 1],
+  'cubic-bezier(0.16, 1, 0.3, 1)': [0.16, 1, 0.3, 1],
+}
 const dtcgData = dtcg()
 write('tokens.dtcg.json', JSON.stringify(dtcgData, null, 2) + '\n')
 

@@ -2,6 +2,124 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
+## 0.9.0 · sin publicar
+
+0.9, «Precisión». Primera entrega del rediseño inspirado en Linear: el armazón se retira para que mande el contenido, Consola baja a 13 px y controles de 28 px, el movimiento se acorta y los iconos pasan a trazo 1,5. Los colores de marca, los tres temas y los cuatro principios no cambian.
+
+### Fundamentos
+
+- Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
+- El configurador de temas de la web calcula los neutros de Consola igual que el tema de serie, en OKLCH con el matiz del principal, y la sección activa de la barra lateral en gris. Con los colores de marca vuelve a reproducir Consola exactamente; para eso, cinco neutros de Consola se ajustan una unidad (el matiz pasa de 305 a 307, el del berenjena).
+- `--k5-tertiary-foreground`: tercer nivel de texto (fechas, contadores, pistas), más claro que `muted-foreground` y con 4,5 : 1 sobre el fondo y sobre gris en Consola y Marca. En Campo es igual que `muted-foreground`, para mantener 7 : 1. El configurador de temas de la web también lo calcula.
+- `--k5-text-title-ui` y `--k5-leading-title-ui`: el título de `PageHeader` y el valor de `Kpi`. 24 px en Consola (antes 28); Marca y Campo siguen en 28.
+- Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
+- Controles de Consola a 24 · 28 · 32 px (antes 28 · 32 · 40). La densidad `compact` baja a 22 · 24 · 28 px. Marca y Campo no cambian.
+- Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
+- Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
+- Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
+- Inter variable: `fonts.css` trae un archivo por alfabeto con todos los pesos (`inter-latin-wght-normal.woff2`, 48 KB, y `inter-latin-ext-wght-normal.woff2`) en lugar de cuatro pesos estáticos. Una página en español descarga 48 KB en lugar de 72–96 KB. Con él, `--k5-weight-medium` pasa a 510 y `--k5-weight-semibold` a 590, un punto más finos y legibles a 13 px. Una app que carga su propia Inter (sin `fonts.css`) se queda en 500 y 600.
+- El presupuesto de `grado.min.css` sube de 17 a 18,5 KB (con gzip) por los atajos, las variantes y props nuevas y la cabecera de 0.8, que se retira en 0.10.
+
+### AppShell
+
+- Consola: la cabecera y la barra lateral van sobre el fondo base (`--k5-sidebar`) y el contenido en un panel con borde y radio de 8 px. Sin cabecera berenjena, la marca deja de competir con la acción principal. En móvil el contenido ocupa todo el ancho, como antes. Marca no cambia.
+- `brandHeader` (React y Vue): recupera la cabecera berenjena de 0.8. Obsoleta: se retira en 0.10.
+- `Nav`: filas del alto del control (28 px), texto de 13 px, iconos más tenues que el texto, títulos de sección en minúscula y gris, contadores sin pastilla. Al pasar y en la sección activa, gris en lugar de menta y lila.
+
+### Componentes
+
+- `Button`: texto de 13 px (antes 12), relleno más corto, primario y destructivo con un brillo interior de 1 px, y el borde del secundario un punto más visible.
+- `Input`, `Select`, `Textarea` y los campos con prefijo: radio de 6 px, texto de la interfaz y un borde que se oscurece al pasar.
+- `DropdownMenu`, `ContextMenu` y `Combobox`: filas del alto del control y opción resaltada en gris en lugar de menta (un solo acento por vista). Los iconos de las opciones van más tenues y se encienden con la opción.
+- `Tooltip`: más compacto, en peso medio.
+- `Dialog`, `AlertDialog` y `Drawer`: cabecera sin línea debajo y título de 16 px, pie sin fondo gris, velo sin desenfoque y entrada más corta (de 0,98 a 1). `Drawer` flota a 8 px del borde con las cuatro esquinas redondeadas; en móvil sigue ocupando la pantalla.
+- `Tabs`: el subrayado de la pestaña activa va en el color del texto, no en berenjena; texto de la interfaz. En `pill`, la elegida lleva un borde fino en lugar de negrita.
+- `Table`: filas de `--k5-row-h`, separadores más tenues y cabecera con la misma línea que el resto.
+- `Kbd`: tecla con fondo gris y sin borde.
+- `SegmentedControl`: la opción elegida lleva un borde fino y se mueve con la curva nueva.
+- `Switch`: 32 × 18 px en Consola; Marca y Campo mantienen 44 × 24.
+- `Card`: título con el texto de la interfaz.
+- `EmptyState`: icono de 24 px a trazo 1,25, y título y descripción con el texto de la interfaz.
+- `CommandPalette`: resultados del alto de 36 px con el texto de la interfaz, grupos con título en minúscula y sin separadores, y resultado activo en gris en lugar de menta.
+- `Popover`: texto de la interfaz.
+- `Alert` y `Toast`: superficie de tarjeta con borde fino; el tono va solo en el icono, el título en el color del texto y la descripción en gris. El fondo de color queda para `Banner`.
+- `ToggleGroup`: la opción activa va en gris levantado en lugar de berenjena.
+- `Accordion`: texto de la interfaz; al pasar, el título se aclara en lugar de volverse berenjena.
+- `Checkbox` y `RadioGroup`: texto de la interfaz, con la casilla centrada en la primera línea.
+- `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
+- `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
+- `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.
+- `DescriptionList`: como un panel de propiedades, con el dato en gris terciario, el valor con el texto de la interfaz y sin líneas entre filas.
+- Gráficos (`BarChart`, `LineChart`, `PriceChart` y los que comparten sus ejes): valores de los ejes y categorías en gris terciario, rejilla continua de 1 px en lugar de discontinua, título con el texto de la interfaz y barras con radio de 2 px.
+- `Banner`: franja de 36 px con el texto de la interfaz.
+- `Stepper`: indicador de 24 px (antes 28) sin halo en el paso actual, y texto de la interfaz.
+- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px y pulso de 1,6 s.
+- `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
+
+### Atajos de teclado
+
+- `Button`: `shortcut` (`['⌘', '↵']`) pinta las teclas dentro del botón y pone `aria-keyshortcuts` (`Meta+Enter`) para que el lector de pantalla anuncie el atajo. En los botones de solo icono las teclas no se pintan: van en su `Tooltip`. La app sigue escuchando la tecla (por ejemplo con `useHotkey`).
+- `Tooltip`: `shortcut` pinta las teclas tras el texto; con `trigger`, el control recibe `aria-keyshortcuts`.
+- `DropdownMenu` y `ContextMenu`: cada opción acepta `shortcut`, que se pinta a la derecha. En `k5-menu`, con `data-shortcut="⌘ D"` en el `<option>`.
+- `toast()`: la acción acepta `shortcut` (`{ label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick }`), que se pinta en el botón y se anuncia con `aria-keyshortcuts`, en `Toaster` de React y Vue y en `k5-toaster`.
+- `keyShortcuts()` en `@1k5-tech-es/grado/classes` traduce las teclas pintadas a los nombres de `aria-keyshortcuts` (`⌘` → `Meta`, `⇧` → `Shift`, `↵` → `Enter`…).
+
+### PageHeader
+
+- `variant="bar"`: una fila de 44 px para listados, con el título pequeño, lo que vaya dentro (un `SegmentedControl` para cambiar de vista, unos filtros) en medio y las acciones a la derecha, sobre una línea. El orden del HTML y del teclado no cambia. El título grande queda para las fichas.
+
+### Combobox
+
+- `onQueryChange` (Vue: `query-change`) avisa también con `''` cuando la búsqueda se vacía al elegir, con Escape o al salir del campo, para volver a la lista de partida.
+- `onCreate` (Vue: `creatable` y el evento `create`): cuando lo escrito no es una opción (sin distinguir mayúsculas), la lista añade al final «Crear "…"» con un más delante. Elegirla avisa con el texto en lugar de seleccionar: la app crea la opción, la añade a `options` y la selecciona. Textos en español, alemán e inglés. `withCreateOption()` y `COMBOBOX_CREATE` en `@1k5-tech-es/grado/core`. En `k5-combobox` todavía no.
+
+### DatePicker
+
+- `natural`: se escribe la fecha y se elige de la lista. Entiende «hoy», «mañana», «pasado mañana», los días de la semana («vie», «próximo lunes»), «la próxima semana», «fin de mes», plazos («en 2 semanas», «2w», «una semana») y fechas («20/11», «20.11.27», «20 nov», «1 de diciembre», «2026-12-03»), en español, alemán e inglés según `GradoProvider`. Las frases salen de `Intl.RelativeTimeFormat`. Es un `Combobox`: el valor sigue siendo `YYYY-MM-DD` y `name` lo envía en un campo oculto. `today` fija el día de partida. `dateSuggestions()` y `shortDateLabel()` en `@1k5-tech-es/grado/patterns`.
+
+### DataTable
+
+- `groupBy`: junta las filas por un campo o por una función (un estado, un responsable). Cada grupo es un `<tbody>` con una fila de título (`<th scope="rowgroup">`) que lleva el nombre, el total y un botón con `aria-expanded` para plegarlo. Los grupos salen en el orden en que aparecen en `rows`, y la columna ordenada manda dentro de cada uno. `groupLabel` (Vue: también el slot `group`) pinta el título; sin él, la clave o «Sin grupo». `collapsedGroups` (React: `onCollapsedGroupsChange` · Vue: `v-model:collapsed-groups`) y `defaultCollapsedGroups` guardan los plegados. «Seleccionar la página» deja fuera las filas plegadas. Con grupos no hay filas virtuales.
+- `groupRows()` en `@1k5-tech-es/grado/core` junta las filas igual para quien pinte su propia tabla.
+- El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos; el de `Button`, de 7 a 7,5 KB por los textos nuevos en tres idiomas, y el del adaptador de react-hook-form, de 24 a 25 KB por `DatePicker` natural.
+
+### Drawer
+
+- `modal={false}` (Vue: `:modal="false"`): vista previa sin velo. Se abre con `show()` en lugar de `showModal()`, sin `aria-modal`, sin bloquear el scroll ni atrapar el foco, así que la persona puede pasar de una fila a otra de la lista con el panel abierto. Escape (con el foco en el panel) y el botón de cierre lo cierran, y el foco vuelve al último control usado fuera del panel.
+
+### FilterBar y FilterChip
+
+- Filtro en partes: `field`, `operator` y `value` (Estado · es uno de · Abierta, En obra) en lugar de una etiqueta, separadas por una línea fina, con el botón de quitar al final. El chip es un grupo con la frase entera como nombre. Con `onEdit` (Vue: `editable` y el evento `edit`) cada parte es un botón que avisa de cuál se ha pulsado (`field`, `operator` o `value`) para abrir su selector sin quitar el filtro. En `FilterBar`, los filtros aceptan las mismas partes y avisan con `onEditFilter(id, part)` (Vue: `editable` y `edit-filter`). `label` sigue sirviendo para los filtros de una pieza.
+- El chip (también el de `MultiSelect`) pasa a gris, sin borde ni tinte morado: el acento queda para la acción principal.
+
+### Text
+
+- `tone="tertiary"`: el tercer nivel de texto, con `--k5-tertiary-foreground`.
+
+### Tabs
+
+- `variant="view"`: pastillas pequeñas con borde y sin línea debajo, para cambiar de vista una lista desde una barra de herramientas (Todos · Abiertos · Esta semana).
+
+### RadioGroup
+
+- `variant="card"`: cada opción es una tarjeta con borde, y la elegida lleva el borde en el color principal. En horizontal se reparten en columnas. Para tarifas o planes con precio y descripción.
+
+### Select
+
+- `variant="property"`: chip de propiedad sin borde, a su ancho y del alto del control pequeño, gris al pasar y con el anillo de foco de siempre. Para cambiar el estado, el responsable o la prioridad en la cabecera o el lateral de una ficha sin que parezca un formulario. Sin etiqueta visible: lleva `aria-label`. En `controlClass('select', { variant: 'property' })` para apps que pintan su propio `<select>`.
+
+### Status
+
+- `progress`: para flujos con orden (un ticket, una instalación), el punto pasa a icono de progreso: discontinuo (`backlog`), vacío (`todo`), medio (`started`), tres cuartos (`waiting`), lleno con check (`done`) y lleno con aspa (`canceled`). La forma se lee sin color. Sin `tone`, cada paso trae el suyo (`started` en aviso, `waiting` en información, `done` en éxito). Es solo CSS sobre el mismo `k5-status__dot`.
+
+### Al actualizar desde 0.8.0
+
+- **Rompe** · `AppShell` en Consola cambia de aspecto: sin cabecera berenjena y con el contenido en un panel. Si la app necesita la cabecera de antes mientras se adapta, añade `brandHeader` (React) o `brand-header` (Vue); se retira en 0.10. Si la app pintaba su propio fondo en `<main>`, quítalo: el panel ya lo pone.
+- Los controles de Consola miden 4 px menos y el texto de los botones pasa de 12 a 13 px. Revisa las maquetas ajustadas a mano (alturas fijas alrededor de un botón o un campo). En pantallas táctiles no cambia nada: `comfortable` sigue en 36 · 44 · 48.
+- `Avatar` mide 4 px menos (24 y 20 px). Si una maqueta contaba con 28 px, usa `size="lg"` o ajusta el hueco.
+- Los archivos estáticos de Inter (`assets/fonts/inter-latin-400-normal.woff2` y los demás pesos) ya no están en el paquete. Si la app los precargaba o los copiaba, usa `inter-latin-wght-normal.woff2` y `inter-latin-ext-wght-normal.woff2`; con `fonts.css` no hay que hacer nada.
+- Los menús ya no resaltan en menta. Si una app contaba con ese color para algo, usa `--k5-accent` directamente.
+
 ## 0.8.0 · sin publicar
 
 ### Arreglos

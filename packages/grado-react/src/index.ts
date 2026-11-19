@@ -60,6 +60,7 @@ export type {
   StepItem,
   TimelineItem,
   FilterItem,
+  FilterPart,
   SortState,
 } from '@1k5-tech-es/grado/patterns'
 export { GradoProvider, useGrado, type GradoProviderProps } from './Locale.js'

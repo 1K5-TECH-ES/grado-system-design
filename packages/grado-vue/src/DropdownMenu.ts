@@ -1,7 +1,8 @@
 import { defineComponent, h, onBeforeUnmount, ref, watch, type PropType } from 'vue'
-import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { moveFocus, overflowsSide, type MenuItem } from '@1k5-tech-es/grado/patterns'
 import { Button } from './Button.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { pathIcon } from './PathIcon.js'
 import { autoId } from './helpers.js'
 
@@ -107,6 +108,7 @@ export const DropdownMenu = defineComponent({
                         tabindex: -1,
                         disabled: item.disabled,
                         class: cx('k5-menu__item', item.danger && 'k5-menu__item--danger'),
+                        'aria-keyshortcuts': item.shortcut?.length ? keyShortcuts(item.shortcut) : undefined,
                         onPointermove: (event: PointerEvent) => {
                           if (!item.disabled) (event.currentTarget as HTMLElement).focus()
                         },
@@ -116,7 +118,7 @@ export const DropdownMenu = defineComponent({
                           emit('action', item.id)
                         },
                       },
-                      item.label,
+                      item.shortcut?.length ? [item.label, shortcutKeys(item.shortcut, 'k5-menu__shortcut')] : item.label,
                     ),
                   ]),
                 ),

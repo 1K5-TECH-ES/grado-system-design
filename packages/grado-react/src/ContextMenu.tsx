@@ -1,7 +1,8 @@
 'use client'
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { cx } from '@1k5-tech-es/grado/classes'
+import { cx, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 import { useAutoId } from './hooks.js'
 
@@ -132,6 +133,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
                 tabIndex={-1}
                 disabled={item.disabled}
                 className={cx('k5-menu__item', item.danger && 'k5-menu__item--danger')}
+                aria-keyshortcuts={item.shortcut?.length ? keyShortcuts(item.shortcut) : undefined}
                 onPointerMove={(event) => {
                   if (!item.disabled) event.currentTarget.focus()
                 }}
@@ -141,6 +143,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
                 }}
               >
                 {item.label}
+                {item.shortcut?.length ? <ShortcutKeys keys={item.shortcut} className="k5-menu__shortcut" /> : null}
               </button>
             </div>
           ))}

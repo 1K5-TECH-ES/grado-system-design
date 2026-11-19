@@ -176,7 +176,7 @@ Párrafo o texto en línea con un paso de la escala tipográfica.
 - El color no se anuncia: el texto debe entenderse sin él, como «Conectada» o «Pendiente de legalizar».
 - Los tonos de estado usan --k5-*-text y llegan a 4,5 : 1 en los dos temas y los dos modos.
 
-**Nota:** Usa --k5-text-* y --k5-leading-* de cada paso. Los tonos de estado usan --k5-*-text, que llegan a 4,5 : 1 sobre el fondo y sobre su tinte. Text no deja márgenes: separa los párrafos con Stack.
+**Nota:** Usa --k5-text-* y --k5-leading-* de cada paso. Los tonos de estado usan --k5-*-text, que llegan a 4,5 : 1 sobre el fondo y sobre su tinte. tertiary (--k5-tertiary-foreground) es el tercer nivel de texto, para fechas, contadores y pistas: más claro que muted y con 4,5 : 1 sobre el fondo y sobre gris (7 : 1 en Campo, igual que muted). Text no deja márgenes: separa los párrafos con Stack.
 
 ## Heading
 

@@ -1,5 +1,5 @@
-// El tema "consola" tiene que reproducir 1komma5es_help. Las únicas diferencias
-// permitidas son las correcciones de marca y las de contraste de abajo.
+// El tema "consola" partió de 1komma5es_help. Las únicas diferencias permitidas son las
+// correcciones de marca, las de contraste y las de 0.9 («Precisión») de abajo.
 // El fixture es una copia de Frontend/src/assets/index.css de 1komma5es_help.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
@@ -55,9 +55,40 @@ const CONTRAST = {
   },
 }
 
+// 0.9 («Precisión»): neutros con un tinte berenjena mínimo, calculados en OKLCH (matiz 305);
+// en oscuro, superficies más separadas por luz y un morado más suave. Las sombras de
+// superposición son más largas y, en oscuro, llevan un brillo superior de 1 px.
+const PRECISION = {
+  light: {
+    muted: '#F1EFF3',
+    'muted-foreground': '#5D5962',
+    border: '#E7E5EA',
+    input: '#DAD8DE',
+    secondary: '#F1EFF3',
+    'secondary-foreground': '#222222',
+  },
+  dark: {
+    background: '#141216',
+    foreground: '#F4F3F6',
+    card: '#18161B',
+    'card-foreground': '#F4F3F6',
+    popover: '#1D1A20',
+    'popover-foreground': '#F4F3F6',
+    muted: '#221F25',
+    'muted-foreground': '#ADA9B1',
+    border: '#2A272E',
+    input: '#353139',
+    secondary: '#242127',
+    'secondary-foreground': '#F4F3F6',
+    primary: '#B98CEA',
+    ring: '#B98CEA',
+  },
+}
+const PRECISION_SHADOWS = ['overlay', 'popover']
+
 const CORRECTIONS = {
-  light: { ...BRAND.light, ...CONTRAST.light },
-  dark: { ...BRAND.dark, ...CONTRAST.dark },
+  light: { ...BRAND.light, ...CONTRAST.light, ...PRECISION.light },
+  dark: { ...BRAND.dark, ...CONTRAST.dark, ...PRECISION.dark },
 }
 
 for (const mode of ['light', 'dark']) {
@@ -66,6 +97,7 @@ for (const mode of ['light', 'dark']) {
     const differences = {}
     for (const [name, value] of Object.entries(help[mode])) {
       if (name.startsWith('shadow-')) {
+        if (PRECISION_SHADOWS.includes(name.slice(7))) continue
         assert.equal(ours.shadow[name.slice(7)], value, `sombra ${name}`)
         continue
       }

@@ -1,6 +1,6 @@
 /** Comportamiento compartido por React y Vue, sin depender de ninguno de los dos. */
 import { DEFAULT_LOCALE, MESSAGES, formatMessage } from './messages.js'
-import { collator, dateTimeFormat, numberFormat } from './intl.js'
+import { collator, dateTimeFormat, numberFormat, relativeTimeFormat } from './intl.js'
 
 const ES = MESSAGES[DEFAULT_LOCALE]
 // Acepta solo un objeto de textos: así selectionLabel funciona también en array.map().
@@ -322,6 +322,123 @@ export function monthTitle(month, locale = DEFAULT_LOCALE) {
 }
 export function dateLabel(iso, locale = DEFAULT_LOCALE) {
   return dateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(utc(iso))
+}
+
+// ---------- Fechas escritas (0.9) ----------
+
+// Palabras que sobran delante de un día: «próximo viernes», «next friday», «am Freitag» (ya sin acentos).
+const DATE_FILLERS = /^(?:el|la|este|esta|proximo|proxima|next|this|on|am|diesen|nachsten|nachster|nachste|kommenden)\s+/
+const DATE_UNITS = {
+  day: ['dia', 'dias', 'day', 'days', 'tag', 'tage', 'tagen'],
+  week: ['semana', 'semanas', 'week', 'weeks', 'woche', 'wochen'],
+  month: ['mes', 'meses', 'month', 'months', 'monat', 'monate', 'monaten'],
+  year: ['ano', 'anos', 'year', 'years', 'jahr', 'jahre', 'jahren'],
+}
+const DATE_ONE = ['un', 'una', 'uno', 'a', 'an', 'one', 'ein', 'eine', 'einen', 'einem', 'einer']
+const END_OF_MONTH = { es: 'Fin de mes', de: 'Monatsende', en: 'End of month' }
+const daysIn = (year, month) => new Date(Date.UTC(year, month, 0)).getUTCDate()
+const validIso = (year, month, day) =>
+  month >= 1 && month <= 12 && day >= 1 && day <= daysIn(year, month) ? toIso(year, month, day) : null
+
+/** Fecha corta para el campo: «vie, 20 nov», con el año si no es el de today. */
+export function shortDateLabel(iso, { today = todayIso(), locale = DEFAULT_LOCALE } = {}) {
+  const options = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }
+  if (iso.slice(0, 4) !== today.slice(0, 4)) options.year = 'numeric'
+  return dateTimeFormat(locale, options).format(utc(iso))
+}
+
+/** Fechas escritas con números: «2026-11-20», «20/11», «20.11.26», «20 nov», «20 de noviembre», «nov 20», «20». */
+function explicitDates(q, today, locale) {
+  const t = parseIso(today)
+  // Sin año: la próxima vez que llega ese día (este año o el siguiente).
+  const upcoming = (month, day, year) => {
+    if (year) return validIso(year < 100 ? 2000 + year : year, month, day)
+    const iso = validIso(t.year, month, day)
+    return iso && iso >= today ? iso : validIso(t.year + 1, month, day)
+  }
+  const months = Array.from({ length: 12 }, (_, i) =>
+    normalizeSearch(dateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(utc(toIso(2026, i + 1, 1)))),
+  )
+  const monthOf = (word) => (word.length >= 3 ? months.findIndex((name) => name.startsWith(word)) + 1 : 0)
+  let m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(q)
+  if (m) return [validIso(+m[1], +m[2], +m[3])]
+  if ((m = /^(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2}|\d{4}))?\.?$/.exec(q))) return [upcoming(+m[2], +m[1], m[3] && +m[3])]
+  if ((m = /^(\d{1,2})\.?\s+(?:de\s+)?([a-z]+)\.?(?:\s+(?:de\s+)?(\d{4}))?$/.exec(q)) && monthOf(m[2]))
+    return [upcoming(monthOf(m[2]), +m[1], m[3] && +m[3])]
+  if ((m = /^([a-z]+)\.?\s+(\d{1,2})(?:,?\s+(\d{4}))?$/.exec(q)) && monthOf(m[1])) return [upcoming(monthOf(m[1]), +m[2], m[3] && +m[3])]
+  if ((m = /^(\d{1,2})$/.exec(q))) {
+    // Solo el día: este mes si aún no ha pasado; si no, el siguiente que lo tenga.
+    for (let i = 0; i < 3; i++) {
+      const first = addMonths(`${today.slice(0, 7)}-01`, i)
+      const iso = validIso(+first.slice(0, 4), +first.slice(5, 7), +m[1])
+      if (iso && iso >= today) return [iso]
+    }
+  }
+  return []
+}
+
+/**
+ * Fechas que propone un campo de fecha a partir de lo que se escribe, en el idioma de locale:
+ * «mañana», «vie», «próximo lunes», «en 2 semanas», «2w», «fin de mes», «20/11», «20 nov».
+ * Sin texto, unas cuantas de partida. Devuelve [{ value: 'YYYY-MM-DD', label: 'Mañana · vie, 20 nov' }]
+ * dentro de min y max, sin repetir fecha.
+ */
+export function dateSuggestions(query, { today = todayIso(), locale = DEFAULT_LOCALE, weekStartsOn = 1, min, max, limit = 6 } = {}) {
+  const lang = locale.slice(0, 2)
+  const cap = (text) => text.charAt(0).toLocaleUpperCase(locale) + text.slice(1)
+  const auto = relativeTimeFormat(locale, { numeric: 'auto' }),
+    always = relativeTimeFormat(locale, { numeric: 'always' })
+  const nextWeek = startOfWeek(addDays(today, 7), weekStartsOn),
+    endOfMonth = addDays(addMonths(`${today.slice(0, 7)}-01`, 1), -1)
+  // Frases fijas: hoy, mañana, pasado mañana, ayer, los siete días que vienen, la semana y el mes próximos.
+  const fixed = [
+    ...[0, 1, 2, -1].map((n) => [cap(auto.format(n, 'day')), addDays(today, n)]),
+    ...Array.from({ length: 7 }, (_, i) => {
+      const iso = addDays(today, i + 1)
+      return [cap(dateTimeFormat(locale, { weekday: 'long', timeZone: 'UTC' }).format(utc(iso))), iso]
+    }),
+    [cap(auto.format(1, 'week')), nextWeek],
+    [cap(auto.format(1, 'month')), addMonths(`${today.slice(0, 7)}-01`, 1)],
+    ...(END_OF_MONTH[lang] ? [[END_OF_MONTH[lang], endOfMonth]] : []),
+  ]
+  const q = normalizeSearch(query).replace(/\s+/g, ' ')
+  const found = []
+  if (!q) found.push(fixed[0], fixed[1], fixed[11], fixed[fixed.length - 1])
+  else {
+    for (const iso of explicitDates(q, today, locale)) if (iso) found.push([null, iso])
+    // «en 2 semanas», «in 3 days», «in 2 Wochen», «2w», «una semana»; solo el número propone días, semanas y meses.
+    const m = /^(?:(?:en|dentro de|in)\s+)?(\d{1,3}|[a-z]+)\s*([a-z]*)$/.exec(q)
+    const count = m && (/^\d+$/.test(m[1]) ? +m[1] : DATE_ONE.includes(m[1]) && m[2] ? 1 : 0)
+    if (count) {
+      const units = Object.keys(DATE_UNITS).filter((unit) =>
+        m[2] ? DATE_UNITS[unit].some((word) => word.startsWith(m[2])) : unit !== 'year',
+      )
+      for (const unit of units) {
+        const iso =
+          unit === 'day'
+            ? addDays(today, count)
+            : unit === 'week'
+              ? addDays(today, 7 * count)
+              : addMonths(today, unit === 'year' ? 12 * count : count)
+        found.push([cap(always.format(count, unit)), iso])
+      }
+    }
+    const word = q.replace(DATE_FILLERS, '')
+    for (const [phrase, iso] of fixed) {
+      const text = normalizeSearch(phrase)
+      if (text.startsWith(word) || text.includes(` ${word}`)) found.push([phrase, iso])
+    }
+  }
+  const seen = new Set()
+  const out = []
+  for (const [phrase, iso] of found) {
+    if (seen.has(iso) || (min && iso < min) || (max && iso > max)) continue
+    seen.add(iso)
+    const date = shortDateLabel(iso, { today, locale })
+    out.push({ value: iso, label: phrase ? `${phrase} · ${date}` : date })
+    if (out.length === limit) break
+  }
+  return out
 }
 
 /** Siguiente valor de un rango al elegir `iso`: primero el inicio, después el final. */

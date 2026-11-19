@@ -1,5 +1,5 @@
-/* Tag: etiqueta que se puede quitar (provincias, palabras clave). Fondo neutro sin borde:
-   Badge solo informa y FilterChip marca un filtro activo. */
+/* Tag: etiqueta que se puede quitar (provincias, palabras clave). Pastilla con línea fina y sin
+   fondo: Badge informa con un tinte y FilterChip marca un filtro activo en gris. */
 .k5-tag {
   display: inline-flex;
   align-items: center;
@@ -7,8 +7,9 @@
   max-width: 100%;
   min-height: 1.5rem;
   padding: 0 var(--k5-space-2);
-  border-radius: var(--k5-radius-xs);
-  background: var(--k5-muted);
+  border: 1px solid var(--k5-border);
+  border-radius: 999px;
+  background: transparent;
   color: var(--k5-foreground);
   font-size: var(--k5-text-small);
   font-weight: var(--k5-weight-medium);
@@ -38,7 +39,7 @@
   height: 1.25rem;
   padding: 0;
   border: 0;
-  border-radius: var(--k5-radius-xs);
+  border-radius: 50%;
   background: transparent;
   color: var(--k5-muted-foreground);
   cursor: pointer;

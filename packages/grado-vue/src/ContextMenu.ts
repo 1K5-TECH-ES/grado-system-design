@@ -1,6 +1,7 @@
 import { defineComponent, h, nextTick, onBeforeUnmount, ref, watch, type PropType } from 'vue'
-import { cx } from '@1k5-tech-es/grado/classes'
+import { cx, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 import { autoId } from './helpers.js'
 
@@ -131,6 +132,7 @@ export const ContextMenu = defineComponent({
                         tabindex: -1,
                         disabled: item.disabled,
                         class: cx('k5-menu__item', item.danger && 'k5-menu__item--danger'),
+                        'aria-keyshortcuts': item.shortcut?.length ? keyShortcuts(item.shortcut) : undefined,
                         onPointermove: (event: PointerEvent) => {
                           if (!item.disabled) (event.currentTarget as HTMLElement).focus()
                         },
@@ -139,7 +141,7 @@ export const ContextMenu = defineComponent({
                           emit('action', item.id)
                         },
                       },
-                      item.label,
+                      item.shortcut?.length ? [item.label, shortcutKeys(item.shortcut, 'k5-menu__shortcut')] : item.label,
                     ),
                   ]),
                 ),

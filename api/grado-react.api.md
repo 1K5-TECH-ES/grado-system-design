@@ -2,7 +2,7 @@
 
 Generado por `npm run api`. Si cambia sin querer, alguien ha cambiado la API pública.
 
-Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BatteryLevelProps, BatteryState, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyIconName, EnergyIconProps, EnergyNode, EnergyNodeName, EnergyNodeState, ErrorSummaryItem, ErrorSummaryProps, FieldCheck, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, HeatmapProps, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, PriceChartProps, PriceSlot, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TariffPeriod, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
+Tipos exportados: AccordionItem, AccordionProps, ActionBarProps, AddressInputProps, AddressOption, AddressValue, AlertProps, AppLogoProps, AppSearchProps, AppShellProps, AvatarGroupProps, AvatarItem, AvatarProps, BadgeProps, BannerProps, BannerTone, BarChartProps, BatteryLevelProps, BatteryState, BreadcrumbItem, BreadcrumbsProps, ButtonProps, CalendarProps, CardDescriptionProps, CardProps, CardSectionProps, CardTitleProps, ChartPoint, ChartSeries, CheckboxProps, ChoiceOption, ComboboxProps, CommandGroup, CommandItem, CommandPaletteProps, ContainerProps, ContainerSize, ContextMenuProps, CopyButtonProps, DataColumn, DataTableProps, DatePickerProps, DateRangePickerProps, DateRangeValue, DescriptionItem, DescriptionLayout, DescriptionListItem, DescriptionListProps, DialogProps, DonutProps, DonutSegment, DonutSlice, DrawerProps, DropdownMenuProps, EmptyStateProps, EnergyFlowDirection, EnergyFlowProps, EnergyIconName, EnergyIconProps, EnergyNode, EnergyNodeName, EnergyNodeState, ErrorSummaryItem, ErrorSummaryProps, FieldCheck, FieldProps, FileUploadProps, FilterBarProps, FilterChipProps, FilterItem, FilterPart, GradoProviderProps, GridColumns, GridMinItemWidth, GridProps, HeadingLevel, HeadingProps, HeadingSize, HeatmapProps, IbanInputProps, IconButtonProps, IconButtonVariant, IconComponent, InputProps, KbdProps, KpiGroupProps, KpiProps, LineChartProps, LinkProps, LinkTone, LinkUnderline, MenuItem, MessageKey, Messages, MeterLevel, MeterLevelName, MeterProps, MeterVariant, MultiSelectProps, NavGroupProps, NavItemProps, NavProps, NavSectionProps, NifInputProps, NifKind, NumberInputProps, PageHeaderProps, PaginationProps, PasswordInputProps, PhoneCountry, PhoneCountryCode, PhoneInputProps, PopoverAlign, PopoverProps, PopoverSide, PriceChartProps, PriceSlot, ProgressProps, ProgressState, ProgressTone, RadioGroupProps, RowStatusTone, SearchInputProps, SegmentedControlProps, SelectProps, SeparatorOrientation, SeparatorProps, SkeletonProps, SliderMark, SliderProps, SmallSize, SortState, SpaceStep, SparklineProps, SparklineTone, SpinnerProps, StackAlign, StackDirection, StackJustify, StackProps, StatusProps, StatusTone, StepItem, StepperProps, SwitchProps, TabItem, TableProps, TabsProps, TagProps, TariffPeriod, TextareaProps, TextProps, TextSize, TextTone, TextWeight, TimelineItem, TimelineProps, TimePickerProps, ToastAction, ToasterProps, ToastFunction, ToastItem, ToastOptions, ToastPromiseMessages, ToastProps, ToggleGroupProps, ToggleOption, TooltipProps, UploadItem
 
 ## Accordion
 
@@ -115,6 +115,7 @@ ref: HTMLDivElement · admite además los atributos HTML de ese elemento
   actions?: ReactNode
   banner?: ReactNode
   brand?: ReactNode
+  brandHeader?: boolean
   collapsed?: boolean
   mainId?: string
   menuLabel?: string
@@ -253,6 +254,7 @@ ref: HTMLButtonElement · admite además los atributos HTML de ese elemento
   icon?: IconComponent
   iconOnly?: boolean
   loading?: boolean
+  shortcut?: string[]
   size?: Size
   variant?: ButtonVariant
 ```
@@ -357,6 +359,7 @@ ref: HTMLInputElement
   label?: string
   loading?: boolean
   name?: string
+  onCreate?: ((query: string) => void)
   onQueryChange?: ((query: string) => void)
   onValueChange?: ((value: string) => void)
   options: ChoiceOption[]
@@ -438,16 +441,21 @@ ref: HTMLDivElement
 ```ts
   caption: string
   className?: string
+  collapsedGroups?: string[]
   columnPicker?: boolean
   columns: DataColumn<T>[]
+  defaultCollapsedGroups?: string[]
   defaultHiddenColumns?: string[]
   defaultSort?: SortState | null
   emptyLabel?: string
   error?: string
+  groupBy?: (keyof T & string) | ((row: T) => string)
+  groupLabel?: ((key: string) => ReactNode)
   hiddenColumns?: string[]
   loading?: boolean
   manual?: boolean
   maxHeight?: string | number
+  onCollapsedGroupsChange?: ((keys: string[]) => void)
   onHiddenColumnsChange?: ((keys: string[]) => void)
   onPageChange?: ((page: number) => void)
   onSelectionChange?: ((keys: string[]) => void)
@@ -468,8 +476,10 @@ ref: HTMLDivElement
 ref: HTMLInputElement · admite además los atributos HTML de ese elemento
 
 ```ts
+  natural?: boolean
   onValueChange?: ((value: string) => void)
   size?: "sm" | "md" | "lg"
+  today?: string
 ```
 
 ## DateRangePicker
@@ -563,6 +573,7 @@ ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
   footer?: ReactNode
   fullscreen?: boolean
   header?: boolean
+  modal?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"
@@ -690,6 +701,7 @@ ref: HTMLDivElement
   filters?: FilterItem[]
   label?: string
   onClear?: (() => void)
+  onEditFilter?: ((id: string, part: FilterPart) => void)
   onQueryChange?: ((query: string) => void)
   onRemoveFilter?: ((id: string) => void)
   placeholder?: string
@@ -702,8 +714,12 @@ ref: HTMLSpanElement
 
 ```ts
   className?: string
-  label: string
+  field?: string
+  label?: string
+  onEdit?: ((part: FilterPart) => void)
   onRemove?: (() => void)
+  operator?: string
+  value?: string
 ```
 
 ## focusField
@@ -1083,6 +1099,7 @@ ref: HTMLElement · admite además los atributos HTML de ese elemento
   as?: "h2" | "h1"
   subtitle?: ReactNode
   title: ReactNode
+  variant?: "default" | "bar"
 ```
 
 ## Pagination
@@ -1222,6 +1239,7 @@ ref: HTMLFieldSetElement
   orientation?: "horizontal" | "vertical"
   required?: boolean
   value?: string
+  variant?: "default" | "card"
 ```
 
 ## SearchInput
@@ -1264,6 +1282,7 @@ ref: HTMLSelectElement · admite además los atributos HTML de ese elemento
 ```ts
   invalid?: boolean
   size?: Size
+  variant?: SelectVariant
 ```
 
 ## Separator
@@ -1290,6 +1309,7 @@ ref: HTMLDialogElement · admite además los atributos HTML de ese elemento
   footer?: ReactNode
   fullscreen?: boolean
   header?: boolean
+  modal?: boolean
   onOpenChange?: ((open: boolean) => void)
   open?: boolean
   side?: "left" | "right"
@@ -1387,6 +1407,7 @@ ref: HTMLElement · admite además los atributos HTML de ese elemento
 ref: HTMLSpanElement · admite además los atributos HTML de ese elemento
 
 ```ts
+  progress?: StatusProgress
   pulse?: boolean
   tone?: RowStatusTone
 ```
@@ -1434,7 +1455,7 @@ ref: HTMLDivElement
   label: string
   onValueChange?: ((value: string) => void)
   value?: string
-  variant?: "line" | "pill"
+  variant?: "line" | "view" | "pill"
 ```
 
 ## Tag
@@ -1575,6 +1596,7 @@ ref: HTMLSpanElement
   className?: string
   content: ReactNode
   label?: string
+  shortcut?: string[]
   trigger?: ReactElement<unknown, string | React.JSXElementConstructor<any>>
 ```
 

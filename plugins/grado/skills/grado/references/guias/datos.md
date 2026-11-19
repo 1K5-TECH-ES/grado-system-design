@@ -115,6 +115,7 @@ Búsqueda y filtros activos visibles, fáciles de quitar individualmente.
 
 - Úsalo encima de un listado para buscar y ver los filtros activos.
 - Añade otros controles, como Select o MultiSelect, como hijos.
+- Pasa los filtros en partes (campo, operador, valores) para que se lean como una frase y cada parte se pueda cambiar sin quitar el filtro.
 
 **Qué evitar**
 
@@ -125,9 +126,10 @@ Búsqueda y filtros activos visibles, fáciles de quitar individualmente.
 
 - Es una región role="search" y el buscador usa label como nombre.
 - Cada chip tiene un botón «Quitar filtro» con su etiqueta. Al quitarlo, el foco vuelve al buscador.
+- Un filtro en partes es un grupo (role="group") con la frase entera como nombre; cada parte editable es un botón con su texto.
 - El número de resultados no se anuncia. Hazlo con role="status" en tu listado.
 
-**Nota:** Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado; en Vue activa removable para mostrar su botón de cierre.
+**Nota:** Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado (field, operator, value; React: onEdit · Vue: editable y evento edit); en Vue activa removable para mostrar su botón de cierre.
 
 ## DataTable
 
@@ -138,6 +140,7 @@ Tabla con ordenación, selección, paginación y estados de carga, error y vací
 - Úsalo para listados que se ordenan, seleccionan o paginan, como instalaciones u ofertas.
 - Marca numeric en las columnas de kWp o importes.
 - Usa loading, error y emptyLabel para los estados de respuesta.
+- Usa groupBy para leer un listado por estado o por responsable sin filtrarlo. Ordena rows por grupo para fijar el orden de los grupos.
 
 **Qué evitar**
 
@@ -149,8 +152,9 @@ Tabla con ordenación, selección, paginación y estados de carga, error y vací
 - caption es obligatorio y nombra la tabla.
 - La columna ordenada lleva aria-sort y la selección se anuncia con role="status".
 - Cada casilla se llama «Seleccionar fila» seguida del rowKey. Usa una clave legible, como la referencia.
+- Cada grupo es un <tbody> con su título en <th scope="rowgroup">, un botón con aria-expanded que lo pliega.
 
-**Nota:** Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual; conserva la selección en otras páginas.
+**Nota:** Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual, sin las filas de los grupos plegados; conserva la selección en otras páginas.
 
 ## BarChart
 

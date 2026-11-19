@@ -163,3 +163,38 @@ test('el cursor se queda detrás de la misma cifra al reformatear', () => {
   assert.equal(caretAfter('abc', 0), 0)
   assert.equal(caretAfter('abc', 9), 3)
 })
+
+// Fechas escritas (0.9): DatePicker natural. Jueves 19 de noviembre de 2026.
+test('dateSuggestions: palabras, días de la semana, plazos y fechas en tres idiomas', async () => {
+  const { dateSuggestions, shortDateLabel } = await import('@1k5-tech-es/grado/patterns')
+  const today = '2026-11-19'
+  const es = (q, extra = {}) => dateSuggestions(q, { today, ...extra })
+  const values = (list) => list.map((item) => item.value)
+  assert.deepEqual(values(es('')), ['2026-11-19', '2026-11-20', '2026-11-23', '2026-11-30'], 'hoy, mañana, la próxima semana y fin de mes')
+  assert.equal(es('')[1].label, 'Mañana · vie, 20 nov')
+  assert.deepEqual(values(es('ma')), ['2026-11-20', '2026-11-21', '2026-11-24'], 'mañana, pasado mañana y martes')
+  assert.deepEqual(values(es('Próximo VIERNES')), ['2026-11-20'])
+  assert.deepEqual(values(es('en 2 semanas')), ['2026-12-03'])
+  assert.deepEqual(values(es('2w')), ['2026-12-03'])
+  assert.deepEqual(values(es('una semana')), ['2026-11-26'])
+  assert.deepEqual(
+    values(es('3')),
+    ['2026-12-03', '2026-11-22', '2026-12-10', '2027-02-19'],
+    'el día 3 y dentro de 3 días, semanas y meses',
+  )
+  assert.deepEqual(values(es('20/11')), ['2026-11-20'])
+  assert.deepEqual(values(es('18/11')), ['2027-11-18'], 'sin año: la próxima vez que llega')
+  assert.deepEqual(values(es('20.11.27')), ['2027-11-20'])
+  assert.deepEqual(values(es('1 de diciembre')), ['2026-12-01'])
+  assert.deepEqual(values(es('2027-01-05')), ['2027-01-05'])
+  assert.deepEqual(values(es('31/02')), [], 'fecha imposible')
+  assert.deepEqual(values(es('zzz')), [])
+  assert.deepEqual(values(es('', { min: '2026-11-20', max: '2026-11-25' })), ['2026-11-20', '2026-11-23'], 'dentro de min y max')
+  assert.deepEqual(
+    dateSuggestions('in 2 wochen', { today, locale: 'de-DE' }).map((item) => item.label),
+    ['In 2 Wochen · Do., 3. Dez.'],
+  )
+  assert.deepEqual(values(dateSuggestions('übermorgen', { today, locale: 'de-DE' })), ['2026-11-21'])
+  assert.deepEqual(values(dateSuggestions('next fri', { today, locale: 'en-GB' })), ['2026-11-20'])
+  assert.equal(shortDateLabel('2027-01-05', { today }), 'mar, 5 ene 2027')
+})

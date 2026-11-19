@@ -26,7 +26,7 @@ export function setAttrs(node, attrs) {
 export function icon(paths, className) {
   const svg = document.createElementNS(SVG, 'svg')
   // Mismo trazo que PathIcon de React y pathIcon de Vue.
-  for (const [name, value] of Object.entries({ ...ICON_ATTRS, 'stroke-width': '2' })) svg.setAttribute(name, String(value))
+  for (const [name, value] of Object.entries({ ...ICON_ATTRS, 'stroke-width': '1.5' })) svg.setAttribute(name, String(value))
   if (className) svg.setAttribute('class', className)
   for (const d of paths) {
     const path = document.createElementNS(SVG, 'path')
