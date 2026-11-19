@@ -10,13 +10,16 @@ export interface TabItem {
   content: ReactNode
   disabled?: boolean
 }
+const TAB_VARIANTS = ['pill', 'view']
+
 export interface TabsProps {
   items: TabItem[]
   label: string
   value?: string
   defaultValue?: string
   onValueChange?: (value: string) => void
-  variant?: 'line' | 'pill'
+  /** line: subrayado. pill: sobre un fondo gris. view: pastillas pequeñas con borde, para cambiar de vista una lista. */
+  variant?: 'line' | 'pill' | 'view'
   className?: string
 }
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
@@ -27,7 +30,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
     id = useAutoId('k5-tabs')
   const current = items.some((item) => item.value === selected && !item.disabled) ? selected : items.find((item) => !item.disabled)?.value
   return (
-    <div ref={ref} className={cx('k5-tabs', variant === 'pill' && 'k5-tabs--pill', className)}>
+    <div ref={ref} className={cx('k5-tabs', variant !== 'line' && TAB_VARIANTS.includes(variant) && `k5-tabs--${variant}`, className)}>
       <div
         className="k5-tabs__list"
         role="tablist"

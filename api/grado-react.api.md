@@ -1437,7 +1437,7 @@ ref: HTMLDivElement
   label: string
   onValueChange?: ((value: string) => void)
   value?: string
-  variant?: "line" | "pill"
+  variant?: "line" | "view" | "pill"
 ```
 
 ## Tag

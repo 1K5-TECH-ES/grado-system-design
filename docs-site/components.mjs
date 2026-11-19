@@ -164,7 +164,7 @@ export const newComponents = [
     [
       ['items', 'value, label, content, disabled', 'Obligatorio'],
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Primera habilitada'],
-      ['variant', 'line · pill', 'line'],
+      ['variant', 'line · pill · view (pastillas con borde para cambiar de vista una lista)', 'line'],
     ],
     'Vue admite slots con el nombre de cada value para contenido complejo. Flechas izquierda/derecha, Home y End cambian la pestaña; las desactivadas se omiten.',
   ),

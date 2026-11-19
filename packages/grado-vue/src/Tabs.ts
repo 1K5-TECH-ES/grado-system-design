@@ -16,7 +16,8 @@ export const Tabs = defineComponent({
     label: { type: String, required: true },
     modelValue: String,
     defaultValue: String,
-    variant: { type: String as PropType<'line' | 'pill'>, default: 'line' },
+    /** line: subrayado. pill: sobre un fondo gris. view: pastillas pequeñas con borde, para cambiar de vista una lista. */
+    variant: { type: String as PropType<'line' | 'pill' | 'view'>, default: 'line' },
   },
   emits: ['update:modelValue'],
   setup(props, { emit, slots }) {
@@ -30,7 +31,7 @@ export const Tabs = defineComponent({
       const current = props.items.some((item) => item.value === selected.value && !item.disabled)
         ? selected.value
         : props.items.find((item) => !item.disabled)?.value
-      return h('div', { class: cx('k5-tabs', props.variant === 'pill' && 'k5-tabs--pill') }, [
+      return h('div', { class: cx('k5-tabs', ['pill', 'view'].includes(props.variant) && `k5-tabs--${props.variant}`) }, [
         h(
           'div',
           {

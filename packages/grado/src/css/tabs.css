@@ -71,6 +71,28 @@
     0 0 0 1px var(--k5-border),
     0 1px 2px rgb(0 0 0 / 0.08);
 }
+/* Vistas («view»): pastillas pequeñas con borde, para cambiar de vista una lista (Todos,
+   Abiertos, Esta semana). Sin línea debajo: suelen ir en una barra de herramientas. */
+.k5-tabs--view .k5-tabs__list {
+  gap: var(--k5-space-1);
+  border-bottom: 0;
+}
+.k5-tabs--view .k5-tabs__tab {
+  height: var(--k5-control-h-sm);
+  margin: 0;
+  padding: 0 var(--k5-space-2);
+  border: 0;
+  border-radius: calc(var(--k5-radius) - 2px);
+  box-shadow: inset 0 0 0 1px var(--k5-border);
+  font-size: var(--k5-text-caption);
+}
+.k5-tabs--view .k5-tabs__tab:hover:not(:disabled) {
+  background: var(--k5-muted);
+}
+.k5-tabs--view .k5-tabs__tab[aria-selected='true'] {
+  background: var(--k5-muted);
+  box-shadow: inset 0 0 0 1px var(--k5-input);
+}
 .k5-tabs__panel {
   padding-top: var(--k5-space-4);
   font-size: var(--k5-text-body);

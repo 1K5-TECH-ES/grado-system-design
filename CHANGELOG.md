@@ -48,6 +48,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `DropdownMenu` y `ContextMenu`: cada opción acepta `shortcut`, que se pinta a la derecha. En `k5-menu`, con `data-shortcut="⌘ D"` en el `<option>`.
 - `keyShortcuts()` en `@1k5-tech-es/grado/classes` traduce las teclas pintadas a los nombres de `aria-keyshortcuts` (`⌘` → `Meta`, `⇧` → `Shift`, `↵` → `Enter`…).
 
+### Tabs
+
+- `variant="view"`: pastillas pequeñas con borde y sin línea debajo, para cambiar de vista una lista desde una barra de herramientas (Todos · Abiertos · Esta semana).
+
 ### Status
 
 - `progress`: para flujos con orden (un ticket, una instalación), el punto pasa a icono de progreso: discontinuo (`backlog`), vacío (`todo`), medio (`started`), tres cuartos (`waiting`), lleno con check (`done`) y lleno con aspa (`canceled`). La forma se lee sin color. Sin `tone`, cada paso trae el suyo (`started` en aviso, `waiting` en información, `done` en éxito). Es solo CSS sobre el mismo `k5-status__dot`.
