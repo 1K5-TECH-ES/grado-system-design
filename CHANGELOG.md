@@ -9,6 +9,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 ### Fundamentos
 
 - Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
+- El configurador de temas de la web calcula los neutros de Consola igual que el tema de serie, en OKLCH con el matiz del principal, y la sección activa de la barra lateral en gris. Con los colores de marca vuelve a reproducir Consola exactamente; para eso, cinco neutros de Consola se ajustan una unidad (el matiz pasa de 305 a 307, el del berenjena).
 - `--k5-tertiary-foreground`: tercer nivel de texto (fechas, contadores, pistas), más claro que `muted-foreground` y con 4,5 : 1 sobre el fondo y sobre gris en Consola y Marca. En Campo es igual que `muted-foreground`, para mantener 7 : 1. El configurador de temas de la web también lo calcula.
 - `--k5-text-title-ui` y `--k5-leading-title-ui`: el título de `PageHeader` y el valor de `Kpi`. 24 px en Consola (antes 28); Marca y Campo siguen en 28.
 - Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
