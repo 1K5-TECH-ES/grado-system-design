@@ -1998,3 +1998,99 @@ kbd {
   width: 2rem;
   height: 2rem;
 }
+
+/* Portada: pantalla de ejemplo hecha solo con componentes de Grado (Sales Coach · Tickets). */
+.docs-showcase {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  height: 35rem;
+  margin-bottom: var(--k5-space-8);
+  padding: var(--k5-space-2) var(--k5-space-2) var(--k5-space-2) 0;
+  overflow: hidden;
+  border-radius: var(--k5-radius-lg);
+  background: var(--k5-sidebar);
+  box-shadow:
+    0 0 0 1px var(--k5-border),
+    var(--k5-shadow-overlay);
+  color: var(--k5-sidebar-foreground);
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
+}
+.docs-showcase__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k5-space-2);
+  min-width: 0;
+  padding: var(--k5-space-1) var(--k5-space-2) var(--k5-space-1) var(--k5-space-2-5);
+  overflow: hidden;
+}
+.docs-showcase__team {
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-2);
+  height: 2rem;
+  padding: 0 var(--k5-space-1-5);
+  font-weight: var(--k5-weight-semibold);
+}
+.docs-showcase__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: auto;
+  border-radius: var(--k5-radius);
+  background: var(--k5-background);
+  box-shadow:
+    0 0 0 1px var(--k5-border),
+    var(--k5-shadow-raised);
+  color: var(--k5-foreground);
+}
+.docs-showcase__main > .k5-page-header {
+  padding: 0 var(--k5-space-2-5) 0 var(--k5-space-4);
+}
+.docs-showcase__filters {
+  padding: var(--k5-space-2) var(--k5-space-4);
+  border-bottom: 1px solid var(--k5-border);
+}
+.docs-showcase__kpis {
+  padding: var(--k5-space-3) var(--k5-space-4);
+  border-bottom: 1px solid var(--k5-border);
+}
+.docs-showcase__list {
+  gap: 0;
+}
+.docs-showcase__list .k5-table-wrap {
+  border: 0;
+  border-radius: 0;
+}
+.docs-showcase__list caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.docs-showcase__list .k5-pagination {
+  display: none;
+}
+.docs-showcase__id {
+  color: var(--k5-tertiary-foreground);
+  font-family: var(--k5-font-mono);
+  font-size: var(--k5-text-caption);
+  white-space: nowrap;
+}
+.docs-showcase__title {
+  font-weight: var(--k5-weight-medium);
+}
+@media (max-width: 1023px) {
+  .docs-showcase {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+  .docs-showcase__side {
+    display: none;
+  }
+  .docs-showcase__main {
+    border-radius: 0;
+  }
+}

@@ -23,7 +23,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 ### AppShell
 
-- La web de Grado abre en Consola, donde se ve el rediseño. Marca hereda los componentes nuevos con su tamaño mayor y conserva su armazón (barra berenjena, indicadores en tarjeta).
+- La web de Grado abre en Consola, donde se ve el rediseño, y su portada empieza por una pantalla de ejemplo (Sales Coach · Tickets) hecha solo con componentes de Grado: `PageHeader bar`, filtros en partes, `Kpi`, `DataTable` agrupada con `Status progress`, `Badge` y `Avatar`. Marca hereda los componentes nuevos con su tamaño mayor y conserva su armazón (barra berenjena, indicadores en tarjeta).
 
 - Consola: la cabecera y la barra lateral van sobre el fondo base (`--k5-sidebar`) y el contenido en un panel con borde y radio de 8 px. Sin cabecera berenjena, la marca deja de competir con la acción principal. En móvil el contenido ocupa todo el ancho, como antes. Marca no cambia.
 - `brandHeader` (React y Vue): recupera la cabecera berenjena de 0.8. Obsoleta: se retira en 0.10.
