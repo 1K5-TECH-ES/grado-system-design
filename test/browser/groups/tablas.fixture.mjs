@@ -60,5 +60,17 @@ export function render({ C, section, set, state, isVue }) {
         maxHeight: 300,
       }),
     ),
+    // Agrupada (0.9): un grupo por provincia que se pliega.
+    section(
+      'agrupada',
+      C('DataTable', {
+        rows: all.slice(0, 9),
+        columns,
+        rowKey: 'id',
+        caption: 'Por provincia',
+        groupBy: 'provincia',
+        selectable: true,
+      }),
+    ),
   ]
 }

@@ -63,6 +63,17 @@ export interface DataTableProps<T extends object> {
   /** Botón «Columnas» para elegir las que se ven. */
   columnPicker?: boolean
   /**
+   * Junta las filas por un campo o por lo que devuelva la función (un estado, un responsable). Cada grupo
+   * lleva una fila de título con su total que se pliega. Los grupos salen en el orden en que aparecen en rows.
+   */
+  groupBy?: (keyof T & string) | ((row: T) => string)
+  /** Lo que se pinta en la fila de título de cada grupo; por defecto, su clave. */
+  groupLabel?: (key: string) => ReactNode
+  /** Claves de los grupos plegados. */
+  collapsedGroups?: string[]
+  defaultCollapsedGroups?: string[]
+  onCollapsedGroupsChange?: (keys: string[]) => void
+  /**
    * Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS.
    * Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales).
    */
@@ -99,6 +110,11 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
     defaultHiddenColumns = [],
     onHiddenColumnsChange,
     columnPicker = false,
+    groupBy,
+    groupLabel,
+    collapsedGroups,
+    defaultCollapsedGroups = [],
+    onCollapsedGroupsChange,
     maxHeight,
     loading,
     error,
@@ -118,6 +134,7 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
   const sorting = sort === undefined ? innerSort : sort
   const selected = selectedKeys ?? innerSelected
   const [hidden, setHidden] = useValue(hiddenColumns, defaultHiddenColumns, onHiddenColumnsChange)
+  const [collapsed, setCollapsed] = useValue(collapsedGroups, defaultCollapsedGroups, onCollapsedGroupsChange)
   const shown = visibleColumns(columns, hidden)
   // Página, orden, selección y filas virtuales salen del núcleo común (@1k5-tech-es/grado/core), como en Vue.
   const sorted = useMemo(() => sortRows(rows, columns, sorting, manual), [rows, columns, sorting, manual])
@@ -136,8 +153,10 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
     error,
     scroll,
     sorted,
+    groupBy,
+    collapsed,
   })
-  const { keyOf, total, size, count, current, visible, keys, all, some, range } = view
+  const { keyOf, total, size, count, current, visible, keys, all, some, groups, range } = view
   const virtual = range != null
   // Clamp uncontrolled pagination when filtering or deleting the last page.
   useEffect(() => {
@@ -187,6 +206,32 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
     ) : (
       <PathIcon paths={sorting.direction === 'asc' ? ICON_PATHS.arrowUp : ICON_PATHS.arrowDown} />
     )
+  const renderRow = (row: T, i: number) => {
+    const key = keyOf(row)
+    return (
+      <tr
+        key={key}
+        aria-rowindex={range ? range.start + i + 2 : undefined}
+        data-selected={selectable && selected.includes(key) ? true : undefined}
+      >
+        {selectable && (
+          <td className="k5-data-table__check">
+            <Checkbox
+              aria-label={formatMessage(m.selectRow, { key })}
+              checked={selected.includes(key)}
+              onCheckedChange={(checked) => updateSelection(toggleRow(selected, key, checked))}
+            />
+          </td>
+        )}
+        {shown.map((column) => (
+          <td key={column.key} className={column.numeric ? 'k5-num' : undefined}>
+            {column.render ? column.render(row) : String(row[column.key] ?? '')}
+          </td>
+        ))}
+        {rowActions && <td className="k5-data-table__actions">{rowActions(row)}</td>}
+      </tr>
+    )
+  }
   const skeletonRows = Array.from({ length: Math.min(size, 3) }, (_, i) => i)
   const selection = selectable ? (
     <span className="k5-data-table__selection" role="status">
@@ -275,73 +320,70 @@ export const DataTable = forwardRef(function DataTable<T extends object>(
             )}
           </tr>
         </thead>
-        <tbody>
-          {loading ? (
-            skeletonRows.map((i) => (
-              <tr key={i}>
-                <td colSpan={span} className="k5-data-table__loading">
-                  {i === 0 && (
-                    <span className="k5-sr-only" role="status">
-                      {m.loadingData}
-                    </span>
-                  )}
-                  <Skeleton height="0.875rem" width={`${90 - i * 15}%`} />
+        {groups && !loading && !error && visible.length ? (
+          groups.map((group) => (
+            <tbody key={group.key} className="k5-data-table__group">
+              <tr className="k5-data-table__group-row">
+                <th scope="rowgroup" colSpan={span}>
+                  <button
+                    type="button"
+                    className="k5-data-table__group-toggle"
+                    aria-expanded={!group.collapsed}
+                    onClick={() => setCollapsed(toggleRow(collapsed, group.key, !group.collapsed))}
+                  >
+                    <PathIcon paths={ICON_PATHS.chevronDown} />
+                    <span>{groupLabel ? groupLabel(group.key) : group.key || m.noGroup}</span>
+                    <span className="k5-data-table__group-count">{group.count}</span>
+                  </button>
+                </th>
+              </tr>
+              {group.collapsed ? null : group.rows.map(renderRow)}
+            </tbody>
+          ))
+        ) : (
+          <tbody>
+            {loading ? (
+              skeletonRows.map((i) => (
+                <tr key={i}>
+                  <td colSpan={span} className="k5-data-table__loading">
+                    {i === 0 && (
+                      <span className="k5-sr-only" role="status">
+                        {m.loadingData}
+                      </span>
+                    )}
+                    <Skeleton height="0.875rem" width={`${90 - i * 15}%`} />
+                  </td>
+                </tr>
+              ))
+            ) : error ? (
+              <tr>
+                <td colSpan={span} className="k5-data-table__empty">
+                  <span role="alert">{error}</span>
                 </td>
               </tr>
-            ))
-          ) : error ? (
-            <tr>
-              <td colSpan={span} className="k5-data-table__empty">
-                <span role="alert">{error}</span>
-              </td>
-            </tr>
-          ) : !visible.length ? (
-            <tr>
-              <td colSpan={span} className="k5-data-table__empty">
-                {emptyLabel ?? m.noResults}
-              </td>
-            </tr>
-          ) : (
-            <>
-              {range && range.before > 0 ? (
-                <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.before }}>
-                  <td colSpan={span} />
-                </tr>
-              ) : null}
-              {(range ? visible.slice(range.start, range.end) : visible).map((row, i) => {
-                const key = keyOf(row)
-                return (
-                  <tr
-                    key={key}
-                    aria-rowindex={range ? range.start + i + 2 : undefined}
-                    data-selected={selectable && selected.includes(key) ? true : undefined}
-                  >
-                    {selectable && (
-                      <td className="k5-data-table__check">
-                        <Checkbox
-                          aria-label={formatMessage(m.selectRow, { key })}
-                          checked={selected.includes(key)}
-                          onCheckedChange={(checked) => updateSelection(toggleRow(selected, key, checked))}
-                        />
-                      </td>
-                    )}
-                    {shown.map((column) => (
-                      <td key={column.key} className={column.numeric ? 'k5-num' : undefined}>
-                        {column.render ? column.render(row) : String(row[column.key] ?? '')}
-                      </td>
-                    ))}
-                    {rowActions && <td className="k5-data-table__actions">{rowActions(row)}</td>}
+            ) : !visible.length ? (
+              <tr>
+                <td colSpan={span} className="k5-data-table__empty">
+                  {emptyLabel ?? m.noResults}
+                </td>
+              </tr>
+            ) : (
+              <>
+                {range && range.before > 0 ? (
+                  <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.before }}>
+                    <td colSpan={span} />
                   </tr>
-                )
-              })}
-              {range && range.after > 0 ? (
-                <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.after }}>
-                  <td colSpan={span} />
-                </tr>
-              ) : null}
-            </>
-          )}
-        </tbody>
+                ) : null}
+                {(range ? visible.slice(range.start, range.end) : visible).map(renderRow)}
+                {range && range.after > 0 ? (
+                  <tr className="k5-data-table__spacer" aria-hidden="true" style={{ height: range.after }}>
+                    <td colSpan={span} />
+                  </tr>
+                ) : null}
+              </>
+            )}
+          </tbody>
+        )}
       </Table>
       {/* Con datos del servidor la paginación sigue a la vista mientras llega la página. */}
       {!error && (manual || !loading) && <Pagination total={total} pageSize={size} page={current} onPageChange={changePage} />}

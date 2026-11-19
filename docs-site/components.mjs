@@ -693,10 +693,16 @@ function receive(incoming) {
         'Alto máximo: scroll propio y cabecera fija. Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales); al imprimir salen esas, así que para papel pagina o exporta CSV',
         '—',
       ],
+      [
+        'groupBy / groupLabel',
+        'Junta las filas por un campo o una función; cada grupo lleva una fila de título con su total que se pliega. groupLabel (Vue: también el slot group) pinta el título. Los grupos salen en el orden en que aparecen en rows; sin filas virtuales',
+        '— / la clave',
+      ],
+      ['collapsedGroups', 'Grupos plegados. React: onCollapsedGroupsChange · Vue: v-model:collapsed-groups', '[]'],
       ['loading / error / emptyLabel', 'Estados de respuesta', 'false / —'],
       ['Acciones y celdas', 'React: rowActions / render · Vue: slots actions / cell-{key}', '—'],
     ],
-    'Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual; conserva la selección en otras páginas.',
+    'Sin manual, ordena y pagina en el cliente los rows que recibe: fíltralos antes. Con manual, pide cada página al servidor al cambiar de página o de orden y pasa totalRows. toCsv(rows, columns) y downloadCsv() exportan lo que se ve, con «;» y coma decimal en español. rowKey debe ser único y estable. Seleccionar todo afecta a la página actual, sin las filas de los grupos plegados; conserva la selección en otras páginas.',
   ),
   entry(
     'accordion',

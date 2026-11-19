@@ -52,6 +52,16 @@ export const DataTable = defineComponent({
     /** Botón «Columnas» para elegir las que se ven. */
     columnPicker: Boolean,
     /**
+     * Junta las filas por un campo o por lo que devuelva la función (un estado, un responsable). Cada grupo
+     * lleva una fila de título con su total que se pliega. Los grupos salen en el orden en que aparecen en rows.
+     */
+    groupBy: [String, Function] as PropType<string | ((row: DataRow) => string)>,
+    /** Lo que se pinta en la fila de título de cada grupo; por defecto, su clave. También con el slot group ({ group }). */
+    groupLabel: Function as PropType<(key: string) => VNodeChild>,
+    /** Claves de los grupos plegados (v-model:collapsedGroups). */
+    collapsedGroups: { type: Array as PropType<string[]>, default: undefined },
+    defaultCollapsedGroups: { type: Array as PropType<string[]>, default: () => [] },
+    /**
      * Alto máximo: la tabla tiene su propio scroll y la cabecera se queda fija. Número en píxeles o medida CSS.
      * Con más de 200 filas a la vista, solo se pintan las que se ven (filas virtuales).
      */
@@ -60,7 +70,7 @@ export const DataTable = defineComponent({
     error: String,
     emptyLabel: String,
   },
-  emits: ['update:page', 'update:sort', 'update:selectedKeys', 'update:hiddenColumns'],
+  emits: ['update:page', 'update:sort', 'update:selectedKeys', 'update:hiddenColumns', 'update:collapsedGroups'],
   setup(props, { emit, slots }) {
     const t = useGrado()
     const innerPage = ref(1),
@@ -72,6 +82,11 @@ export const DataTable = defineComponent({
       () => props.hiddenColumns,
       props.defaultHiddenColumns,
       (keys: string[]) => emit('update:hiddenColumns', keys),
+    )
+    const [collapsed, setCollapsed] = model<string[]>(
+      () => props.collapsedGroups,
+      props.defaultCollapsedGroups,
+      (keys: string[]) => emit('update:collapsedGroups', keys),
     )
     const shown = computed(() => visibleColumns(props.columns, hidden.value))
     // Página, orden, selección y filas virtuales salen del núcleo común (@1k5-tech-es/grado/core), como en React.
@@ -93,6 +108,8 @@ export const DataTable = defineComponent({
         error: props.error,
         scroll: scroll.value,
         sorted: sorted.value,
+        groupBy: props.groupBy,
+        collapsed: collapsed.value,
       }),
     )
     const count = computed(() => view.value.count)
@@ -116,7 +133,9 @@ export const DataTable = defineComponent({
     // Filas virtuales: dónde está el scroll, cuánto se ve y cuánto mide una fila.
     const root = ref<HTMLElement | null>(null)
     // Solo depende de si hay filas virtuales, no de su tramo: así medir no vuelve a enganchar los eventos.
-    const virtual = computed(() => props.maxHeight != null && !props.loading && !props.error && view.value.visible.length > VIRTUAL_ROWS)
+    const virtual = computed(
+      () => !props.groupBy && props.maxHeight != null && !props.loading && !props.error && view.value.visible.length > VIRTUAL_ROWS,
+    )
     let stop: (() => void) | null = null
     watch(
       [virtual, root],
@@ -155,7 +174,7 @@ export const DataTable = defineComponent({
         : pathIcon(sorting.value.direction === 'asc' ? ICON_PATHS.arrowUp : ICON_PATHS.arrowDown)
     return () => {
       const m = t.value.messages,
-        { visible, keys, range, all, some, keyOf, total, size, current } = view.value,
+        { visible, keys, range, all, some, groups, keyOf, total, size, current } = view.value,
         span = shown.value.length + Number(props.selectable) + Number(!!slots.actions)
       const selection = props.selectable
         ? h('span', { class: 'k5-data-table__selection', role: 'status' }, selectionLabel(selected.value.length, m))
@@ -186,6 +205,58 @@ export const DataTable = defineComponent({
               ),
           },
         )
+      const bodyRow = (row: DataRow, i: number) => {
+        const key = keyOf(row)
+        return h(
+          'tr',
+          {
+            key,
+            ...(range ? { 'aria-rowindex': range.start + i + 2 } : {}),
+            'data-selected': props.selectable && selected.value.includes(key) ? true : undefined,
+          },
+          [
+            props.selectable
+              ? h('td', { class: 'k5-data-table__check' }, [
+                  h(Checkbox, {
+                    'aria-label': formatMessage(m.selectRow, { key }),
+                    modelValue: selected.value.includes(key),
+                    'onUpdate:modelValue': (checked: boolean) => updateSelection(toggleRow(selected.value, key, checked)),
+                  }),
+                ])
+              : null,
+            ...shown.value.map((column) =>
+              h('td', { key: column.key, ...(column.numeric ? { class: 'k5-num' } : {}) }, [
+                slots[`cell-${column.key}`]?.({ row }) ?? (column.render ? column.render(row) : String(row[column.key] ?? '')),
+              ]),
+            ),
+            slots.actions ? h('td', { class: 'k5-data-table__actions' }, slots.actions({ row })) : null,
+          ],
+        )
+      }
+      const groupRow = (group: NonNullable<typeof groups>[number]) =>
+        h('tbody', { key: group.key, class: 'k5-data-table__group' }, [
+          h('tr', { class: 'k5-data-table__group-row' }, [
+            h('th', { scope: 'rowgroup', colspan: span }, [
+              h(
+                'button',
+                {
+                  type: 'button',
+                  class: 'k5-data-table__group-toggle',
+                  'aria-expanded': !group.collapsed,
+                  onClick: () => setCollapsed(toggleRow(collapsed.value, group.key, !group.collapsed)),
+                },
+                [
+                  pathIcon(ICON_PATHS.chevronDown),
+                  h('span', null, [
+                    slots.group?.({ group: group.key }) ?? (props.groupLabel ? props.groupLabel(group.key) : group.key || m.noGroup),
+                  ]),
+                  h('span', { class: 'k5-data-table__group-count' }, String(group.count)),
+                ],
+              ),
+            ]),
+          ]),
+          ...(group.collapsed ? [] : group.rows.map(bodyRow)),
+        ])
       const height = props.maxHeight
       return h(
         'div',
@@ -251,61 +322,34 @@ export const DataTable = defineComponent({
                       : null,
                   ]),
                 ]),
-                h(
-                  'tbody',
-                  null,
-                  props.loading
-                    ? Array.from({ length: Math.min(size, 3) }, (_, i) =>
-                        h('tr', { key: i }, [
-                          h('td', { colspan: span, class: 'k5-data-table__loading' }, [
-                            i === 0 ? h('span', { class: 'k5-sr-only', role: 'status' }, m.loadingData) : null,
-                            h(Skeleton, { height: '0.875rem', width: `${90 - i * 15}%` }),
-                          ]),
-                        ]),
-                      )
-                    : props.error
-                      ? [
-                          h('tr', null, [
-                            h('td', { colspan: span, class: 'k5-data-table__empty' }, [h('span', { role: 'alert' }, props.error)]),
-                          ]),
-                        ]
-                      : !visible.length
-                        ? [h('tr', null, [h('td', { colspan: span, class: 'k5-data-table__empty' }, props.emptyLabel ?? m.noResults)])]
-                        : [
-                            range && range.before > 0 ? spacer(range.before, span) : null,
-                            ...(range ? visible.slice(range.start, range.end) : visible).map((row, i) => {
-                              const key = keyOf(row)
-                              return h(
-                                'tr',
-                                {
-                                  key,
-                                  ...(range ? { 'aria-rowindex': range.start + i + 2 } : {}),
-                                  'data-selected': props.selectable && selected.value.includes(key) ? true : undefined,
-                                },
-                                [
-                                  props.selectable
-                                    ? h('td', { class: 'k5-data-table__check' }, [
-                                        h(Checkbox, {
-                                          'aria-label': formatMessage(m.selectRow, { key }),
-                                          modelValue: selected.value.includes(key),
-                                          'onUpdate:modelValue': (checked: boolean) =>
-                                            updateSelection(toggleRow(selected.value, key, checked)),
-                                        }),
-                                      ])
-                                    : null,
-                                  ...shown.value.map((column) =>
-                                    h('td', { key: column.key, ...(column.numeric ? { class: 'k5-num' } : {}) }, [
-                                      slots[`cell-${column.key}`]?.({ row }) ??
-                                        (column.render ? column.render(row) : String(row[column.key] ?? '')),
-                                    ]),
-                                  ),
-                                  slots.actions ? h('td', { class: 'k5-data-table__actions' }, slots.actions({ row })) : null,
-                                ],
-                              )
-                            }),
-                            range && range.after > 0 ? spacer(range.after, span) : null,
-                          ],
-                ),
+                groups && !props.loading && !props.error && visible.length
+                  ? groups.map(groupRow)
+                  : h(
+                      'tbody',
+                      null,
+                      props.loading
+                        ? Array.from({ length: Math.min(size, 3) }, (_, i) =>
+                            h('tr', { key: i }, [
+                              h('td', { colspan: span, class: 'k5-data-table__loading' }, [
+                                i === 0 ? h('span', { class: 'k5-sr-only', role: 'status' }, m.loadingData) : null,
+                                h(Skeleton, { height: '0.875rem', width: `${90 - i * 15}%` }),
+                              ]),
+                            ]),
+                          )
+                        : props.error
+                          ? [
+                              h('tr', null, [
+                                h('td', { colspan: span, class: 'k5-data-table__empty' }, [h('span', { role: 'alert' }, props.error)]),
+                              ]),
+                            ]
+                          : !visible.length
+                            ? [h('tr', null, [h('td', { colspan: span, class: 'k5-data-table__empty' }, props.emptyLabel ?? m.noResults)])]
+                            : [
+                                range && range.before > 0 ? spacer(range.before, span) : null,
+                                ...(range ? visible.slice(range.start, range.end) : visible).map(bodyRow),
+                                range && range.after > 0 ? spacer(range.after, span) : null,
+                              ],
+                    ),
               ],
             },
           ),

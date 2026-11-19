@@ -370,6 +370,7 @@ function CoreDemo({ id }) {
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'loading' ? 'ready' : 'loading') }, 'Carga'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'error' ? 'ready' : 'error') }, 'Error'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'empty' ? 'ready' : 'empty') }, 'Vacío'),
+        h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode(mode === 'grouped' ? 'ready' : 'grouped') }, 'Agrupar'),
         h(G.Button, { size: 'sm', variant: 'ghost', onClick: () => setMode('ready') }, 'Restablecer'),
       ),
       h(G.DataTable, {
@@ -378,7 +379,8 @@ function CoreDemo({ id }) {
         rowKey: 'id',
         caption: 'Instalaciones · datos de ejemplo',
         selectable: true,
-        pageSize: 3,
+        pageSize: mode === 'grouped' ? 10 : 3,
+        groupBy: mode === 'grouped' ? 'estado' : undefined,
         loading: mode === 'loading',
         error: mode === 'error' ? 'No se pudieron cargar las instalaciones.' : undefined,
         rowActions: (item) =>

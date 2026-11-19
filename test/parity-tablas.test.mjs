@@ -45,6 +45,18 @@ const SCENARIOS = {
     maxHeight: 400,
     selectable: true,
   },
+  'agrupada por provincia, con selección y un grupo plegado': {
+    ...base,
+    rows: [...rows, { id: 'INS-23', cliente: 'Ana Ruiz', provincia: 'Madrid', kwp: 5.2 }, { id: 'INS-24', cliente: 'Pau Vidal' }],
+    groupBy: 'provincia',
+    selectable: true,
+    defaultCollapsedGroups: ['Barcelona'],
+  },
+  'agrupada con etiqueta propia': {
+    ...base,
+    groupBy: (row) => (row.kwp > 5 ? 'grande' : 'pequeña'),
+    groupLabel: (key) => `Instalación ${key}`,
+  },
 }
 
 for (const [name, props] of Object.entries(SCENARIOS)) {
@@ -90,4 +102,17 @@ test('DataTable con filas virtuales: solo el primer tramo, con su alto y su posi
     r(R.DataTable, { ...SCENARIOS['filas virtuales: 1000 filas con alto máximo'], maxHeight: undefined }),
   )
   assert.equal((noHeight.match(/<tr data-selected|<tr>/g) ?? []).length > 1000, true)
+})
+
+test('DataTable agrupada: un tbody por grupo con su título, su total y el plegado', () => {
+  const html = renderToStaticMarkup(r(R.DataTable, SCENARIOS['agrupada por provincia, con selección y un grupo plegado']))
+  assert.equal((html.match(/<tbody class="k5-data-table__group">/g) ?? []).length, 3)
+  assert.match(html, /<th scope="rowgroup" colSpan="4"><button type="button" class="k5-data-table__group-toggle" aria-expanded="true">/)
+  assert.match(html, /<span>Madrid<\/span><span class="k5-data-table__group-count">2<\/span>/)
+  assert.match(html, /aria-expanded="false">.*?<span>Barcelona<\/span>/)
+  assert.doesNotMatch(html, /Jordi Puig/, 'el grupo plegado no pinta sus filas')
+  assert.match(html, /<span>Sin grupo<\/span>/)
+  assert.ok(html.indexOf('Lucía Martín') < html.indexOf('Ana Ruiz') && html.indexOf('Ana Ruiz') < html.indexOf('Pau Vidal'))
+  const label = renderToStaticMarkup(r(R.DataTable, SCENARIOS['agrupada con etiqueta propia']))
+  assert.match(label, /<span>Instalación grande<\/span>/)
 })

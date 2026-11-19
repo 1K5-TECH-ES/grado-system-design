@@ -357,12 +357,16 @@ function
 
 ```ts
   caption: String  // obligatoria
+  collapsedGroups: Array  // con valor por defecto
   columnPicker: Boolean
   columns: Array  // obligatoria
+  defaultCollapsedGroups: Array  // con valor por defecto
   defaultHiddenColumns: Array  // con valor por defecto
   defaultSort: Object  // con valor por defecto
   emptyLabel: String
   error: String
+  groupBy: String | Function
+  groupLabel: Function
   hiddenColumns: Array  // con valor por defecto
   loading: Boolean
   manual: Boolean
@@ -377,7 +381,7 @@ function
   totalRows: Number
 ```
 
-emits: update:hiddenColumns, update:page, update:selectedKeys, update:sort
+emits: update:collapsedGroups, update:hiddenColumns, update:page, update:selectedKeys, update:sort
 
 ## DatePicker
 

@@ -15,6 +15,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
 - Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
 - Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
+- El presupuesto de `grado.min.css` sube de 17 a 18 KB (con gzip) por los atajos, las variantes nuevas y la cabecera de 0.8, que se retira en 0.10.
 
 ### AppShell
 
@@ -53,6 +54,12 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 ### PageHeader
 
 - `variant="bar"`: una fila de 44 px para listados, con el título pequeño, lo que vaya dentro (un `SegmentedControl` para cambiar de vista, unos filtros) en medio y las acciones a la derecha, sobre una línea. El orden del HTML y del teclado no cambia. El título grande queda para las fichas.
+
+### DataTable
+
+- `groupBy`: junta las filas por un campo o por una función (un estado, un responsable). Cada grupo es un `<tbody>` con una fila de título (`<th scope="rowgroup">`) que lleva el nombre, el total y un botón con `aria-expanded` para plegarlo. Los grupos salen en el orden en que aparecen en `rows`, y la columna ordenada manda dentro de cada uno. `groupLabel` (Vue: también el slot `group`) pinta el título; sin él, la clave o «Sin grupo». `collapsedGroups` (React: `onCollapsedGroupsChange` · Vue: `v-model:collapsed-groups`) y `defaultCollapsedGroups` guardan los plegados. «Seleccionar la página» deja fuera las filas plegadas. Con grupos no hay filas virtuales.
+- `groupRows()` en `@1k5-tech-es/grado/core` junta las filas igual para quien pinte su propia tabla.
+- El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos.
 
 ### Tabs
 

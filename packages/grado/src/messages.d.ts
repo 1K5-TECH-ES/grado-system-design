@@ -42,6 +42,7 @@ export type MessageKey =
   | 'nextPage'
   | 'pageN'
   | 'pageRange'
+  | 'noGroup'
   | 'noResultsCount'
   | 'dateFrom'
   | 'dateTo'

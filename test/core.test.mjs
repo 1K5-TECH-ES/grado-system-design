@@ -11,6 +11,7 @@ import {
   comboboxReduce,
   comboboxState,
   comboboxView,
+  groupRows,
   nextSort,
   sortRows,
   tableView,
@@ -165,4 +166,47 @@ test('tabla: orden, página, selección, columnas y filas virtuales', () => {
   })
   assert.deepEqual([virtual.range.start, virtual.range.end], [0, 20])
   assert.equal(tableView({ rows: many, columns: [], rowKey: 'id', page: 1, pageSize: 1000 }).range, null)
+})
+
+test('tabla agrupada: grupos en el orden de rows, orden dentro de cada uno, total y plegados', () => {
+  const rows = [
+    { id: 'a', estado: 'Abierta', kwp: 3 },
+    { id: 'b', estado: 'Cerrada', kwp: 9 },
+    { id: 'c', estado: 'Abierta', kwp: 7 },
+    { id: 'd', estado: '', kwp: 1 },
+    { id: 'e', estado: 'Cerrada', kwp: 5 },
+  ]
+  const columns = [{ key: 'kwp', header: 'kWp', sortable: true }]
+  assert.equal(groupRows(rows, undefined), rows, 'sin groupBy: tal cual')
+  assert.deepEqual(
+    groupRows(rows, 'estado').map((row) => row.id),
+    ['a', 'c', 'b', 'e', 'd'],
+  )
+  // El orden de la columna manda dentro del grupo; el de los grupos no cambia al ordenar.
+  const view = tableView({ rows, columns, rowKey: 'id', sort: { key: 'kwp', direction: 'desc' }, page: 1, groupBy: 'estado' })
+  assert.deepEqual(
+    view.groups.map((group) => [group.key, group.rows.map((row) => row.id), group.count]),
+    [
+      ['Abierta', ['c', 'a'], 2],
+      ['Cerrada', ['b', 'e'], 2],
+      ['', ['d'], 1],
+    ],
+  )
+  // Un grupo partido entre dos páginas sale en las dos con su total entero.
+  const second = tableView({ rows, columns, rowKey: 'id', page: 2, pageSize: 3, groupBy: (row) => row.estado || 'Sin estado' })
+  assert.deepEqual(
+    second.groups.map((group) => [group.key, group.rows.length, group.count]),
+    [
+      ['Cerrada', 1, 2],
+      ['Sin estado', 1, 1],
+    ],
+  )
+  // Las filas plegadas no cuentan para «seleccionar la página».
+  const folded = tableView({ rows, columns, rowKey: 'id', page: 1, groupBy: 'estado', collapsed: ['Cerrada'], selected: ['a', 'c', 'd'] })
+  assert.equal(folded.groups[1].collapsed, true)
+  assert.deepEqual(folded.keys, ['a', 'c', 'd'])
+  assert.equal(folded.all, true)
+  // Con grupos no hay filas virtuales.
+  const many = Array.from({ length: 1000 }, (_, i) => ({ id: String(i), g: String(i % 2) }))
+  assert.equal(tableView({ rows: many, columns: [], rowKey: 'id', page: 1, pageSize: 1000, maxHeight: 400, groupBy: 'g' }).range, null)
 })

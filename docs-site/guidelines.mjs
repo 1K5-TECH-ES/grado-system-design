@@ -470,6 +470,7 @@ export const guidelines = {
       'Úsalo para listados que se ordenan, seleccionan o paginan, como instalaciones u ofertas.',
       'Marca numeric en las columnas de kWp o importes.',
       'Usa loading, error y emptyLabel para los estados de respuesta.',
+      'Usa groupBy para leer un listado por estado o por responsable sin filtrarlo. Ordena rows por grupo para fijar el orden de los grupos.',
     ],
     avoid: [
       'Con cientos de filas o más no las cargues todas: usa manual y pide cada página al servidor.',
@@ -479,6 +480,7 @@ export const guidelines = {
       'caption es obligatorio y nombra la tabla.',
       'La columna ordenada lleva aria-sort y la selección se anuncia con role="status".',
       'Cada casilla se llama «Seleccionar fila» seguida del rowKey. Usa una clave legible, como la referencia.',
+      'Cada grupo es un <tbody> con su título en <th scope="rowgroup">, un botón con aria-expanded que lo pliega.',
     ],
   },
   accordion: {

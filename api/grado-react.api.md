@@ -440,16 +440,21 @@ ref: HTMLDivElement
 ```ts
   caption: string
   className?: string
+  collapsedGroups?: string[]
   columnPicker?: boolean
   columns: DataColumn<T>[]
+  defaultCollapsedGroups?: string[]
   defaultHiddenColumns?: string[]
   defaultSort?: SortState | null
   emptyLabel?: string
   error?: string
+  groupBy?: (keyof T & string) | ((row: T) => string)
+  groupLabel?: ((key: string) => ReactNode)
   hiddenColumns?: string[]
   loading?: boolean
   manual?: boolean
   maxHeight?: string | number
+  onCollapsedGroupsChange?: ((keys: string[]) => void)
   onHiddenColumnsChange?: ((keys: string[]) => void)
   onPageChange?: ((page: number) => void)
   onSelectionChange?: ((keys: string[]) => void)

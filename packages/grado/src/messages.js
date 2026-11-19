@@ -53,6 +53,7 @@ const es = {
   nextPage: 'Página siguiente',
   pageN: 'Página {page}',
   pageRange: '{from}–{to} de {total}',
+  noGroup: 'Sin grupo',
   noResultsCount: '0 resultados',
   dateFrom: 'Desde',
   dateTo: 'Hasta',

@@ -47,6 +47,7 @@ export const en = {
   nextPage: 'Next page',
   pageN: 'Page {page}',
   pageRange: '{from}–{to} of {total}',
+  noGroup: 'No group',
   noResultsCount: '0 results',
   dateFrom: 'From',
   dateTo: 'To',

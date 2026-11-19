@@ -427,6 +427,14 @@ export interface TableColumnLike {
     sortValue?: (row: never) => unknown;
 }
 export declare function sortRows<T>(rows: T[], columns: TableColumnLike[], sort: SortState | null | undefined, manual?: boolean): T[];
+export type GroupBy<T> = string | ((row: T) => string);
+export declare function groupRows<T>(rows: T[], groupBy: GroupBy<T> | null | undefined, order?: T[]): T[];
+export interface TableGroup<T> {
+    key: string;
+    rows: T[];
+    count: number;
+    collapsed: boolean;
+}
 export interface TableView<T> {
     keyOf: (row: T) => string;
     total: number;
@@ -437,6 +445,7 @@ export interface TableView<T> {
     keys: string[];
     all: boolean;
     some: boolean;
+    groups: TableGroup<T>[] | null;
     range: VirtualWindow | null;
 }
 export declare function tableView<T>(options: {
@@ -458,6 +467,8 @@ export declare function tableView<T>(options: {
         rowHeight: number;
     };
     sorted?: T[];
+    groupBy?: GroupBy<T>;
+    collapsed?: string[];
 }): TableView<T>;
 ```
 
@@ -637,7 +648,7 @@ export declare function labsMessagesFor(locale?: string, overrides?: Partial<Rec
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noGroup' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';

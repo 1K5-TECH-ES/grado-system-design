@@ -12,8 +12,9 @@ import { build } from 'esbuild'
 
 const KB = 1024
 const LIMITS = {
-  // 0.9: +0,5 KB por los atajos (shortcut) y la cabecera de 0.8 (brandHeader, se retira en 0.10).
-  'grado.min.css': 17.5 * KB,
+  // 0.9: de 17 a 18 KB por los atajos (shortcut), Status progress, Tabs view, PageHeader bar y
+  // las props nuevas de «Precisión»; incluye la cabecera de 0.8 (brandHeader, se retira en 0.10).
+  'grado.min.css': 18 * KB,
   'tokens.css': 4 * KB,
   // Temas en su propio archivo (0.6): solo los cargan las apps que los usan.
   'themes/campo.css': 1.6 * KB,
@@ -41,7 +42,8 @@ const IMPORTS = {
   'Field, Input': { names: ['Field', 'Input'], limit: 2.5 * KB },
   Dialog: { names: ['Dialog'], limit: 9 * KB },
   // 0.6: de 14 a 14,5 KB. El núcleo común (core.js) deja el de Vue justo en 14 KB y el gzip del CI lo pasa.
-  DataTable: { names: ['DataTable'], limit: 14.5 * KB },
+  // 0.9: de 14,5 a 15,5 KB por groupBy (grupos plegables); Vue queda en 14,8.
+  DataTable: { names: ['DataTable'], limit: 15.5 * KB },
   'AppShell, Nav, NavItem': { names: ['AppShell', 'Nav', 'NavItem'], limit: 9.5 * KB },
   LineChart: { names: ['LineChart'], limit: 10 * KB },
   'Toaster, toast': { names: ['Toaster', 'toast'], limit: 9.5 * KB },

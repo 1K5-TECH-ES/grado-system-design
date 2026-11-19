@@ -99,6 +99,18 @@ export interface TableColumnLike {
   sortValue?: (row: never) => unknown
 }
 export declare function sortRows<T>(rows: T[], columns: TableColumnLike[], sort: SortState | null | undefined, manual?: boolean): T[]
+/** Un campo de la fila o una función que da la clave de su grupo. */
+export type GroupBy<T> = string | ((row: T) => string)
+/** Filas juntas por grupo, en el orden en que cada grupo aparece en order (por defecto, rows). */
+export declare function groupRows<T>(rows: T[], groupBy: GroupBy<T> | null | undefined, order?: T[]): T[]
+export interface TableGroup<T> {
+  key: string
+  /** Las filas del grupo en esta página. */
+  rows: T[]
+  /** Cuántas filas tiene el grupo entre todas las que recibe la tabla. */
+  count: number
+  collapsed: boolean
+}
 export interface TableView<T> {
   keyOf: (row: T) => string
   total: number
@@ -109,6 +121,7 @@ export interface TableView<T> {
   keys: string[]
   all: boolean
   some: boolean
+  groups: TableGroup<T>[] | null
   range: VirtualWindow | null
 }
 export declare function tableView<T>(options: {
@@ -126,4 +139,6 @@ export declare function tableView<T>(options: {
   error?: string
   scroll?: { top: number; viewport: number; rowHeight: number }
   sorted?: T[]
+  groupBy?: GroupBy<T>
+  collapsed?: string[]
 }): TableView<T>

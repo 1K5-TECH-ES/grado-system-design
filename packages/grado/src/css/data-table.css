@@ -111,3 +111,47 @@ th[aria-sort] .k5-data-table__sort {
   padding: 0;
   border: 0;
 }
+
+/* groupBy: cada grupo es un <tbody> con una fila de título que se pliega (nombre y total). */
+.k5-table .k5-data-table__group-row th {
+  height: var(--k5-control-h);
+  padding: 0;
+  background: color-mix(in srgb, var(--k5-muted) 60%, transparent);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-table .k5-data-table__group + .k5-data-table__group .k5-data-table__group-row th {
+  border-top: 1px solid var(--k5-border);
+}
+.k5-data-table__group-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--k5-space-2);
+  width: 100%;
+  min-height: var(--k5-control-h);
+  padding: 0 var(--k5-space-3);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.k5-data-table__group-toggle:focus-visible {
+  outline: 2px solid var(--k5-ring);
+  outline-offset: -2px;
+}
+.k5-data-table__group-toggle svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: rotate var(--k5-duration-fast) var(--k5-ease-out);
+}
+.k5-data-table__group-toggle[aria-expanded='false'] svg {
+  rotate: -90deg;
+}
+.k5-data-table__group-count {
+  color: var(--k5-muted-foreground);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--k5-weight-regular);
+}
