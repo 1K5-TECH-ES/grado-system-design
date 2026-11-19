@@ -16,6 +16,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
 - Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
 - Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
+- Inter variable: `fonts.css` trae un archivo por alfabeto con todos los pesos (`inter-latin-wght-normal.woff2`, 48 KB, y `inter-latin-ext-wght-normal.woff2`) en lugar de cuatro pesos estáticos. Una página en español descarga 48 KB en lugar de 72–96 KB. Con él, `--k5-weight-medium` pasa a 510 y `--k5-weight-semibold` a 590, un punto más finos y legibles a 13 px. Una app que carga su propia Inter (sin `fonts.css`) se queda en 500 y 600.
 - El presupuesto de `grado.min.css` sube de 17 a 18,5 KB (con gzip) por los atajos, las variantes y props nuevas y la cabecera de 0.8, que se retira en 0.10.
 
 ### AppShell
@@ -115,6 +116,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - **Rompe** · `AppShell` en Consola cambia de aspecto: sin cabecera berenjena y con el contenido en un panel. Si la app necesita la cabecera de antes mientras se adapta, añade `brandHeader` (React) o `brand-header` (Vue); se retira en 0.10. Si la app pintaba su propio fondo en `<main>`, quítalo: el panel ya lo pone.
 - Los controles de Consola miden 4 px menos y el texto de los botones pasa de 12 a 13 px. Revisa las maquetas ajustadas a mano (alturas fijas alrededor de un botón o un campo). En pantallas táctiles no cambia nada: `comfortable` sigue en 36 · 44 · 48.
 - `Avatar` mide 4 px menos (24 y 20 px). Si una maqueta contaba con 28 px, usa `size="lg"` o ajusta el hueco.
+- Los archivos estáticos de Inter (`assets/fonts/inter-latin-400-normal.woff2` y los demás pesos) ya no están en el paquete. Si la app los precargaba o los copiaba, usa `inter-latin-wght-normal.woff2` y `inter-latin-ext-wght-normal.woff2`; con `fonts.css` no hay que hacer nada.
 - Los menús ya no resaltan en menta. Si una app contaba con ese color para algo, usa `--k5-accent` directamente.
 
 ## 0.8.0 · sin publicar
