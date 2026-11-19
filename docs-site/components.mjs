@@ -638,11 +638,16 @@ function receive(incoming) {
     ),
     [
       ['query', 'React: onQueryChange · Vue: v-model:query', 'Vacío'],
-      ['filters', 'Lista de { id, label }', '[]'],
+      ['filters', 'Lista de { id, label } o, en partes, { id, field, operator, value }', '[]'],
+      [
+        'Editar una parte',
+        'React: onEditFilter(id, part) · Vue: editable y evento edit-filter. part es field, operator o value: abre su selector',
+        '—',
+      ],
       ['Eliminar / limpiar', 'React: onRemoveFilter / onClear · Vue: eventos remove-filter / clear', '—'],
       ['children / slot', 'Controles adicionales', '—'],
     ],
-    'Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado; en Vue activa removable para mostrar su botón de cierre.',
+    'Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado (field, operator, value; React: onEdit · Vue: editable y evento edit); en Vue activa removable para mostrar su botón de cierre.',
   ),
   entry(
     'data-table',

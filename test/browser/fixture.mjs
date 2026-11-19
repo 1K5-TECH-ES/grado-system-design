@@ -38,7 +38,10 @@ const initial = () => ({
   range: { start: '2026-10-01', end: '2026-10-31' },
   files: [],
   step: 'a',
-  filters: [{ id: 'a', label: 'Estado' }],
+  filters: [
+    { id: 'a', label: 'Estado' },
+    { id: 'b', field: 'Provincia', operator: 'es', value: 'Madrid' },
+  ],
   query: '',
   accordion: [],
   reduced: false,
@@ -301,6 +304,20 @@ function renderUI(framework, state, update) {
         onQueryChange: set('query'),
         filters: state.filters,
         onRemoveFilter: (id) => update({ filters: state.filters.filter((f) => f.id !== id) }),
+        // Filtro en partes (0.9): el operador alterna y el valor pasa a Valencia.
+        editable: true,
+        onEditFilter: (id, part) =>
+          update({
+            filters: state.filters.map((f) =>
+              f.id !== id
+                ? f
+                : part === 'operator'
+                  ? { ...f, operator: f.operator === 'es' ? 'no es' : 'es' }
+                  : part === 'value'
+                    ? { ...f, value: 'Valencia' }
+                    : f,
+            ),
+          }),
         onClear: () => update({ query: '', filters: [] }),
       }),
     ),

@@ -565,6 +565,7 @@ emits: filesChange, reject, remove, retry
 
 ```ts
   clearable: Boolean
+  editable: Boolean
   filters: Array  // con valor por defecto
   label: String
   placeholder: String
@@ -572,16 +573,20 @@ emits: filesChange, reject, remove, retry
   searchable: Boolean  // con valor por defecto
 ```
 
-emits: clear, removeFilter, update:query
+emits: clear, editFilter, removeFilter, update:query
 
 ## FilterChip
 
 ```ts
-  label: String  // obligatoria
+  editable: Boolean
+  field: String
+  label: String
+  operator: String
   removable: Boolean
+  value: String
 ```
 
-emits: remove
+emits: edit, remove
 
 ## focusField
 

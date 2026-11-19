@@ -115,6 +115,7 @@ Búsqueda y filtros activos visibles, fáciles de quitar individualmente.
 
 - Úsalo encima de un listado para buscar y ver los filtros activos.
 - Añade otros controles, como Select o MultiSelect, como hijos.
+- Pasa los filtros en partes (campo, operador, valores) para que se lean como una frase y cada parte se pueda cambiar sin quitar el filtro.
 
 **Qué evitar**
 
@@ -125,9 +126,10 @@ Búsqueda y filtros activos visibles, fáciles de quitar individualmente.
 
 - Es una región role="search" y el buscador usa label como nombre.
 - Cada chip tiene un botón «Quitar filtro» con su etiqueta. Al quitarlo, el foco vuelve al buscador.
+- Un filtro en partes es un grupo (role="group") con la frase entera como nombre; cada parte editable es un botón con su texto.
 - El número de resultados no se anuncia. Hazlo con role="status" en tu listado.
 
-**Nota:** Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado; en Vue activa removable para mostrar su botón de cierre.
+**Nota:** Los filtros se aplican a los datos en la aplicación. FilterChip también se exporta por separado (field, operator, value; React: onEdit · Vue: editable y evento edit); en Vue activa removable para mostrar su botón de cierre.
 
 ## DataTable
 

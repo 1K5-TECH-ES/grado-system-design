@@ -115,7 +115,19 @@ const fixtures = [
   ['Stepper', { items: [{ id: 'a', label: 'Cliente' }], value: 'a', modelValue: 'a' }],
   ['Timeline', { items: [{ id: '1', title: 'Creado', tone: 'info' }] }],
   ['FilterChip', { label: 'Estado: abierto' }],
+  ['FilterChip', { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', removable: true, onRemove: () => {} }],
+  ['FilterChip', { field: 'Estado', operator: 'es', value: 'Abierta', editable: true, onEdit: () => {} }],
   ['FilterBar', { filters: [{ id: '1', label: 'Estado' }] }],
+  [
+    'FilterBar',
+    {
+      filters: [{ id: '1', field: 'Provincia', operator: 'no es', value: 'Madrid' }],
+      editable: true,
+      onEditFilter: () => {},
+      onRemoveFilter: () => {},
+      searchable: false,
+    },
+  ],
   ['Accordion', { items: [{ value: 'a', title: 'Ayuda', content: 'Texto' }] }],
   ['Breadcrumbs', { items: [{ label: 'Inicio' }] }],
   [

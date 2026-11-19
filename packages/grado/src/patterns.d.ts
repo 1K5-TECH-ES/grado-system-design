@@ -35,9 +35,16 @@ export interface TimelineItem {
   dateTime?: string
   tone?: StatusTone
 }
+/** Parte de un filtro que se puede editar: el campo, el operador o los valores. */
+export type FilterPart = 'field' | 'operator' | 'value'
 export interface FilterItem {
   id: string
-  label: string
+  /** Texto del filtro en una pieza. Con field, nombra el filtro si quieres otro texto que el de las partes. */
+  label?: string
+  /** Filtro en partes: campo (Estado), operador (es uno de) y valores (Abierta, En obra). */
+  field?: string
+  operator?: string
+  value?: string
 }
 export interface UploadItem {
   id: string

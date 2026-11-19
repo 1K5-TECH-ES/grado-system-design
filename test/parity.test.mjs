@@ -91,6 +91,14 @@ const SCENARIOS = {
         h(V.Status, { progress: 'done', tone: 'brand' }, text('Resuelto')),
       ]),
   ],
+  'filtro en partes, editable y quitable': [
+    r(R.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', onEdit: () => {}, onRemove: () => {} }),
+    () => h(V.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', editable: true, removable: true }),
+  ],
+  'filtro en partes sin operador ni edición': [
+    r(R.FilterChip, { field: 'Provincia', value: 'Madrid' }),
+    () => h(V.FilterChip, { field: 'Provincia', value: 'Madrid' }),
+  ],
   'badges de todos los tonos': [
     r(
       'div',
@@ -370,4 +378,20 @@ test('el armazón enlaza menú y barra lateral y marca la página actual', () =>
 
 test('plegado: los elementos llevan su nombre como title', () => {
   assert.match(html['armazón plegado'], /<a class="k5-nav-item" href="\/chat" title="Chat">/)
+})
+
+test('FilterChip en partes: grupo con la frase entera, una parte por botón y quitar con la frase', () => {
+  const html = renderToStaticMarkup(
+    r(R.FilterChip, { field: 'Estado', operator: 'es uno de', value: 'Abierta, En obra', onEdit: () => {}, onRemove: () => {} }),
+  )
+  assert.match(html, /^<span class="k5-chip k5-chip--parts" role="group" aria-label="Estado es uno de Abierta, En obra">/)
+  assert.match(html, /<button type="button" class="k5-chip__part k5-chip__field">Estado<\/button>/)
+  assert.match(html, /<button type="button" class="k5-chip__part k5-chip__operator">es uno de<\/button>/)
+  assert.match(html, /aria-label="Quitar filtro: Estado es uno de Abierta, En obra"/)
+  // Sin onEdit, las partes son texto; sin field, el chip de siempre.
+  assert.match(
+    renderToStaticMarkup(r(R.FilterChip, { field: 'Provincia', value: 'Madrid' })),
+    /<span class="k5-chip__part k5-chip__value">Madrid<\/span>/,
+  )
+  assert.equal(renderToStaticMarkup(r(R.FilterChip, { label: 'Estado: abierto' })), '<span class="k5-chip">Estado: abierto</span>')
 })

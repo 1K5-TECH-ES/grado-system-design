@@ -711,9 +711,13 @@ export interface TimelineItem {
     dateTime?: string;
     tone?: StatusTone;
 }
+export type FilterPart = 'field' | 'operator' | 'value';
 export interface FilterItem {
     id: string;
-    label: string;
+    label?: string;
+    field?: string;
+    operator?: string;
+    value?: string;
 }
 export interface UploadItem {
     id: string;

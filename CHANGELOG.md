@@ -61,6 +61,11 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `groupRows()` en `@1k5-tech-es/grado/core` junta las filas igual para quien pinte su propia tabla.
 - El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos.
 
+### FilterBar y FilterChip
+
+- Filtro en partes: `field`, `operator` y `value` (Estado · es uno de · Abierta, En obra) en lugar de una etiqueta, separadas por una línea fina, con el botón de quitar al final. El chip es un grupo con la frase entera como nombre. Con `onEdit` (Vue: `editable` y el evento `edit`) cada parte es un botón que avisa de cuál se ha pulsado (`field`, `operator` o `value`) para abrir su selector sin quitar el filtro. En `FilterBar`, los filtros aceptan las mismas partes y avisan con `onEditFilter(id, part)` (Vue: `editable` y `edit-filter`). `label` sigue sirviendo para los filtros de una pieza.
+- El chip (también el de `MultiSelect`) pasa a gris, sin borde ni tinte morado: el acento queda para la acción principal.
+
 ### Tabs
 
 - `variant="view"`: pastillas pequeñas con borde y sin línea debajo, para cambiar de vista una lista desde una barra de herramientas (Todos · Abiertos · Esta semana).

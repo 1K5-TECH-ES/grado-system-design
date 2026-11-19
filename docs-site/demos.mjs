@@ -142,7 +142,7 @@ function CoreDemo({ id }) {
     [checked, setChecked] = useState(false)
   const [query, setQuery] = useState(''),
     [filters, setFilters] = useState([
-      { id: 'status', label: 'Estado: en obra' },
+      { id: 'status', field: 'Estado', operator: 'es', value: 'En obra' },
       { id: 'owner', label: 'Responsable: Marta' },
     ])
   const [files, setFiles] = useState([
@@ -356,6 +356,12 @@ function CoreDemo({ id }) {
         onQueryChange: setQuery,
         filters,
         onRemoveFilter: (key) => setFilters((items) => items.filter((item) => item.id !== key)),
+        // El operador alterna entre «es» y «no es»; en una app, el campo y los valores abrirían su selector.
+        onEditFilter: (key, part) =>
+          part === 'operator' &&
+          setFilters((items) =>
+            items.map((item) => (item.id === key ? { ...item, operator: item.operator === 'es' ? 'no es' : 'es' } : item)),
+          ),
         onClear: () => {
           setQuery('')
           setFilters([])

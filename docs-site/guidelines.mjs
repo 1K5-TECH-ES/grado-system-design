@@ -457,11 +457,13 @@ export const guidelines = {
     use: [
       'Úsalo encima de un listado para buscar y ver los filtros activos.',
       'Añade otros controles, como Select o MultiSelect, como hijos.',
+      'Pasa los filtros en partes (campo, operador, valores) para que se lean como una frase y cada parte se pueda cambiar sin quitar el filtro.',
     ],
     avoid: ['Para buscar en toda la aplicación usa CommandPalette.', 'Muestra solo los filtros activos, uno por FilterChip.'],
     a11y: [
       'Es una región role="search" y el buscador usa label como nombre.',
       'Cada chip tiene un botón «Quitar filtro» con su etiqueta. Al quitarlo, el foco vuelve al buscador.',
+      'Un filtro en partes es un grupo (role="group") con la frase entera como nombre; cada parte editable es un botón con su texto.',
       'El número de resultados no se anuncia. Hazlo con role="status" en tu listado.',
     ],
   },
