@@ -12,7 +12,8 @@ import { build } from 'esbuild'
 
 const KB = 1024
 const LIMITS = {
-  'grado.min.css': 17 * KB,
+  // 0.9: +0,5 KB por los atajos (shortcut) y la cabecera de 0.8 (brandHeader, se retira en 0.10).
+  'grado.min.css': 17.5 * KB,
   'tokens.css': 4 * KB,
   // Temas en su propio archivo (0.6): solo los cargan las apps que los usan.
   'themes/campo.css': 1.6 * KB,
