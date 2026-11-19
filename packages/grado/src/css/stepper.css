@@ -21,8 +21,8 @@
   background: transparent;
   color: var(--k5-muted-foreground);
   font-family: inherit;
-  font-size: var(--k5-text-body);
-  line-height: 1.4;
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
   text-align: left;
 }
 .k5-stepper__item:not(:last-child) .k5-stepper__control::after {
@@ -55,23 +55,23 @@ button.k5-stepper__control:hover:not(:disabled) {
   display: grid;
   flex-shrink: 0;
   place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border: 1px solid var(--k5-border);
   border-radius: 50%;
   background: var(--k5-card);
-  font-size: var(--k5-text-caption);
+  font-size: 0.6875rem;
   font-weight: var(--k5-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 .k5-stepper__number svg {
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 .k5-stepper__text {
   display: grid;
   gap: var(--k5-space-0-5);
-  padding-top: var(--k5-space-1);
+  padding-top: 0.1875rem;
 }
 .k5-stepper__description {
   color: var(--k5-muted-foreground);
@@ -90,7 +90,6 @@ button.k5-stepper__control:hover:not(:disabled) {
   border-color: var(--k5-primary);
   background: var(--k5-primary);
   color: var(--k5-primary-foreground);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
 }
 .k5-stepper__item[aria-current='step'] .k5-stepper__control {
   color: var(--k5-foreground);
