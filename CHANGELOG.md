@@ -84,6 +84,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - `variant="view"`: pastillas pequeñas con borde y sin línea debajo, para cambiar de vista una lista desde una barra de herramientas (Todos · Abiertos · Esta semana).
 
+### RadioGroup
+
+- `variant="card"`: cada opción es una tarjeta con borde, y la elegida lleva el borde en el color principal. En horizontal se reparten en columnas. Para tarifas o planes con precio y descripción.
+
 ### Status
 
 - `progress`: para flujos con orden (un ticket, una instalación), el punto pasa a icono de progreso: discontinuo (`backlog`), vacío (`todo`), medio (`started`), tres cuartos (`waiting`), lleno con check (`done`) y lleno con aspa (`canceled`). La forma se lee sin color. Sin `tone`, cada paso trae el suyo (`started` en aviso, `waiting` en información, `done` en éxito). Es solo CSS sobre el mismo `k5-status__dot`.

@@ -91,6 +91,30 @@ const SCENARIOS = {
         h(V.Status, { progress: 'done', tone: 'brand' }, text('Resuelto')),
       ]),
   ],
+  // Sin descripción: la normalización de ids de Vue (v-0-1) se come el índice de su id.
+  'opciones en tarjeta': [
+    r(R.RadioGroup, {
+      label: 'Tarifa',
+      variant: 'card',
+      orientation: 'horizontal',
+      defaultValue: 'fija',
+      options: [
+        { value: 'fija', label: 'Fija · 0,14 €/kWh' },
+        { value: 'dinamica', label: 'Dinámica' },
+      ],
+    }),
+    () =>
+      h(V.RadioGroup, {
+        label: 'Tarifa',
+        variant: 'card',
+        orientation: 'horizontal',
+        defaultValue: 'fija',
+        options: [
+          { value: 'fija', label: 'Fija · 0,14 €/kWh' },
+          { value: 'dinamica', label: 'Dinámica' },
+        ],
+      }),
+  ],
   'panel lateral sin velo': [
     r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'),
     () => h(V.Drawer, { title: 'Vista previa', modal: false }, () => 'Detalle'),

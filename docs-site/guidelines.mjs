@@ -260,6 +260,7 @@ export const guidelines = {
     use: [
       'Úsalo para una opción entre pocas que conviene ver a la vez, como Solo placas o Placas y batería.',
       'Añade description si las opciones cambian el precio o el plazo.',
+      'Usa variant="card" cuando cada opción necesita leerse entera, como tarifas o planes con su precio.',
     ],
     avoid: ['Con más de cinco opciones usa Select o Combobox.', 'Para cambiar una vista al momento usa SegmentedControl.'],
     a11y: [

@@ -214,6 +214,7 @@ export const newComponents = [
       ['options', 'value, label, description, disabled', 'Obligatorio'],
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Vacío'],
       ['orientation', 'vertical · horizontal', 'vertical'],
+      ['variant', 'default · card (cada opción es una tarjeta con borde; en horizontal, en columnas)', 'default'],
       ['name / required / disabled', 'Atributos del formulario', '—'],
     ],
   ),

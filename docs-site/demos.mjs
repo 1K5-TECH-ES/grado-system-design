@@ -221,7 +221,20 @@ function CoreDemo({ id }) {
       h(G.Checkbox, { label: 'Selección parcial', indeterminate: true, checked: false, readOnly: true }),
       h(G.Checkbox, { label: 'No disponible', disabled: true }),
     )
-  if (id === 'radio-group') return h(G.RadioGroup, { label: 'Tipo de instalación', options: choices, defaultValue: 'solar' })
+  if (id === 'radio-group')
+    return stack(
+      h(G.RadioGroup, { label: 'Tipo de instalación', options: choices, defaultValue: 'solar' }),
+      h(G.RadioGroup, {
+        label: 'Tarifa',
+        variant: 'card',
+        orientation: 'horizontal',
+        defaultValue: 'fija',
+        options: [
+          { value: 'fija', label: 'Fija · 0,14 €/kWh', description: 'El mismo precio a cualquier hora.' },
+          { value: 'dinamica', label: 'Dinámica', description: 'Precio de mercado, hora a hora.' },
+        ],
+      }),
+    )
   if (id === 'dropdown-menu')
     return trigger(
       h(G.DropdownMenu, {

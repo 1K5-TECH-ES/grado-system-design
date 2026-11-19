@@ -97,6 +97,7 @@ Elige una sola alternativa con controles nativos y una etiqueta de grupo.
 
 - Úsalo para una opción entre pocas que conviene ver a la vez, como Solo placas o Placas y batería.
 - Añade description si las opciones cambian el precio o el plazo.
+- Usa variant="card" cuando cada opción necesita leerse entera, como tarifas o planes con su precio.
 
 **Qué evitar**
 

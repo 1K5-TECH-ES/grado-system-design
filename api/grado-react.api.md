@@ -1237,6 +1237,7 @@ ref: HTMLFieldSetElement
   orientation?: "horizontal" | "vertical"
   required?: boolean
   value?: string
+  variant?: "default" | "card"
 ```
 
 ## SearchInput

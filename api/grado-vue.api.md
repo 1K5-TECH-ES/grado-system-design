@@ -1035,6 +1035,7 @@ function
   options: Array  // obligatoria
   orientation: String  // con valor por defecto
   required: Boolean
+  variant: String  // con valor por defecto
 ```
 
 emits: update:modelValue
