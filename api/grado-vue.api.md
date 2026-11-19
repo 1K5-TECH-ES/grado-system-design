@@ -1171,6 +1171,7 @@ function
 ## Status
 
 ```ts
+  progress: String
   pulse: Boolean
   tone: String
 ```

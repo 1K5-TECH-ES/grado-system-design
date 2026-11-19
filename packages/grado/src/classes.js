@@ -208,9 +208,28 @@ export const LINK_TONES = ['default', 'muted']
 export const LINK_UNDERLINES = ['hover', 'always']
 const SMALL_SIZES = ['sm', 'md']
 
-/** Estado de una fila: punto de color y texto. pulse: el punto late (estados «en vivo»). */
-export function statusClass({ tone = 'neutral', pulse = false } = {}) {
-  return cx('k5-status', `k5-status--${pick(tone, STATUS_TONES, 'neutral')}`, pulse && 'k5-status--pulse')
+/**
+ * Pasos de un flujo con orden (ticket, instalación). La forma del icono se lee sin color:
+ * discontinuo, vacío, medio, tres cuartos, lleno con check y lleno con aspa. Cada paso trae su
+ * tono por defecto.
+ */
+export const STATUS_PROGRESS = {
+  backlog: 'neutral',
+  todo: 'neutral',
+  started: 'warning',
+  waiting: 'info',
+  done: 'success',
+  canceled: 'neutral',
+}
+
+/**
+ * Estado de una fila: punto de color y texto. pulse: el punto late (estados «en vivo»).
+ * progress: el punto pasa a icono de progreso; sin tone, usa el del paso.
+ */
+export function statusClass({ tone, pulse = false, progress } = {}) {
+  const step = Object.hasOwn(STATUS_PROGRESS, progress) ? progress : null
+  const t = pick(tone ?? (step ? STATUS_PROGRESS[step] : 'neutral'), STATUS_TONES, 'neutral')
+  return cx('k5-status', `k5-status--${t}`, pulse && 'k5-status--pulse', step && `k5-status--progress k5-status--${step}`)
 }
 
 /** Barra de progreso. steps: variante por pasos; indeterminate: sin valor conocido. */

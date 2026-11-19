@@ -163,9 +163,12 @@ export declare const PROGRESS_TONES: readonly ProgressTone[];
 export declare const DESCRIPTION_LAYOUTS: readonly DescriptionLayout[];
 export declare const LINK_TONES: readonly LinkTone[];
 export declare const LINK_UNDERLINES: readonly LinkUnderline[];
+export type StatusProgress = 'backlog' | 'todo' | 'started' | 'waiting' | 'done' | 'canceled';
+export declare const STATUS_PROGRESS: Record<StatusProgress, RowStatusTone>;
 export declare function statusClass(options?: {
     tone?: RowStatusTone;
     pulse?: boolean;
+    progress?: StatusProgress;
 }): string;
 export declare function progressClass(options?: {
     tone?: ProgressTone;

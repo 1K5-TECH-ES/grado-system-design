@@ -34,6 +34,11 @@ export const entries = [
     [
       ['tone', "'neutral' | 'brand' | 'info' | 'success' | 'warning' | 'danger'", "'neutral'"],
       ['pulse', 'El punto late, para estados «en vivo». Sin animación con movimiento reducido', 'false'],
+      [
+        'progress',
+        'backlog · todo · started · waiting · done · canceled. Icono de progreso para flujos con orden; sin tone, cada paso trae el suyo',
+        '—',
+      ],
       ['children / slot', 'Texto del estado', '—'],
     ],
     'El color va solo en el punto, que se oculta a los lectores de pantalla; el texto conserva el color normal y debe entenderse por sí solo.',

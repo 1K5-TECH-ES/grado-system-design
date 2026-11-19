@@ -83,6 +83,14 @@ const SCENARIOS = {
     r(R.Button, { variant: 'ghost', iconOnly: true, icon: IconR, 'aria-label': 'Asignar', shortcut: ['a'] }),
     () => h(V.Button, { variant: 'ghost', iconOnly: true, icon: IconV, 'aria-label': 'Asignar', shortcut: ['a'] }),
   ],
+  'estado con icono de progreso': [
+    r('div', null, r(R.Status, { progress: 'started' }, 'En curso'), r(R.Status, { progress: 'done', tone: 'brand' }, 'Resuelto')),
+    () =>
+      h('div', null, [
+        h(V.Status, { progress: 'started' }, text('En curso')),
+        h(V.Status, { progress: 'done', tone: 'brand' }, text('Resuelto')),
+      ]),
+  ],
   'badges de todos los tonos': [
     r(
       'div',
@@ -314,6 +322,15 @@ test('el atajo se anuncia con aria-keyshortcuts y se pinta oculto a lectores de 
   const html = renderToStaticMarkup(r(R.Button, { shortcut: ['⌘', '⇧', 'k'] }, 'Buscar'))
   assert.match(html, /aria-keyshortcuts="Meta\+Shift\+K"/)
   assert.match(html, /<span class="k5-btn__shortcut" aria-hidden="true"><kbd>⌘<\/kbd><kbd>⇧<\/kbd><kbd>k<\/kbd><\/span>/)
+})
+
+test('cada paso de progreso trae su tono, y tone manda si se da', () => {
+  const html = renderToStaticMarkup(
+    r('div', null, r(R.Status, { progress: 'started' }, 'a'), r(R.Status, { progress: 'done', tone: 'brand' }, 'b')),
+  )
+  assert.match(html, /class="k5-status k5-status--warning k5-status--progress k5-status--started"/)
+  assert.match(html, /class="k5-status k5-status--brand k5-status--progress k5-status--done"/)
+  assert.match(renderToStaticMarkup(r(R.Status, { progress: 'otro' }, 'c')), /class="k5-status k5-status--neutral"/)
 })
 
 test('un botón cargando queda desactivado y lo anuncia', () => {

@@ -78,7 +78,10 @@ export declare const PROGRESS_TONES: readonly ProgressTone[]
 export declare const DESCRIPTION_LAYOUTS: readonly DescriptionLayout[]
 export declare const LINK_TONES: readonly LinkTone[]
 export declare const LINK_UNDERLINES: readonly LinkUnderline[]
-export declare function statusClass(options?: { tone?: RowStatusTone; pulse?: boolean }): string
+export type StatusProgress = 'backlog' | 'todo' | 'started' | 'waiting' | 'done' | 'canceled'
+/** Tono por defecto de cada paso de progress. */
+export declare const STATUS_PROGRESS: Record<StatusProgress, RowStatusTone>
+export declare function statusClass(options?: { tone?: RowStatusTone; pulse?: boolean; progress?: StatusProgress }): string
 export declare function progressClass(options?: { tone?: ProgressTone; size?: SmallSize; indeterminate?: boolean; steps?: boolean }): string
 export declare function descriptionListClass(options?: { layout?: DescriptionLayout }): string
 export declare function copyButtonClass(options?: { size?: Size; iconOnly?: boolean; copied?: boolean }): string

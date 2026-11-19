@@ -48,6 +48,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `DropdownMenu` y `ContextMenu`: cada opción acepta `shortcut`, que se pinta a la derecha. En `k5-menu`, con `data-shortcut="⌘ D"` en el `<option>`.
 - `keyShortcuts()` en `@1k5-tech-es/grado/classes` traduce las teclas pintadas a los nombres de `aria-keyshortcuts` (`⌘` → `Meta`, `⇧` → `Shift`, `↵` → `Enter`…).
 
+### Status
+
+- `progress`: para flujos con orden (un ticket, una instalación), el punto pasa a icono de progreso: discontinuo (`backlog`), vacío (`todo`), medio (`started`), tres cuartos (`waiting`), lleno con check (`done`) y lleno con aspa (`canceled`). La forma se lee sin color. Sin `tone`, cada paso trae el suyo (`started` en aviso, `waiting` en información, `done` en éxito). Es solo CSS sobre el mismo `k5-status__dot`.
+
 ### Al actualizar desde 0.8.0
 
 - **Rompe** · `AppShell` en Consola cambia de aspecto: sin cabecera berenjena y con el contenido en un panel. Si la app necesita la cabecera de antes mientras se adapta, añade `brandHeader` (React) o `brand-header` (Vue); se retira en 0.10. Si la app pintaba su propio fondo en `<main>`, quítalo: el panel ya lo pone.

@@ -1389,6 +1389,7 @@ ref: HTMLElement · admite además los atributos HTML de ese elemento
 ref: HTMLSpanElement · admite además los atributos HTML de ese elemento
 
 ```ts
+  progress?: StatusProgress
   pulse?: boolean
   tone?: RowStatusTone
 ```
