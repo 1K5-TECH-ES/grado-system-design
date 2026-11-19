@@ -1,7 +1,8 @@
-/* Botón de solo icono. Conmutado (aria-pressed="true"): fondo y texto del tono primario. */
+/* Botón de solo icono. Conmutado (aria-pressed="true"): gris levantado con el icono en el color
+   del texto, como el resto de lo elegido (un solo acento por vista). */
 .k5-btn--icon[aria-pressed='true'],
 .k5-btn--icon[aria-pressed='true']:hover {
-  border-color: transparent;
-  background: var(--k5-primary-subtle);
-  color: var(--k5-primary-text);
+  border-color: var(--k5-border);
+  background: var(--k5-muted);
+  color: var(--k5-foreground);
 }

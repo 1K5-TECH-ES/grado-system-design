@@ -3,6 +3,16 @@
    sombra pierde la señal, así que aquí lleva el resaltado del sistema (highlight) o un borde.
    Los focos usan outline, que se mantiene. */
 @media (forced-colors: active) {
+  /* Casilla y opción propias: en alto contraste vuelven a ser las del sistema. */
+  .k5-checkbox,
+  .k5-radio {
+    appearance: auto;
+  }
+  .k5-checkbox::before,
+  .k5-radio::before {
+    display: none;
+  }
+
   /* Lo elegido o activo en listas, menús, pestañas y navegación. */
   .k5-menu__item:focus,
   .k5-combobox__option[data-active='true'],
@@ -25,6 +35,10 @@
   .k5-calendar__day[aria-current='date'] {
     outline: 1px solid canvastext;
     outline-offset: -2px;
+  }
+  .k5-stepper__item[aria-current='step'] .k5-stepper__number {
+    forced-color-adjust: none;
+    background: highlight;
   }
   .k5-kpi[aria-pressed='true'] {
     outline: 2px solid highlight;

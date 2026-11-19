@@ -1,5 +1,5 @@
-/* Kbd: una tecla o un atajo (Ctrl + K). Solo fondo gris, sin borde: acompaña al texto
-   sin parecer un botón. */
+/* Kbd: una tecla o un atajo (Ctrl + K). Tecla hundida de 18 px con línea interior: acompaña
+   al texto sin parecer un botón. */
 .k5-kbd {
   display: inline-flex;
   align-items: center;
@@ -18,7 +18,8 @@
   height: 1.125rem;
   padding: 0 var(--k5-space-1);
   border-radius: var(--k5-radius-xs);
-  background: var(--k5-muted);
+  background: var(--k5-field);
+  box-shadow: inset 0 0 0 1px var(--k5-border);
   color: var(--k5-muted-foreground);
   font: inherit;
   font-size: 0.6875rem;

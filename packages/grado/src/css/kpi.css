@@ -102,6 +102,26 @@ button.k5-kpi:focus-visible {
   color: var(--k5-muted-foreground);
 }
 
+/* strip: tira compacta para la cabecera de un listado. Sin línea arriba; cada indicador separado
+   del anterior por una línea vertical y la cifra a 20 px. */
+.k5-kpis--strip {
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--k5-space-3) 0;
+}
+.k5-kpis--strip .k5-kpi {
+  padding: 0 var(--k5-space-4);
+  border-top: 0;
+  border-left: var(--k5-border-width) solid var(--k5-border);
+}
+.k5-kpis--strip .k5-kpi:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.k5-kpis--strip .k5-kpi__value {
+  font-size: var(--k5-text-heading);
+  line-height: var(--k5-leading-heading);
+}
+
 /* :not(…) deja fuera un bloque Consola metido en una página Marca: ahí manda Consola. */
 :where([data-k5-theme='marca']) .k5-kpis:not(:where([data-k5-theme='marca'] [data-k5-theme='consola'] *)) {
   gap: var(--k5-space-3);

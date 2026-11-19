@@ -4,6 +4,7 @@ import tokens from '@1k5-tech-es/grado/tokens.json' with { type: 'json' }
 import { icons } from '../icons.mjs'
 import { useAppearance } from '../Layout.mjs'
 import { LinkButton, Page, Section, TextLink, useSite, version } from '../ui.mjs'
+import { Showcase } from '../Showcase.mjs'
 
 const brandColors = [...Object.entries(tokens.brand).map(([name, c]) => [name, c.hex]), ['graphite', tokens.neutral.graphite]]
 const px = (rem) => `${parseFloat(rem) * 16} px`
@@ -111,6 +112,7 @@ export default function Home() {
         h(LinkButton, { to: '/componentes', icon: icons.components }, 'Explorar componentes'),
       ),
     },
+    h(Showcase),
     h(
       G.KpiGroup,
       { label: 'Grado en cifras' },

@@ -55,3 +55,37 @@
   color: var(--k5-tertiary-foreground);
   font-variant-numeric: tabular-nums;
 }
+
+/* progress y author: un icono de 20 px sobre la línea en lugar del punto (estado o avatar). */
+.k5-timeline__icon {
+  position: absolute;
+  top: calc((var(--k5-leading-ui) - 1.25rem) / 2);
+  left: calc(-0.625rem - 0.5px);
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--k5-background);
+}
+.k5-timeline__icon .k5-status__dot {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+/* Con autor, el título es la acción en gris y el nombre en el color del texto. */
+.k5-timeline__title:has(.k5-timeline__author) {
+  color: var(--k5-muted-foreground);
+  font-weight: var(--k5-weight-regular);
+}
+.k5-timeline__author {
+  color: var(--k5-foreground);
+  font-weight: var(--k5-weight-medium);
+}
+.k5-timeline__comment {
+  margin: var(--k5-space-1-5) 0 0;
+  padding: var(--k5-space-2-5) var(--k5-space-3);
+  border: 1px solid var(--k5-border);
+  border-radius: var(--k5-radius);
+  color: var(--k5-foreground);
+  overflow-wrap: anywhere;
+}

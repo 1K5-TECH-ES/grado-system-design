@@ -78,10 +78,10 @@ test('grado.css no escribe z-index ni duraciones a mano', () => {
     [...css.matchAll(/z-index:(?!\s*var\()[^;]+;/g)].map((m) => m[0]),
     [],
   )
-  // Solo las animaciones en bucle (spinner y skeleton) llevan su propio ritmo.
+  // Solo las animaciones en bucle (spinner, pulso y brillo del skeleton) llevan su propio ritmo.
   const loose = [...css.matchAll(/\b(transition|animation)(?:-duration)?\s*:[^;]*\b\d*\.?\d+m?s\b[^;]*;/g)]
     .map((m) => m[0])
-    .filter((rule) => !/k5-(spin|pulse)|animation-duration: 1\.6s|visibility 0s/.test(rule))
+    .filter((rule) => !/k5-(spin|pulse|shimmer)|animation-duration: 1\.6s|visibility 0s/.test(rule))
   assert.deepEqual(loose, [])
 })
 

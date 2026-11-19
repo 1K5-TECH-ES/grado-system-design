@@ -36,8 +36,19 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+/* Cargando: el botón conserva su color (solo el spinner dice que trabaja); desactivado de verdad,
+   el primario y el destructivo pasan a gris en lugar de desvaír su color. */
 .k5-btn[aria-busy='true'] {
+  opacity: 1;
   cursor: progress;
+}
+.k5-btn--primary:disabled:not([aria-busy='true']),
+.k5-btn--destructive:disabled:not([aria-busy='true']) {
+  border-color: var(--k5-border);
+  background: var(--k5-muted);
+  color: var(--k5-muted-foreground);
+  box-shadow: none;
+  opacity: 1;
 }
 .k5-btn svg {
   width: 0.875rem;

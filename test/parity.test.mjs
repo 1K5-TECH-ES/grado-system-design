@@ -123,6 +123,27 @@ const SCENARIOS = {
         ],
       }),
   ],
+  'actividad con icono de progreso, autor y comentario': [
+    r(R.Timeline, {
+      items: [
+        { id: 'a', title: 'Estado: En curso', progress: 'started', date: 'hace 2 h' },
+        { id: 'b', author: 'Lucía Fernández', title: 'comentó', comment: 'Le he pasado los pasos.' },
+        { id: 'c', title: 'Oferta aceptada', tone: 'success' },
+      ],
+    }),
+    () =>
+      h(V.Timeline, {
+        items: [
+          { id: 'a', title: 'Estado: En curso', progress: 'started', date: 'hace 2 h' },
+          { id: 'b', author: 'Lucía Fernández', title: 'comentó', comment: 'Le he pasado los pasos.' },
+          { id: 'c', title: 'Oferta aceptada', tone: 'success' },
+        ],
+      }),
+  ],
+  'indicadores en tira': [
+    r(R.KpiGroup, { variant: 'strip' }, r(R.Kpi, { label: 'Abiertos', value: '128' })),
+    () => h(V.KpiGroup, { variant: 'strip' }, () => h(V.Kpi, { label: 'Abiertos', value: '128' })),
+  ],
   'panel lateral sin velo': [
     r(R.Drawer, { title: 'Vista previa', modal: false }, 'Detalle'),
     () => h(V.Drawer, { title: 'Vista previa', modal: false }, () => 'Detalle'),
@@ -446,4 +467,19 @@ test('DatePicker natural: combobox con la fecha corta y el valor ISO para el for
   assert.match(html, /value="Mañana · vie, 20 nov"/)
   // Sin natural, el campo nativo de siempre.
   assert.match(renderToStaticMarkup(r(R.DatePicker, {})), /type="date"/)
+})
+
+test('Timeline: el autor va en el título y su avatar y el icono de progreso están ocultos a lectores', () => {
+  const html = renderToStaticMarkup(
+    r(R.Timeline, {
+      items: [
+        { id: 'b', author: 'Lucía Fernández', title: 'comentó', comment: 'Hola' },
+        { id: 'a', title: 'En curso', progress: 'started' },
+      ],
+    }),
+  )
+  assert.match(html, /<strong class="k5-timeline__title"><span class="k5-timeline__author">Lucía Fernández <\/span>comentó<\/strong>/)
+  assert.match(html, /<span aria-hidden="true" class="k5-timeline__icon"><span role="img"/)
+  assert.match(html, /<p class="k5-timeline__comment">Hola<\/p>/)
+  assert.match(html, /class="k5-timeline__icon k5-status k5-status--warning k5-status--progress k5-status--started"/)
 })

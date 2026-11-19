@@ -365,7 +365,25 @@ function CoreDemo({ id }) {
       h('p', { className: 'demo-status' }, 'Los archivos permanecen en tu navegador; esta demostración no los envía.'),
     )
   if (id === 'stepper') return h(G.Stepper, { items: steps, value: value || 'instalacion', onValueChange: setValue })
-  if (id === 'timeline') return h(G.Timeline, { items: events })
+  if (id === 'timeline')
+    return grid2(
+      h(G.Timeline, { items: events }),
+      // Actividad de un ticket: cambios de estado con su icono y un comentario con su autor.
+      h(G.Timeline, {
+        label: 'Actividad del ticket K5-4821',
+        items: [
+          { id: 'a', title: 'creó el ticket desde el chat', progress: 'backlog', date: 'hace 3 h' },
+          { id: 'b', title: 'Estado: En curso', progress: 'started', date: 'hace 2 h' },
+          {
+            id: 'c',
+            author: 'Lucía Fernández',
+            title: 'comentó',
+            comment: 'El datalogger perdió la wifi tras el corte. Le he pasado al cliente los pasos para reconectarlo.',
+            date: 'hace 40 min',
+          },
+        ],
+      }),
+    )
   if (id === 'filter-bar')
     return stack(
       h(G.FilterBar, {

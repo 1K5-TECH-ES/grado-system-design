@@ -629,6 +629,11 @@ function receive(incoming) {
     vue('Timeline', `<Timeline :items="items" />`, `const items = ${history};`),
     [
       ['items', 'id, title, description, date, dateTime, tone', 'Obligatorio'],
+      [
+        'items: progress / author / comment',
+        'Actividad tipo ticket: progress cambia el punto por el icono de progreso de Status; author pone su avatar y su nombre delante del título; comment, el texto en una caja',
+        '—',
+      ],
       ['label', 'Nombre accesible de la lista', 'Historial'],
     ],
     'Muestra los elementos en el orden recibido. date es texto visible; dateTime es la fecha ISO para el elemento time.',

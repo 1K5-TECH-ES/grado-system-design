@@ -1,13 +1,73 @@
-/* Casilla y opciones: controles nativos en berenjena, como los checkbox de 1komma5es_help. */
-/* margin-top: centra el control (16 px) con la primera línea del texto de la interfaz. */
+/* Casilla y opción propias de 14 px: fondo hundido con línea y, marcadas, el color principal con
+   la marca dibujada en primary-foreground (contraste en los tres temas y los dos modos). Siguen
+   siendo el input nativo: teclado, formulario y lectores de pantalla no cambian.
+   margin-top: centra el control con la primera línea del texto de la interfaz. */
 .k5-checkbox,
 .k5-radio {
+  --_box: 0.875rem;
+  display: inline-grid;
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
-  margin: calc((var(--k5-leading-ui) - 1rem) / 2) 0 0;
-  accent-color: var(--k5-primary);
+  place-content: center;
+  width: var(--_box);
+  height: var(--_box);
+  margin: calc((var(--k5-leading-ui) - var(--_box)) / 2) 0 0;
+  border: 1px solid color-mix(in srgb, var(--k5-foreground) 18%, var(--k5-input));
+  border-radius: var(--k5-radius-xs);
+  background: var(--k5-field);
   cursor: pointer;
+  appearance: none;
+  transition:
+    background-color var(--k5-duration-fast),
+    border-color var(--k5-duration-fast);
+}
+.k5-radio {
+  border-radius: 50%;
+}
+/* Marca, con más aire, a 16 px; Campo, para dedos con guantes, a 20 px. */
+:where([data-k5-theme='marca']) :is(.k5-checkbox, .k5-radio) {
+  --_box: 1rem;
+}
+:where([data-k5-theme='campo']) :is(.k5-checkbox, .k5-radio) {
+  --_box: 1.25rem;
+}
+.k5-checkbox:hover:not(:disabled, :checked, :indeterminate),
+.k5-radio:hover:not(:disabled, :checked) {
+  border-color: color-mix(in srgb, var(--k5-input) 60%, var(--k5-foreground));
+}
+.k5-checkbox:checked,
+.k5-checkbox:indeterminate,
+.k5-radio:checked {
+  border-color: var(--k5-primary);
+  background: var(--k5-primary);
+}
+/* La marca: un check que se dibuja al marcar, un guion en indeterminado y un punto de 6 px en la opción. */
+.k5-checkbox::before,
+.k5-radio::before {
+  content: '';
+  width: 0.5625rem;
+  height: 0.5625rem;
+  background: var(--k5-primary-foreground);
+  clip-path: polygon(14% 44%, 0 62%, 40% 100%, 100% 18%, 84% 2%, 38% 66%);
+  transform: scale(0);
+  transition: transform var(--k5-duration-base) var(--k5-ease-out);
+}
+.k5-checkbox:checked::before {
+  transform: scale(1);
+}
+.k5-checkbox:indeterminate::before {
+  height: 0.125rem;
+  border-radius: 1px;
+  clip-path: none;
+  transform: scale(1);
+}
+.k5-radio::before {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  clip-path: none;
+}
+.k5-radio:checked::before {
+  transform: scale(1);
 }
 .k5-checkbox:focus-visible,
 .k5-radio:focus-visible {
@@ -16,6 +76,7 @@
 }
 .k5-checkbox:disabled,
 .k5-radio:disabled {
+  opacity: var(--k5-opacity-disabled);
   cursor: not-allowed;
 }
 

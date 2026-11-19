@@ -19,10 +19,21 @@ export const KpiGroup = defineComponent({
   props: {
     /** Nombre del grupo para lectores de pantalla. */
     label: String,
+    /** strip: una tira compacta, con los indicadores separados por una línea vertical (cabecera de un listado). */
+    variant: { type: String as PropType<'default' | 'strip'>, default: 'default' },
   },
   setup(props, { slots }) {
     const t = useGrado()
-    return () => h('div', { role: 'group', 'aria-label': props.label ?? t.value.messages.indicators, class: 'k5-kpis' }, slots.default?.())
+    return () =>
+      h(
+        'div',
+        {
+          role: 'group',
+          'aria-label': props.label ?? t.value.messages.indicators,
+          class: ['k5-kpis', props.variant === 'strip' && 'k5-kpis--strip'],
+        },
+        slots.default?.(),
+      )
   },
 })
 

@@ -111,6 +111,23 @@
   white-space: nowrap;
 }
 
+/* Pie con la ayuda de teclado: moverse, abrir y cerrar. */
+.k5-command__footer {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--k5-space-3-5);
+  align-items: center;
+  height: 2.125rem;
+  padding: 0 var(--k5-space-3-5);
+  border-top: 1px solid var(--k5-border);
+  color: var(--k5-tertiary-foreground);
+  font-size: var(--k5-text-caption);
+}
+.k5-command__footer span {
+  display: inline-flex;
+  gap: var(--k5-space-1);
+  align-items: center;
+}
 .k5-command__empty {
   margin: 0;
   padding: var(--k5-space-8) var(--k5-space-4);

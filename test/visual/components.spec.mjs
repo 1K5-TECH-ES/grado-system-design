@@ -13,7 +13,7 @@ const NOW = new Date('2026-10-16T10:30:00+02:00')
 async function openComponents(page, theme, mode) {
   await page.addInitScript(
     ([theme, mode]) => {
-      localStorage.setItem('grado-docs-tema', theme)
+      localStorage.setItem('grado-docs-tema-0.9', theme)
       localStorage.setItem('grado-docs-mode', mode)
     },
     [theme, mode],

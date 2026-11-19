@@ -1,9 +1,9 @@
-/* Interruptor: un checkbox nativo con role="switch". Consola: 32 × 18 px, como el resto de
+/* Interruptor: un checkbox nativo con role="switch". Consola: 28 × 16 px, como el resto de
    controles densos; Marca y Campo mantienen 44 × 24 px (más aire y dedos con guantes). */
 .k5-switch {
-  --_w: 2rem;
-  --_h: 1.125rem;
-  --_thumb: 0.75rem;
+  --_w: 1.75rem;
+  --_h: 1rem;
+  --_thumb: 0.625rem;
   appearance: none;
   position: relative;
   flex-shrink: 0;

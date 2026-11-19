@@ -184,6 +184,22 @@ export const CommandPalette = forwardRef<HTMLDialogElement, CommandPaletteProps>
           </p>
         )}
       </div>
+      {/* Ayuda de teclado a la vista. Oculta a lectores de pantalla: el combobox ya anuncia sus teclas. */}
+      <div className="k5-command__footer" aria-hidden="true">
+        <span>
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>
+          {m.commandMove}
+        </span>
+        <span>
+          <kbd>↵</kbd>
+          {m.commandOpen}
+        </span>
+        <span>
+          <kbd>Esc</kbd>
+          {m.commandClose}
+        </span>
+      </div>
     </dialog>
   )
 })

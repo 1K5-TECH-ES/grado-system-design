@@ -40,7 +40,7 @@
   padding: 0 var(--k5-space-2-5);
   border: 1px solid var(--k5-input);
   border-radius: calc(var(--k5-radius) - 2px);
-  background: var(--k5-background);
+  background: var(--k5-field);
   color: var(--k5-foreground);
   font-family: inherit;
   font-size: var(--k5-text-ui);
@@ -105,7 +105,7 @@
 .k5-textarea:focus {
   outline: 2px solid transparent;
   border-color: var(--k5-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-ring) 30%, transparent);
 }
 .k5-input[aria-invalid='true'],
 .k5-select[aria-invalid='true'],
@@ -125,7 +125,7 @@
   cursor: not-allowed;
 }
 
-/* Input con prefijo o sufijo: €, kWp, kWh… El contenedor dibuja el borde. */
+/* Input con prefijo o sufijo: €, kWp, kWh… El contenedor dibuja el borde y el fondo hundido. */
 .k5-input-wrap {
   --_h: var(--k5-control-h);
   display: flex;
@@ -136,7 +136,7 @@
   padding: 0 var(--k5-space-2-5);
   border: 1px solid var(--k5-input);
   border-radius: calc(var(--k5-radius) - 2px);
-  background: var(--k5-background);
+  background: var(--k5-field);
   transition:
     border-color var(--k5-duration-fast),
     box-shadow var(--k5-duration-fast);
@@ -154,7 +154,7 @@
 .k5-input-wrap:focus-within {
   outline: 2px solid transparent;
   border-color: var(--k5-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-primary) 20%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k5-ring) 30%, transparent);
 }
 .k5-input-wrap:has(.k5-input[aria-invalid='true']) {
   border-color: var(--k5-destructive);

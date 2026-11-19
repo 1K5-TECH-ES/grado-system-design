@@ -186,6 +186,12 @@ export const CommandPalette = defineComponent({
             ),
             items.value.length ? null : h('p', { class: 'k5-command__empty', role: 'status' }, props.emptyLabel ?? m.noResults),
           ]),
+          // Ayuda de teclado a la vista. Oculta a lectores de pantalla: el combobox ya anuncia sus teclas.
+          h('div', { class: 'k5-command__footer', 'aria-hidden': 'true' }, [
+            h('span', null, [h('kbd', null, '↑'), h('kbd', null, '↓'), m.commandMove]),
+            h('span', null, [h('kbd', null, '↵'), m.commandOpen]),
+            h('span', null, [h('kbd', null, 'Esc'), m.commandClose]),
+          ]),
         ],
       )
     }

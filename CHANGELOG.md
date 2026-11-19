@@ -10,6 +10,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
 - El configurador de temas de la web calcula los neutros de Consola igual que el tema de serie, en OKLCH con el matiz del principal, y la sección activa de la barra lateral en gris. Con los colores de marca vuelve a reproducir Consola exactamente; para eso, cinco neutros de Consola se ajustan una unidad (el matiz pasa de 305 a 307, el del berenjena).
+- `--k5-field`: el fondo hundido de los campos, un punto por debajo del panel (en oscuro, más oscuro que la tarjeta). Pasa AA con el texto y con el placeholder en los tres temas; en Campo es el fondo, para no perder contraste al sol.
 - `--k5-tertiary-foreground`: tercer nivel de texto (fechas, contadores, pistas), más claro que `muted-foreground` y con 4,5 : 1 sobre el fondo y sobre gris en Consola y Marca. En Campo es igual que `muted-foreground`, para mantener 7 : 1. El configurador de temas de la web también lo calcula.
 - `--k5-text-title-ui` y `--k5-leading-title-ui`: el título de `PageHeader` y el valor de `Kpi`. 24 px en Consola (antes 28); Marca y Campo siguen en 28.
 - Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
@@ -18,9 +19,11 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
 - Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
 - Inter variable: `fonts.css` trae un archivo por alfabeto con todos los pesos (`inter-latin-wght-normal.woff2`, 48 KB, y `inter-latin-ext-wght-normal.woff2`) en lugar de cuatro pesos estáticos. Una página en español descarga 48 KB en lugar de 72–96 KB. Con él, `--k5-weight-medium` pasa a 510 y `--k5-weight-semibold` a 590, un punto más finos y legibles a 13 px. Una app que carga su propia Inter (sin `fonts.css`) se queda en 500 y 600.
-- El presupuesto de `grado.min.css` sube de 17 a 18,5 KB (con gzip) por los atajos, las variantes y props nuevas y la cabecera de 0.8, que se retira en 0.10.
+- El presupuesto de `grado.min.css` sube de 17 a 19,5 KB (con gzip) por los atajos, las variantes y props nuevas, los controles propios y la cabecera de 0.8, que se retira en 0.10.
 
 ### AppShell
+
+- La web de Grado abre en Consola, donde se ve el rediseño, y su portada empieza por una pantalla de ejemplo (Sales Coach · Tickets) hecha solo con componentes de Grado: `PageHeader bar`, filtros en partes, `Kpi`, `DataTable` agrupada con `Status progress`, `Badge` y `Avatar`. Marca hereda los componentes nuevos con su tamaño mayor y conserva su armazón (barra berenjena, indicadores en tarjeta).
 
 - Consola: la cabecera y la barra lateral van sobre el fondo base (`--k5-sidebar`) y el contenido en un panel con borde y radio de 8 px. Sin cabecera berenjena, la marca deja de competir con la acción principal. En móvil el contenido ocupa todo el ancho, como antes. Marca no cambia.
 - `brandHeader` (React y Vue): recupera la cabecera berenjena de 0.8. Obsoleta: se retira en 0.10.
@@ -46,14 +49,25 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `ToggleGroup`: la opción activa va en gris levantado en lugar de berenjena.
 - `Accordion`: texto de la interfaz; al pasar, el título se aclara en lugar de volverse berenjena.
 - `Checkbox` y `RadioGroup`: texto de la interfaz, con la casilla centrada en la primera línea.
+- `Input`, `Select`, `Textarea` y los campos con prefijo: fondo hundido (`--k5-field`) y anillo de foco más visible.
+- `Checkbox` y `RadioGroup`: casilla y opción propias de 14 px (16 en Marca, 20 en Campo) con fondo hundido; marcadas, el color principal con un check que se dibuja, un guion en indeterminado o un punto de 6 px. Siguen siendo el input nativo; en alto contraste vuelven a ser los del sistema.
+- `Switch`: 28 × 16 px en Consola.
+- `SegmentedControl`: pista hundida con línea interior, a su ancho; la opción elegida, levantada.
+- `Kbd`: tecla hundida con línea interior.
+- `Slider`: pista de 4 px y pulgar de 14 px del color de la tarjeta, con anillo al enfocar.
+- `Button`: cargando conserva su color; desactivado, el primario y el destructivo pasan a gris en lugar de desvaír su color.
+- `Accordion`: filas de 32 px sin separadores, chevron a la izquierda que gira 90° y contenido alineado con el título.
+- `Skeleton`: brillo que recorre el bloque en lugar de pulso.
+- `Stepper`: los pasos usan el lenguaje de `Status`: anillo vacío pendiente, medio lleno el actual y check lleno en verde lo hecho, unidos por una línea de 1 px. El número del paso deja de pintarse (ya estaba oculto a lectores de pantalla; el texto dice el paso).
+- `CommandPalette`: pie con la ayuda de teclado (↑↓ moverse · ↵ abrir · Esc cerrar), en los tres idiomas.
+- `Pagination`: botones sin caja y página actual en gris levantado en lugar de berenjena. `IconButton` conmutado, en gris con el icono en el color del texto.
 - `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
 - `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
 - `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.
 - `DescriptionList`: como un panel de propiedades, con el dato en gris terciario, el valor con el texto de la interfaz y sin líneas entre filas.
 - Gráficos (`BarChart`, `LineChart`, `PriceChart` y los que comparten sus ejes): valores de los ejes y categorías en gris terciario, rejilla continua de 1 px en lugar de discontinua, título con el texto de la interfaz y barras con radio de 2 px.
 - `Banner`: franja de 36 px con el texto de la interfaz.
-- `Stepper`: indicador de 24 px (antes 28) sin halo en el paso actual, y texto de la interfaz.
-- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px y pulso de 1,6 s.
+- `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px.
 - `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
 
 ### Atajos de teclado
@@ -91,6 +105,14 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - Filtro en partes: `field`, `operator` y `value` (Estado · es uno de · Abierta, En obra) en lugar de una etiqueta, separadas por una línea fina, con el botón de quitar al final. El chip es un grupo con la frase entera como nombre. Con `onEdit` (Vue: `editable` y el evento `edit`) cada parte es un botón que avisa de cuál se ha pulsado (`field`, `operator` o `value`) para abrir su selector sin quitar el filtro. En `FilterBar`, los filtros aceptan las mismas partes y avisan con `onEditFilter(id, part)` (Vue: `editable` y `edit-filter`). `label` sigue sirviendo para los filtros de una pieza.
 - El chip (también el de `MultiSelect`) pasa a gris, sin borde ni tinte morado: el acento queda para la acción principal.
+
+### Timeline
+
+- Actividad tipo ticket. Cada elemento acepta `progress` (el punto pasa al icono de progreso de `Status`), `author` (su avatar sustituye al punto y su nombre va delante del título: «Lucía F. comentó») y `comment` (el texto en una caja con línea).
+
+### Kpi
+
+- `KpiGroup variant="strip"`: tira compacta para la cabecera de un listado, con los indicadores separados por una línea vertical, sin línea arriba y la cifra a 18 px.
 
 ### Text
 

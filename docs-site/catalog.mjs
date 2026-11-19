@@ -374,6 +374,7 @@ import { KpiGroup, Kpi } from '@1k5-tech-es/grado-vue';
       ['better', 'higher · lower · neutral', 'higher'],
       ['trend', 'number[]: línea de tendencia bajo la cifra, del color de la variación', '—'],
       ['selectable / selected', 'boolean', 'false'],
+      ['KpiGroup: variant', 'default · strip (tira compacta separada por líneas verticales, para la cabecera de un listado)', 'default'],
     ],
   },
   {
