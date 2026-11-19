@@ -15,7 +15,7 @@ export default preset;
 ```ts
 export type ThemeName = "consola" | "marca" | "campo";
 export type ThemeMode = 'light' | 'dark';
-export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
+export type ColorToken = "background" | "foreground" | "card" | "card-foreground" | "popover" | "popover-foreground" | "primary" | "primary-foreground" | "secondary" | "secondary-foreground" | "muted" | "muted-foreground" | "tertiary-foreground" | "accent" | "accent-foreground" | "destructive" | "destructive-foreground" | "success" | "success-foreground" | "warning" | "warning-foreground" | "warning-strong" | "info" | "info-foreground" | "border" | "input" | "ring" | "header" | "header-foreground" | "brand-pink" | "sidebar" | "sidebar-foreground" | "sidebar-primary" | "sidebar-primary-foreground" | "sidebar-accent" | "sidebar-accent-foreground" | "sidebar-border" | "sidebar-ring" | "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5" | "primary-text" | "success-text" | "warning-text" | "destructive-text" | "info-text" | "primary-subtle" | "primary-border" | "success-subtle" | "success-border" | "warning-subtle" | "warning-border" | "destructive-subtle" | "destructive-border" | "info-subtle" | "info-border";
 export type ShadowToken = "raised" | "overlay" | "popover";
 export type SizeToken = "radius" | "control-h-sm" | "control-h" | "control-h-lg" | "radius-panel" | "radius-badge" | "radius-xs" | "radius-sm" | "radius-md" | "radius-lg" | "radius-full" | "text-ui" | "leading-ui" | "row-h" | "text-title-ui" | "leading-title-ui";
 export type PaletteName = "aubergine" | "aubergine-75" | "aubergine-50" | "aubergine-25" | "aubergine-10" | "mint" | "mint-75" | "mint-50" | "mint-25" | "mint-10" | "fuchsia" | "fuchsia-75" | "fuchsia-50" | "fuchsia-25" | "fuchsia-10" | "graphite" | "graphite-75" | "graphite-50" | "graphite-25" | "graphite-10" | "white" | "black";
@@ -257,7 +257,7 @@ export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 'auto';
 export type GridMinItemWidth = 'sm' | 'md' | 'lg';
 export type ContainerSize = 'sm' | 'md' | 'lg';
 export type TextSize = 'caption' | 'small' | 'body' | 'lead';
-export type TextTone = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type TextTone = 'default' | 'muted' | 'tertiary' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
 export type TextWeight = 'regular' | 'medium' | 'semibold';
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingSize = 'lead' | 'heading' | 'title' | 'display';

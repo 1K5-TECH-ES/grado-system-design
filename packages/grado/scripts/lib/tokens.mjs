@@ -18,6 +18,8 @@ export const CONTRAST_PAIRS = [
   ['foreground', 'background', 'Texto principal'],
   ['muted-foreground', 'background', 'Texto secundario'],
   ['muted-foreground', 'muted', 'Texto secundario sobre gris'],
+  ['tertiary-foreground', 'background', 'Texto terciario'],
+  ['tertiary-foreground', 'muted', 'Texto terciario sobre gris'],
   ['card-foreground', 'card', 'Texto en tarjetas'],
   ['popover-foreground', 'popover', 'Texto en menús'],
   ['primary', 'background', 'Texto o enlace berenjena'],

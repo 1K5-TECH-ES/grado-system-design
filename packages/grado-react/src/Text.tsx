@@ -16,7 +16,7 @@ export interface TextProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType
   /** caption, small, body (por defecto) o lead. */
   size?: TextSize
-  /** default hereda el color del contexto. muted para texto secundario; el resto, solo para estado. */
+  /** default hereda el color del contexto. muted para texto secundario y tertiary para el tercer nivel (fechas, contadores); el resto, solo para estado. */
   tone?: TextTone
   weight?: TextWeight
   /** Una sola línea con puntos suspensivos. */

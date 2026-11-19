@@ -340,6 +340,8 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
     'secondary-foreground': reach(n(Math.min(92, ps), 20), lightSecondary, 7),
     muted: lightMuted,
     'muted-foreground': reach(n(8, campo ? 30 : 40), lightMuted, min),
+    // Tercer nivel: parte más claro y oscurece lo justo para pasar sobre el gris.
+    'tertiary-foreground': reach(n(6, 60), lightMuted, min),
     accent,
     'accent-foreground': on(accent),
     border: lightBorder,
@@ -403,6 +405,7 @@ export function themeTokens(palette, { base = 'consola', radius = 'r8', font = '
     'secondary-foreground': darkFg,
     muted: darkMuted,
     'muted-foreground': reach(n(8, 65), darkMuted, min),
+    'tertiary-foreground': reach(n(6, 40), darkMuted, min),
     accent: darkAccent,
     'accent-foreground': on(darkAccent),
     border: darkBorder,
@@ -530,6 +533,7 @@ export function contrastChecks({ config, tokens }) {
     checks.push({ mode, label: 'Enlaces y texto de marca', background: c.background, foreground: c['primary-text'], min: text })
     checks.push({ mode, label: 'Texto de marca sobre tinte', background: c['primary-subtle'], foreground: c['primary-text'], min: text })
     checks.push({ mode, label: 'Texto secundario', background: c.muted, foreground: c['muted-foreground'], min: text })
+    checks.push({ mode, label: 'Texto terciario', background: c.muted, foreground: c['tertiary-foreground'], min: text })
     if (mode === 'light')
       checks.push({ mode, label: 'Acento sobre el fondo', background: c.background, foreground: c.accent, min: 3, ui: true })
     checks.push({ mode, label: 'Texto sobre el acento', background: c.accent, foreground: c['accent-foreground'], min: text })

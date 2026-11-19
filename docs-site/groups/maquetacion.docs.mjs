@@ -112,6 +112,7 @@ export const entries = [
       `<>
   <Text size="lead">Ahorra hasta un 70 % en la factura de la luz.</Text>
   <Text tone="muted" size="small">Última lectura: hoy a las 10:30.</Text>
+  <Text tone="tertiary" size="caption">Actualizado hace 5 min</Text>
   <Text as="span" tone="success" weight="medium">Conectada</Text>
 </>`,
     ),
@@ -119,17 +120,18 @@ export const entries = [
       'Text',
       `<Text size="lead">Ahorra hasta un 70 % en la factura de la luz.</Text>
 <Text tone="muted" size="small">Última lectura: hoy a las 10:30.</Text>
+<Text tone="tertiary" size="caption">Actualizado hace 5 min</Text>
 <Text as="span" tone="success" weight="medium">Conectada</Text>`,
     ),
     [
       asRow('p'),
       ['size', 'caption · small · body · lead', 'body'],
-      ['tone', 'default · muted · primary · success · warning · danger · info', 'default (hereda el color)'],
+      ['tone', 'default · muted · tertiary · primary · success · warning · danger · info', 'default (hereda el color)'],
       ['weight', 'regular · medium · semibold', 'regular'],
       ['truncate', 'Una línea con puntos suspensivos', 'false'],
       ['numeric', 'Cifras tabulares para que los números se alineen', 'false'],
     ],
-    'Usa --k5-text-* y --k5-leading-* de cada paso. Los tonos de estado usan --k5-*-text, que llegan a 4,5 : 1 sobre el fondo y sobre su tinte. Text no deja márgenes: separa los párrafos con Stack.',
+    'Usa --k5-text-* y --k5-leading-* de cada paso. Los tonos de estado usan --k5-*-text, que llegan a 4,5 : 1 sobre el fondo y sobre su tinte. tertiary (--k5-tertiary-foreground) es el tercer nivel de texto, para fechas, contadores y pistas: más claro que muted y con 4,5 : 1 sobre el fondo y sobre gris (7 : 1 en Campo, igual que muted). Text no deja márgenes: separa los párrafos con Stack.',
   ),
   entry(
     'heading',
