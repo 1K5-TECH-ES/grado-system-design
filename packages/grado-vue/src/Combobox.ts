@@ -1,7 +1,16 @@
 import { computed, defineComponent, h, ref, watch, type PropType } from 'vue'
 import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
-import { comboboxReduce, comboboxState, comboboxView, type ComboboxEvent, type ComboboxState } from '@1k5-tech-es/grado/core'
+import {
+  COMBOBOX_CREATE,
+  comboboxReduce,
+  comboboxState,
+  comboboxView,
+  withCreateOption,
+  type ComboboxEvent,
+  type ComboboxState,
+} from '@1k5-tech-es/grado/core'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Input, useField } from './Field.js'
 import { pathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -21,8 +30,13 @@ export const Combobox = defineComponent({
     emptyLabel: String,
     name: String,
     id: String,
+    /**
+     * Añade «Crear "…"» al final de la lista cuando lo escrito no es una opción. Al elegirla emite create
+     * con el texto: la app crea la opción, la añade a options y la selecciona.
+     */
+    creatable: Boolean,
   },
-  emits: ['update:modelValue', 'queryChange'],
+  emits: ['update:modelValue', 'queryChange', 'create'],
   setup(props, { emit }) {
     const [selected, select] = model(
       () => props.modelValue,
@@ -36,7 +50,12 @@ export const Combobox = defineComponent({
       t = useGrado()
     const placeholder = computed(() => props.placeholder ?? t.value.messages.searchPlaceholder)
     const id = computed(() => props.id ?? field?.value.id ?? auto),
-      filtered = computed(() => filterOptions(props.options, state.value.query))
+      filtered = computed(() => {
+        const matches = filterOptions(props.options, state.value.query)
+        if (!props.creatable) return matches
+        const query = state.value.query.trim()
+        return withCreateOption(matches, query, props.options, formatMessage(t.value.messages.createOption, { query }))
+      })
     watch(
       () => [state.value.active, state.value.open],
       () => {
@@ -47,12 +66,14 @@ export const Combobox = defineComponent({
     )
     // Cada evento pasa por el núcleo común (@1k5-tech-es/grado/core), igual que en React y en grado-elements.
     const send = (event: ComboboxEvent, dom?: Event) => {
+      const query = state.value.query.trim()
       const result = comboboxReduce(state.value, event, { filtered: filtered.value, loading: props.loading })
       if (result.preventDefault) dom?.preventDefault()
       if (result.stopPropagation) dom?.stopPropagation()
       state.value = result.state
       if (result.query !== undefined) emit('queryChange', result.query)
-      if (result.select !== undefined) select(result.select)
+      if (result.select === COMBOBOX_CREATE) emit('create', query)
+      else if (result.select !== undefined) select(result.select)
       if (result.focusInput) (root.value?.querySelector('input[role="combobox"]') as HTMLInputElement)?.focus()
     }
     return () => {
@@ -121,12 +142,14 @@ export const Combobox = defineComponent({
                           'aria-selected': option.value === selected.value,
                           'aria-disabled': option.disabled || undefined,
                           'data-active': index === state.value.active,
-                          class: 'k5-combobox__option',
+                          class: ['k5-combobox__option', option.value === COMBOBOX_CREATE && 'k5-combobox__create'],
                           onMousedown: (event: MouseEvent) => event.preventDefault(),
                           onMousemove: () => send({ type: 'hover', index }),
                           onClick: () => send({ type: 'pick', option }),
                         },
-                        [h('span', null, option.label), pathIcon(ICON_PATHS.check, 'k5-combobox__check')],
+                        option.value === COMBOBOX_CREATE
+                          ? [pathIcon(ICON_PATHS.plus), h('span', null, option.label)]
+                          : [h('span', null, option.label), pathIcon(ICON_PATHS.check, 'k5-combobox__check')],
                       ),
                     ),
               )

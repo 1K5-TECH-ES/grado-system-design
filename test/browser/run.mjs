@@ -175,6 +175,17 @@ try {
     await expect(page.locator('#combo .k5-combobox__empty')).toHaveText('No hay resultados')
     await page.keyboard.press('Escape')
     await expect(page.locator('#combo input[role=combobox]')).toHaveValue('Marta Ruiz')
+    // «Crear "…"»: solo si lo escrito no es ya una opción; elegirlo crea y selecciona.
+    const creatable = page.locator('#creatable input[role=combobox]')
+    await creatable.fill('urgente')
+    await expect(page.locator('#creatable .k5-combobox__create')).toHaveCount(0)
+    await creatable.fill('Revisión')
+    await expect(page.locator('#creatable [role=option]')).toHaveText(['Crear «Revisión»'])
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('Enter')
+    await expect(page.locator('#creatable output')).toHaveText('revisión')
+    await expect(creatable).toHaveValue('Revisión')
+    await expect(creatable).toBeFocused()
     await page.locator('#menu button').click()
     await expect(page.locator('#menu [role=menuitem]').first()).toBeFocused()
     // El atajo se anuncia con aria-keyshortcuts y las teclas pintadas no entran en el nombre.

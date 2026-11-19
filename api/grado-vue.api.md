@@ -287,6 +287,7 @@ emits: update:modelValue
 ## Combobox
 
 ```ts
+  creatable: Boolean
   defaultValue: String  // con valor por defecto
   disabled: Boolean
   emptyLabel: String
@@ -300,7 +301,7 @@ emits: update:modelValue
   required: Boolean  // con valor por defecto
 ```
 
-emits: queryChange, update:modelValue
+emits: create, queryChange, update:modelValue
 
 ## CommandPalette
 

@@ -380,9 +380,11 @@ export const guidelines = {
       'Úsalo para elegir un valor de una lista larga, como un cliente o un municipio.',
       'Añade keywords para encontrar opciones por otros datos, como el CUPS o el NIF.',
       'Usa onQueryChange y loading si las opciones llegan del servidor.',
+      'Usa onCreate para listas que crecen con el uso, como etiquetas: se crea sin salir del campo.',
     ],
     avoid: [
       'Con pocas opciones usa Select o RadioGroup.',
+      'No uses onCreate si crear necesita más datos que un nombre: abre un Dialog.',
       'Para elegir varias opciones usa MultiSelect.',
       'Para buscar acciones desde cualquier pantalla usa CommandPalette.',
     ],

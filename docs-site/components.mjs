@@ -479,6 +479,11 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['value / modelValue', 'React: onValueChange · Vue: v-model', 'Vacío'],
       ['loading / emptyLabel', 'Carga / texto sin resultados', 'false / No hay resultados'],
       ['onQueryChange / @query-change', 'Texto de búsqueda para carga externa', '—'],
+      [
+        'onCreate',
+        'Añade «Crear "…"» al final cuando lo escrito no es una opción y avisa con el texto. Vue: creatable y evento create. La app añade la opción y la selecciona',
+        '—',
+      ],
       ['name / required', 'Valor de formulario / obligatorio', '—'],
     ],
     'Selección única. Filtra sin distinguir tildes. Flechas recorren opciones; Enter selecciona y Escape cancela la búsqueda. La consulta a un servidor la gestiona la aplicación.',

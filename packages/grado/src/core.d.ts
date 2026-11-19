@@ -38,6 +38,10 @@ export interface ComboboxView {
   inputValue: string
   inputPlaceholder: string
 }
+/** Valor de la opción «Crear "…"»: al elegirla, el combobox avisa con onCreate en lugar de seleccionar. */
+export declare const COMBOBOX_CREATE: string
+/** Añade «Crear "…"» al final si lo escrito no es ya una opción (sin distinguir mayúsculas). */
+export declare function withCreateOption(filtered: ChoiceOption[], query: string, options: ChoiceOption[], label: string): ChoiceOption[]
 export declare function comboboxView(
   state: ComboboxState,
   options: { options: ChoiceOption[]; filtered: ChoiceOption[]; selected: string; id: string; placeholder: string },

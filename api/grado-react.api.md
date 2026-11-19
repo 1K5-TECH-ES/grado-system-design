@@ -359,6 +359,7 @@ ref: HTMLInputElement
   label?: string
   loading?: boolean
   name?: string
+  onCreate?: ((query: string) => void)
   onQueryChange?: ((query: string) => void)
   onValueChange?: ((value: string) => void)
   options: ChoiceOption[]

@@ -43,6 +43,7 @@ export type MessageKey =
   | 'pageN'
   | 'pageRange'
   | 'noGroup'
+  | 'createOption'
   | 'noResultsCount'
   | 'dateFrom'
   | 'dateTo'

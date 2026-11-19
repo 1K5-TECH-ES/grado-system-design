@@ -48,6 +48,7 @@ export const en = {
   pageN: 'Page {page}',
   pageRange: '{from}–{to} of {total}',
   noGroup: 'No group',
+  createOption: 'Create “{query}”',
   noResultsCount: '0 results',
   dateFrom: 'From',
   dateTo: 'To',

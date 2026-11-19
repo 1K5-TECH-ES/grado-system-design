@@ -2,7 +2,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
 import { filterOptions, type ChoiceOption } from '@1k5-tech-es/grado/patterns'
-import { comboboxReduce, comboboxState, comboboxView, type ComboboxEvent } from '@1k5-tech-es/grado/core'
+import { COMBOBOX_CREATE, comboboxReduce, comboboxState, comboboxView, withCreateOption, type ComboboxEvent } from '@1k5-tech-es/grado/core'
+import { formatMessage } from '@1k5-tech-es/grado/messages'
 import { Input, useField } from './Field.js'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
@@ -14,6 +15,11 @@ export interface ComboboxProps {
   defaultValue?: string
   onValueChange?: (value: string) => void
   onQueryChange?: (query: string) => void
+  /**
+   * Añade «Crear "…"» al final de la lista cuando lo escrito no es una opción. Al elegirla avisa con el
+   * texto: la app crea la opción, la añade a options y la selecciona.
+   */
+  onCreate?: (query: string) => void
   label?: string
   placeholder?: string
   disabled?: boolean
@@ -31,6 +37,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     defaultValue = '',
     onValueChange,
     onQueryChange,
+    onCreate,
     label,
     placeholder: placeholderProp,
     disabled,
@@ -52,7 +59,10 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const input = useRef<HTMLInputElement>(null),
     root = useRef<HTMLDivElement>(null)
   useImperativeHandle(ref, () => input.current as HTMLInputElement, [])
-  const filtered = useMemo(() => filterOptions(options, state.query), [options, state.query])
+  const matches = useMemo(() => filterOptions(options, state.query), [options, state.query])
+  const filtered = onCreate
+    ? withCreateOption(matches, state.query, options, formatMessage(m.createOption, { query: state.query.trim() }))
+    : matches
   const view = comboboxView(state, { options, filtered, selected, id: controlId, placeholder })
   const { open, active } = state
   const activeOption = view.activeOption
@@ -66,7 +76,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     if (result.stopPropagation) dom?.stopPropagation()
     setState(result.state)
     if (result.query !== undefined) onQueryChange?.(result.query)
-    if (result.select !== undefined) select(result.select)
+    if (result.select === COMBOBOX_CREATE) onCreate?.(state.query.trim())
+    else if (result.select !== undefined) select(result.select)
     if (result.focusInput) input.current?.focus()
   }
   return (
@@ -113,13 +124,14 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
                 aria-selected={option.value === selected}
                 aria-disabled={option.disabled || undefined}
                 data-active={index === active}
-                className="k5-combobox__option"
+                className={cx('k5-combobox__option', option.value === COMBOBOX_CREATE && 'k5-combobox__create')}
                 onMouseDown={(event) => event.preventDefault()}
                 onMouseMove={() => send({ type: 'hover', index })}
                 onClick={() => send({ type: 'pick', option })}
               >
+                {option.value === COMBOBOX_CREATE ? <PathIcon paths={ICON_PATHS.plus} /> : null}
                 <span>{option.label}</span>
-                <PathIcon paths={ICON_PATHS.check} className="k5-combobox__check" />
+                {option.value === COMBOBOX_CREATE ? null : <PathIcon paths={ICON_PATHS.check} className="k5-combobox__check" />}
               </li>
             ))
           )}

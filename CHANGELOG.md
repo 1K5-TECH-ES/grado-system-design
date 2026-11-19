@@ -57,6 +57,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - `variant="bar"`: una fila de 44 px para listados, con el título pequeño, lo que vaya dentro (un `SegmentedControl` para cambiar de vista, unos filtros) en medio y las acciones a la derecha, sobre una línea. El orden del HTML y del teclado no cambia. El título grande queda para las fichas.
 
+### Combobox
+
+- `onCreate` (Vue: `creatable` y el evento `create`): cuando lo escrito no es una opción (sin distinguir mayúsculas), la lista añade al final «Crear "…"» con un más delante. Elegirla avisa con el texto en lugar de seleccionar: la app crea la opción, la añade a `options` y la selecciona. Textos en español, alemán e inglés. `withCreateOption()` y `COMBOBOX_CREATE` en `@1k5-tech-es/grado/core`. En `k5-combobox` todavía no.
+
 ### DataTable
 
 - `groupBy`: junta las filas por un campo o por una función (un estado, un responsable). Cada grupo es un `<tbody>` con una fila de título (`<th scope="rowgroup">`) que lleva el nombre, el total y un botón con `aria-expanded` para plegarlo. Los grupos salen en el orden en que aparecen en `rows`, y la columna ordenada manda dentro de cada uno. `groupLabel` (Vue: también el slot `group`) pinta el título; sin él, la clave o «Sin grupo». `collapsedGroups` (React: `onCollapsedGroupsChange` · Vue: `v-model:collapsed-groups`) y `defaultCollapsedGroups` guardan los plegados. «Seleccionar la página» deja fuera las filas plegadas. Con grupos no hay filas virtuales.

@@ -31,6 +31,8 @@ const initial = () => ({
   checked: false,
   choice: 'a',
   client: '',
+  labels: [{ value: 'urgente', label: 'Urgente' }],
+  label: '',
   tab: 'a',
   page: 1,
   toast: false,
@@ -267,6 +269,23 @@ function renderUI(framework, state, update) {
         C('Combobox', { options: people, value: state.client, onValueChange: set('client'), name: 'cliente' }),
       ),
       make('output', null, state.client),
+    ),
+    // Combobox con «Crear "…"» (0.9): la app añade la opción y la selecciona.
+    section(
+      'creatable',
+      C(
+        'Field',
+        { label: 'Etiqueta' },
+        C('Combobox', {
+          options: state.labels,
+          value: state.label,
+          onValueChange: set('label'),
+          creatable: true,
+          onCreate: (query) =>
+            update({ labels: [...state.labels, { value: query.toLowerCase(), label: query }], label: query.toLowerCase() }),
+        }),
+      ),
+      make('output', null, state.label),
     ),
     section(
       'menu',

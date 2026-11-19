@@ -138,6 +138,12 @@
 .k5-combobox__option[aria-selected='true'] .k5-combobox__check {
   visibility: visible;
 }
+/* «Crear "…"» (onCreate): al final, con un más delante y el texto en una línea. */
+.k5-combobox__create > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .k5-combobox__empty {
   padding: var(--k5-space-3) var(--k5-space-2);
   color: var(--k5-muted-foreground);

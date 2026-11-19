@@ -54,6 +54,7 @@ const es = {
   pageN: 'Página {page}',
   pageRange: '{from}–{to} de {total}',
   noGroup: 'Sin grupo',
+  createOption: 'Crear «{query}»',
   noResultsCount: '0 resultados',
   dateFrom: 'Desde',
   dateTo: 'Hasta',

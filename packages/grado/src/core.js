@@ -10,6 +10,19 @@ import { addDays, addMonths, clampDate, dateLabel, monthTitle, monthWeeks, nextR
 
 // ---------- Combobox ----------
 
+/** Valor de la opción «Crear "…"»: al elegirla, el combobox avisa con onCreate en lugar de seleccionar. */
+export const COMBOBOX_CREATE = '\u0000create'
+
+/**
+ * Con onCreate: añade «Crear "…"» al final de las opciones que se ven si lo escrito no es ya una
+ * opción (sin distinguir mayúsculas). label es el texto de esa opción, ya traducido.
+ */
+export function withCreateOption(filtered, query, options, label) {
+  const text = query.trim().toLocaleLowerCase()
+  if (!text || options.some((option) => option.label.trim().toLocaleLowerCase() === text)) return filtered
+  return [...filtered, { value: COMBOBOX_CREATE, label }]
+}
+
 /** Estado inicial: lista cerrada, sin búsqueda ni opción activa. */
 export const comboboxState = () => ({ open: false, query: '', active: -1 })
 

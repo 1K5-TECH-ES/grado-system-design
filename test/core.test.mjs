@@ -11,7 +11,9 @@ import {
   comboboxReduce,
   comboboxState,
   comboboxView,
+  COMBOBOX_CREATE,
   groupRows,
+  withCreateOption,
   nextSort,
   sortRows,
   tableView,
@@ -209,4 +211,16 @@ test('tabla agrupada: grupos en el orden de rows, orden dentro de cada uno, tota
   // Con grupos no hay filas virtuales.
   const many = Array.from({ length: 1000 }, (_, i) => ({ id: String(i), g: String(i % 2) }))
   assert.equal(tableView({ rows: many, columns: [], rowKey: 'id', page: 1, pageSize: 1000, maxHeight: 400, groupBy: 'g' }).range, null)
+})
+
+test('combobox: «Crear "…"» solo cuando lo escrito no es ya una opción', () => {
+  const create = (query) => withCreateOption([], query, options, `Crear «${query.trim()}»`)
+  assert.deepEqual(create('Toledo'), [{ value: COMBOBOX_CREATE, label: 'Crear «Toledo»' }])
+  assert.deepEqual(create('  madrid '), [], 'sin distinguir mayúsculas ni espacios')
+  assert.deepEqual(create('   '), [])
+  // Va detrás de las coincidencias y elegirla devuelve su valor, que el componente convierte en onCreate.
+  const list = withCreateOption([options[0]], 'Mad', options, 'Crear «Mad»')
+  assert.equal(list.length, 2)
+  const picked = comboboxReduce({ open: true, query: 'Mad', active: 1 }, { type: 'key', key: 'Enter' }, { filtered: list })
+  assert.equal(picked.select, COMBOBOX_CREATE)
 })
