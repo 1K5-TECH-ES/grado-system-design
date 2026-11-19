@@ -50,6 +50,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `DropdownMenu` y `ContextMenu`: cada opción acepta `shortcut`, que se pinta a la derecha. En `k5-menu`, con `data-shortcut="⌘ D"` en el `<option>`.
 - `keyShortcuts()` en `@1k5-tech-es/grado/classes` traduce las teclas pintadas a los nombres de `aria-keyshortcuts` (`⌘` → `Meta`, `⇧` → `Shift`, `↵` → `Enter`…).
 
+### PageHeader
+
+- `variant="bar"`: una fila de 44 px para listados, con el título pequeño, lo que vaya dentro (un `SegmentedControl` para cambiar de vista, unos filtros) en medio y las acciones a la derecha, sobre una línea. El orden del HTML y del teclado no cambia. El título grande queda para las fichas.
+
 ### Tabs
 
 - `variant="view"`: pastillas pequeñas con borde y sin línea debajo, para cambiar de vista una lista desde una barra de herramientas (Todos · Abiertos · Esta semana).

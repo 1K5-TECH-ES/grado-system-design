@@ -225,6 +225,15 @@ const SCENARIOS = {
         { actions: () => h(V.Button, null, text('Nuevo ticket')) },
       ),
   ],
+  'cabecera en barra con contenido en medio': [
+    r(R.PageHeader, { variant: 'bar', title: 'Tickets', actions: r(R.Button, { size: 'sm' }, 'Nuevo ticket') }, r('span', null, 'Vistas')),
+    () =>
+      h(
+        V.PageHeader,
+        { variant: 'bar', title: 'Tickets' },
+        { actions: () => h(V.Button, { size: 'sm' }, text('Nuevo ticket')), default: () => h('span', null, 'Vistas') },
+      ),
+  ],
   'estado vacío': [
     r(R.EmptyState, {
       icon: IconR,

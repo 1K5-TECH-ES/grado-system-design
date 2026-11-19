@@ -1,4 +1,5 @@
-/* Cabecera de página: título de 28 px, subtítulo y acciones a la derecha. */
+/* Cabecera de página: título grande (24 px en Consola, 28 en Marca), subtítulo y acciones a la
+   derecha. bar: una fila de 44 px para listados, con el título pequeño. */
 .k5-page-header {
   display: flex;
   flex-wrap: wrap;
@@ -32,4 +33,43 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--k5-space-2);
+}
+
+/* bar: título pequeño, lo de dentro (vistas, filtros) en medio y acciones a la derecha. El
+   orden visual cambia con order; el del HTML (y el del teclado) sigue siendo título, acciones,
+   contenido, como en la cabecera normal. */
+.k5-page-header--bar {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--k5-space-3);
+  min-height: 2.75rem;
+  margin-bottom: 0;
+  padding: var(--k5-space-1) var(--k5-space-2-5) var(--k5-space-1) var(--k5-space-4);
+  border-bottom: 1px solid var(--k5-border);
+}
+.k5-page-header--bar .k5-page-header__titles {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: baseline;
+  gap: var(--k5-space-2);
+}
+.k5-page-header--bar .k5-page-header__title {
+  overflow: hidden;
+  font-size: var(--k5-text-ui);
+  font-weight: var(--k5-weight-medium);
+  letter-spacing: 0;
+  line-height: var(--k5-leading-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-page-header--bar .k5-page-header__subtitle {
+  overflow: hidden;
+  font-size: var(--k5-text-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.k5-page-header--bar > .k5-page-header__actions {
+  order: 1;
+  flex-wrap: nowrap;
+  margin-left: auto;
 }

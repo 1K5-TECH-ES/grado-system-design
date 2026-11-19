@@ -1085,6 +1085,7 @@ ref: HTMLElement · admite además los atributos HTML de ese elemento
   as?: "h2" | "h1"
   subtitle?: ReactNode
   title: ReactNode
+  variant?: "default" | "bar"
 ```
 
 ## Pagination

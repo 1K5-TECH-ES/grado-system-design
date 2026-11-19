@@ -901,6 +901,7 @@ emits: update:modelValue
   as: String  // con valor por defecto
   subtitle: String
   title: String  // obligatoria
+  variant: String
 ```
 
 ## Pagination

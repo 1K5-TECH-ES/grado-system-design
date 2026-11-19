@@ -388,6 +388,7 @@ import { PageHeader, Button } from '@1k5-tech-es/grado-vue';
       ['title / subtitle', 'Título / descripción', '—'],
       ['actions', 'Prop React / slot Vue', '—'],
       ['as', 'Nivel del encabezado', 'h1'],
+      ['variant', 'default · bar (barra de 44 px para listados: título pequeño, contenido en medio y acciones a la derecha)', 'default'],
     ],
   },
   {
