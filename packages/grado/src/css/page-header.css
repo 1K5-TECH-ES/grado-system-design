@@ -15,10 +15,10 @@
 .k5-page-header__title {
   margin: 0;
   color: var(--k5-foreground);
-  font-size: var(--k5-text-title);
+  font-size: var(--k5-text-title-ui);
   font-weight: var(--k5-weight-semibold);
   letter-spacing: var(--k5-tracking-title);
-  line-height: var(--k5-leading-title);
+  line-height: var(--k5-leading-title-ui);
   text-wrap: balance;
 }
 .k5-page-header__subtitle {

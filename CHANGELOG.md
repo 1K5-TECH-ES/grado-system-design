@@ -9,6 +9,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 ### Fundamentos
 
 - Neutros de Consola calculados en OKLCH con un tinte berenjena mínimo (matiz 305): gris, bordes y texto secundario en claro; en oscuro, fondo, tarjeta y menú más separados por luz, y un morado más suave (`#B98CEA`). Todo sigue pasando AA en los tres temas y 7 : 1 en Campo.
+- `--k5-text-title-ui` y `--k5-leading-title-ui`: el título de `PageHeader` y el valor de `Kpi`. 24 px en Consola (antes 28); Marca y Campo siguen en 28.
 - Tamaños nuevos por tema: `--k5-text-ui` y `--k5-leading-ui` (el texto de botones, campos, menús, navegación y tablas: 13 px en Consola, 14 px en Marca y Campo) y `--k5-row-h` (alto de fila de tabla: 36 px en Consola, 44 px en Marca y Campo).
 - Controles de Consola a 24 · 28 · 32 px (antes 28 · 32 · 40). La densidad `compact` baja a 22 · 24 · 28 px. Marca y Campo no cambian.
 - Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
@@ -34,6 +35,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `SegmentedControl`: la opción elegida lleva un borde fino y se mueve con la curva nueva.
 - `Switch`: 32 × 18 px en Consola; Marca y Campo mantienen 44 × 24.
 - `Card`: título con el texto de la interfaz.
+- `EmptyState`: icono de 24 px a trazo 1,25, y título y descripción con el texto de la interfaz.
 - `CommandPalette`: resultados del alto de 36 px con el texto de la interfaz, grupos con título en minúscula y sin separadores, y resultado activo en gris en lugar de menta.
 - `Popover`: texto de la interfaz.
 - `Alert` y `Toast`: superficie de tarjeta con borde fino; el tono va solo en el icono, el título en el color del texto y la descripción en gris. El fondo de color queda para `Banner`.
