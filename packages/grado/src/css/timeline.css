@@ -1,4 +1,5 @@
-/* Historial: línea vertical con un punto por evento, coloreado por tono. */
+/* Historial: línea vertical de 1 px con un punto por evento. El punto es gris salvo que el evento
+   tenga tono (un solo acento por vista); la fecha va en gris terciario. */
 .k5-timeline {
   margin: 0;
   padding: 0;
@@ -9,8 +10,8 @@
   margin-left: 0.3125rem;
   padding: 0 0 var(--k5-space-5) var(--k5-space-5);
   border-left: 1px solid var(--k5-border);
-  font-size: var(--k5-text-body);
-  line-height: 1.4;
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
 }
 .k5-timeline__item:last-child {
   padding-bottom: 0;
@@ -23,7 +24,7 @@
   width: 0.5625rem;
   height: 0.5625rem;
   border-radius: 50%;
-  background: var(--k5-primary);
+  background: var(--k5-muted-foreground);
   box-shadow: 0 0 0 3px var(--k5-background);
 }
 .k5-timeline__dot--success {
@@ -51,5 +52,6 @@
   font-size: var(--k5-text-caption);
 }
 .k5-timeline__date {
+  color: var(--k5-tertiary-foreground);
   font-variant-numeric: tabular-nums;
 }

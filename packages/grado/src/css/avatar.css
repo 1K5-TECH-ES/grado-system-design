@@ -1,7 +1,8 @@
-/* Avatar: iniciales sobre menta, como el menú de usuario de 1komma5es_help. */
+/* Avatar: iniciales en negrita sobre menta, como el menú de usuario de 1komma5es_help.
+   20 · 24 · 40 px: los dos pequeños para filas y asignaciones; el grande para la cabecera de una ficha. */
 .k5-avatar {
-  --_s: 1.75rem;
-  --_dot: 0.5rem;
+  --_s: 1.5rem;
+  --_dot: 0.4375rem;
   position: relative;
   display: inline-grid;
   flex-shrink: 0;
@@ -11,15 +12,15 @@
   border-radius: 50%;
   background: var(--k5-mint);
   color: var(--k5-graphite);
-  font-size: var(--k5-text-caption);
-  font-weight: var(--k5-weight-semibold);
+  font-size: 0.6875rem;
+  font-weight: var(--k5-weight-bold);
   line-height: 1;
   user-select: none;
 }
 .k5-avatar--sm {
-  --_s: 1.5rem;
-  --_dot: 0.4375rem;
-  font-size: 0.625rem;
+  --_s: 1.25rem;
+  --_dot: 0.375rem;
+  font-size: 0.5625rem;
 }
 .k5-avatar--lg {
   --_s: 2.5rem;

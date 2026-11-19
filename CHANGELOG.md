@@ -44,6 +44,11 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `ToggleGroup`: la opción activa va en gris levantado en lugar de berenjena.
 - `Accordion`: texto de la interfaz; al pasar, el título se aclara en lugar de volverse berenjena.
 - `Checkbox` y `RadioGroup`: texto de la interfaz, con la casilla centrada en la primera línea.
+- `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
+- `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
+- `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.
+- `DescriptionList`: como un panel de propiedades, con el dato en gris terciario, el valor con el texto de la interfaz y sin líneas entre filas.
+- `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
 
 ### Atajos de teclado
 
@@ -105,6 +110,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - **Rompe** · `AppShell` en Consola cambia de aspecto: sin cabecera berenjena y con el contenido en un panel. Si la app necesita la cabecera de antes mientras se adapta, añade `brandHeader` (React) o `brand-header` (Vue); se retira en 0.10. Si la app pintaba su propio fondo en `<main>`, quítalo: el panel ya lo pone.
 - Los controles de Consola miden 4 px menos y el texto de los botones pasa de 12 a 13 px. Revisa las maquetas ajustadas a mano (alturas fijas alrededor de un botón o un campo). En pantallas táctiles no cambia nada: `comfortable` sigue en 36 · 44 · 48.
+- `Avatar` mide 4 px menos (24 y 20 px). Si una maqueta contaba con 28 px, usa `size="lg"` o ajusta el hueco.
 - Los menús ya no resaltan en menta. Si una app contaba con ese color para algo, usa `--k5-accent` directamente.
 
 ## 0.8.0 · sin publicar

@@ -1,16 +1,17 @@
-/* Badge: pequeño, sin borde, con fondo tintado. El texto usa los tokens *-text,
-   calculados para llegar a 4,5 : 1 sobre su propio tinte. Para el estado de una fila,
-   Status (punto y texto) es más discreto. */
+/* Badge: pequeño, sin borde, con un tinte del 12 %. El color va en el punto y el texto en gris
+   secundario (4,5 : 1 sobre el tinte), para que varias etiquetas juntas no compitan con la acción.
+   Con un icono dentro, el icono lleva el color y no hay punto. Para el estado de una fila, Status. */
 .k5-badge {
   --_c: var(--k5-muted-foreground);
   display: inline-flex;
   align-items: center;
   gap: var(--k5-space-1);
-  padding: var(--k5-space-0-5) var(--k5-space-1-5);
+  min-height: 1.25rem;
+  padding: 0 var(--k5-space-1-5);
   border: 0;
   border-radius: var(--k5-radius-badge);
-  background: color-mix(in srgb, var(--_c) 10%, transparent);
-  color: var(--_text, var(--_c));
+  background: color-mix(in srgb, var(--_c) 12%, transparent);
+  color: var(--k5-muted-foreground);
   font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
   line-height: var(--k5-leading-caption);
@@ -21,6 +22,15 @@
   width: var(--k5-icon-sm);
   height: var(--k5-icon-sm);
   flex-shrink: 0;
+  color: var(--_text, var(--_c));
+}
+.k5-badge:not(.k5-badge--neutral, :has(svg))::before {
+  content: '';
+  width: 0.375rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--_c);
 }
 
 .k5-badge--neutral {
@@ -47,17 +57,9 @@
   --_c: var(--k5-destructive);
   --_text: var(--k5-destructive-text);
 }
-/* Novedades y destacados: punto fucsia de marca y texto normal sobre un tinte fucsia.
+/* Novedades y destacados: punto fucsia de marca sobre un tinte fucsia.
    Llama la atención sin competir con la acción principal. */
 .k5-badge--highlight {
-  background: color-mix(in srgb, var(--k5-fuchsia) 16%, transparent);
+  --_c: var(--k5-fuchsia);
   color: var(--k5-foreground);
-}
-.k5-badge--highlight::before {
-  content: '';
-  width: 0.375rem;
-  height: 0.375rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--k5-fuchsia);
 }
