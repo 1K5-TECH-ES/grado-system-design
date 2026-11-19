@@ -23,6 +23,8 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 ### AppShell
 
+- La web de Grado abre en Consola, donde se ve el rediseño. Marca hereda los componentes nuevos con su tamaño mayor y conserva su armazón (barra berenjena, indicadores en tarjeta).
+
 - Consola: la cabecera y la barra lateral van sobre el fondo base (`--k5-sidebar`) y el contenido en un panel con borde y radio de 8 px. Sin cabecera berenjena, la marca deja de competir con la acción principal. En móvil el contenido ocupa todo el ancho, como antes. Marca no cambia.
 - `brandHeader` (React y Vue): recupera la cabecera berenjena de 0.8. Obsoleta: se retira en 0.10.
 - `Nav`: filas del alto del control (28 px), texto de 13 px, iconos más tenues que el texto, títulos de sección en minúscula y gris, contadores sin pastilla. Al pasar y en la sección activa, gris en lugar de menta y lila.
@@ -56,6 +58,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `Button`: cargando conserva su color; desactivado, el primario y el destructivo pasan a gris en lugar de desvaír su color.
 - `Accordion`: filas de 32 px sin separadores, chevron a la izquierda que gira 90° y contenido alineado con el título.
 - `Skeleton`: brillo que recorre el bloque en lugar de pulso.
+- `Pagination`: botones sin caja y página actual en gris levantado en lugar de berenjena. `IconButton` conmutado, en gris con el icono en el color del texto.
 - `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
 - `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
 - `Avatar`: 24 px (antes 28) y `sm` 20 px (antes 24), iniciales en negrita; `lg` sigue en 40 px para la cabecera de una ficha. `AvatarGroup` solapa 6 px.

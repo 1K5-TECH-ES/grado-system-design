@@ -1,4 +1,5 @@
-/* Paginación: como ListPagination de 1komma5es_help (rango a la izquierda, página actual en berenjena). */
+/* Paginación: rango a la izquierda y botones sin caja; la página actual, en gris levantado
+   (un solo acento por vista). */
 .k5-pagination {
   display: flex;
   flex-wrap: wrap;
@@ -21,10 +22,10 @@
   min-width: var(--k5-control-h);
   height: var(--k5-control-h);
   padding: 0 var(--k5-space-2);
-  border: 1px solid var(--k5-border);
+  border: 1px solid transparent;
   border-radius: calc(var(--k5-radius) - 2px);
-  background: var(--k5-card);
-  color: var(--k5-foreground);
+  background: transparent;
+  color: var(--k5-muted-foreground);
   font-family: inherit;
   font-size: var(--k5-text-caption);
   font-weight: var(--k5-weight-medium);
@@ -39,12 +40,13 @@
 }
 .k5-pagination button:hover:not(:disabled) {
   background: var(--k5-muted);
+  color: var(--k5-foreground);
 }
 .k5-pagination button[aria-current='page'] {
-  border-color: var(--k5-primary);
-  background: var(--k5-primary);
-  color: var(--k5-primary-foreground);
-  font-weight: var(--k5-weight-semibold);
+  border-color: var(--k5-border);
+  background: var(--k5-card);
+  color: var(--k5-foreground);
+  box-shadow: var(--k5-shadow-raised);
 }
 .k5-pagination button:focus-visible {
   outline: 2px solid var(--k5-ring);

@@ -5,6 +5,9 @@
   gap: var(--k5-space-0-5);
   width: 100%;
 }
+.k5-accordion__item {
+  min-width: 0;
+}
 .k5-accordion__heading {
   margin: 0;
   font: inherit;

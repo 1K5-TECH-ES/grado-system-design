@@ -12,7 +12,7 @@ const root = () => (typeof document === 'undefined' ? null : document.documentEl
 
 /** Tema y modo de toda la web. theme.js los aplica antes de pintar; aquí se cambian. */
 export function useAppearance() {
-  const [theme, setThemeState] = useState(() => root()?.dataset.k5Theme ?? 'marca')
+  const [theme, setThemeState] = useState(() => root()?.dataset.k5Theme ?? 'consola')
   const [mode, setModeState] = useState(() => (root()?.classList.contains('dark') ? 'dark' : 'light'))
   // Otro control (las tarjetas de tema de Inicio) también puede cambiarlos.
   useEffect(() => {
@@ -25,7 +25,7 @@ export function useAppearance() {
   }, [])
   const setTheme = (value) => {
     root().dataset.k5Theme = value
-    storage.save('grado-docs-tema', value)
+    storage.save('grado-docs-tema-0.9', value)
   }
   const setMode = (value) => {
     root().classList.toggle('dark', value === 'dark')
