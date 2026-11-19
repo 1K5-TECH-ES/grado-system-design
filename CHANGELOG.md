@@ -2,7 +2,9 @@
 
 Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-tech-es/grado-vue` y, desde 0.6.0, `@1k5-tech-es/grado-elements`. Los paquetes comparten número de versión.
 
-## 0.9.0 · sin publicar
+## 0.9.0 · 19 de noviembre de 2026
+
+Incluye también los cambios de 0.8.0, que no llegó a publicarse: si vienes de 0.7.0, lee las dos secciones.
 
 0.9, «Precisión». Primera entrega del rediseño inspirado en Linear: el armazón se retira para que mande el contenido, Consola baja a 13 px y controles de 28 px, el movimiento se acorta y los iconos pasan a trazo 1,5. Los colores de marca, los tres temas y los cuatro principios no cambian.
 
@@ -142,7 +144,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Los archivos estáticos de Inter (`assets/fonts/inter-latin-400-normal.woff2` y los demás pesos) ya no están en el paquete. Si la app los precargaba o los copiaba, usa `inter-latin-wght-normal.woff2` y `inter-latin-ext-wght-normal.woff2`; con `fonts.css` no hay que hacer nada.
 - Los menús ya no resaltan en menta. Si una app contaba con ese color para algo, usa `--k5-accent` directamente.
 
-## 0.8.0 · sin publicar
+## 0.8.0 · no se publicó: sus cambios salen con 0.9.0
 
 ### Arreglos
 

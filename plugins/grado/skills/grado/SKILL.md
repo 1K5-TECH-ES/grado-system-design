@@ -7,7 +7,7 @@ description: Usar Grado, el sistema de diseño de 1KOMMA5° España (paquetes np
 
 Grado es el sistema de diseño de 1KOMMA5° España. Aporta presentación y componentes; el router, los datos, el estado y la lógica siguen siendo de la app.
 
-Esta skill describe **Grado 0.7.0**. Hasta la 1.0, una versión menor (0.7 → 0.8) puede cambiar una API o el aspecto, así que lo instalado en la app manda sobre lo que diga aquí (sección 3).
+Esta skill describe **Grado 0.9.0**. Hasta la 1.0, una versión menor (0.8 → 0.9) puede cambiar una API o el aspecto, así que lo instalado en la app manda sobre lo que diga aquí (sección 3).
 
 | Paquete | Para qué |
 |---|---|
@@ -49,7 +49,7 @@ No adivines props ni eventos: los nombres se parecen a los de shadcn o Radix, pe
 1. **Los tipos instalados:** `node_modules/@1k5-tech-es/grado-react/dist/*.d.ts` (o `grado-vue`). Siempre corresponden a la versión que usa la app.
 2. **El README de cada paquete** en `node_modules/@1k5-tech-es/*/README.md`. El de `grado-elements` tiene la sintaxis de los Web Components.
 3. **El repositorio de Grado**, si lo tienes: `api/grado-react.api.md` y `api/grado-vue.api.md` (props de cada componente y, en Vue, los `emits`), `packages/grado-react/src/<Componente>.tsx`, `packages/grado/src/css/<componente>.css`, `catalog/index.html` y la sección «Al actualizar» de `CHANGELOG.md`.
-4. **El repositorio en GitHub**, que es público. Usa la etiqueta de la versión instalada, por ejemplo `https://raw.githubusercontent.com/1K5-TECH-ES/grado-system-design/v0.7.0/api/grado-react.api.md`.
+4. **El repositorio en GitHub**, que es público. Usa la etiqueta de la versión instalada, por ejemplo `https://raw.githubusercontent.com/1K5-TECH-ES/grado-system-design/v0.9.0/api/grado-react.api.md`.
 
 ## 4. Reglas que valen siempre
 
