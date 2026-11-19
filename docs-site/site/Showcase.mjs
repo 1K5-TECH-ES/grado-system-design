@@ -193,7 +193,7 @@ export function Showcase() {
       ),
       h(
         G.KpiGroup,
-        { label: 'Indicadores de ejemplo', className: 'docs-showcase__kpis' },
+        { label: 'Indicadores de ejemplo', variant: 'strip', className: 'docs-showcase__kpis' },
         h(G.Kpi, { label: 'Tickets abiertos', value: '128', change: -5.9, better: 'lower' }),
         h(G.Kpi, { label: 'Primera respuesta', value: '1 h 12 min', change: -14.3, better: 'lower' }),
         h(G.Kpi, { label: 'Resueltos', value: '342', change: 10.0 }),

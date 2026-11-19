@@ -36,6 +36,10 @@
     outline: 1px solid canvastext;
     outline-offset: -2px;
   }
+  .k5-stepper__item[aria-current='step'] .k5-stepper__number {
+    forced-color-adjust: none;
+    background: highlight;
+  }
   .k5-kpi[aria-pressed='true'] {
     outline: 2px solid highlight;
   }

@@ -19,7 +19,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
 - Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
 - Inter variable: `fonts.css` trae un archivo por alfabeto con todos los pesos (`inter-latin-wght-normal.woff2`, 48 KB, y `inter-latin-ext-wght-normal.woff2`) en lugar de cuatro pesos estáticos. Una página en español descarga 48 KB en lugar de 72–96 KB. Con él, `--k5-weight-medium` pasa a 510 y `--k5-weight-semibold` a 590, un punto más finos y legibles a 13 px. Una app que carga su propia Inter (sin `fonts.css`) se queda en 500 y 600.
-- El presupuesto de `grado.min.css` sube de 17 a 18,5 KB (con gzip) por los atajos, las variantes y props nuevas y la cabecera de 0.8, que se retira en 0.10.
+- El presupuesto de `grado.min.css` sube de 17 a 19,5 KB (con gzip) por los atajos, las variantes y props nuevas, los controles propios y la cabecera de 0.8, que se retira en 0.10.
 
 ### AppShell
 
@@ -58,6 +58,8 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `Button`: cargando conserva su color; desactivado, el primario y el destructivo pasan a gris en lugar de desvaír su color.
 - `Accordion`: filas de 32 px sin separadores, chevron a la izquierda que gira 90° y contenido alineado con el título.
 - `Skeleton`: brillo que recorre el bloque en lugar de pulso.
+- `Stepper`: los pasos usan el lenguaje de `Status`: anillo vacío pendiente, medio lleno el actual y check lleno en verde lo hecho, unidos por una línea de 1 px. El número del paso deja de pintarse (ya estaba oculto a lectores de pantalla; el texto dice el paso).
+- `CommandPalette`: pie con la ayuda de teclado (↑↓ moverse · ↵ abrir · Esc cerrar), en los tres idiomas.
 - `Pagination`: botones sin caja y página actual en gris levantado en lugar de berenjena. `IconButton` conmutado, en gris con el icono en el color del texto.
 - `Badge`: tinte al 12 %, 20 px de alto, el color en un punto y el texto en gris secundario, para que varias etiquetas juntas no compitan con la acción. Con un icono dentro, el icono lleva el color y no hay punto. `neutral` va sin punto.
 - `Tag`: pastilla con línea fina y sin fondo, para distinguirla del chip gris de `FilterChip`.
@@ -65,7 +67,6 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `DescriptionList`: como un panel de propiedades, con el dato en gris terciario, el valor con el texto de la interfaz y sin líneas entre filas.
 - Gráficos (`BarChart`, `LineChart`, `PriceChart` y los que comparten sus ejes): valores de los ejes y categorías en gris terciario, rejilla continua de 1 px en lugar de discontinua, título con el texto de la interfaz y barras con radio de 2 px.
 - `Banner`: franja de 36 px con el texto de la interfaz.
-- `Stepper`: indicador de 24 px (antes 28) sin halo en el paso actual, y texto de la interfaz.
 - `Progress` y `Meter`: barra de 6 px (antes 8). `Skeleton`: radio de 4 px.
 - `Timeline`: texto de la interfaz y fecha en gris terciario. Los eventos sin `tone` llevan el punto gris en lugar de berenjena.
 
@@ -104,6 +105,14 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 - Filtro en partes: `field`, `operator` y `value` (Estado · es uno de · Abierta, En obra) en lugar de una etiqueta, separadas por una línea fina, con el botón de quitar al final. El chip es un grupo con la frase entera como nombre. Con `onEdit` (Vue: `editable` y el evento `edit`) cada parte es un botón que avisa de cuál se ha pulsado (`field`, `operator` o `value`) para abrir su selector sin quitar el filtro. En `FilterBar`, los filtros aceptan las mismas partes y avisan con `onEditFilter(id, part)` (Vue: `editable` y `edit-filter`). `label` sigue sirviendo para los filtros de una pieza.
 - El chip (también el de `MultiSelect`) pasa a gris, sin borde ni tinte morado: el acento queda para la acción principal.
+
+### Timeline
+
+- Actividad tipo ticket. Cada elemento acepta `progress` (el punto pasa al icono de progreso de `Status`), `author` (su avatar sustituye al punto y su nombre va delante del título: «Lucía F. comentó») y `comment` (el texto en una caja con línea).
+
+### Kpi
+
+- `KpiGroup variant="strip"`: tira compacta para la cabecera de un listado, con los indicadores separados por una línea vertical, sin línea arriba y la cifra a 18 px.
 
 ### Text
 

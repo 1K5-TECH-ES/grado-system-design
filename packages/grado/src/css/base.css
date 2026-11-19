@@ -46,10 +46,11 @@
   }
 }
 
-/* Teclas de un atajo (shortcut) en botones, menús y tooltips. Cada uno pone su color. */
+/* Teclas de un atajo (shortcut) en botones, menús, tooltips y el pie de CommandPalette. */
 .k5-btn__shortcut kbd,
 .k5-menu__shortcut kbd,
-.k5-tooltip__shortcut kbd {
+.k5-tooltip__shortcut kbd,
+.k5-command__footer kbd {
   display: inline-grid;
   place-items: center;
   min-width: 1rem;

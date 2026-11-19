@@ -907,6 +907,7 @@ ref: HTMLDivElement · admite además los atributos HTML de ese elemento
 
 ```ts
   label?: string
+  variant?: "default" | "strip"
 ```
 
 ## LineChart

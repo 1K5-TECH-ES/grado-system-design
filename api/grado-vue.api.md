@@ -755,6 +755,7 @@ function
 
 ```ts
   label: String
+  variant: String  // con valor por defecto
 ```
 
 ## LineChart

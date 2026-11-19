@@ -34,6 +34,12 @@ export interface TimelineItem {
   date?: string
   dateTime?: string
   tone?: StatusTone
+  /** Cambio de estado en un flujo con orden: el punto pasa al icono de progreso de Status. */
+  progress?: import('./classes.js').StatusProgress
+  /** Quién lo hizo: su avatar sustituye al punto y su nombre va delante del título («Lucía F. comentó»). */
+  author?: string
+  /** Texto de un comentario, en una caja bajo el título. */
+  comment?: string
 }
 /** Parte de un filtro que se puede editar: el campo, el operador o los valores. */
 export type FilterPart = 'field' | 'operator' | 'value'

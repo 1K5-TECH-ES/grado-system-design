@@ -19,11 +19,21 @@ const TREND_KEYS = { up: 'trendUp', down: 'trendDown', flat: 'trendFlat' } as co
 export interface KpiGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** Nombre del grupo para lectores de pantalla. */
   label?: string
+  /** strip: una tira compacta, con los indicadores separados por una línea vertical (cabecera de un listado). */
+  variant?: 'default' | 'strip'
 }
 
-export const KpiGroup = forwardRef<HTMLDivElement, KpiGroupProps>(function KpiGroup({ label, className, ...rest }, ref) {
+export const KpiGroup = forwardRef<HTMLDivElement, KpiGroupProps>(function KpiGroup({ label, variant, className, ...rest }, ref) {
   const { messages: m } = useGrado()
-  return <div ref={ref} {...rest} role="group" aria-label={label ?? m.indicators} className={cx('k5-kpis', className)} />
+  return (
+    <div
+      ref={ref}
+      {...rest}
+      role="group"
+      aria-label={label ?? m.indicators}
+      className={cx('k5-kpis', variant === 'strip' && 'k5-kpis--strip', className)}
+    />
+  )
 })
 
 function TrendArrow({ direction }: { direction: TrendDirection }) {
