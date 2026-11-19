@@ -254,6 +254,7 @@ ref: HTMLButtonElement · admite además los atributos HTML de ese elemento
   icon?: IconComponent
   iconOnly?: boolean
   loading?: boolean
+  shortcut?: string[]
   size?: Size
   variant?: ButtonVariant
 ```
@@ -1576,6 +1577,7 @@ ref: HTMLSpanElement
   className?: string
   content: ReactNode
   label?: string
+  shortcut?: string[]
   trigger?: ReactElement<unknown, string | React.JSXElementConstructor<any>>
 ```
 

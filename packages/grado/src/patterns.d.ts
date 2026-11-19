@@ -14,6 +14,8 @@ export interface MenuItem {
   disabled?: boolean
   danger?: boolean
   separator?: boolean
+  /** Atajo de la opción: ['⌘', 'D']. Se pinta a la derecha y se anuncia con aria-keyshortcuts; la app escucha la tecla. */
+  shortcut?: string[]
 }
 export interface BreadcrumbItem {
   label: string

@@ -204,6 +204,7 @@ emits: dismiss
   icon: Object | Function
   iconOnly: Boolean
   loading: Boolean
+  shortcut: Array
   size: String
   type: String  // con valor por defecto
   variant: String
@@ -1328,6 +1329,7 @@ emits: update:modelValue
 ```ts
   content: String
   label: String
+  shortcut: Array
 ```
 
 ## useField

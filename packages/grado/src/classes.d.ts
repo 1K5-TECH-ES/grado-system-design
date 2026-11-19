@@ -17,6 +17,8 @@ export declare const BADGE_TONES: readonly BadgeTone[]
 export declare const CARD_VARIANTS: readonly CardVariant[]
 
 export declare function cx(...parts: unknown[]): string
+/** Atajo para aria-keyshortcuts: ['⌘', 'K'] → 'Meta+K'. */
+export declare function keyShortcuts(keys?: string[]): string
 export declare function buttonClass(options?: { variant?: ButtonVariant; size?: Size; iconOnly?: boolean; block?: boolean }): string
 export declare function badgeClass(options?: { tone?: BadgeTone }): string
 export declare function controlClass(kind?: ControlKind, options?: { size?: Size }): string

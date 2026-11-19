@@ -253,7 +253,7 @@ function renderUI(framework, state, update) {
       C('DropdownMenu', {
         label: 'Acciones',
         items: [
-          { id: 'edit', label: 'Editar' },
+          { id: 'edit', label: 'Editar', shortcut: ['⌘', 'e'] },
           { id: 'disabled', label: 'Desactivado', disabled: true },
           { id: 'delete', label: 'Eliminar', danger: true },
         ],

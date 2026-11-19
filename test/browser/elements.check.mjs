@@ -21,7 +21,7 @@ export const page = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 </form></section>
 <section id="tabs"><k5-tabs label="Ficha"><k5-tab value="a" label="Resumen">Uno</k5-tab><k5-tab value="b" label="Documentos">Dos</k5-tab></k5-tabs></section>
 <section id="dialog"><button type="button" data-k5-open="nota">Nueva nota</button><k5-dialog id="nota" label="Nota"><label>Texto <input></label></k5-dialog></section>
-<section id="menu"><k5-menu label="Acciones"><option value="edit">Editar</option><option value="del" data-danger data-separator>Eliminar</option></k5-menu><output></output></section>
+<section id="menu"><k5-menu label="Acciones"><option value="edit" data-shortcut="⌘ e">Editar</option><option value="del" data-danger data-separator>Eliminar</option></k5-menu><output></output></section>
 <k5-toaster></k5-toaster>
 </main></body></html>`
 
@@ -48,7 +48,7 @@ export async function checkElements(browser, base, { expect, axe }) {
     'k5-menu': r(G.DropdownMenu, {
       label: 'Acciones',
       items: [
-        { id: 'edit', label: 'Editar' },
+        { id: 'edit', label: 'Editar', shortcut: ['⌘', 'e'] },
         { id: 'del', label: 'Eliminar', danger: true, separator: true },
       ],
     }),
@@ -116,6 +116,9 @@ export async function checkElements(browser, base, { expect, axe }) {
   await trigger.focus()
   await p.keyboard.press('ArrowDown')
   await expect(p.locator('k5-menu [role=menuitem]').first()).toBeFocused()
+  // Abierto, el menú tiene el mismo HTML que el de React con el atajo pintado.
+  await expect(p.locator('k5-menu [role=menuitem]').first()).toHaveAttribute('aria-keyshortcuts', 'Meta+E')
+  await expect(p.locator('k5-menu .k5-menu__shortcut kbd')).toHaveText(['⌘', 'e'])
   await p.keyboard.press('End')
   await expect(p.locator('k5-menu [role=menuitem]').last()).toBeFocused()
   await p.keyboard.press('Enter')

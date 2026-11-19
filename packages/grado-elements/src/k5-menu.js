@@ -1,10 +1,11 @@
 // <k5-menu label="Acciones">
 //   <option value="editar">Editar</option>
+//   <option value="duplicar" data-shortcut="⌘ D">Duplicar</option>
 //   <option value="borrar" data-danger data-separator>Eliminar</option>
 // </k5-menu>
 // Menú de acciones con el mismo HTML y teclado que DropdownMenu de React y Vue. Al elegir,
 // avisa con un evento k5-select que lleva el valor en detail.value.
-import { buttonClass, cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
+import { buttonClass, cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { moveFocus } from '@1k5-tech-es/grado/patterns'
 import { define, el, icon, setAttrs, uid } from './dom.js'
 
@@ -19,6 +20,7 @@ export class K5Menu extends HTMLElement {
       disabled: option.disabled,
       danger: option.hasAttribute('data-danger'),
       separator: option.hasAttribute('data-separator'),
+      shortcut: option.dataset.shortcut ? option.dataset.shortcut.split(/\s+/).filter(Boolean) : undefined,
     }))
     this.menuId = uid('k5-menu')
     this.isOpen = false
@@ -91,8 +93,18 @@ export class K5Menu extends HTMLElement {
             tabindex: '-1',
             disabled: item.disabled,
             class: cx('k5-menu__item', item.danger && 'k5-menu__item--danger'),
+            'aria-keyshortcuts': item.shortcut?.length ? keyShortcuts(item.shortcut) : undefined,
           },
-          item.label,
+          item.shortcut?.length
+            ? [
+                item.label,
+                el(
+                  'span',
+                  { class: 'k5-menu__shortcut', 'aria-hidden': 'true' },
+                  item.shortcut.map((key) => el('kbd', {}, key)),
+                ),
+              ]
+            : item.label,
         )
         button.addEventListener('pointermove', () => {
           if (!item.disabled) button.focus()

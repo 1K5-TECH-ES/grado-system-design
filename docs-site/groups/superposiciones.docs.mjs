@@ -153,7 +153,7 @@ export const entries = [
       `const items = ${contextItems};`,
     ),
     [
-      ['items', 'id, label, disabled, danger, separator (como DropdownMenu)', 'Obligatorio'],
+      ['items', 'id, label, disabled, danger, separator, shortcut (como DropdownMenu)', 'Obligatorio'],
       ['onAction / @action', 'Recibe el id de la acción', '—'],
       ['label', 'Nombre de la zona y del menú', '«Acciones» en el menú'],
       ['disabled', 'Deja el menú del navegador', 'false'],

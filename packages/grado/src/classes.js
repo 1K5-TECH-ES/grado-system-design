@@ -21,6 +21,41 @@ export function buttonClass({ variant = 'primary', size = 'md', iconOnly = false
   return cx('k5-btn', `k5-btn--${v}`, s !== 'md' && `k5-btn--${s}`, iconOnly && 'k5-btn--icon', block && 'k5-btn--block')
 }
 
+// Teclas de un atajo tal como se pintan → nombres de aria-keyshortcuts. Lo que no está en la
+// tabla (letras, F1…) va tal cual, con las letras en mayúscula.
+const KEY_NAMES = {
+  '⌘': 'Meta',
+  Cmd: 'Meta',
+  Meta: 'Meta',
+  Ctrl: 'Control',
+  Control: 'Control',
+  '⌥': 'Alt',
+  Alt: 'Alt',
+  Opción: 'Alt',
+  '⇧': 'Shift',
+  Shift: 'Shift',
+  Mayús: 'Shift',
+  '↵': 'Enter',
+  Enter: 'Enter',
+  Intro: 'Enter',
+  Esc: 'Escape',
+  Escape: 'Escape',
+  '⌫': 'Backspace',
+  '⌦': 'Delete',
+  Supr: 'Delete',
+  Tab: 'Tab',
+  Espacio: 'Space',
+  '↑': 'ArrowUp',
+  '↓': 'ArrowDown',
+  '←': 'ArrowLeft',
+  '→': 'ArrowRight',
+}
+
+/** Atajo para aria-keyshortcuts: ['⌘', 'K'] → 'Meta+K', ['⇧', 'v'] → 'Shift+V'. */
+export function keyShortcuts(keys = []) {
+  return keys.map((key) => KEY_NAMES[key] ?? (key.length === 1 ? key.toUpperCase() : key)).join('+')
+}
+
 export function badgeClass({ tone = 'neutral' } = {}) {
   return cx('k5-badge', `k5-badge--${pick(tone, BADGE_TONES, 'neutral')}`)
 }

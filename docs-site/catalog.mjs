@@ -53,6 +53,11 @@ const emit = defineEmits(['guardar']);
       ['size', 'sm · md · lg', 'md'],
       ['loading / disabled', 'boolean', 'false'],
       ['icon / iconOnly / block', 'Componente de icono / boolean / boolean', '—'],
+      [
+        'shortcut',
+        "Teclas del atajo: ['⌘', '↵']. Se pintan dentro (no en iconOnly) y se anuncian con aria-keyshortcuts; la app escucha la tecla",
+        '—',
+      ],
     ],
     note: 'Para enviar un formulario utiliza type="submit". Los botones de solo icono necesitan aria-label. Para enlaces utiliza buttonClass() con el enlace de tu router.',
   },

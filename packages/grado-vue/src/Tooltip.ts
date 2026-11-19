@@ -1,12 +1,17 @@
-import { cloneVNode, defineComponent, h, ref } from 'vue'
-import { ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { Button } from './Button.js'
+import { cloneVNode, defineComponent, h, ref, type PropType } from 'vue'
+import { ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
+import { Button, shortcutKeys } from './Button.js'
 import { pathIcon } from './PathIcon.js'
 import { autoId } from './helpers.js'
 
 export const Tooltip = defineComponent({
   name: 'K5Tooltip',
-  props: { label: String, content: String },
+  props: {
+    label: String,
+    content: String,
+    /** Atajo del control: ['⌘', 'L']. Se pinta tras el texto y, con el slot trigger, el control recibe aria-keyshortcuts. */
+    shortcut: Array as PropType<string[]>,
+  },
   setup(props, { slots }) {
     const open = ref(false),
       id = autoId('k5-tooltip')
@@ -32,7 +37,14 @@ export const Tooltip = defineComponent({
         [
           // Con el slot trigger acompaña a ese control; sin él, pinta el botón de información.
           slots.trigger
-            ? slots.trigger().map((vnode) => cloneVNode(vnode, open.value ? { 'aria-describedby': id } : {}))
+            ? slots.trigger().map((vnode) =>
+                cloneVNode(vnode, {
+                  ...(open.value ? { 'aria-describedby': id } : {}),
+                  ...(props.shortcut?.length && !vnode.props?.['aria-keyshortcuts']
+                    ? { 'aria-keyshortcuts': keyShortcuts(props.shortcut) }
+                    : {}),
+                }),
+              )
             : h(
                 Button,
                 {
@@ -45,7 +57,12 @@ export const Tooltip = defineComponent({
                 },
                 { default: () => slots.default?.() ?? pathIcon(ICON_PATHS.info) },
               ),
-          open.value ? h('span', { role: 'tooltip', id, class: 'k5-tooltip__content' }, slots.content?.() ?? props.content) : null,
+          open.value
+            ? h('span', { role: 'tooltip', id, class: 'k5-tooltip__content' }, [
+                slots.content?.() ?? props.content,
+                props.shortcut?.length ? shortcutKeys(props.shortcut, 'k5-tooltip__shortcut') : null,
+              ])
+            : null,
         ],
       )
   },

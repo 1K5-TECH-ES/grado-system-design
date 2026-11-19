@@ -165,6 +165,9 @@ try {
     await expect(page.locator('#combo input[role=combobox]')).toHaveValue('Marta Ruiz')
     await page.locator('#menu button').click()
     await expect(page.locator('#menu [role=menuitem]').first()).toBeFocused()
+    // El atajo se anuncia con aria-keyshortcuts y las teclas pintadas no entran en el nombre.
+    await expect(page.locator('#menu [role=menuitem]').first()).toHaveAttribute('aria-keyshortcuts', 'Meta+E')
+    await expect(page.locator('#menu [role=menuitem]').first()).toHaveAccessibleName('Editar')
     expect((await page.locator('#menu [role=menu]').boundingBox()).x).toBeGreaterThanOrEqual(0)
     await page.locator('#menu [role=menuitem]').nth(1).hover()
     await expect(page.locator('#menu [role=menuitem]').nth(1)).not.toBeFocused()

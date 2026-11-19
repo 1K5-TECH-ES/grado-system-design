@@ -91,6 +91,7 @@ export declare const SIZES: readonly Size[];
 export declare const BADGE_TONES: readonly BadgeTone[];
 export declare const CARD_VARIANTS: readonly CardVariant[];
 export declare function cx(...parts: unknown[]): string;
+export declare function keyShortcuts(keys?: string[]): string;
 export declare function buttonClass(options?: {
     variant?: ButtonVariant;
     size?: Size;
@@ -676,6 +677,7 @@ export interface MenuItem {
     disabled?: boolean;
     danger?: boolean;
     separator?: boolean;
+    shortcut?: string[];
 }
 export interface BreadcrumbItem {
     label: string;

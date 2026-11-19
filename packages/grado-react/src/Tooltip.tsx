@@ -1,7 +1,7 @@
 'use client'
 import { cloneElement, forwardRef, isValidElement, useState, type ReactElement, type ReactNode } from 'react'
-import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { Button } from './Button.js'
+import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
+import { Button, ShortcutKeys } from './Button.js'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId } from './hooks.js'
 
@@ -12,10 +12,12 @@ export interface TooltipProps {
   children?: ReactNode
   /** Control al que acompaña (un Button, un IconButton, un enlace) en lugar del botón de información. Recibe aria-describedby mientras se ve. */
   trigger?: ReactElement
+  /** Atajo del control: ['⌘', 'L']. Se pinta tras el texto y, con trigger, el control recibe aria-keyshortcuts. */
+  shortcut?: string[]
   className?: string
 }
 export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip(
-  { label, content, children = <PathIcon paths={ICON_PATHS.info} />, trigger, className },
+  { label, content, children = <PathIcon paths={ICON_PATHS.info} />, trigger, shortcut, className },
   ref,
 ) {
   const [open, setOpen] = useState(false),
@@ -38,8 +40,11 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
         }
       }}
     >
-      {isValidElement<{ 'aria-describedby'?: string }>(trigger) ? (
-        cloneElement(trigger, { 'aria-describedby': open ? id : trigger.props['aria-describedby'] })
+      {isValidElement<{ 'aria-describedby'?: string; 'aria-keyshortcuts'?: string }>(trigger) ? (
+        cloneElement(trigger, {
+          'aria-describedby': open ? id : trigger.props['aria-describedby'],
+          'aria-keyshortcuts': trigger.props['aria-keyshortcuts'] ?? (shortcut?.length ? keyShortcuts(shortcut) : undefined),
+        })
       ) : (
         <Button
           variant="ghost"
@@ -55,6 +60,7 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
       {open && (
         <span role="tooltip" id={id} className="k5-tooltip__content">
           {content}
+          {shortcut?.length ? <ShortcutKeys keys={shortcut} className="k5-tooltip__shortcut" /> : null}
         </span>
       )}
     </span>

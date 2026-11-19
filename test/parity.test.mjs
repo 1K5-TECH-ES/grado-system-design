@@ -75,6 +75,14 @@ const SCENARIOS = {
     r(R.Button, { variant: 'danger', size: 'lg', type: 'submit', disabled: true }, 'Eliminar cliente'),
     () => h(V.Button, { variant: 'danger', size: 'lg', type: 'submit', disabled: true }, text('Eliminar cliente')),
   ],
+  'botón con atajo de teclado': [
+    r(R.Button, { shortcut: ['⌘', '↵'] }, 'Crear ticket'),
+    () => h(V.Button, { shortcut: ['⌘', '↵'] }, text('Crear ticket')),
+  ],
+  'botón solo icono con atajo: sin teclas pintadas, con aria-keyshortcuts': [
+    r(R.Button, { variant: 'ghost', iconOnly: true, icon: IconR, 'aria-label': 'Asignar', shortcut: ['a'] }),
+    () => h(V.Button, { variant: 'ghost', iconOnly: true, icon: IconV, 'aria-label': 'Asignar', shortcut: ['a'] }),
+  ],
   'badges de todos los tonos': [
     r(
       'div',
@@ -300,6 +308,12 @@ test('el id automático enlaza etiqueta y control', () => {
   const out = html['campo con id automático y textarea']
   assert.match(out, /for="k5-AUTO"/)
   assert.match(out, /id="k5-AUTO"/)
+})
+
+test('el atajo se anuncia con aria-keyshortcuts y se pinta oculto a lectores de pantalla', () => {
+  const html = renderToStaticMarkup(r(R.Button, { shortcut: ['⌘', '⇧', 'k'] }, 'Buscar'))
+  assert.match(html, /aria-keyshortcuts="Meta\+Shift\+K"/)
+  assert.match(html, /<span class="k5-btn__shortcut" aria-hidden="true"><kbd>⌘<\/kbd><kbd>⇧<\/kbd><kbd>k<\/kbd><\/span>/)
 })
 
 test('un botón cargando queda desactivado y lo anuncia', () => {

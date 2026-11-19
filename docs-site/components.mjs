@@ -217,7 +217,7 @@ export const newComponents = [
     react('DropdownMenu', `<DropdownMenu label="Acciones" items={items} onAction={(id) => console.log(id)} />`, `const items = ${menu};`),
     vue('DropdownMenu', `<DropdownMenu label="Acciones" :items="items" @action="(id) => console.log(id)" />`, `const items = ${menu};`),
     [
-      ['items', 'id, label, disabled, danger, separator', 'Obligatorio'],
+      ['items', 'id, label, disabled, danger, separator, shortcut', 'Obligatorio'],
       ['onAction / @action', 'Recibe el id de la acción', '—'],
       ['disabled', 'Desactiva el botón', 'false'],
       ['align', 'start · end: borde del botón con el que se alinea; si no cabe, se abre hacia el otro lado', 'end'],
@@ -412,6 +412,7 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['content', 'Texto de ayuda (Vue: también slot content); no controles interactivos', 'Obligatorio'],
       ['children / slot', 'Contenido visual del botón de información', 'Icono de información'],
       ['trigger', 'React: el control / Vue: slot trigger. Lo acompaña en lugar del botón de información y recibe aria-describedby', '—'],
+      ['shortcut', "Teclas del atajo del control: ['⌘', 'L']. Van tras el texto y el control recibe aria-keyshortcuts", '—'],
     ],
     'Se abre con puntero o foco. Escape lo descarta. Evita colocar el disparador dentro de contenedores que recorten el contenido.',
   ),
