@@ -2,7 +2,7 @@
 
 Esta guía es para el agente (Claude Code u otro) que trabaja en una app de 1KOMMA5° España y tiene que usar **Grado**, el sistema de diseño de la empresa. Si eres una persona, también te sirve; los pasos que solo puede hacer una persona están marcados con **👤**.
 
-Versión actual: **0.7.0**. Hasta la 1.0, una versión menor (0.7 → 0.8) puede cambiar una API o el aspecto: lee el `CHANGELOG.md` antes de actualizar.
+Versión actual: **0.9.0**. Hasta la 1.0, una versión menor (0.7 → 0.8) puede cambiar una API o el aspecto: lee el `CHANGELOG.md` antes de actualizar.
 
 > **Con Claude Code, mejor la skill.** Este repositorio publica un plugin con la skill `grado`, que lleva esta guía partida por temas y Claude carga sola cuando la tarea toca Grado. Dentro de la app:
 >
@@ -104,7 +104,7 @@ Instala **siempre** el paquete base y el del framework en la **misma versión**.
 La web de documentación de Grado ofrece los `.tgz` para descargar. Guárdalos en `vendor/` de la app, súbelos al repo e instala con:
 
 ```bash
-npm install ./vendor/1k5-tech-es-grado-0.7.0.tgz ./vendor/1k5-tech-es-grado-react-0.7.0.tgz
+npm install ./vendor/1k5-tech-es-grado-0.9.0.tgz ./vendor/1k5-tech-es-grado-react-0.9.0.tgz
 ```
 
 Es un plan B: con token, usa siempre npm.
@@ -261,7 +261,7 @@ const potencia = ref('8,4');
 
 Ante la duda, mira `api/grado-vue.api.md`: lista props y `emits` de cada componente.
 
-### 5.3 Qué hay (0.7.0)
+### 5.3 Qué hay (0.9.0)
 
 - **Armazón:** `AppShell`, `Nav`, `NavSection`, `NavGroup`, `NavItem`, `AppSearch`, `AppLogo`, `Avatar`, `AvatarGroup`, `PageHeader`
 - **Maquetación y texto:** `Container`, `Stack`, `Grid`, `Separator`, `Heading`, `Text`, `Link`, `Kbd`
@@ -425,7 +425,7 @@ Si algo de la app no tiene equivalente en Grado, constrúyelo sobre las clases `
 
 ---
 
-## 8. Cosas que hay que saber (0.7.0)
+## 8. Cosas que hay que saber (0.9.0)
 
 - **`Dialog` deja su contenido montado aunque esté cerrado.** Si dentro hay algo pesado (un editor, un formulario con peticiones), móntalo solo cuando esté abierto: `{open && <Contenido />}` / `v-if="open"`.
 - **`DropdownMenu` solo acepta `items` (`id`, `label`, `disabled`, `danger`, `separator`) y `onAction(id)`:** no hay disparador propio, iconos, opciones marcadas ni contenido libre. Para eso, construye un menú propio con las clases `k5-menu__…`.

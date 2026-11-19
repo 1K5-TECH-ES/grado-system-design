@@ -1,6 +1,6 @@
 # Componentes
 
-Lista de **Grado 0.7.0**. Si la app tiene otra versión, los tipos en `node_modules/@1k5-tech-es/grado-react/dist/*.d.ts` (o `grado-vue`) mandan: un componente de esta lista que no esté ahí es de una versión posterior.
+Lista de **Grado 0.9.0**. Si la app tiene otra versión, los tipos en `node_modules/@1k5-tech-es/grado-react/dist/*.d.ts` (o `grado-vue`) mandan: un componente de esta lista que no esté ahí es de una versión posterior.
 
 ## 1. Primer componente
 
@@ -130,10 +130,22 @@ Con el App Router se pueden importar desde un Server Component: los componentes 
 
 La sintaxis completa y los eventos están en `node_modules/@1k5-tech-es/grado-elements/README.md`. Los textos salen del `lang` de la página.
 
-## 9. Trampas conocidas (0.7.0)
+## 9. Novedades de 0.9 («Precisión», con lo de 0.8)
+
+Úsalas en lugar de montarlas a mano:
+
+- **Atajos:** `shortcut={['⌘', 'K']}` en `Button`, `Tooltip`, las opciones de `DropdownMenu` y `ContextMenu` y la acción de `toast()`. Pinta las teclas y pone `aria-keyshortcuts`; la tecla la escucha la app.
+- **Listados:** `PageHeader variant="bar"` (fila de 44 px con un `SegmentedControl` para las vistas), `KpiGroup variant="strip"`, `FilterBar` con filtros en partes (`{ id, field, operator, value }` y `onEditFilter`), `DataTable groupBy` (con `groupLabel` y grupos plegables) y `Status progress` (`backlog`, `todo`, `started`, `waiting`, `done`, `canceled`) para flujos con orden.
+- **Fichas:** `Select variant="property"` para estado, responsable o prioridad; `Drawer modal={false}` para una vista previa sin velo; `Timeline` con `progress`, `author` y `comment` para la actividad.
+- **Formularios:** `DatePicker natural` («mañana», «viernes», «en 2 semanas», «20/11»; el valor sigue siendo ISO), `Combobox onCreate` (Vue: `creatable` y `@create`) y `RadioGroup variant="card"` para tarifas o planes.
+- **Texto:** `Text tone="tertiary"` para fechas, contadores y pistas (`--k5-tertiary-foreground`).
+
+Al actualizar desde 0.7 o 0.8: `AppShell` en Consola ya no tiene cabecera berenjena (`brandHeader` la recupera hasta 0.10), los controles miden 4 px menos y el texto de la interfaz baja a 13 px, `Avatar` mide 24 y 20 px, y los menús resaltan en gris. El detalle está en el CHANGELOG.
+
+## 10. Trampas conocidas (0.9.0)
 
 - **`Dialog` deja su contenido montado aunque esté cerrado.** Si dentro hay algo pesado (un editor, un formulario con peticiones), móntalo solo cuando esté abierto: `{open && <Contenido />}` o `v-if="open"`.
-- **`DropdownMenu` solo acepta `items` (`id`, `label`, `disabled`, `danger`, `separator`) y `onAction(id)`.** No tiene disparador propio, iconos, opciones marcadas ni contenido libre. Para eso, haz un menú propio con las clases `k5-menu__…`.
+- **`DropdownMenu` solo acepta `items` (`id`, `label`, `disabled`, `danger`, `separator`, `shortcut`) y `onAction(id)`.** No tiene disparador propio, iconos, opciones marcadas ni contenido libre. Para eso, haz un menú propio con las clases `k5-menu__…`.
 - **`ContextMenu` puede cambiar sus opciones según lo que haya bajo el puntero.** El `onContextMenu` (`@contextmenu`) de un hijo se ejecuta antes de que se abra el menú: prepara `items` ahí. Si el hijo llama a `event.stopPropagation()`, el menú no se abre. No hace falta un menú propio para un lienzo o un plano.
 - **`Popover` no se abre en la capa superior** (*top layer*): dentro de un contenedor con `overflow: hidden` puede quedar recortado.
 - **Botón destructivo:** existen `variant="danger"` y `variant="destructive"`; las dos se mantienen.

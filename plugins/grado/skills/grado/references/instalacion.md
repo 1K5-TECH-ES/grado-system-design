@@ -58,7 +58,7 @@ Instala siempre el paquete base y el del framework en la **misma versión**. Los
 La web de documentación de Grado ofrece los `.tgz` para descargar. Se guardan en `vendor/` de la app, se suben al repositorio y se instalan con:
 
 ```bash
-npm install ./vendor/1k5-tech-es-grado-0.7.0.tgz ./vendor/1k5-tech-es-grado-react-0.7.0.tgz
+npm install ./vendor/1k5-tech-es-grado-0.9.0.tgz ./vendor/1k5-tech-es-grado-react-0.9.0.tgz
 ```
 
 Con token, usa siempre npm: los `.tgz` hay que cambiarlos a mano en cada versión.
@@ -121,7 +121,7 @@ Con el paquete instalado ya están los tipos en `node_modules`. Si además se cl
 cd ..                 # junto a la app
 git clone https://github.com/1K5-TECH-ES/grado-system-design.git
 cd grado-system-design
-git checkout v0.7.0   # la versión que usa la app
+git checkout v0.9.0   # la versión que usa la app
 npm install           # usa el mismo .npmrc y token
 npm run build         # genera dist/ de los paquetes y el catálogo
 ```

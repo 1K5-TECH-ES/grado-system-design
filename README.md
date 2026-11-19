@@ -21,6 +21,7 @@ Sistema de diseño de 1KOMMA5° España. Parte de 1komma5es_help, lo ajusta a la
 | 9. Estabilidad (0.5.0) | Fase 1: inventario de uso `npx @1k5-tech-es/grado usage`, React 18, Vue 3.5.0 y Node 24 probados en el CI, Node 22 como mínimo. Fase 2: una captura por componente, tamaño por import, impresión y alto contraste, apps de prueba con Vite, Next y Nuxt. Fase 3: textos en alemán e inglés aparte, alias de tamaño obsoletos, política de versiones y filas virtuales en `DataTable` | Hecha |
 | 10. Ampliación (0.6.0) | Núcleo común para React y Vue, Web Components (`grado-elements`) para HTML sin framework, tema de alto contraste para el trabajo de campo y componentes en `labs`: comparador de tarifas, firma de la oferta, previsión de producción solar y piezas de utilidad | Hecha |
 | 11. Memorias (0.7.0) | Lo que pidió pasar Memorias a Grado: diálogos centrados con Tailwind 4, `Dialog` a pantalla completa y sin cabecera, `Tooltip` sobre cualquier control, cabeceras de fila en `Table` y modo por defecto en `useTheme` | Hecha |
+| 12. Revisión y Precisión (0.9.0, con 0.8.0) | Skill `grado` para las apps y revisión de componentes (0.8); rediseño inspirado en Linear: Consola a 13 px y controles de 28 px, neutros en OKLCH, Inter variable, campos hundidos y controles propios, atajos de teclado, `DataTable` agrupada, filtros en partes, `DatePicker` con texto, `Drawer` sin velo y la web abriendo en Consola | Hecha |
 
 ## Decisiones tomadas
 
@@ -52,7 +53,7 @@ npm run figma:check   # compara design/figma-tokens.json (export de Tokens Studi
 npm run catalog       # genera catalog/index.html con todos los componentes
 npm run docs:build    # genera la web y los paquetes descargables en docs-site/dist/
 npm run docs:check    # verifica rutas, anclas, ejemplos y descargas de la web generada
-npm run release:check -- 0.7.0  # versiones de los cuatro paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
+npm run release:check -- 0.9.0  # versiones de los cuatro paquetes y sección del CHANGELOG, con fecha, antes de etiquetar
 ```
 
 ## Publicar una versión
