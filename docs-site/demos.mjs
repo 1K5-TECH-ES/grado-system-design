@@ -330,10 +330,14 @@ function CoreDemo({ id }) {
     )
   if (id === 'pagination') return h(G.Pagination, { total: 128, pageSize: 10 })
   if (id === 'date-picker')
-    return h(
-      G.Field,
-      { label: 'Fecha de instalación' },
-      h(G.DatePicker, { defaultValue: '2026-10-20', min: '2026-01-01', max: '2027-12-31' }),
+    return grid2(
+      h(G.Field, { label: 'Fecha de instalación' }, h(G.DatePicker, { defaultValue: '2026-10-20', min: '2026-01-01', max: '2027-12-31' })),
+      h(
+        G.Field,
+        { label: 'Vence', hint: 'Prueba «mañana», «vie», «en 2 semanas» o «20/11».' },
+        // today fijo: la captura de la web no cambia de un día a otro.
+        h(G.DatePicker, { natural: true, today: '2026-11-19', defaultValue: '2026-11-20' }),
+      ),
     )
   if (id === 'date-range-picker')
     return h(G.DateRangePicker, {

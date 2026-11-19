@@ -428,3 +428,22 @@ export declare function virtualWindow(options: {
   overscan?: number
 }): VirtualWindow
 export declare function pixelHeight(value: number | string | null | undefined): number | null
+
+// ---------- Fechas escritas (0.9) ----------
+export interface DateSuggestion {
+  /** YYYY-MM-DD */
+  value: string
+  /** «Mañana · vie, 20 nov» */
+  label: string
+}
+/**
+ * Fechas que propone un campo de fecha a partir de lo que se escribe, en el idioma de locale:
+ * «mañana», «vie», «próximo lunes», «en 2 semanas», «2w», «fin de mes», «20/11», «20 nov».
+ * Sin texto, unas cuantas de partida.
+ */
+export declare function dateSuggestions(
+  query: string,
+  options?: { today?: string; locale?: string; weekStartsOn?: number; min?: string; max?: string; limit?: number },
+): DateSuggestion[]
+/** Fecha corta: «vie, 20 nov», con el año si no es el de today. */
+export declare function shortDateLabel(iso: string, options?: { today?: string; locale?: string }): string

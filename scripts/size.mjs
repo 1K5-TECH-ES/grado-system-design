@@ -22,7 +22,8 @@ const LIMITS = {
   // Web Components (0.6): el archivo para usar sin bundler, con todo dentro. 12,6 KB al crearlo.
   'grado-elements.min.js': 14 * KB,
   // Los adaptadores, con los componentes que usan; sin la librería de formularios.
-  '@1k5-tech-es/grado-react/react-hook-form': 24 * KB,
+  // 0.9: de 24 a 25 KB: DatePicker natural lleva Combobox y el analizador de fechas escritas.
+  '@1k5-tech-es/grado-react/react-hook-form': 25 * KB,
   '@1k5-tech-es/grado-vue/vee-validate': 15 * KB,
   // Labs (0.6): todo junto, con sus textos en tres idiomas. Fase 1 (utilidades): 14 y 14,5 KB;
   // fase 2 (TariffComparison, SignaturePad, SolarForecast): 20,7 y 21,2 KB. Un 10 % de margen.
@@ -39,7 +40,8 @@ const WARNINGS = {
 // Lo que cuesta cada import, igual en React y en Vue. Medido en 0.5 con un 10 % de margen.
 // Casi todos llevan ~4,5 KB fijos: los textos de los tres idiomas (messages.js) y classes.js.
 const IMPORTS = {
-  Button: { names: ['Button'], limit: 7 * KB },
+  // 0.9: de 7 a 7,5 KB por los textos nuevos (fechas escritas, «Crear», grupos) en tres idiomas.
+  Button: { names: ['Button'], limit: 7.5 * KB },
   'Field, Input': { names: ['Field', 'Input'], limit: 2.5 * KB },
   Dialog: { names: ['Dialog'], limit: 9 * KB },
   // 0.6: de 14 a 14,5 KB. El núcleo común (core.js) deja el de Vue justo en 14 KB y el gzip del CI lo pasa.

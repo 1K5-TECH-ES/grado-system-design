@@ -44,6 +44,8 @@ export type MessageKey =
   | 'pageRange'
   | 'noGroup'
   | 'createOption'
+  | 'datePlaceholder'
+  | 'dateHint'
   | 'noResultsCount'
   | 'dateFrom'
   | 'dateTo'

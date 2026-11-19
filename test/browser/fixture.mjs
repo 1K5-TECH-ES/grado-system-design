@@ -33,6 +33,7 @@ const initial = () => ({
   client: '',
   labels: [{ value: 'urgente', label: 'Urgente' }],
   label: '',
+  due: '',
   tab: 'a',
   page: 1,
   toast: false,
@@ -286,6 +287,24 @@ function renderUI(framework, state, update) {
         }),
       ),
       make('output', null, state.label),
+    ),
+    // Fecha escrita (0.9): «en 2 semanas» y Enter; hoy es el 19 de noviembre de 2026.
+    section(
+      'natural-date',
+      C(
+        'Field',
+        { label: 'Vence' },
+        C('DatePicker', {
+          natural: true,
+          today: '2026-11-19',
+          name: 'vence',
+          value: state.due,
+          modelValue: state.due,
+          onValueChange: set('due'),
+          'onUpdate:modelValue': set('due'),
+        }),
+      ),
+      make('output', null, state.due),
     ),
     section(
       'menu',

@@ -476,8 +476,10 @@ ref: HTMLDivElement
 ref: HTMLInputElement · admite además los atributos HTML de ese elemento
 
 ```ts
+  natural?: boolean
   onValueChange?: ((value: string) => void)
   size?: "sm" | "md" | "lg"
+  today?: string
 ```
 
 ## DateRangePicker

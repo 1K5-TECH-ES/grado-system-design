@@ -175,6 +175,22 @@ try {
     await expect(page.locator('#combo .k5-combobox__empty')).toHaveText('No hay resultados')
     await page.keyboard.press('Escape')
     await expect(page.locator('#combo input[role=combobox]')).toHaveValue('Marta Ruiz')
+    // Fecha escrita: lo que se escribe propone fechas; Enter elige y el valor es ISO.
+    const due = page.locator('#natural-date input[role=combobox]')
+    await due.fill('en 2 semanas')
+    await expect(page.locator('#natural-date [role=option]')).toHaveText(['Dentro de 2 semanas · jue, 3 dic'])
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('Enter')
+    await expect(page.locator('#natural-date output')).toHaveText('2026-12-03')
+    await expect(due).toHaveValue('jue, 3 dic')
+    await due.fill('zzz')
+    await expect(page.locator('#natural-date .k5-combobox__empty')).toHaveText('Escribe una fecha: mañana, viernes, en 2 semanas, 20/11')
+    await page.keyboard.press('Escape')
+    await expect(due).toHaveValue('jue, 3 dic')
+    // Escape vacía la búsqueda y avisa: al volver a abrir, las fechas de partida.
+    await due.click()
+    await expect(page.locator('#natural-date [role=option]').first()).toHaveText('Hoy · jue, 19 nov')
+    await page.keyboard.press('Escape')
     // «Crear "…"»: solo si lo escrito no es ya una opción; elegirlo crea y selecciona.
     const creatable = page.locator('#creatable input[role=combobox]')
     await creatable.fill('urgente')

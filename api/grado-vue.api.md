@@ -389,6 +389,8 @@ emits: update:collapsedGroups, update:hiddenColumns, update:page, update:selecte
 
 ```ts
   modelValue: String
+  natural: Boolean
+  today: String
 ```
 
 emits: update:modelValue

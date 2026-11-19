@@ -224,3 +224,11 @@ test('combobox: «Crear "…"» solo cuando lo escrito no es ya una opción', ()
   const picked = comboboxReduce({ open: true, query: 'Mad', active: 1 }, { type: 'key', key: 'Enter' }, { filtered: list })
   assert.equal(picked.select, COMBOBOX_CREATE)
 })
+
+test('combobox: vaciar la búsqueda al elegir, con Escape o al salir se avisa con query vacío', () => {
+  const typing = { open: true, query: 'mad', active: 0 }
+  assert.equal(comboboxReduce(typing, { type: 'key', key: 'Escape' }).query, '')
+  assert.equal(comboboxReduce(typing, { type: 'leave' }).query, '')
+  assert.equal(comboboxReduce(typing, { type: 'pick', option: options[0] }).query, '')
+  assert.equal(comboboxReduce({ open: true, query: '', active: 0 }, { type: 'leave' }).query, undefined, 'sin búsqueda, nada que avisar')
+})

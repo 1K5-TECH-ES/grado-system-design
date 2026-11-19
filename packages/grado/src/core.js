@@ -35,7 +35,13 @@ const enabledIndexes = (options) => options.map((option, i) => (option.disabled 
  * stopPropagation? }: select es el valor que hay que elegir ('' lo vacía) y query, la búsqueda
  * que hay que avisar.
  */
-export function comboboxReduce(state, event, { filtered = [], loading = false } = {}) {
+export function comboboxReduce(state, event, ctx) {
+  const result = reduceCombobox(state, event, ctx)
+  // Elegir, Escape o salir vacían la búsqueda: se avisa para que quien la usa (carga externa,
+  // DatePicker natural) vuelva a la lista de partida.
+  return result.query === undefined && state.query && !result.state.query ? { ...result, query: '' } : result
+}
+function reduceCombobox(state, event, { filtered = [], loading = false } = {}) {
   const pick = (option) =>
     option.disabled ? { state } : { state: { ...state, open: false, query: '' }, select: option.value, focusInput: true }
   switch (event.type) {

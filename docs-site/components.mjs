@@ -530,8 +530,14 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       ['value / modelValue', 'Fecha ISO YYYY-MM-DD, sin zona horaria', 'Vacío'],
       ['min / max', 'Fechas ISO límite', '—'],
       ['required / disabled / name', 'Atributos nativos', '—'],
+      [
+        'natural',
+        'Se escribe la fecha («mañana», «vie», «próximo lunes», «en 2 semanas», «2w», «fin de mes», «20/11», «20 nov») y se elige de la lista, en el idioma de GradoProvider. Es un Combobox: el valor sigue siendo ISO y name lo envía igual',
+        'false',
+      ],
+      ['today', 'Con natural, el día del que parten «mañana» o «en 2 semanas»', 'Hoy'],
     ],
-    'La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado.',
+    'La ventana del calendario la proporciona el navegador y puede variar entre dispositivos. El control mantiene los tokens de Grado. dateSuggestions(texto, { today, locale, min, max }) de @1k5-tech-es/grado/patterns da las mismas propuestas para otros controles.',
   ),
   entry(
     'date-range-picker',

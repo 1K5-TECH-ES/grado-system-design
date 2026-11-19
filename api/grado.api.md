@@ -652,7 +652,7 @@ export declare function labsMessagesFor(locale?: string, overrides?: Partial<Rec
 ## src/messages.d.ts
 
 ```ts
-export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noGroup' | 'createOption' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
+export type MessageKey = 'close' | 'dismiss' | 'notifications' | 'fieldRequired' | 'fieldInvalid' | 'columns' | 'chartHint' | 'tariffValle' | 'tariffLlano' | 'tariffPunta' | 'tariffPeriod' | 'priceHour' | 'price' | 'priceCheapest' | 'priceDearest' | 'priceNow' | 'batteryEnergy' | 'batteryReserve' | 'errorSummaryOne' | 'errorSummaryMany' | 'loading' | 'loadingEllipsis' | 'loadingData' | 'search' | 'searchPlaceholder' | 'noResults' | 'options' | 'menu' | 'skipToContent' | 'mainNavigation' | 'indicators' | 'previous' | 'trendUp' | 'trendDown' | 'trendFlat' | 'statusOnline' | 'statusAway' | 'statusBusy' | 'pagination' | 'previousPage' | 'nextPage' | 'pageN' | 'pageRange' | 'noGroup' | 'createOption' | 'datePlaceholder' | 'dateHint' | 'noResultsCount' | 'dateFrom' | 'dateTo' | 'rangeInverted' | 'rangeMin' | 'rangeMax' | 'uploadLabel' | 'uploadHint' | 'uploadSingle' | 'uploadTooBig' | 'uploadFormat' | 'uploadFailed' | 'uploading' | 'uploadDone' | 'retry' | 'retryFile' | 'removeFile' | 'progress' | 'completed' | 'history' | 'removeFilter' | 'clearFilters' | 'breadcrumbs' | 'selectPage' | 'selectRow' | 'actions' | 'selectedNone' | 'selectedOne' | 'selectedMany' | 'decrease' | 'increase' | 'removeItem' | 'calendar' | 'previousMonth' | 'nextMonth' | 'today' | 'commandPalette' | 'commandPlaceholder' | 'chartData' | 'total' | 'copy' | 'copied' | 'copyFailed' | 'copyNamed' | 'progressStep' | 'avatarMore' | 'opensInNewTab' | 'meterLabel' | 'valueOfMax' | 'energyFlow' | 'energySolar' | 'energyHome' | 'energyBattery' | 'energyGrid' | 'energyProducing' | 'energyNoProduction' | 'energyConsuming' | 'energyNoConsumption' | 'energyCharging' | 'energyDischarging' | 'energyBatteryIdle' | 'energyImporting' | 'energyExporting' | 'energyGridIdle' | 'batteryLevel' | 'clearSearch' | 'showPassword' | 'hidePassword' | 'timePlaceholder' | 'timeOptions' | 'timeInvalid' | 'timeMin' | 'timeMax' | 'phoneCountry' | 'phoneInvalid' | 'phoneSpainLength' | 'phoneSpainStart' | 'nifDniFormat' | 'nifDniLetter' | 'nifNieFormat' | 'nifNieLetter' | 'nifCifFormat' | 'nifCifControl' | 'nifInvalid' | 'ibanCountry' | 'ibanLength' | 'ibanInvalid' | 'ibanChecksum' | 'addressPlaceholder' | 'addressOptions' | 'addressMinChars' | 'addressFailed' | 'selectedCountOne' | 'selectedCountMany' | 'clearSelection';
 export type Messages = Record<MessageKey, string>;
 export type LocaleName = 'es-ES' | 'de-DE' | 'en-GB';
 export declare const DEFAULT_LOCALE: 'es-ES';
@@ -1082,4 +1082,20 @@ export declare function virtualWindow(options: {
     overscan?: number;
 }): VirtualWindow;
 export declare function pixelHeight(value: number | string | null | undefined): number | null;
+export interface DateSuggestion {
+    value: string;
+    label: string;
+}
+export declare function dateSuggestions(query: string, options?: {
+    today?: string;
+    locale?: string;
+    weekStartsOn?: number;
+    min?: string;
+    max?: string;
+    limit?: number;
+}): DateSuggestion[];
+export declare function shortDateLabel(iso: string, options?: {
+    today?: string;
+    locale?: string;
+}): string;
 ```

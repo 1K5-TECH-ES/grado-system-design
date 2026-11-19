@@ -92,6 +92,10 @@ const SCENARIOS = {
       ]),
   ],
   // Sin descripción: la normalización de ids de Vue (v-0-1) se come el índice de su id.
+  'fecha escrita con valor': [
+    r(R.DatePicker, { natural: true, today: '2026-11-19', value: '2026-12-03', 'aria-label': 'Vence', name: 'vence' }),
+    () => h(V.DatePicker, { natural: true, today: '2026-11-19', modelValue: '2026-12-03', 'aria-label': 'Vence', name: 'vence' }),
+  ],
   'select como chip de propiedad': [
     r(R.Select, { variant: 'property', 'aria-label': 'Prioridad' }, r('option', { value: 'alta' }, 'Alta')),
     () => h(V.Select, { variant: 'property', 'aria-label': 'Prioridad' }, () => h('option', { value: 'alta' }, 'Alta')),
@@ -433,4 +437,13 @@ test('Drawer sin velo: sin aria-modal y con su clase; Dialog sigue modal', () =>
   assert.match(html, /class="k5-dialog k5-drawer k5-drawer--modeless"/)
   assert.doesNotMatch(html, /aria-modal/)
   assert.match(renderToStaticMarkup(r(R.Drawer, { title: 'Ficha' }, 'Detalle')), /aria-modal="true"/)
+})
+
+test('DatePicker natural: combobox con la fecha corta y el valor ISO para el formulario', () => {
+  const html = renderToStaticMarkup(r(R.DatePicker, { natural: true, today: '2026-11-19', value: '2026-11-20', name: 'vence' }))
+  assert.match(html, /<input type="hidden" name="vence" value="2026-11-20"\/>/)
+  assert.match(html, /role="combobox"/)
+  assert.match(html, /value="Mañana · vie, 20 nov"/)
+  // Sin natural, el campo nativo de siempre.
+  assert.match(renderToStaticMarkup(r(R.DatePicker, {})), /type="date"/)
 })

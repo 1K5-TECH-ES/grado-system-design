@@ -409,13 +409,16 @@ export const guidelines = {
     use: [
       'Úsalo para una fecha concreta en un formulario, como la fecha de instalación.',
       'Limita con min y max las fechas que no se pueden elegir.',
+      'Usa natural para fechas cercanas que se piensan en palabras, como el vencimiento de una tarea o la próxima visita.',
     ],
     avoid: [
       'Para un periodo con inicio y fin usa DateRangePicker.',
+      'No uses natural para fechas lejanas o exactas, como una fecha de nacimiento: el campo nativo es más rápido.',
       'Si conviene ver el mes entero, por ejemplo para agendar visitas, usa Calendar.',
     ],
     a11y: [
       'Es el input date nativo. El teclado y lo que se anuncia dependen del navegador.',
+      'Con natural es un Combobox: flechas para recorrer las fechas propuestas, Enter para elegir y Escape para volver a la fecha que había.',
       'Ponlo dentro de Field para que tenga etiqueta y error.',
     ],
   },

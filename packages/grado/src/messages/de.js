@@ -50,6 +50,8 @@ export const de = {
   noGroup: 'Ohne Gruppe',
   createOption: '„{query}“ anlegen',
   noResultsCount: '0 Ergebnisse',
+  datePlaceholder: 'Morgen, Freitag, 20.11.…',
+  dateHint: 'Datum eingeben: morgen, Freitag, in 2 Wochen, 20.11.',
   dateFrom: 'Von',
   dateTo: 'Bis',
   rangeInverted: 'Das Enddatum muss am oder nach dem Startdatum liegen.',

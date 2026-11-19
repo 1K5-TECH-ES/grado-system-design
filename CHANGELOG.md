@@ -59,13 +59,18 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 
 ### Combobox
 
+- `onQueryChange` (Vue: `query-change`) avisa también con `''` cuando la búsqueda se vacía al elegir, con Escape o al salir del campo, para volver a la lista de partida.
 - `onCreate` (Vue: `creatable` y el evento `create`): cuando lo escrito no es una opción (sin distinguir mayúsculas), la lista añade al final «Crear "…"» con un más delante. Elegirla avisa con el texto en lugar de seleccionar: la app crea la opción, la añade a `options` y la selecciona. Textos en español, alemán e inglés. `withCreateOption()` y `COMBOBOX_CREATE` en `@1k5-tech-es/grado/core`. En `k5-combobox` todavía no.
+
+### DatePicker
+
+- `natural`: se escribe la fecha y se elige de la lista. Entiende «hoy», «mañana», «pasado mañana», los días de la semana («vie», «próximo lunes»), «la próxima semana», «fin de mes», plazos («en 2 semanas», «2w», «una semana») y fechas («20/11», «20.11.27», «20 nov», «1 de diciembre», «2026-12-03»), en español, alemán e inglés según `GradoProvider`. Las frases salen de `Intl.RelativeTimeFormat`. Es un `Combobox`: el valor sigue siendo `YYYY-MM-DD` y `name` lo envía en un campo oculto. `today` fija el día de partida. `dateSuggestions()` y `shortDateLabel()` en `@1k5-tech-es/grado/patterns`.
 
 ### DataTable
 
 - `groupBy`: junta las filas por un campo o por una función (un estado, un responsable). Cada grupo es un `<tbody>` con una fila de título (`<th scope="rowgroup">`) que lleva el nombre, el total y un botón con `aria-expanded` para plegarlo. Los grupos salen en el orden en que aparecen en `rows`, y la columna ordenada manda dentro de cada uno. `groupLabel` (Vue: también el slot `group`) pinta el título; sin él, la clave o «Sin grupo». `collapsedGroups` (React: `onCollapsedGroupsChange` · Vue: `v-model:collapsed-groups`) y `defaultCollapsedGroups` guardan los plegados. «Seleccionar la página» deja fuera las filas plegadas. Con grupos no hay filas virtuales.
 - `groupRows()` en `@1k5-tech-es/grado/core` junta las filas igual para quien pinte su propia tabla.
-- El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos.
+- El presupuesto del import de `DataTable` sube de 14,5 a 15,5 KB por los grupos; el de `Button`, de 7 a 7,5 KB por los textos nuevos en tres idiomas, y el del adaptador de react-hook-form, de 24 a 25 KB por `DatePicker` natural.
 
 ### Drawer
 

@@ -50,6 +50,8 @@ export const en = {
   noGroup: 'No group',
   createOption: 'Create “{query}”',
   noResultsCount: '0 results',
+  datePlaceholder: 'Tomorrow, Friday, 20/11…',
+  dateHint: 'Type a date: tomorrow, Friday, in 2 weeks, 20/11',
   dateFrom: 'From',
   dateTo: 'To',
   rangeInverted: 'The end date must be on or after the start date.',
