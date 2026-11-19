@@ -7,12 +7,12 @@
   align-items: center;
   gap: var(--k5-space-2) var(--k5-space-3);
   width: 100%;
-  min-height: var(--k5-control-h-lg);
-  padding: var(--k5-space-2) var(--k5-space-4);
+  min-height: 2.25rem;
+  padding: var(--k5-space-1-5) var(--k5-space-4);
   background: var(--_bg);
   color: var(--k5-foreground);
-  font-size: var(--k5-text-body);
-  line-height: var(--k5-leading-body);
+  font-size: var(--k5-text-ui);
+  line-height: var(--k5-leading-ui);
 }
 .k5-banner--info {
   --_bg: var(--k5-info-subtle);
