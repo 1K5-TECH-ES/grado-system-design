@@ -1,9 +1,9 @@
 // <k5-toaster></k5-toaster>
 // import { toast } from '@1k5-tech-es/grado-elements'
-// toast.success('Oferta enviada', { action: { label: 'Deshacer', onClick: deshacer } })
+// toast.success('Oferta enviada', { action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick: deshacer } })
 // Avisos con cola, con el mismo HTML que Toaster de React y Vue y la misma cola
 // (createToastStore de @1k5-tech-es/grado/patterns). Pon un <k5-toaster> en la página.
-import { buttonClass, ICON_PATHS, STATUS_ICONS } from '@1k5-tech-es/grado/classes'
+import { buttonClass, ICON_PATHS, keyShortcuts, STATUS_ICONS } from '@1k5-tech-es/grado/classes'
 import { createToastStore, visibleToasts } from '@1k5-tech-es/grado/patterns'
 import { define, el, icon, setAttrs, texts } from './dom.js'
 
@@ -77,7 +77,25 @@ export class K5Toaster extends HTMLElement {
     close.addEventListener('click', () => toast.dismiss(item.id))
     let action = null
     if (item.action) {
-      action = el('button', { type: 'button', class: buttonClass({ variant: 'link', size: 'sm' }) }, item.action.label)
+      const keys = item.action.shortcut ?? []
+      action = el(
+        'button',
+        {
+          type: 'button',
+          class: buttonClass({ variant: 'link', size: 'sm' }),
+          'aria-keyshortcuts': keys.length ? keyShortcuts(keys) : undefined,
+        },
+        [
+          item.action.label,
+          keys.length
+            ? el(
+                'span',
+                { class: 'k5-btn__shortcut', 'aria-hidden': 'true' },
+                keys.map((key) => el('kbd', {}, key)),
+              )
+            : null,
+        ],
+      )
       action.addEventListener('click', () => {
         item.action.onClick?.()
         toast.dismiss(item.id)

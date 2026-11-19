@@ -952,6 +952,7 @@ export declare function toggleValues(current: string[], value: string, type?: 's
 export interface ToastAction {
     label: string;
     onClick: () => void;
+    shortcut?: string[];
 }
 export interface ToastOptions {
     id?: string;

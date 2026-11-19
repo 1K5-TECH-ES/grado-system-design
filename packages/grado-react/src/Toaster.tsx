@@ -1,8 +1,9 @@
 'use client'
 import { forwardRef, useSyncExternalStore } from 'react'
-import { buttonClass, cx } from '@1k5-tech-es/grado/classes'
+import { buttonClass, cx, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { createToastStore, visibleToasts, type ToastItem } from '@1k5-tech-es/grado/patterns'
 import { Toast } from './Alert.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 
 const store = createToastStore()
@@ -42,8 +43,14 @@ export const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster({ 
           role={item.tone === 'danger' ? 'alert' : 'none'}
           action={
             item.action ? (
-              <button type="button" className={buttonClass({ variant: 'link', size: 'sm' })} onClick={() => act(item)}>
+              <button
+                type="button"
+                className={buttonClass({ variant: 'link', size: 'sm' })}
+                aria-keyshortcuts={item.action.shortcut?.length ? keyShortcuts(item.action.shortcut) : undefined}
+                onClick={() => act(item)}
+              >
                 {item.action.label}
+                {item.action.shortcut?.length ? <ShortcutKeys keys={item.action.shortcut} className="k5-btn__shortcut" /> : null}
               </button>
             ) : undefined
           }

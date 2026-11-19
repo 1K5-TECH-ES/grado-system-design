@@ -214,6 +214,8 @@ try {
         .every((animation) => animation.playState !== 'running'),
     )
     await axe(page, `${framework} · Toaster con avisos`)
+    await expect(page.locator('.k5-toaster button').filter({ hasText: 'Deshacer' })).toHaveAttribute('aria-keyshortcuts', 'Meta+Z')
+    await expect(page.locator('.k5-toaster button').filter({ hasText: 'Deshacer' })).toHaveAccessibleName('Deshacer')
     await page.locator('.k5-toaster button').filter({ hasText: 'Deshacer' }).click()
     await expect(page.locator('#toaster output')).toHaveText('true')
     await expect(toasts).toHaveCount(3)

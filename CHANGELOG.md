@@ -50,6 +50,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - `Button`: `shortcut` (`['⌘', '↵']`) pinta las teclas dentro del botón y pone `aria-keyshortcuts` (`Meta+Enter`) para que el lector de pantalla anuncie el atajo. En los botones de solo icono las teclas no se pintan: van en su `Tooltip`. La app sigue escuchando la tecla (por ejemplo con `useHotkey`).
 - `Tooltip`: `shortcut` pinta las teclas tras el texto; con `trigger`, el control recibe `aria-keyshortcuts`.
 - `DropdownMenu` y `ContextMenu`: cada opción acepta `shortcut`, que se pinta a la derecha. En `k5-menu`, con `data-shortcut="⌘ D"` en el `<option>`.
+- `toast()`: la acción acepta `shortcut` (`{ label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick }`), que se pinta en el botón y se anuncia con `aria-keyshortcuts`, en `Toaster` de React y Vue y en `k5-toaster`.
 - `keyShortcuts()` en `@1k5-tech-es/grado/classes` traduce las teclas pintadas a los nombres de `aria-keyshortcuts` (`⌘` → `Meta`, `⇧` → `Shift`, `↵` → `Enter`…).
 
 ### PageHeader

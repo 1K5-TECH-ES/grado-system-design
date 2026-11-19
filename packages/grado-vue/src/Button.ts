@@ -1,6 +1,7 @@
 import { defineComponent, h, type Component, type PropType } from 'vue'
 import { buttonClass, keyShortcuts, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { Spinner } from './Spinner.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 
 /** Para enlaces o RouterLink, usa buttonClass() de @1k5-tech-es/grado/classes. */
 export const Button = defineComponent({
@@ -43,12 +44,3 @@ export const Button = defineComponent({
       )
   },
 })
-
-/** Teclas de un atajo pintadas junto a un texto. Ocultas a lectores de pantalla: el control lleva aria-keyshortcuts. */
-export function shortcutKeys(keys: string[], className: string) {
-  return h(
-    'span',
-    { class: className, 'aria-hidden': 'true' },
-    keys.map((key) => h('kbd', key)),
-  )
-}

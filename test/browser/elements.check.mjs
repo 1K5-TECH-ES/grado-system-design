@@ -130,12 +130,17 @@ export async function checkElements(browser, base, { expect, axe }) {
   await p.evaluate(async () => {
     const { toast } = await import('./grado-elements.min.js')
     window.undone = false
-    toast.success('Oferta enviada', { duration: 0, action: { label: 'Deshacer', onClick: () => (window.undone = true) } })
+    toast.success('Oferta enviada', {
+      duration: 0,
+      action: { label: 'Deshacer', shortcut: ['⌘', 'z'], onClick: () => (window.undone = true) },
+    })
     toast.error('No se ha podido guardar', { duration: 0 })
   })
   await expect(p.locator('k5-toaster .k5-toast')).toHaveCount(2)
   await expect(p.locator('k5-toaster [role=alert]')).toHaveText(/No se ha podido guardar/)
   await axe(p, 'grado-elements · avisos')
+  await expect(p.locator('k5-toaster button', { hasText: 'Deshacer' })).toHaveAttribute('aria-keyshortcuts', 'Meta+Z')
+  await expect(p.locator('k5-toaster button', { hasText: 'Deshacer' }).locator('kbd')).toHaveText(['⌘', 'z'])
   await p.locator('k5-toaster button', { hasText: 'Deshacer' }).click()
   expect(await p.evaluate(() => window.undone)).toBe(true)
   await p.locator('k5-toaster .k5-close').click()

@@ -438,7 +438,10 @@ function renderUI(framework, state, update) {
     section(
       'toaster',
       button('Avisar', () => {
-        G.toast.success('Oferta enviada', { duration: 0, action: { label: 'Deshacer', onClick: () => update({ undone: true }) } })
+        G.toast.success('Oferta enviada', {
+          duration: 0,
+          action: { label: 'Deshacer', shortcut: ['⌘', 'z'], onClick: () => update({ undone: true }) },
+        })
         G.toast.error('No se ha podido guardar', { duration: 0 })
         G.toast('Documento subido', { duration: 0 })
         G.toast('Instalación programada', { duration: 0 })

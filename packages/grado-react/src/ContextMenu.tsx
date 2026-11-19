@@ -2,7 +2,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { cx, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
-import { ShortcutKeys } from './Button.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 import { useAutoId } from './hooks.js'
 

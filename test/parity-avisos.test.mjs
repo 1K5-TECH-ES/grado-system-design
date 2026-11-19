@@ -46,3 +46,17 @@ test('Toaster en alemán', async () => {
   assert.equal(normalize(react), normalize(await vue(() => h(V.GradoProvider, { locale: 'de-DE' }, () => h(V.Toaster)))))
   both((toast) => toast.dismiss())
 })
+
+test('Toaster: la acción con atajo pinta las teclas y lleva aria-keyshortcuts', async () => {
+  both((toast) => {
+    toast.dismiss()
+    toast('Ticket archivado', { action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick() {} } })
+  })
+  const react = renderToStaticMarkup(r(R.Toaster))
+  assert.match(
+    react,
+    /class="k5-btn k5-btn--link k5-btn--sm" aria-keyshortcuts="Meta\+Z">Deshacer<span class="k5-btn__shortcut" aria-hidden="true"><kbd>⌘<\/kbd><kbd>Z<\/kbd><\/span><\/button>/,
+  )
+  assert.equal(normalize(react), normalize(await vue(() => h(V.Toaster))))
+  both((toast) => toast.dismiss())
+})

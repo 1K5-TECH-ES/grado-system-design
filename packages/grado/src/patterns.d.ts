@@ -290,6 +290,8 @@ export interface ToastAction {
   label: string
   /** El aviso se cierra después de llamarla. */
   onClick: () => void
+  /** Atajo de la acción: ['⌘', 'Z']. Se pinta en el botón y se anuncia con aria-keyshortcuts; la app escucha la tecla. */
+  shortcut?: string[]
 }
 export interface ToastOptions {
   /** Con el id de un aviso que ya está en la cola, lo sustituye en su sitio. */

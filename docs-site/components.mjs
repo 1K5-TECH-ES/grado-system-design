@@ -348,7 +348,7 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       `const enviar = () =>
   toast.success('Oferta enviada', {
     description: 'A Lucía Fernández',
-    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+    action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick: () => toast('Envío deshecho') },
   });`,
     ),
     vue(
@@ -358,11 +358,15 @@ const maxKwp = (kwp) => kwp == null || kwp <= 15 || 'Como mucho 15 kWp';
       `const enviar = () =>
   toast.success('Oferta enviada', {
     description: 'A Lucía Fernández',
-    action: { label: 'Deshacer', onClick: () => toast('Envío deshecho') },
+    action: { label: 'Deshacer', shortcut: ['⌘', 'Z'], onClick: () => toast('Envío deshecho') },
   });`,
     ),
     [
-      ['toast(título, opciones)', 'tone, description, action { label, onClick }, duration (0: hasta que se cierre), id', '—'],
+      [
+        'toast(título, opciones)',
+        'tone, description, action { label, onClick, shortcut } (shortcut pinta las teclas y pone aria-keyshortcuts; la app escucha la tecla), duration (0: hasta que se cierre), id',
+        '—',
+      ],
       ['toast.success · warning · error · info', 'El mismo aviso con su tono. error se anuncia con role="alert"', '—'],
       ['toast.promise(promesa, textos)', 'loading mientras sigue; después success o error, que pueden ser funciones', '—'],
       ['toast.dismiss(id?)', 'Cierra un aviso o, sin id, todos', '—'],

@@ -1,6 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
 import { buttonClass, cx, keyShortcuts, type ButtonVariant, type Size } from '@1k5-tech-es/grado/classes'
 import { Spinner } from './Spinner.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import type { IconComponent } from './types.js'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -42,14 +43,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     </button>
   )
 })
-
-/** Teclas de un atajo pintadas junto a un texto. Ocultas a lectores de pantalla: el control lleva aria-keyshortcuts. */
-export function ShortcutKeys({ keys, className }: { keys: string[]; className: string }) {
-  return (
-    <span className={className} aria-hidden="true">
-      {keys.map((key, index) => (
-        <kbd key={`${key}-${index}`}>{key}</kbd>
-      ))}
-    </span>
-  )
-}

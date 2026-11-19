@@ -1,7 +1,8 @@
 'use client'
 import { cloneElement, forwardRef, isValidElement, useState, type ReactElement, type ReactNode } from 'react'
 import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
-import { Button, ShortcutKeys } from './Button.js'
+import { Button } from './Button.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId } from './hooks.js'
 

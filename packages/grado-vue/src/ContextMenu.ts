@@ -1,7 +1,7 @@
 import { defineComponent, h, nextTick, onBeforeUnmount, ref, watch, type PropType } from 'vue'
 import { cx, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { menuPosition, moveFocus, type MenuItem } from '@1k5-tech-es/grado/patterns'
-import { shortcutKeys } from './Button.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { useGrado } from './Locale.js'
 import { autoId } from './helpers.js'
 

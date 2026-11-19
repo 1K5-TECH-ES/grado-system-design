@@ -1,6 +1,7 @@
 import { cloneVNode, defineComponent, h, ref, type PropType } from 'vue'
 import { ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
-import { Button, shortcutKeys } from './Button.js'
+import { Button } from './Button.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { pathIcon } from './PathIcon.js'
 import { autoId } from './helpers.js'
 

@@ -2,7 +2,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { moveFocus, overflowsSide, type MenuItem } from '@1k5-tech-es/grado/patterns'
-import { Button, ShortcutKeys } from './Button.js'
+import { Button } from './Button.js'
+import { ShortcutKeys } from './ShortcutKeys.js'
 import { PathIcon } from './PathIcon.js'
 import { useAutoId } from './hooks.js'
 

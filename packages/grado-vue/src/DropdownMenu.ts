@@ -1,7 +1,8 @@
 import { defineComponent, h, onBeforeUnmount, ref, watch, type PropType } from 'vue'
 import { cx, ICON_PATHS, keyShortcuts } from '@1k5-tech-es/grado/classes'
 import { moveFocus, overflowsSide, type MenuItem } from '@1k5-tech-es/grado/patterns'
-import { Button, shortcutKeys } from './Button.js'
+import { Button } from './Button.js'
+import { shortcutKeys } from './ShortcutKeys.js'
 import { pathIcon } from './PathIcon.js'
 import { autoId } from './helpers.js'
 
