@@ -44,10 +44,16 @@ export const Popover = defineComponent({
     }
     // Si el panel no cabe por su lado (ventana o contenedor con scroll), se alinea con el otro borde.
     const placed = ref<PopoverAlign>(props.align)
+    // Si la app cierra el panel con el foco dentro (una opción que elige y cierra), el foco se
+    // quedaría en <body> al desaparecer el panel: vuelve al disparador, como con Escape. Después del
+    // evento: con Enter, el disparador enfocado a mitad de la pulsación la recibiría y volvería a abrir.
+    let focusInside = false
     const outside = (event: PointerEvent) => {
       const node = event.target as Element
       if (root.value?.contains(node)) return
       const inside = root.value?.contains(document.activeElement)
+      // El clic fuera decide él adónde va el foco.
+      focusInside = false
       close(false)
       // El foco vuelve al disparador salvo que el clic caiga en otro control.
       if (inside && !node.closest?.(FOCUSABLE)) setTimeout(() => toggler()?.focus())
@@ -66,7 +72,15 @@ export const Popover = defineComponent({
     watch(
       open,
       (value) => {
-        if (!value) return
+        if (!value) {
+          if (!focusInside) return
+          focusInside = false
+          setTimeout(() => {
+            const active = document.activeElement
+            if (!active || active === document.body) toggler()?.focus()
+          })
+          return
+        }
         // Al abrir, el foco pasa al primer elemento enfocable del panel o, si no hay, al panel.
         ;(panel.value?.querySelector<HTMLElement>(FOCUSABLE) ?? panel.value)?.focus()
         document.addEventListener('pointerdown', outside)
@@ -122,6 +136,12 @@ export const Popover = defineComponent({
                   'aria-labelledby': hasTitle ? `${id()}-title` : undefined,
                   'aria-label': hasTitle ? undefined : props.label,
                   class: popoverClass({ align: placed.value, side: props.side }),
+                  onFocusin: () => (focusInside = true),
+                  onFocusout: (event: FocusEvent) => {
+                    // Sin relatedTarget, el foco no se ha ido a otro sitio: el panel está desapareciendo.
+                    const next = event.relatedTarget as Node | null
+                    if (next && !(event.currentTarget as HTMLElement).contains(next)) focusInside = false
+                  },
                 },
                 [hasTitle ? h('p', { id: `${id()}-title`, class: 'k5-popover__title' }, props.title) : null, slots.default?.()],
               )

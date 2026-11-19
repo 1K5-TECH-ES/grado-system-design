@@ -76,6 +76,19 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
   }, [open, align])
   const latest = useRef(close)
   latest.current = close
+  // Si la app cierra el panel con el foco dentro (una opción que elige y cierra), el foco se
+  // quedaría en <body> al desaparecer el panel: vuelve al disparador, como con Escape. Después del
+  // evento: con Enter, el disparador enfocado a mitad de la pulsación la recibiría y volvería a abrir.
+  const focusInside = useRef(false)
+  useEffect(() => {
+    if (open || !focusInside.current) return
+    focusInside.current = false
+    const timer = setTimeout(() => {
+      const active = document.activeElement
+      if (!active || active === document.body) toggler()?.focus()
+    })
+    return () => clearTimeout(timer)
+  }, [open])
   // Abierto desde el principio: escucha los clics fuera, pero no mueve el foco.
   const mounted = useRef(false)
   useEffect(() => {
@@ -88,6 +101,8 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
       const node = event.target as Element
       if (root.current?.contains(node)) return
       const inside = root.current?.contains(document.activeElement)
+      // El clic fuera decide él adónde va el foco.
+      focusInside.current = false
       latest.current(false)
       // El foco vuelve al disparador salvo que el clic caiga en otro control.
       if (inside && !node.closest?.(FOCUSABLE)) setTimeout(() => toggler()?.focus())
@@ -140,6 +155,11 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover
           aria-labelledby={hasTitle ? titleId : undefined}
           aria-label={hasTitle ? undefined : label}
           className={popoverClass({ align: placed, side })}
+          onFocus={() => (focusInside.current = true)}
+          onBlur={(event) => {
+            // Sin relatedTarget, el foco no se ha ido a otro sitio: el panel está desapareciendo.
+            if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) focusInside.current = false
+          }}
         >
           {hasTitle && (
             <p id={titleId} className="k5-popover__title">

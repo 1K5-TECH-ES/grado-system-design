@@ -101,6 +101,32 @@ export function lockScroll(doc) {
   }
 }
 
+/**
+ * Clic en el fondo de un <dialog> modal. Solo cuenta si el gesto empieza y acaba fuera de su
+ * caja: si se pulsa en un campo y se suelta en el fondo (al seleccionar texto arrastrando), el
+ * navegador manda el click al <dialog>, que es el ancestro común, y no debe cerrarse.
+ * down va en pointerdown y click en click del <dialog>; click devuelve true si hay que cerrar.
+ */
+export function backdropGesture() {
+  const outside = (event) => {
+    const dialog = event.currentTarget
+    if (event.target !== dialog) return false
+    const box = dialog.getBoundingClientRect()
+    return event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom
+  }
+  let started = false
+  return {
+    down(event) {
+      started = outside(event)
+    },
+    click(event) {
+      const hit = started && outside(event)
+      started = false
+      return hit
+    },
+  }
+}
+
 /** Roving focus with arrows, Home/End and printable-character navigation. */
 export function moveFocus(event, container, selector, horizontal = false) {
   const items = [...container.querySelectorAll(selector)].filter((el) => !el.disabled && el.getAttribute('aria-disabled') !== 'true')

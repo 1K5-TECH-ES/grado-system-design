@@ -20,8 +20,11 @@ export const Tooltip = defineComponent({
           onFocusin: () => (open.value = true),
           onFocusout: () => (open.value = false),
           onKeydown: (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
+            // Escape quita el tooltip y nada más: sin preventDefault, el <dialog> que lo contiene también
+            // se cerraría. Con el tooltip ya oculto, Escape sigue su camino y cierra lo que haya debajo.
+            if (event.key === 'Escape' && open.value) {
               open.value = false
+              event.preventDefault()
               event.stopPropagation()
             }
           },

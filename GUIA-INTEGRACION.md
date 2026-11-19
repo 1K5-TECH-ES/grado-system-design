@@ -429,6 +429,7 @@ Si algo de la app no tiene equivalente en Grado, constrúyelo sobre las clases `
 
 - **`Dialog` deja su contenido montado aunque esté cerrado.** Si dentro hay algo pesado (un editor, un formulario con peticiones), móntalo solo cuando esté abierto: `{open && <Contenido />}` / `v-if="open"`.
 - **`DropdownMenu` solo acepta `items` (`id`, `label`, `disabled`, `danger`, `separator`) y `onAction(id)`:** no hay disparador propio, iconos, opciones marcadas ni contenido libre. Para eso, construye un menú propio con las clases `k5-menu__…`.
+- **`ContextMenu` puede cambiar sus opciones según lo que haya bajo el puntero.** El `onContextMenu` (`@contextmenu`) de un hijo se ejecuta antes de que se abra el menú: prepara `items` ahí. Si el hijo llama a `event.stopPropagation()`, el menú no se abre. No hace falta un menú propio para un lienzo o un plano.
 - **`Popover` no se abre en la capa superior** (*top layer*): dentro de un contenedor con `overflow: hidden` puede quedar recortado.
 - **Botón destructivo:** existen `variant="danger"` y `variant="destructive"`; las dos se mantienen.
 - **`labs`** puede cambiar entre versiones menores sin periodo de aviso.

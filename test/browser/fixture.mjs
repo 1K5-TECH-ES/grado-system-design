@@ -45,6 +45,8 @@ const initial = () => ({
   ...Object.assign({}, ...groups.map((g) => g.initial)),
 })
 function renderUI(framework, state, update) {
+  // Para que un test cambie el estado sin tocar la página (un clic cerraría lo que esté abierto).
+  window.fixtureUpdate = update
   const isVue = framework === 'vue',
     make = isVue ? h : r,
     G = isVue ? V : R
@@ -192,6 +194,7 @@ function renderUI(framework, state, update) {
           footer: button('Guardar', () => update({ modal: false })),
         },
         make('label', null, ['Nombre', make('input', { defaultValue: 'Lucía' })]),
+        C('Tooltip', { label: 'Ayuda del nombre', content: 'Como aparece en el DNI' }),
       ),
     ),
     section(

@@ -724,6 +724,10 @@ export declare function fileError(file: Pick<File, 'name' | 'size' | 'type'>, ac
 }): string;
 export declare function rangeError(start?: string, end?: string, min?: string, max?: string, messages?: Messages): string;
 export declare function lockScroll(doc: Document): () => void;
+export declare function backdropGesture(): {
+    down(event: Pick<MouseEvent, 'target' | 'currentTarget' | 'clientX' | 'clientY'>): void;
+    click(event: Pick<MouseEvent, 'target' | 'currentTarget' | 'clientX' | 'clientY'>): boolean;
+};
 export declare function moveFocus(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey' | 'preventDefault'>, container: HTMLElement, selector: string, horizontal?: boolean): void;
 export declare function nextIndex(key: string, index: number, length: number): number | null;
 export declare function overflowsSide(element: Element, side: 'left' | 'right'): boolean;

@@ -27,6 +27,15 @@ export async function check(page, { expect }) {
   await page.locator('#sp-popover').click({ position: { x: 600, y: 8 } })
   await expect(panel).toHaveCount(0)
   await expect(trigger).toBeFocused()
+  // Si la app lo cierra desde dentro (el botón elige y cierra), el foco vuelve al disparador.
+  await trigger.click()
+  await expect(panel.locator('button')).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(panel).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+  // Y no se vuelve a abrir: el Enter que cerró no llega al disparador.
+  await page.waitForTimeout(100)
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false')
   // Sin controles dentro, el foco va al panel; Tab fuera lo cierra.
   const help = page.locator('#sp-popover .k5-popover').last()
   await help.locator('[aria-haspopup=dialog]').click()
@@ -82,9 +91,23 @@ export async function check(page, { expect }) {
   await page.mouse.click(width - 5, top + 10, { button: 'right' })
   const inside = await settled(menu)
   expect(inside.x + inside.width).toBeLessThanOrEqual(width)
+  // Si la página se vuelve a pintar con el menú abierto, el menú sigue dentro.
+  await page.evaluate(() => window.fixtureUpdate({ spTick: 1 }))
+  await expect(zone.locator('p')).toHaveAttribute('data-tick', '1')
+  const repainted = await menu.boundingBox()
+  expect(repainted.x + repainted.width).toBeLessThanOrEqual(width)
   await page.mouse.click(5, 5)
   await expect(menu).toHaveCount(0)
   await page.evaluate(() => document.querySelector('#sp-context .k5-context-menu').style.removeProperty('width'))
+  // El onContextMenu de un hijo prepara las opciones antes de abrir; si para el evento, no hay menú.
+  await page.locator('#sp-power').click({ button: 'right' })
+  await expect(menu.locator('[role=menuitem]')).toHaveText(['Copiar potencia'])
+  await page.keyboard.press('Escape')
+  await expect(menu).toHaveCount(0)
+  await page.evaluate(() => window.fixtureUpdate({ spTarget: '' }))
+  await page.locator('#sp-no-menu').click({ button: 'right' })
+  await page.waitForTimeout(100)
+  await expect(menu).toHaveCount(0)
 
   // ActionBar: flota abajo y centrada; flechas entre botones y Escape quita la selección.
   await expect(page.locator('#sp-action .k5-action-bar:not(.k5-action-bar--inline)')).toHaveCount(0)

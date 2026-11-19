@@ -1,7 +1,7 @@
 'use client'
-import { forwardRef, useEffect, useImperativeHandle, useRef, type DialogHTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type DialogHTMLAttributes, type ReactNode } from 'react'
 import { cx, ICON_PATHS } from '@1k5-tech-es/grado/classes'
-import { lockScroll } from '@1k5-tech-es/grado/patterns'
+import { backdropGesture, lockScroll } from '@1k5-tech-es/grado/patterns'
 import { PathIcon } from './PathIcon.js'
 import { useGrado } from './Locale.js'
 import { useAutoId, useValue } from './hooks.js'
@@ -51,6 +51,7 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
   const ref = useRef<HTMLDialogElement>(null)
   useImperativeHandle(forwarded, () => ref.current as HTMLDialogElement, [])
   const id = useAutoId('k5-dialog')
+  const [backdrop] = useState(backdropGesture)
   useEffect(() => {
     const dialog = ref.current
     if (!dialog || !visible) return
@@ -85,13 +86,13 @@ const Modal = forwardRef<HTMLDialogElement, DialogProps & { alert?: boolean; sid
         event.preventDefault()
         if (closeOnEscape) setVisible(false)
       }}
+      onPointerDown={(event) => {
+        rest.onPointerDown?.(event)
+        backdrop.down(event)
+      }}
       onClick={(event) => {
         rest.onClick?.(event)
-        if (event.target === event.currentTarget && closeOnOutside && !alert) {
-          const rect = event.currentTarget.getBoundingClientRect()
-          if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)
-            setVisible(false)
-        }
+        if (backdrop.click(event) && closeOnOutside && !alert) setVisible(false)
       }}
     >
       {header ? (

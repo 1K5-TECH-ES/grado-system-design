@@ -5,6 +5,8 @@
 export const initial = {
   spPopover: false,
   spContext: '',
+  spTick: 0,
+  spTarget: '',
   spCount: 0,
   spCleared: 0,
   spPin: false,
@@ -13,6 +15,7 @@ export const initial = {
   spBanner: true,
 }
 
+const power = [{ id: 'copiar-potencia', label: 'Copiar potencia' }]
 const menu = [
   { id: 'abrir', label: 'Abrir ficha' },
   { id: 'cups', label: 'Copiar CUPS', disabled: true },
@@ -27,6 +30,7 @@ export function render({ C, make, section, button, set, state, update, isVue }) 
       make('path', { d: 'M12 17v5', key: 'a' }),
       make('path', { d: 'M9 10.76V4h6v6.76l2 3.24H7z', key: 'b' }),
     ])
+  const contextEvent = isVue ? 'onContextmenu' : 'onContextMenu'
   const pressed = isVue ? { 'onUpdate:pressed': set('spPin') } : { onPressedChange: set('spPin') }
   return [
     section(
@@ -35,7 +39,7 @@ export function render({ C, make, section, button, set, state, update, isVue }) 
         'Popover',
         { label: 'Datos del suministro', title: 'ES0021000000000001AB', open: state.spPopover, onOpenChange: set('spPopover') },
         make('p', null, 'i-DE · Tarifa 2.0TD · 4,6 kW'),
-        C('Button', { variant: 'secondary', size: 'sm' }, 'Copiar CUPS'),
+        C('Button', { variant: 'secondary', size: 'sm', onClick: () => update({ spPopover: false }) }, 'Copiar CUPS'),
       ),
       C('Popover', { label: 'Ayuda', align: 'end' }, 'Sin controles dentro'),
     ),
@@ -61,8 +65,15 @@ export function render({ C, make, section, button, set, state, update, isVue }) 
       'sp-context',
       C(
         'ContextMenu',
-        { items: menu, label: 'Instalación de Lucía Fernández', onAction: set('spContext') },
-        make('p', null, 'Lucía Fernández · Valencia · 8,4 kWp'),
+        { items: state.spTarget === 'potencia' ? power : menu, label: 'Instalación de Lucía Fernández', onAction: set('spContext') },
+        make('p', { 'data-tick': state.spTick }, [
+          'Lucía Fernández · Valencia · ',
+          // El menú depende de lo que hay bajo el puntero: el hijo prepara items antes de que se abra.
+          make('span', { id: 'sp-power', [contextEvent]: () => update({ spTarget: 'potencia' }) }, '8,4 kWp'),
+          ' · ',
+          // Y un hijo puede dejarlo cerrado.
+          make('span', { id: 'sp-no-menu', [contextEvent]: (event) => event.stopPropagation() }, 'sin menú'),
+        ]),
       ),
       make('output', null, state.spContext),
     ),
