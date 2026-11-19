@@ -12,9 +12,10 @@ import { build } from 'esbuild'
 
 const KB = 1024
 const LIMITS = {
-  // 0.9: de 17 a 18 KB por los atajos (shortcut), Status progress, Tabs view, PageHeader bar y
-  // las props nuevas de «Precisión»; incluye la cabecera de 0.8 (brandHeader, se retira en 0.10).
-  'grado.min.css': 18 * KB,
+  // 0.9: de 17 a 18,5 KB por los atajos (shortcut), Status progress, Tabs view, PageHeader bar,
+  // los grupos de DataTable, el filtro en partes, RadioGroup card y Select property; incluye la
+  // cabecera de 0.8 (brandHeader, se retira en 0.10).
+  'grado.min.css': 18.5 * KB,
   'tokens.css': 4 * KB,
   // Temas en su propio archivo (0.6): solo los cargan las apps que los usan.
   'themes/campo.css': 1.6 * KB,

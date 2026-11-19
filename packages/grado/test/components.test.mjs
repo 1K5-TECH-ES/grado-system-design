@@ -18,6 +18,7 @@ test('cada clase que puede generar classes.js existe en grado.css', () => {
   }
   for (const tone of k5.BADGE_TONES) add(k5.badgeClass({ tone }))
   for (const kind of ['input', 'select', 'textarea']) for (const size of k5.SIZES) add(k5.controlClass(kind, { size }))
+  add(k5.controlClass('select', { variant: 'property' }))
   for (const size of k5.SIZES) add(k5.inputWrapClass({ size }))
   for (const size of k5.SIZES) add(k5.spinnerClass({ size }))
   for (const variant of k5.CARD_VARIANTS) add(k5.cardClass({ variant }))

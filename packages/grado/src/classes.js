@@ -60,10 +60,17 @@ export function badgeClass({ tone = 'neutral' } = {}) {
   return cx('k5-badge', `k5-badge--${pick(tone, BADGE_TONES, 'neutral')}`)
 }
 
-/** kind: 'input' | 'select' | 'textarea'. El tamaño no aplica a textarea. */
-export function controlClass(kind = 'input', { size = 'md' } = {}) {
+/**
+ * kind: 'input' | 'select' | 'textarea'. El tamaño no aplica a textarea. variant 'property' (solo
+ * select): chip de propiedad sin borde, a su ancho, como el estado o el responsable de un ticket.
+ */
+export function controlClass(kind = 'input', { size = 'md', variant = 'default' } = {}) {
   const s = pick(size, SIZES, 'md')
-  return cx(`k5-${kind}`, kind !== 'textarea' && s !== 'md' && `k5-input--${s}`)
+  return cx(
+    `k5-${kind}`,
+    kind !== 'textarea' && s !== 'md' && `k5-input--${s}`,
+    kind === 'select' && variant === 'property' && 'k5-select--property',
+  )
 }
 
 export function inputWrapClass({ size = 'md' } = {}) {

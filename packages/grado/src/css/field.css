@@ -78,6 +78,21 @@
   background-size: 0.875rem;
   cursor: pointer;
 }
+/* variant property: chip de propiedad (estado, responsable, prioridad). Sin borde y a su ancho;
+   gris al pasar. El foco mantiene el anillo. */
+.k5-select--property {
+  --_h: var(--k5-control-h-sm);
+  justify-self: start;
+  width: auto;
+  padding: 0 var(--k5-space-6) 0 var(--k5-space-2);
+  border: 0;
+  background-color: transparent;
+  background-position: right 0.375rem center;
+  font-weight: var(--k5-weight-medium);
+}
+.k5-select--property:hover {
+  background-color: var(--k5-muted);
+}
 .k5-input::placeholder,
 .k5-textarea::placeholder {
   color: var(--k5-muted-foreground);

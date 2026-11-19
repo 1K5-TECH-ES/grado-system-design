@@ -21,7 +21,9 @@ export declare function cx(...parts: unknown[]): string
 export declare function keyShortcuts(keys?: string[]): string
 export declare function buttonClass(options?: { variant?: ButtonVariant; size?: Size; iconOnly?: boolean; block?: boolean }): string
 export declare function badgeClass(options?: { tone?: BadgeTone }): string
-export declare function controlClass(kind?: ControlKind, options?: { size?: Size }): string
+/** default: campo de formulario. property (solo select): chip de propiedad sin borde y a su ancho. */
+export type SelectVariant = 'default' | 'property'
+export declare function controlClass(kind?: ControlKind, options?: { size?: Size; variant?: SelectVariant }): string
 export declare function inputWrapClass(options?: { size?: Size }): string
 export declare function cardClass(options?: { variant?: CardVariant }): string
 export declare function tableClass(options?: { compact?: boolean }): string

@@ -101,8 +101,10 @@ export declare function buttonClass(options?: {
 export declare function badgeClass(options?: {
     tone?: BadgeTone;
 }): string;
+export type SelectVariant = 'default' | 'property';
 export declare function controlClass(kind?: ControlKind, options?: {
     size?: Size;
+    variant?: SelectVariant;
 }): string;
 export declare function inputWrapClass(options?: {
     size?: Size;

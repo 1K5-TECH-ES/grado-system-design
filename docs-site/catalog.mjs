@@ -142,6 +142,13 @@ const potencia = ref('8,4');
         ),
       ),
       h(G.Field, { label: 'Notas' }, h(G.Textarea, { rows: 3, placeholder: 'Añade indicaciones para el instalador…' })),
+      h(
+        G.Select,
+        { variant: 'property', 'aria-label': 'Prioridad', defaultValue: 'alta' },
+        h('option', { value: 'alta' }, 'Prioridad alta'),
+        h('option', { value: 'media' }, 'Prioridad media'),
+        h('option', { value: 'baja' }, 'Prioridad baja'),
+      ),
     ),
     react: `import { Field, Select, Textarea } from '@1k5-tech-es/grado-react';
 
@@ -151,7 +158,11 @@ const potencia = ref('8,4');
     <option value="bateria">Placas y batería</option>
   </Select>
 </Field>
-<Field label="Notas"><Textarea rows={3} /></Field>`,
+<Field label="Notas"><Textarea rows={3} /></Field>
+<Select variant="property" aria-label="Prioridad" defaultValue="alta">
+  <option value="alta">Prioridad alta</option>
+  <option value="baja">Prioridad baja</option>
+</Select>`,
     vue: `<script setup>
 import { ref } from 'vue';
 import { Field, Select, Textarea } from '@1k5-tech-es/grado-vue';
@@ -170,6 +181,11 @@ const notas = ref('');
 </template>`,
     props: [
       ['Select: size', 'sm · md · lg', 'md'],
+      [
+        'Select: variant',
+        'default · property (chip de propiedad sin borde y a su ancho, para el estado o el responsable de una ficha; con aria-label si no va en Field)',
+        'default',
+      ],
       ['invalid', 'boolean', 'Heredado de Field'],
       ['Atributos nativos', 'disabled, name, rows, placeholder…', '—'],
     ],

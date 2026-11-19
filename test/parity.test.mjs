@@ -92,6 +92,10 @@ const SCENARIOS = {
       ]),
   ],
   // Sin descripción: la normalización de ids de Vue (v-0-1) se come el índice de su id.
+  'select como chip de propiedad': [
+    r(R.Select, { variant: 'property', 'aria-label': 'Prioridad' }, r('option', { value: 'alta' }, 'Alta')),
+    () => h(V.Select, { variant: 'property', 'aria-label': 'Prioridad' }, () => h('option', { value: 'alta' }, 'Alta')),
+  ],
   'opciones en tarjeta': [
     r(R.RadioGroup, {
       label: 'Tarifa',

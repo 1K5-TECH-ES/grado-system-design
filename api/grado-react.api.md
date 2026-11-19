@@ -1280,6 +1280,7 @@ ref: HTMLSelectElement · admite además los atributos HTML de ese elemento
 ```ts
   invalid?: boolean
   size?: Size
+  variant?: SelectVariant
 ```
 
 ## Separator

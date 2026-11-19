@@ -61,6 +61,7 @@ export const guidelines = {
     use: [
       'Usa Select para elegir una opción de una lista corta y conocida, como el tipo de instalación.',
       'Usa Textarea para textos largos, como las indicaciones para el instalador.',
+      'Usa variant="property" para cambiar una propiedad en la cabecera o el lateral de una ficha (estado, responsable, prioridad) sin que parezca un formulario.',
     ],
     avoid: [
       'Con muchas opciones, como clientes o municipios, usa Combobox.',
@@ -70,6 +71,7 @@ export const guidelines = {
     a11y: [
       'Son controles nativos. El teclado y los lectores de pantalla funcionan sin trabajo extra.',
       'Ponlos dentro de Field para que tengan etiqueta, ayuda y error.',
+      'variant="property" no tiene etiqueta visible: ponle aria-label («Prioridad») o mete el nombre en cada opción.',
     ],
   },
   switch: {

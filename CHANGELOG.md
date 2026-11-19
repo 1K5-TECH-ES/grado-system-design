@@ -16,7 +16,7 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 - Movimiento: 80 · 120 · 180 · 240 ms (antes 100 · 150 · 200 · 300) y `--k5-ease-out` pasa a `cubic-bezier(0.16, 1, 0.3, 1)`, que arranca deprisa y se posa sin rebote.
 - Sombras de menús y diálogos más largas y suaves; en oscuro, con un brillo de 1 px arriba.
 - Iconos internos (y los de energía) a trazo 1,5. Los iconos que la app pone en `NavItem`, menús y botones se pintan también a 1,5.
-- El presupuesto de `grado.min.css` sube de 17 a 18 KB (con gzip) por los atajos, las variantes nuevas y la cabecera de 0.8, que se retira en 0.10.
+- El presupuesto de `grado.min.css` sube de 17 a 18,5 KB (con gzip) por los atajos, las variantes y props nuevas y la cabecera de 0.8, que se retira en 0.10.
 
 ### AppShell
 
@@ -87,6 +87,10 @@ Todas las versiones de `@1k5-tech-es/grado`, `@1k5-tech-es/grado-react`, `@1k5-t
 ### RadioGroup
 
 - `variant="card"`: cada opción es una tarjeta con borde, y la elegida lleva el borde en el color principal. En horizontal se reparten en columnas. Para tarifas o planes con precio y descripción.
+
+### Select
+
+- `variant="property"`: chip de propiedad sin borde, a su ancho y del alto del control pequeño, gris al pasar y con el anillo de foco de siempre. Para cambiar el estado, el responsable o la prioridad en la cabecera o el lateral de una ficha sin que parezca un formulario. Sin etiqueta visible: lleva `aria-label`. En `controlClass('select', { variant: 'property' })` para apps que pintan su propio `<select>`.
 
 ### Status
 

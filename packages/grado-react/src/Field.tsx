@@ -10,7 +10,7 @@ import {
   type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react'
-import { controlClass, cx, inputWrapClass, type Size } from '@1k5-tech-es/grado/classes'
+import { controlClass, cx, inputWrapClass, type SelectVariant, type Size } from '@1k5-tech-es/grado/classes'
 
 interface FieldContextValue {
   id: string
@@ -142,16 +142,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   size?: Size
+  /** property: chip de propiedad sin borde y a su ancho (estado, responsable, prioridad). Necesita aria-label o Field. */
+  variant?: SelectVariant
   invalid?: boolean
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { size, invalid, id, required, 'aria-describedby': describedBy, className, children, ...rest },
+  { size, variant, invalid, id, required, 'aria-describedby': describedBy, className, children, ...rest },
   ref,
 ) {
   const control = useControl({ id, required, invalid, 'aria-describedby': describedBy })
   return (
-    <select {...rest} {...control} ref={ref} className={cx(controlClass('select', { size }), className)}>
+    <select {...rest} {...control} ref={ref} className={cx(controlClass('select', { size, variant }), className)}>
       {children}
     </select>
   )

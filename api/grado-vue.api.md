@@ -1082,6 +1082,7 @@ emits: update:modelValue
   modelValue: String
   required: Boolean  // con valor por defecto
   size: String
+  variant: String
 ```
 
 emits: update:modelValue
